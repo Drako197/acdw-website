@@ -1,0 +1,51 @@
+[
+  {
+    "type": "homeowner",
+    "title": "Homeowner",
+    "description": "Protect your home from costly AC drain pan overflows and water damage.",
+    "features": [
+      "Easy DIY installation",
+      "Visual clog detection",
+      "Peace of mind",
+      "30-minute setup",
+      "Retail pricing available",
+      "Clear visual monitoring"
+    ],
+    "cta": "Shop Now",
+    "pricing": "retail"
+  },
+  {
+    "type": "hvac-professional",
+    "title": "HVAC Professional",
+    "description": "Streamline service calls, reduce callbacks, and offer superior protection.",
+    "features": [
+      "Faster maintenance",
+      "Enhanced customer satisfaction",
+      "Increased efficiency & profits",
+      "Bulk ordering available",
+      "Professional pricing",
+      "Installation guides",
+      "Technical support",
+      "ICC code compliance docs"
+    ],
+    "cta": "Pro Login",
+    "pricing": "pro"
+  },
+  {
+    "type": "city-official",
+    "title": "City Official",
+    "description": "Ensure code compliance and prevent property damage in your jurisdiction.",
+    "features": [
+      "ICC code compliance",
+      "Reduced liability",
+      "Public safety & infrastructure protection",
+      "Centralized monitoring",
+      "Compliance reporting",
+      "Bulk system management",
+      "Custom solutions",
+      "Demo scheduling"
+    ],
+    "cta": "Request Demo",
+    "pricing": "contact"
+  }
+]

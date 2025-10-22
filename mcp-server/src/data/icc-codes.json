@@ -1,0 +1,42 @@
+[
+  {
+    "code": "IMC 307.2.1",
+    "title": "Condensate Drain Sizing",
+    "description": "AC Drain Wiz must be installed in a system that follows proper drain sizing based on equipment output.",
+    "applicableProducts": ["DRAIN_WIZ_1_0", "DRAIN_WIZ_MINI", "DRAIN_WIZ_SENSOR"],
+    "complianceNotes": "The AC Drain Wiz system is designed to work within standard condensate drain sizing requirements. The 3/4\" NPT connection accommodates most residential AC unit drain requirements.",
+    "referenceUrl": "https://codes.iccsafe.org/content/IMC2021/chapter-3-general-regulations"
+  },
+  {
+    "code": "IMC 307.2.2",
+    "title": "Drain Pipe Materials and Installation",
+    "description": "AC Drain Wiz connects to condensate piping and must be compatible with approved materials (PVC, CPVC, copper, etc.).",
+    "applicableProducts": ["DRAIN_WIZ_1_0", "DRAIN_WIZ_MINI", "DRAIN_WIZ_SENSOR"],
+    "complianceNotes": "AC Drain Wiz is constructed from UV-resistant ABS plastic with 3/4\" NPT connections, making it compatible with standard PVC, CPVC, and copper condensate drain systems.",
+    "referenceUrl": "https://codes.iccsafe.org/content/IMC2021/chapter-3-general-regulations"
+  },
+  {
+    "code": "IMC 307.2.3",
+    "title": "Auxiliary Drain Pan",
+    "description": "While AC Drain Wiz proactively clears blockages, code still requires auxiliary pans or switches if overflow could cause damage.",
+    "applicableProducts": ["DRAIN_WIZ_1_0", "DRAIN_WIZ_MINI", "DRAIN_WIZ_SENSOR"],
+    "complianceNotes": "AC Drain Wiz reduces the likelihood of overflow, but auxiliary drain pans or float switches may still be required in areas where water damage could occur. The AC Drain Wiz Sensor can serve as an auxiliary drain switch.",
+    "referenceUrl": "https://codes.iccsafe.org/content/IMC2021/chapter-3-general-regulations"
+  },
+  {
+    "code": "IMC 307.2.5",
+    "title": "Auxiliary Drain Systems",
+    "description": "Drain Wiz can be used in tandem with auxiliary drain switches (like float switches) for added protection.",
+    "applicableProducts": ["DRAIN_WIZ_1_0", "DRAIN_WIZ_MINI", "DRAIN_WIZ_SENSOR"],
+    "complianceNotes": "AC Drain Wiz works in conjunction with auxiliary drain systems. The AC Drain Wiz Sensor provides smart monitoring capabilities that can integrate with existing float switch systems.",
+    "referenceUrl": "https://codes.iccsafe.org/content/IMC2021/chapter-3-general-regulations"
+  },
+  {
+    "code": "IRC M1411",
+    "title": "Condensate Disposal",
+    "description": "Residential code requirements for condensate disposal systems.",
+    "applicableProducts": ["DRAIN_WIZ_1_0", "DRAIN_WIZ_MINI", "DRAIN_WIZ_SENSOR"],
+    "complianceNotes": "AC Drain Wiz systems comply with residential condensate disposal requirements and can be installed in accordance with IRC M1411 guidelines.",
+    "referenceUrl": "https://codes.iccsafe.org/content/IRC2021/chapter-14-heating-and-cooling-equipment-and-appliances"
+  }
+]

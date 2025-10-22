@@ -1,0 +1,128 @@
+[
+  {
+    "id": "drain-wiz-1-0",
+    "name": "AC Drain Wiz 1.0",
+    "slug": "ac-drain-wiz-1-0",
+    "description": "The original AC Drain Wiz model is a permanently installed drain line maintenance solution designed for proactive cleaning and fast technician access. It sets the foundation for the product line with a simple, tool-free setup and clear visibility into system performance.",
+    "shortDescription": "Original model with full-size access and visibility for general residential AC systems.",
+    "price": 89.99,
+    "proPrice": 67.99,
+    "bulkPrice": 59.99,
+    "image": "/images/products/drain-wiz-1-0-main.jpg",
+    "images": [
+      "/images/products/drain-wiz-1-0-main.jpg",
+      "/images/products/drain-wiz-1-0-installation.jpg",
+      "/images/products/drain-wiz-1-0-detail.jpg"
+    ],
+    "category": "DRAIN_WIZ_1_0",
+    "features": [
+      "Tool-free access for routine maintenance",
+      "Proactively clears clogs before they back up",
+      "Reduces liability and water damage risk",
+      "Installs in under 30 minutes",
+      "Clear housing for visual verification",
+      "Increases efficiency for HVAC techs"
+    ],
+    "specifications": {
+      "dimensions": "4\" x 6\" x 3\"",
+      "weight": "1.2 lbs",
+      "material": "UV-resistant ABS plastic",
+      "connectionSize": "3/4\" NPT",
+      "operatingTemp": "-40°F to 150°F",
+      "pressureRating": "150 PSI"
+    },
+    "iccCompliance": [
+      "IMC 307.2.1 - Condensate Drain Sizing",
+      "IMC 307.2.2 - Drain Pipe Materials and Installation",
+      "IMC 307.2.3 - Auxiliary Drain Pan",
+      "IMC 307.2.5 - Auxiliary Drain Systems"
+    ],
+    "inStock": true,
+    "createdAt": "2024-01-15T00:00:00Z",
+    "updatedAt": "2024-01-15T00:00:00Z"
+  },
+  {
+    "id": "drain-wiz-mini",
+    "name": "AC Drain Wiz Mini",
+    "slug": "ac-drain-wiz-mini",
+    "description": "The AC Drain Wiz Mini is a smaller, more compact version of the original model designed to fit tighter installation environments, such as high-efficiency units or residential spaces with limited clearance.",
+    "shortDescription": "Compact model with 25% smaller footprint for space-constrained installations.",
+    "price": 79.99,
+    "proPrice": 59.99,
+    "bulkPrice": 49.99,
+    "image": "/images/products/drain-wiz-mini-main.jpg",
+    "images": [
+      "/images/products/drain-wiz-mini-main.jpg",
+      "/images/products/drain-wiz-mini-installation.jpg",
+      "/images/products/drain-wiz-mini-comparison.jpg"
+    ],
+    "category": "DRAIN_WIZ_MINI",
+    "features": [
+      "25% smaller footprint",
+      "Streamlined profile for tight spaces",
+      "Same proactive clog-clearing functionality",
+      "Perfect for attics and utility closets",
+      "Ideal for condos and apartments",
+      "One-time installation simplicity"
+    ],
+    "specifications": {
+      "dimensions": "3\" x 4.5\" x 2.5\"",
+      "weight": "0.9 lbs",
+      "material": "UV-resistant ABS plastic",
+      "connectionSize": "3/4\" NPT",
+      "operatingTemp": "-40°F to 150°F",
+      "pressureRating": "150 PSI"
+    },
+    "iccCompliance": [
+      "IMC 307.2.1 - Condensate Drain Sizing",
+      "IMC 307.2.2 - Drain Pipe Materials and Installation",
+      "IMC 307.2.3 - Auxiliary Drain Pan",
+      "IMC 307.2.5 - Auxiliary Drain Systems"
+    ],
+    "inStock": true,
+    "createdAt": "2024-01-15T00:00:00Z",
+    "updatedAt": "2024-01-15T00:00:00Z"
+  },
+  {
+    "id": "drain-wiz-sensor",
+    "name": "AC Drain Wiz Sensor",
+    "slug": "ac-drain-wiz-sensor",
+    "description": "The AC Drain Wiz Sensor is a smart monitoring accessory that detects water levels or clogs and can trigger alerts before an overflow happens. It integrates with existing AC Drain Wiz installations to create a fail-safe monitoring system.",
+    "shortDescription": "Smart monitoring accessory with water level detection and alert capabilities.",
+    "price": 149.99,
+    "proPrice": 119.99,
+    "bulkPrice": 99.99,
+    "image": "/images/products/drain-wiz-sensor-main.jpg",
+    "images": [
+      "/images/products/drain-wiz-sensor-main.jpg",
+      "/images/products/drain-wiz-sensor-installation.jpg",
+      "/images/products/drain-wiz-sensor-app.jpg"
+    ],
+    "category": "DRAIN_WIZ_SENSOR",
+    "features": [
+      "Early warning system for rising water levels",
+      "Clog detection and alerting",
+      "Easy integration with existing AC Drain Wiz",
+      "Smart home alert compatibility",
+      "SMS and Wi-Fi notifications",
+      "Ideal for high-value properties"
+    ],
+    "specifications": {
+      "dimensions": "2\" x 3\" x 1.5\"",
+      "weight": "0.4 lbs",
+      "material": "Waterproof ABS plastic",
+      "powerSource": "Battery powered (1 year life)",
+      "connectivity": "Wi-Fi, Bluetooth",
+      "alertTypes": "SMS, Email, Push notification"
+    },
+    "iccCompliance": [
+      "IMC 307.2.1 - Condensate Drain Sizing",
+      "IMC 307.2.2 - Drain Pipe Materials and Installation",
+      "IMC 307.2.3 - Auxiliary Drain Pan",
+      "IMC 307.2.5 - Auxiliary Drain Systems"
+    ],
+    "inStock": true,
+    "createdAt": "2024-01-15T00:00:00Z",
+    "updatedAt": "2024-01-15T00:00:00Z"
+  }
+]
