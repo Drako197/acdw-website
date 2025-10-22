@@ -81,7 +81,7 @@ export function CustomerTypeSelector() {
         navigate('/products?type=homeowner')
         break
       case 'hvac-professional':
-        navigate('/auth/signin?callbackUrl=/products?type=hvac-professional')
+        navigate('/auth/signin', { state: { from: { pathname: '/products', search: '?type=hvac-professional' } } })
         break
       case 'city-official':
         navigate('/contact?type=demo-request')

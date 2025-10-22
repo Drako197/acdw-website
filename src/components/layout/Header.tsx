@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom'
 import { 
   Bars3Icon, 
   XMarkIcon, 
-  ShoppingCartIcon
+  ShoppingCartIcon,
+  UserCircleIcon
 } from '@heroicons/react/24/outline'
+import { useAuth } from '../../contexts/AuthContext'
 
 const navigation = [
   { name: 'Products', href: '/products' },
@@ -16,6 +18,8 @@ const navigation = [
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const { user, logout, isAuthenticated } = useAuth()
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
@@ -52,20 +56,53 @@ export function Header() {
             </button>
             
             {/* User menu */}
-            <div className="flex items-center space-x-2">
-              <Link
-                to="/auth/signin"
-                className="text-sm font-medium text-gray-700 hover:text-primary-600"
-              >
-                Sign In
-              </Link>
-              <Link
-                to="/auth/signup"
-                className="btn btn-primary btn-sm"
-              >
-                Sign Up
-              </Link>
-            </div>
+            {isAuthenticated ? (
+              <div className="relative">
+                <button
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-primary-600"
+                >
+                  <UserCircleIcon className="h-6 w-6" />
+                  <span className="hidden sm:block">{user?.name}</span>
+                </button>
+                
+                {userMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                    <Link
+                      to="/dashboard"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logout()
+                        setUserMenuOpen(false)
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2">
+                <Link
+                  to="/auth/signin"
+                  className="text-sm font-medium text-gray-700 hover:text-primary-600"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/auth/signup"
+                  className="btn btn-primary btn-sm"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
 
             {/* Mobile menu button */}
             <button
@@ -98,20 +135,43 @@ export function Header() {
               ))}
               
               <div className="pt-4 border-t border-gray-200 space-y-2">
-                <Link
-                  to="/auth/signin"
-                  className="block text-sm font-medium text-gray-700 hover:text-primary-600"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/auth/signup"
-                  className="block text-sm font-medium text-primary-600 hover:text-primary-700"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Sign Up
-                </Link>
+                {isAuthenticated ? (
+                  <>
+                    <Link
+                      to="/dashboard"
+                      className="block text-sm font-medium text-gray-700 hover:text-primary-600"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logout()
+                        setMobileMenuOpen(false)
+                      }}
+                      className="block w-full text-left text-sm font-medium text-gray-700 hover:text-primary-600"
+                    >
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/auth/signin"
+                      className="block text-sm font-medium text-gray-700 hover:text-primary-600"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      to="/auth/signup"
+                      className="block text-sm font-medium text-primary-600 hover:text-primary-700"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>
