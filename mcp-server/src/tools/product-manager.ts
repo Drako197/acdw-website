@@ -10,7 +10,11 @@ export class ProductManager {
   private dataPath: string
 
   constructor() {
-    this.dataPath = join(__dirname, '../data/products.json')
+    // Handle both development and production paths
+    const isDev = __dirname.includes('src')
+    this.dataPath = isDev 
+      ? join(__dirname, '../data/products.json')
+      : join(__dirname, '../../src/data/products.json')
   }
 
   private loadProducts(): Product[] {

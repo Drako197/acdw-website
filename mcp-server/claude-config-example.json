@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "acdw-mcp-server": {
+      "command": "node",
+      "args": ["/Users/uxdesign/Desktop/Project/ACDW Website/mcp-server/dist/index.js"],
+      "env": {}
+    }
+  }
+}
