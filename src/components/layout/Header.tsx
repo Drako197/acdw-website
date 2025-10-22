@@ -22,26 +22,26 @@ export function Header() {
   const { user, logout, isAuthenticated } = useAuth()
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
-      <nav className="container" aria-label="Top">
-        <div className="flex h-16 items-center justify-between">
+    <header className="header-main-container">
+      <nav className="header-navigation-wrapper" aria-label="Top">
+        <div className="header-content-layout">
           {/* Logo */}
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">AC</span>
+          <div className="header-logo-section">
+            <Link to="/" className="header-logo-link">
+              <div className="header-logo-icon">
+                <span className="header-logo-text">AC</span>
               </div>
-              <span className="text-xl font-bold text-gray-900">AC Drain Wiz</span>
+              <span className="header-brand-name">AC Drain Wiz</span>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex lg:items-center lg:space-x-8">
+          <div className="header-desktop-navigation">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className="text-sm font-medium text-gray-700 hover:text-primary-600"
+                className="header-nav-link"
               >
                 {item.name}
               </Link>
@@ -49,28 +49,28 @@ export function Header() {
           </div>
 
           {/* Right side actions */}
-          <div className="flex items-center space-x-4">
+          <div className="header-actions-section">
             {/* Cart */}
-            <button className="relative p-2 text-gray-700 hover:text-primary-600 transition-colors">
-              <ShoppingCartIcon className="h-6 w-6" />
+            <button className="header-cart-button">
+              <ShoppingCartIcon className="header-cart-icon" />
             </button>
             
             {/* User menu */}
             {isAuthenticated ? (
-              <div className="relative">
+              <div className="header-user-menu-container">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-primary-600"
+                  className="header-user-menu-button"
                 >
-                  <UserCircleIcon className="h-6 w-6" />
-                  <span className="hidden sm:block">{user?.name}</span>
+                  <UserCircleIcon className="header-user-icon" />
+                  <span className="header-user-name">{user?.name}</span>
                 </button>
                 
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                  <div className="header-user-dropdown">
                     <Link
                       to="/dashboard"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="header-user-dropdown-item"
                       onClick={() => setUserMenuOpen(false)}
                     >
                       Dashboard
@@ -80,7 +80,7 @@ export function Header() {
                         logout()
                         setUserMenuOpen(false)
                       }}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="header-user-dropdown-item"
                     >
                       Sign Out
                     </button>
@@ -88,16 +88,16 @@ export function Header() {
                 )}
               </div>
             ) : (
-              <div className="flex items-center space-x-2">
+              <div className="header-auth-buttons">
                 <Link
                   to="/auth/signin"
-                  className="text-sm font-medium text-gray-700 hover:text-primary-600"
+                  className="header-signin-link"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/auth/signup"
-                  className="btn btn-primary btn-sm"
+                  className="header-signup-button"
                 >
                   Sign Up
                 </Link>
@@ -107,13 +107,13 @@ export function Header() {
             {/* Mobile menu button */}
             <button
               type="button"
-              className="lg:hidden p-2 text-gray-700 hover:text-primary-600"
+              className="header-mobile-menu-button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? (
-                <XMarkIcon className="h-6 w-6" />
+                <XMarkIcon className="header-mobile-menu-icon" />
               ) : (
-                <Bars3Icon className="h-6 w-6" />
+                <Bars3Icon className="header-mobile-menu-icon" />
               )}
             </button>
           </div>
@@ -121,25 +121,25 @@ export function Header() {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-gray-200 py-4">
-            <div className="space-y-4">
+          <div className="header-mobile-menu-container">
+            <div className="header-mobile-menu-content">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
-                  className="block text-sm font-medium text-gray-700 hover:text-primary-600"
+                  className="header-mobile-nav-link"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {item.name}
                 </Link>
               ))}
               
-              <div className="pt-4 border-t border-gray-200 space-y-2">
+              <div className="header-mobile-auth-section">
                 {isAuthenticated ? (
                   <>
                     <Link
                       to="/dashboard"
-                      className="block text-sm font-medium text-gray-700 hover:text-primary-600"
+                      className="header-mobile-auth-link"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Dashboard
@@ -149,7 +149,7 @@ export function Header() {
                         logout()
                         setMobileMenuOpen(false)
                       }}
-                      className="block w-full text-left text-sm font-medium text-gray-700 hover:text-primary-600"
+                      className="header-mobile-signout-button"
                     >
                       Sign Out
                     </button>
@@ -158,14 +158,14 @@ export function Header() {
                   <>
                     <Link
                       to="/auth/signin"
-                      className="block text-sm font-medium text-gray-700 hover:text-primary-600"
+                      className="header-mobile-auth-link"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Sign In
                     </Link>
                     <Link
                       to="/auth/signup"
-                      className="block text-sm font-medium text-primary-600 hover:text-primary-700"
+                      className="header-mobile-signup-link"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Sign Up

@@ -76,4 +76,501 @@
   .text-muted {
     @apply text-sm text-gray-500;
   }
+
+  /* Hero Section Classes */
+  .hero-main-container {
+    @apply relative bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 overflow-hidden;
+  }
+
+  .hero-background-pattern {
+    @apply absolute inset-0 opacity-20;
+  }
+
+  .hero-content-wrapper {
+    @apply relative container section;
+  }
+
+  .hero-layout-grid {
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-12 items-center;
+  }
+
+  .hero-text-content {
+    @apply text-white;
+  }
+
+  .hero-main-heading {
+    @apply heading-1 mb-6 text-white;
+  }
+
+  .hero-brand-highlight {
+    @apply text-accent-400;
+  }
+
+  .hero-description-text {
+    @apply text-xl text-primary-100 mb-8 leading-relaxed;
+  }
+
+  .hero-cta-buttons {
+    @apply flex flex-col sm:flex-row gap-4 mb-12;
+  }
+
+  .hero-primary-button {
+    @apply btn btn-lg bg-white text-primary-700 hover:bg-primary-50 flex items-center justify-center;
+  }
+
+  .hero-secondary-button {
+    @apply btn btn-lg border-2 border-white text-white hover:bg-white hover:text-primary-700;
+  }
+
+  .hero-button-icon {
+    @apply ml-2 h-5 w-5;
+  }
+
+  .hero-trust-indicators {
+    @apply flex items-center space-x-8 text-primary-200;
+  }
+
+  .hero-trust-item {
+    @apply flex items-center;
+  }
+
+  .hero-trust-icon {
+    @apply h-5 w-5 mr-2;
+  }
+
+  .hero-trust-text {
+    @apply text-sm;
+  }
+
+  .hero-features-grid {
+    @apply grid grid-cols-1 gap-6;
+  }
+
+  .hero-feature-card {
+    @apply bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20;
+  }
+
+  .hero-feature-content {
+    @apply flex items-start;
+  }
+
+  .hero-feature-icon-wrapper {
+    @apply flex-shrink-0;
+  }
+
+  .hero-feature-icon {
+    @apply h-8 w-8 text-accent-400;
+  }
+
+  .hero-feature-text {
+    @apply ml-4;
+  }
+
+  .hero-feature-title {
+    @apply text-lg font-semibold text-white mb-2;
+  }
+
+  .hero-feature-description {
+    @apply text-primary-100;
+  }
+
+  /* Customer Type Selector Classes */
+  .customer-selector-main-container {
+    @apply section bg-white;
+  }
+
+  .customer-selector-content-wrapper {
+    @apply container;
+  }
+
+  .customer-selector-header {
+    @apply text-center mb-16;
+  }
+
+  .customer-selector-title {
+    @apply heading-2 mb-6;
+  }
+
+  .customer-selector-description {
+    @apply text-large max-w-3xl mx-auto;
+  }
+
+  .customer-selector-cards-grid {
+    @apply grid grid-cols-1 gap-8 lg:grid-cols-3;
+  }
+
+  .customer-type-card {
+    @apply card cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-primary-300;
+  }
+
+  .customer-type-card-header {
+    @apply flex items-center mb-4;
+  }
+
+  .customer-type-icon-wrapper {
+    @apply p-3 rounded-lg;
+  }
+
+  .customer-type-icon-homeowner {
+    @apply bg-blue-100 text-blue-600;
+  }
+
+  .customer-type-icon-hvac {
+    @apply bg-green-100 text-green-600;
+  }
+
+  .customer-type-icon-city {
+    @apply bg-purple-100 text-purple-600;
+  }
+
+  .customer-type-icon {
+    @apply h-6 w-6;
+  }
+
+  .customer-type-title {
+    @apply heading-3 ml-4;
+  }
+
+  .customer-type-description {
+    @apply text-gray-600 mb-6;
+  }
+
+  .customer-type-features-list {
+    @apply space-y-2 mb-6;
+  }
+
+  .customer-type-feature-item {
+    @apply flex items-center text-sm text-gray-600;
+  }
+
+  .customer-type-feature-checkmark {
+    @apply h-4 w-4 text-green-500 mr-2 flex-shrink-0;
+  }
+
+  .customer-type-cta-button {
+    @apply btn w-full;
+  }
+
+  .customer-type-cta-primary {
+    @apply btn-primary;
+  }
+
+  .customer-type-cta-outline {
+    @apply btn-outline;
+  }
+
+  .customer-type-cta-secondary {
+    @apply btn-secondary;
+  }
+
+  /* Header Classes */
+  .header-main-container {
+    @apply bg-white shadow-sm border-b border-gray-200;
+  }
+
+  .header-navigation-wrapper {
+    @apply container;
+  }
+
+  .header-content-layout {
+    @apply flex h-16 items-center justify-between;
+  }
+
+  .header-logo-section {
+    @apply flex items-center;
+  }
+
+  .header-logo-link {
+    @apply flex items-center space-x-2;
+  }
+
+  .header-logo-icon {
+    @apply h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center;
+  }
+
+  .header-logo-text {
+    @apply text-white font-bold text-sm;
+  }
+
+  .header-brand-name {
+    @apply text-xl font-bold text-gray-900;
+  }
+
+  .header-desktop-navigation {
+    @apply hidden lg:flex lg:items-center lg:space-x-8;
+  }
+
+  .header-nav-link {
+    @apply text-sm font-medium text-gray-700 hover:text-primary-600;
+  }
+
+  .header-actions-section {
+    @apply flex items-center space-x-4;
+  }
+
+  .header-cart-button {
+    @apply relative p-2 text-gray-700 hover:text-primary-600 transition-colors;
+  }
+
+  .header-cart-icon {
+    @apply h-6 w-6;
+  }
+
+  .header-user-menu-container {
+    @apply relative;
+  }
+
+  .header-user-menu-button {
+    @apply flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-primary-600;
+  }
+
+  .header-user-icon {
+    @apply h-6 w-6;
+  }
+
+  .header-user-name {
+    @apply hidden sm:block;
+  }
+
+  .header-user-dropdown {
+    @apply absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50;
+  }
+
+  .header-user-dropdown-item {
+    @apply block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100;
+  }
+
+  .header-auth-buttons {
+    @apply flex items-center space-x-2;
+  }
+
+  .header-signin-link {
+    @apply text-sm font-medium text-gray-700 hover:text-primary-600;
+  }
+
+  .header-signup-button {
+    @apply btn btn-primary btn-sm;
+  }
+
+  .header-mobile-menu-button {
+    @apply lg:hidden p-2 text-gray-700 hover:text-primary-600;
+  }
+
+  .header-mobile-menu-icon {
+    @apply h-6 w-6;
+  }
+
+  .header-mobile-menu-container {
+    @apply lg:hidden border-t border-gray-200 py-4;
+  }
+
+  .header-mobile-menu-content {
+    @apply space-y-4;
+  }
+
+  .header-mobile-nav-link {
+    @apply block text-sm font-medium text-gray-700 hover:text-primary-600;
+  }
+
+  .header-mobile-auth-section {
+    @apply pt-4 border-t border-gray-200 space-y-2;
+  }
+
+  .header-mobile-auth-link {
+    @apply block text-sm font-medium text-gray-700 hover:text-primary-600;
+  }
+
+  .header-mobile-signout-button {
+    @apply block w-full text-left text-sm font-medium text-gray-700 hover:text-primary-600;
+  }
+
+  .header-mobile-signup-link {
+    @apply block text-sm font-medium text-primary-600 hover:text-primary-700;
+  }
+
+  /* Sign In Form Classes */
+  .signin-page-container {
+    @apply min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8;
+  }
+
+  .signin-form-wrapper {
+    @apply max-w-md w-full space-y-8;
+  }
+
+  .signin-form-header {
+    @apply mt-6;
+  }
+
+  .signin-form-title {
+    @apply text-center text-3xl font-extrabold text-gray-900;
+  }
+
+  .signin-form-subtitle {
+    @apply mt-2 text-center text-sm text-gray-600;
+  }
+
+  .signin-form {
+    @apply mt-8 space-y-6;
+  }
+
+  .signin-form-inputs {
+    @apply rounded-md shadow-sm -space-y-px;
+  }
+
+  .signin-form-label {
+    @apply sr-only;
+  }
+
+  .signin-form-email-input {
+    @apply appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm;
+  }
+
+  .signin-form-password-input {
+    @apply appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm;
+  }
+
+  .signin-form-error {
+    @apply rounded-md bg-red-50 p-4;
+  }
+
+  .signin-form-error-text {
+    @apply text-sm text-red-700;
+  }
+
+  .signin-form-submit-button {
+    @apply relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .signin-form-loading {
+    @apply flex items-center;
+  }
+
+  .signin-form-spinner {
+    @apply animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2;
+  }
+
+  .signin-form-footer {
+    @apply text-center;
+  }
+
+  .signin-form-footer-text {
+    @apply text-sm text-gray-600;
+  }
+
+  .signin-form-signup-link {
+    @apply font-medium text-primary-600 hover:text-primary-500;
+  }
+
+  /* Dashboard Classes */
+  .dashboard-page-container {
+    @apply min-h-screen bg-gray-50;
+  }
+
+  .dashboard-content-wrapper {
+    @apply container mx-auto px-4 py-8;
+  }
+
+  .dashboard-main-content {
+    @apply max-w-4xl mx-auto;
+  }
+
+  .dashboard-header-card {
+    @apply bg-white shadow rounded-lg p-6 mb-6;
+  }
+
+  .dashboard-header-content {
+    @apply flex items-center justify-between;
+  }
+
+  .dashboard-welcome-section {
+    @apply flex-1;
+  }
+
+  .dashboard-welcome-title {
+    @apply text-2xl font-bold text-gray-900;
+  }
+
+  .dashboard-welcome-subtitle {
+    @apply text-gray-600;
+  }
+
+  .dashboard-signout-button {
+    @apply btn btn-outline;
+  }
+
+  .dashboard-cards-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+
+  .dashboard-card {
+    @apply bg-white shadow rounded-lg p-6;
+  }
+
+  .dashboard-card-title {
+    @apply text-lg font-semibold text-gray-900 mb-4;
+  }
+
+  .dashboard-quick-actions {
+    @apply space-y-3;
+  }
+
+  .dashboard-action-button-primary {
+    @apply w-full btn btn-primary;
+  }
+
+  .dashboard-action-button-outline {
+    @apply w-full btn btn-outline;
+  }
+
+  .dashboard-account-info {
+    @apply space-y-2 text-sm;
+  }
+
+  .dashboard-account-item {
+    @apply flex;
+  }
+
+  .dashboard-account-label {
+    @apply font-medium text-gray-700;
+  }
+
+  .dashboard-account-value {
+    @apply ml-2 text-gray-600;
+  }
+
+  .dashboard-activity-content {
+    @apply text-sm text-gray-600;
+  }
+
+  .dashboard-activity-empty {
+    @apply mb-2;
+  }
+
+  .dashboard-activity-message {
+    @apply mt-2;
+  }
+
+  .dashboard-professional-features {
+    @apply mt-6 bg-white shadow rounded-lg p-6;
+  }
+
+  .dashboard-professional-title {
+    @apply text-lg font-semibold text-gray-900 mb-4;
+  }
+
+  .dashboard-professional-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+
+  .dashboard-professional-feature {
+    @apply border rounded-lg p-4;
+  }
+
+  .dashboard-professional-feature-title {
+    @apply font-medium text-gray-900 mb-2;
+  }
+
+  .dashboard-professional-feature-description {
+    @apply text-sm text-gray-600;
+  }
 }

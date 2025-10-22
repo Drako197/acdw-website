@@ -27,72 +27,72 @@ export function Hero() {
   ]
 
   return (
-    <div className="relative bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 overflow-hidden">
+    <div className="hero-main-container">
       {/* Background Pattern */}
       <div 
-        className="absolute inset-0 opacity-20" 
+        className="hero-background-pattern" 
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
         }}
       ></div>
       
-      <div className="relative container section">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="hero-content-wrapper">
+        <div className="hero-layout-grid">
           {/* Content */}
-          <div className="text-white">
-            <h1 className="heading-1 mb-6 text-white">
+          <div className="hero-text-content">
+            <h1 className="hero-main-heading">
               Prevent Costly Water Damage with{' '}
-              <span className="text-accent-400">AC Drain Wiz</span>
+              <span className="hero-brand-highlight">AC Drain Wiz</span>
             </h1>
             
-            <p className="text-xl text-primary-100 mb-8 leading-relaxed">
+            <p className="hero-description-text">
               Professional-grade AC drain line maintenance solutions that proactively clear clogs, 
               prevent water damage, and streamline HVAC service operations for professionals and homeowners.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+            <div className="hero-cta-buttons">
               <button 
                 onClick={handleGetStarted}
-                className="btn btn-lg bg-white text-primary-700 hover:bg-primary-50 flex items-center justify-center"
+                className="hero-primary-button"
               >
                 Get Started
-                <ArrowRightIcon className="ml-2 h-5 w-5" />
+                <ArrowRightIcon className="hero-button-icon" />
               </button>
               
               <button 
                 onClick={() => navigate('/products')}
-                className="btn btn-lg border-2 border-white text-white hover:bg-white hover:text-primary-700"
+                className="hero-secondary-button"
               >
                 View Products
               </button>
             </div>
             
             {/* Trust Indicators */}
-            <div className="flex items-center space-x-8 text-primary-200">
-              <div className="flex items-center">
-                <ShieldCheckIcon className="h-5 w-5 mr-2" />
-                <span className="text-sm">ICC Code Compliant</span>
+            <div className="hero-trust-indicators">
+              <div className="hero-trust-item">
+                <ShieldCheckIcon className="hero-trust-icon" />
+                <span className="hero-trust-text">ICC Code Compliant</span>
               </div>
-              <div className="flex items-center">
-                <WrenchScrewdriverIcon className="h-5 w-5 mr-2" />
-                <span className="text-sm">Professional Grade</span>
+              <div className="hero-trust-item">
+                <WrenchScrewdriverIcon className="hero-trust-icon" />
+                <span className="hero-trust-text">Professional Grade</span>
               </div>
             </div>
           </div>
           
           {/* Features Grid */}
-          <div className="grid grid-cols-1 gap-6">
+          <div className="hero-features-grid">
             {features.map((feature, index) => (
-              <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
-                <div className="flex items-start">
-                  <div className="flex-shrink-0">
-                    <feature.icon className="h-8 w-8 text-accent-400" />
+              <div key={index} className="hero-feature-card">
+                <div className="hero-feature-content">
+                  <div className="hero-feature-icon-wrapper">
+                    <feature.icon className="hero-feature-icon" />
                   </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-white mb-2">
+                  <div className="hero-feature-text">
+                    <h3 className="hero-feature-title">
                       {feature.title}
                     </h3>
-                    <p className="text-primary-100">
+                    <p className="hero-feature-description">
                       {feature.description}
                     </p>
                   </div>

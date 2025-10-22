@@ -5,23 +5,23 @@ function DashboardContent() {
   const { user, logout } = useAuth()
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
+    <div className="dashboard-page-container">
+      <div className="dashboard-content-wrapper">
+        <div className="dashboard-main-content">
           {/* Header */}
-          <div className="bg-white shadow rounded-lg p-6 mb-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">
+          <div className="dashboard-header-card">
+            <div className="dashboard-header-content">
+              <div className="dashboard-welcome-section">
+                <h1 className="dashboard-welcome-title">
                   Welcome back, {user?.name}!
                 </h1>
-                <p className="text-gray-600">
+                <p className="dashboard-welcome-subtitle">
                   {user?.role.replace('_', ' ')} Account
                 </p>
               </div>
               <button
                 onClick={logout}
-                className="btn btn-outline"
+                className="dashboard-signout-button"
               >
                 Sign Out
               </button>
@@ -29,72 +29,72 @@ function DashboardContent() {
           </div>
 
           {/* Dashboard Content */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="dashboard-cards-grid">
             {/* Quick Actions */}
-            <div className="bg-white shadow rounded-lg p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
-              <div className="space-y-3">
-                <button className="w-full btn btn-primary">
+            <div className="dashboard-card">
+              <h2 className="dashboard-card-title">Quick Actions</h2>
+              <div className="dashboard-quick-actions">
+                <button className="dashboard-action-button-primary">
                   View Products
                 </button>
-                <button className="w-full btn btn-outline">
+                <button className="dashboard-action-button-outline">
                   Bulk Order
                 </button>
-                <button className="w-full btn btn-outline">
+                <button className="dashboard-action-button-outline">
                   Request Demo
                 </button>
               </div>
             </div>
 
             {/* Account Info */}
-            <div className="bg-white shadow rounded-lg p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Account Information</h2>
-              <div className="space-y-2 text-sm">
-                <div>
-                  <span className="font-medium text-gray-700">Name:</span>
-                  <span className="ml-2 text-gray-600">{user?.name}</span>
+            <div className="dashboard-card">
+              <h2 className="dashboard-card-title">Account Information</h2>
+              <div className="dashboard-account-info">
+                <div className="dashboard-account-item">
+                  <span className="dashboard-account-label">Name:</span>
+                  <span className="dashboard-account-value">{user?.name}</span>
                 </div>
-                <div>
-                  <span className="font-medium text-gray-700">Email:</span>
-                  <span className="ml-2 text-gray-600">{user?.email}</span>
+                <div className="dashboard-account-item">
+                  <span className="dashboard-account-label">Email:</span>
+                  <span className="dashboard-account-value">{user?.email}</span>
                 </div>
-                <div>
-                  <span className="font-medium text-gray-700">Role:</span>
-                  <span className="ml-2 text-gray-600">{user?.role.replace('_', ' ')}</span>
+                <div className="dashboard-account-item">
+                  <span className="dashboard-account-label">Role:</span>
+                  <span className="dashboard-account-value">{user?.role.replace('_', ' ')}</span>
                 </div>
               </div>
             </div>
 
             {/* Recent Activity */}
-            <div className="bg-white shadow rounded-lg p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
-              <div className="text-sm text-gray-600">
-                <p>No recent activity</p>
-                <p className="mt-2">Start by exploring our products!</p>
+            <div className="dashboard-card">
+              <h2 className="dashboard-card-title">Recent Activity</h2>
+              <div className="dashboard-activity-content">
+                <p className="dashboard-activity-empty">No recent activity</p>
+                <p className="dashboard-activity-message">Start by exploring our products!</p>
               </div>
             </div>
           </div>
 
           {/* Professional Features */}
           {user?.role === 'HVAC_PROFESSIONAL' && (
-            <div className="mt-6 bg-white shadow rounded-lg p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Professional Features</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border rounded-lg p-4">
-                  <h3 className="font-medium text-gray-900 mb-2">Bulk Pricing</h3>
-                  <p className="text-sm text-gray-600">Access professional pricing for large orders</p>
+            <div className="dashboard-professional-features">
+              <h2 className="dashboard-professional-title">Professional Features</h2>
+              <div className="dashboard-professional-grid">
+                <div className="dashboard-professional-feature">
+                  <h3 className="dashboard-professional-feature-title">Bulk Pricing</h3>
+                  <p className="dashboard-professional-feature-description">Access professional pricing for large orders</p>
                 </div>
-                <div className="border rounded-lg p-4">
-                  <h3 className="font-medium text-gray-900 mb-2">Technical Support</h3>
-                  <p className="text-sm text-gray-600">Get priority support for installation and troubleshooting</p>
+                <div className="dashboard-professional-feature">
+                  <h3 className="dashboard-professional-feature-title">Technical Support</h3>
+                  <p className="dashboard-professional-feature-description">Get priority support for installation and troubleshooting</p>
                 </div>
-                <div className="border rounded-lg p-4">
-                  <h3 className="font-medium text-gray-900 mb-2">Installation Guides</h3>
-                  <p className="text-sm text-gray-600">Download detailed installation and maintenance guides</p>
+                <div className="dashboard-professional-feature">
+                  <h3 className="dashboard-professional-feature-title">Installation Guides</h3>
+                  <p className="dashboard-professional-feature-description">Download detailed installation and maintenance guides</p>
                 </div>
-                <div className="border rounded-lg p-4">
-                  <h3 className="font-medium text-gray-900 mb-2">ICC Compliance</h3>
-                  <p className="text-sm text-gray-600">Access code compliance documentation</p>
+                <div className="dashboard-professional-feature">
+                  <h3 className="dashboard-professional-feature-title">ICC Compliance</h3>
+                  <p className="dashboard-professional-feature-description">Access code compliance documentation</p>
                 </div>
               </div>
             </div>
