@@ -1,59 +1,9 @@
 import { useNavigate } from 'react-router-dom'
-import { ArrowRightIcon, CheckIcon, ClockIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/outline'
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
 export function Hero() {
   const navigate = useNavigate()
 
-  const products = [
-    {
-      id: 'mini',
-      name: 'ACDW Mini',
-      status: 'Coming Soon',
-      statusColor: 'bg-blue-100 text-blue-800',
-      description: 'Our flagship compact maintenance solution with versatile attachment system',
-      keyBenefits: [
-        '5" compact form factor',
-        'Bayonet port system',
-        'Bi-directional valve',
-        'All service attachments'
-      ],
-      cta: 'Learn More',
-      ctaAction: () => navigate('/products?product=mini'),
-      featured: true
-    },
-    {
-      id: 'sensor',
-      name: 'ACDW Sensor',
-      status: 'Coming Soon',
-      statusColor: 'bg-purple-100 text-purple-800',
-      description: 'Smart monitoring with Wi-Fi connectivity and proactive alerts',
-      keyBenefits: [
-        'No-contact sensing',
-        'Wi-Fi connectivity',
-        'SMS/Email alerts',
-        'AC shutoff capability'
-      ],
-      cta: 'Learn More',
-      ctaAction: () => navigate('/products?product=sensor'),
-      featured: false
-    },
-    {
-      id: 'core',
-      name: 'AC Drain Wiz 1.0',
-      status: 'Available Now',
-      statusColor: 'bg-green-100 text-green-800',
-      description: 'Proven foundation solution for reliable maintenance access',
-      keyBenefits: [
-        'Proven reliability',
-        '30-minute installation',
-        'Clear visual inspection',
-        'IMC compliant'
-      ],
-      cta: 'Shop Now',
-      ctaAction: () => navigate('/products?product=core'),
-      featured: false
-    }
-  ]
 
   return (
     <>

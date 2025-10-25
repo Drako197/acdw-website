@@ -58,7 +58,7 @@ const customerTypes: CustomerTypeConfig[] = [
       'Simple story, clear kits'
     ],
     cta: 'Access Distributor Portal',
-    pricing: 'bulk'
+    pricing: 'pro'
   },
   {
     type: 'city-official',
@@ -159,7 +159,6 @@ export function CustomerTypeSelector() {
                 <button className={`customer-type-cta-button ${
                   config.pricing === 'retail' ? 'customer-type-cta-primary' :
                   config.pricing === 'pro' ? 'customer-type-cta-outline' :
-                  config.pricing === 'bulk' ? 'customer-type-cta-outline' :
                   'customer-type-cta-secondary'
                 }`}>
                   {config.cta}
