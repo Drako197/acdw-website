@@ -79,7 +79,9 @@
 
   /* Hero Section Classes */
   .hero-main-container {
-    @apply relative bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 overflow-hidden;
+    @apply relative overflow-hidden;
+    background: linear-gradient(135deg, #0077C5 0%, #00B8F5 100%);
+    height: 100vh;
   }
 
   .hero-background-pattern {
@@ -90,8 +92,13 @@
     @apply relative container section;
   }
 
-  .hero-layout-grid {
-    @apply grid grid-cols-1 lg:grid-cols-2 gap-12 items-center;
+  .hero-header-section {
+    @apply text-center;
+  }
+
+  .hero-background-image {
+    @apply absolute inset-0 bg-cover bg-center bg-no-repeat;
+    background-image: url('/images/acdw-mini-hero-background.png');
   }
 
   .hero-text-content {
@@ -103,15 +110,20 @@
   }
 
   .hero-brand-highlight {
-    @apply text-accent-400;
+    @apply text-orange-500;
+  }
+
+  .hero-subtitle {
+    @apply text-2xl text-white font-semibold mb-6 leading-relaxed;
   }
 
   .hero-description-text {
-    @apply text-xl text-primary-100 mb-8 leading-relaxed;
+    @apply text-xl text-primary-100 mb-8 leading-relaxed text-left;
   }
 
   .hero-cta-buttons {
-    @apply flex flex-col sm:flex-row gap-4 mb-12;
+    @apply flex flex-col sm:flex-row gap-4 mb-4;
+    margin-top: 190px;
   }
 
   .hero-primary-button {
@@ -127,7 +139,7 @@
   }
 
   .hero-trust-indicators {
-    @apply flex items-center space-x-8 text-primary-200;
+    @apply flex items-center justify-center space-x-8 text-primary-200;
   }
 
   .hero-trust-item {
@@ -142,36 +154,243 @@
     @apply text-sm;
   }
 
-  .hero-features-grid {
-    @apply grid grid-cols-1 gap-6;
+  /* Product Cards */
+  .hero-product-card {
+    @apply bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20 transition-all duration-200 hover:bg-white/15 hover:border-white/30;
   }
 
-  .hero-feature-card {
-    @apply bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20;
+  .hero-product-card-featured {
+    @apply bg-white/15 border-white/30 transform scale-105;
   }
 
-  .hero-feature-content {
-    @apply flex items-start;
+  .hero-product-header {
+    @apply mb-6;
   }
 
-  .hero-feature-icon-wrapper {
-    @apply flex-shrink-0;
+  .hero-product-title-section {
+    @apply flex items-center justify-between mb-3;
   }
 
-  .hero-feature-icon {
-    @apply h-8 w-8 text-accent-400;
+  .hero-product-title {
+    @apply text-xl font-bold text-white;
   }
 
-  .hero-feature-text {
-    @apply ml-4;
+  .hero-product-status {
+    @apply px-3 py-1 rounded-full text-xs font-medium;
   }
 
-  .hero-feature-title {
-    @apply text-lg font-semibold text-white mb-2;
+  .hero-product-description {
+    @apply text-primary-100 text-sm leading-relaxed;
   }
 
-  .hero-feature-description {
-    @apply text-primary-100;
+  .hero-product-benefits {
+    @apply mb-6;
+  }
+
+  .hero-product-benefits-list {
+    @apply space-y-2;
+  }
+
+  .hero-product-benefit-item {
+    @apply flex items-center;
+  }
+
+  .hero-product-benefit-icon {
+    @apply h-4 w-4 text-green-400 mr-3 flex-shrink-0;
+  }
+
+  .hero-product-benefit-text {
+    @apply text-sm text-primary-100;
+  }
+
+  .hero-product-cta {
+    @apply mt-auto;
+  }
+
+  .hero-product-button {
+    @apply w-full btn bg-white/20 text-white hover:bg-white/30 border border-white/30 flex items-center justify-center;
+  }
+
+  .hero-product-button-featured {
+    @apply bg-white text-blue-700 hover:bg-primary-50 border-white;
+  }
+
+  .hero-product-button-icon {
+    @apply ml-2 h-4 w-4;
+  }
+
+  /* Trust Section */
+  .trust-section-container {
+    @apply bg-white py-12;
+  }
+
+  .trust-section-content {
+    @apply container mx-auto px-4 flex items-center justify-between max-w-4xl;
+  }
+
+  .trust-badge {
+    @apply flex items-center justify-center;
+  }
+
+  .trust-badge-image {
+    @apply h-24 w-auto max-w-none;
+  }
+
+  .trust-main-text {
+    @apply flex-1 text-center;
+  }
+
+  .trust-title {
+    @apply heading-2 text-gray-900;
+  }
+
+  /* Product Showcase Section */
+  .product-showcase-container {
+    @apply bg-gray-50 py-16 w-full;
+  }
+
+  .product-showcase-header {
+    @apply text-center mb-12;
+  }
+
+  .product-showcase-title {
+    @apply heading-2 mb-4;
+  }
+
+  .product-showcase-subtitle {
+    @apply text-large text-gray-600 max-w-2xl mx-auto;
+  }
+
+  .product-showcase-grid {
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto px-4;
+  }
+
+  .product-showcase-grid-three {
+    @apply grid gap-8 max-w-7xl mx-auto px-4;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 1024px) {
+    .product-showcase-grid-three {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+  }
+
+  .product-showcase-card {
+    @apply relative rounded-2xl overflow-hidden min-h-96;
+  }
+
+  .product-showcase-card-sensor {
+    @apply min-h-[700px];
+  }
+
+  .product-showcase-card-core {
+    @apply min-h-[700px];
+  }
+
+  .product-showcase-card-mini {
+    @apply min-h-[700px];
+  }
+
+  @media (min-width: 1024px) {
+    .product-showcase-card-mini {
+      grid-column: 1 / -1;
+    }
+  }
+
+
+  .product-showcase-card-background {
+    @apply absolute inset-0 bg-cover bg-center bg-no-repeat;
+    /* Product images will be added as backgrounds */
+  }
+
+  .product-showcase-card-sensor .product-showcase-card-background {
+    background-image: url('/images/acdw-sensor-showcase-background.png');
+  }
+
+  .product-showcase-card-core .product-showcase-card-background {
+    background-image: url('/images/acdw-core-showcase-background.png');
+  }
+
+  .product-showcase-card-mini .product-showcase-card-background {
+    background-image: url('/images/hvac-tech-mini-sensor-combined.png');
+  }
+
+
+  .product-showcase-card-content {
+    @apply relative z-10 p-8 h-full flex flex-col justify-center items-center text-center;
+  }
+
+  .product-showcase-card-sensor .product-showcase-card-content {
+    @apply justify-end pb-12;
+  }
+
+  .product-showcase-card-core .product-showcase-card-content {
+    @apply justify-end pb-12;
+  }
+
+  .product-showcase-card-mini .product-showcase-card-content {
+    @apply justify-end pb-12;
+  }
+
+
+  .product-showcase-card-header {
+    @apply hidden;
+  }
+
+  .product-showcase-card-title {
+    @apply hidden;
+  }
+
+  .product-showcase-card-status {
+    @apply hidden;
+  }
+
+  .product-showcase-card-headline {
+    @apply text-4xl font-bold text-white mb-4;
+  }
+
+  .product-showcase-card-description {
+    @apply text-white/90 text-lg leading-relaxed mb-8;
+  }
+
+
+  .product-showcase-card-sensor .product-showcase-card-headline {
+    @apply text-5xl font-bold text-white mb-6;
+  }
+
+  .product-showcase-card-sensor .product-showcase-card-description {
+    @apply text-white/90 text-xl leading-relaxed mb-8;
+  }
+
+  .product-showcase-card-core .product-showcase-card-headline {
+    @apply text-5xl font-bold text-white mb-6;
+  }
+
+  .product-showcase-card-core .product-showcase-card-description {
+    @apply text-white/90 text-xl leading-relaxed mb-8;
+  }
+
+  .product-showcase-card-mini .product-showcase-card-headline {
+    @apply text-5xl font-bold text-white mb-6;
+  }
+
+  .product-showcase-card-mini .product-showcase-card-description {
+    @apply text-white/90 text-xl leading-relaxed mb-8;
+  }
+
+
+  .product-showcase-card-ctas {
+    @apply flex space-x-4;
+  }
+
+  .product-showcase-card-cta-primary {
+    @apply btn bg-blue-600 text-white hover:bg-blue-700 px-6 py-3;
+  }
+
+  .product-showcase-card-cta-secondary {
+    @apply btn border-2 border-white text-white hover:bg-white hover:text-gray-900 px-6 py-3;
   }
 
   /* Customer Type Selector Classes */
@@ -196,7 +415,7 @@
   }
 
   .customer-selector-cards-grid {
-    @apply grid grid-cols-1 gap-8 lg:grid-cols-3;
+    @apply grid grid-cols-1 gap-8 lg:grid-cols-2 xl:grid-cols-4;
   }
 
   .customer-type-card {
@@ -217,6 +436,10 @@
 
   .customer-type-icon-hvac {
     @apply bg-green-100 text-green-600;
+  }
+
+  .customer-type-icon-distributor {
+    @apply bg-orange-100 text-orange-600;
   }
 
   .customer-type-icon-city {
@@ -284,12 +507,8 @@
     @apply flex items-center space-x-2;
   }
 
-  .header-logo-icon {
-    @apply h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center;
-  }
-
-  .header-logo-text {
-    @apply text-white font-bold text-sm;
+  .header-logo-image {
+    @apply h-9 w-auto max-w-none;
   }
 
   .header-brand-name {
@@ -573,4 +792,38 @@
   .dashboard-professional-feature-description {
     @apply text-sm text-gray-600;
   }
+
+  /* Benefits Section Styles */
+  .benefits-section-container {
+    @apply py-16 px-4 sm:px-6 lg:px-8 bg-gray-50;
+  }
+
+  .benefits-section-content {
+    @apply max-w-7xl mx-auto;
+  }
+
+  .benefits-section-title {
+    @apply text-4xl font-bold text-gray-900 text-center mb-12;
+  }
+
+  .benefits-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8;
+  }
+
+  .benefit-card {
+    @apply bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300;
+  }
+
+  .benefit-icon {
+    @apply text-blue-600 mb-4;
+  }
+
+  .benefit-title {
+    @apply text-xl font-bold text-gray-900 mb-3;
+  }
+
+  .benefit-description {
+    @apply text-gray-600 leading-relaxed;
+  }
+
 }

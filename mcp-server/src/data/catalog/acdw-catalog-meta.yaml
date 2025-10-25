@@ -1,0 +1,32 @@
+acdw_catalog_version: "2025-10-22"
+brand: AC Drain Wiz
+mission: Make AC maintenance easier, faster, and more profitable with a one-time installed solution that proactively keeps condensate drain lines clear.
+audiences:
+  - HVAC Contractors
+  - HVAC Distributors/Wholesalers
+  - City/Code Officials (AHJs)
+  - Homeowners (via contractors)
+primary_markets:
+  - Residential HVAC
+  - Condominiums/Apartments
+  - Light Commercial (select installs)
+contact:
+  name: Alan Riddle
+  title: Founder & CEO
+  email: ariddle@acdrainwiz.com
+  phone: "(561) 654-5237"
+go_to_market_notes:
+  messages_contractors:
+    - One-time install; service through a single port
+    - 35% faster cleanouts (internal claim—validate before external use)
+    - Upsell opportunities and fewer emergency calls
+  messages_distributors:
+    - Simple story, clear kits, and strong unit economics
+    - Stock-friendly case packs (20/50) for the Core; Mini/Sensor TBD
+  messages_ahj:
+    - Clear maintenance access and approved disposal references (IMC)
+    - Sensor can function as a non-contact water-level detection device
+global_open_items:
+  - Confirm any external claims with test data
+  - Lock pricing for Mini and Sensor; update packs/SKUs/UPCs
+  - Create wiring diagram (DC Sensor) and publish bayonet + O-ring spec sheet

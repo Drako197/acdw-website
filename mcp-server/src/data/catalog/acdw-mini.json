@@ -1,0 +1,67 @@
+{
+  "product_id": "ACDW-MINI",
+  "name": "ACDW Mini",
+  "status": "Pre-launch (spec draft)",
+  "description": "Compact maintenance manifold (~5\" length) with a single snap-to-lock bayonet port and a bi-directional valve to orient service flow outward (to discharge) or inward (toward drain pan).",
+  "key_benefits": [
+    "One port for all services (flush, air, vacuum, sensor)",
+    "Bi-directional valve supports outward flush or inward vacuum",
+    "Clear body for fast visual checks",
+    "Supports code-compliant maintenance access"
+  ],
+  "form_factor": {
+    "overall_length_in": 5,
+    "primary_port": "Bayonet, quarter-turn with lock detent",
+    "o_ring_gland": "Present; size/material TBD"
+  },
+  "connections": {
+    "ends": "Slip x slip sockets for 3/4\" PVC (TBD: socket depth, chamfer)",
+    "compatibility": ["Most residential condensate lines", "Transfer pumps (yes)"]
+  },
+  "attachments_included": [
+    "Protective Service Cap (insert when no service/sensor is installed)"
+  ],
+  "attachments_optional": [
+    { "name": "Water Hose Attachment", "direction": "Outward only (do not push water toward pan)", "limits": { "max_psi": "TBD", "max_gpm": "TBD" } },
+    { "name": "Air Hose Attachment (Type A)", "direction": "Outward only", "limits": { "max_psi": "TBD", "max_cfm": "TBD" } },
+    { "name": "Air Hose Attachment (Type B)", "direction": "Outward only", "limits": { "max_psi": "TBD", "max_cfm": "TBD" } },
+    { "name": "Vacuum Attachment", "direction": "Bidirectional; recommended toward pan for thorough clean", "limits": { "max_inHg": "TBD" } }
+  ],
+  "ui_markings": [
+    "Molded flow arrows (TBD artwork)",
+    "LOCK/UNLOCK index marks on collar (TBD artwork)",
+    "Reserved 1\"x1\" QR label area on top surface"
+  ],
+  "materials": {
+    "body": "Clear/translucent polymer (ABS vs clear PVC TBD)",
+    "uv_stabilization": "TBD",
+    "min_wall_thickness_mm": "TBD"
+  },
+  "codes_and_compliance": {
+    "references": ["IMC 307.2.5", "IMC 307.2.2", "IMC 307.2.1.1"],
+    "notes": "Supports maintenance access and approved disposal locations."
+  },
+  "installation": {
+    "typical_time_minutes": 30,
+    "steps": [
+      "Solvent-weld installation (TBD: joint details)",
+      "Set valve orientation (outward flush vs inward vacuum)",
+      "Attach service tool to bayonet and lock (audible/tactile click TBD)",
+      "Perform service and verify clear flow",
+      "Insert protective service cap (if sensor not installed)"
+    ]
+  },
+  "packaging": {
+    "single_unit_includes": ["Mini manifold with bi-directional plug", "Protective service cap", "Quick-start guide"],
+    "case_packs": "TBD"
+  },
+  "pricing": { "msrp_usd": "TBD", "contractor": "TBD", "distributor": "TBD" },
+  "open_items": [
+    "Finalize bayonet spec (lug width/height, 90° throw, detent force)",
+    "O-ring material/size (e.g., NBR/EPDM, durometer)",
+    "Socket depth/chamfer and tolerance table",
+    "Pressure/flow ratings for all attachments",
+    "Exact resin and operating temperature range",
+    "Ingress/marking requirements if any"
+  ]
+}

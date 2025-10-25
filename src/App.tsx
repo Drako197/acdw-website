@@ -5,6 +5,7 @@ import { Footer } from './components/layout/Footer'
 import { HomePage } from './pages/HomePage'
 import { CustomerSelectionPage } from './pages/CustomerSelectionPage'
 import { ProductsPage } from './pages/ProductsPage'
+import { SolutionsPage } from './pages/SolutionsPage'
 import { ContactPage } from './pages/ContactPage'
 import { AboutPage } from './pages/AboutPage'
 import { SignInPage } from './pages/SignInPage'
@@ -22,6 +23,7 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/customer-selection" element={<CustomerSelectionPage />} />
               <Route path="/products" element={<ProductsPage />} />
+              <Route path="/solutions" element={<SolutionsPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/auth/signin" element={<SignInPage />} />

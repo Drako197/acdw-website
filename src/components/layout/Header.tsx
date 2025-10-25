@@ -11,9 +11,9 @@ import { useAuth } from '../../contexts/AuthContext'
 const navigation = [
   { name: 'Products', href: '/products' },
   { name: 'Solutions', href: '/solutions' },
-  { name: 'Resources', href: '/resources' },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },
+  { name: 'Sensor Monitoring', href: 'https://monitor.acdrainwiz.com/login', external: true },
 ]
 
 export function Header() {
@@ -28,23 +28,36 @@ export function Header() {
           {/* Logo */}
           <div className="header-logo-section">
             <Link to="/" className="header-logo-link">
-              <div className="header-logo-icon">
-                <span className="header-logo-text">AC</span>
-              </div>
-              <span className="header-brand-name">AC Drain Wiz</span>
+              <img 
+                src="/images/ac-drain-wiz-logo.png" 
+                alt="AC Drain Wiz Logo" 
+                className="header-logo-image"
+              />
             </Link>
           </div>
 
           {/* Desktop Navigation */}
           <div className="header-desktop-navigation">
             {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className="header-nav-link"
-              >
-                {item.name}
-              </Link>
+              item.external ? (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="header-nav-link"
+                >
+                  {item.name}
+                </a>
+              ) : (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className="header-nav-link"
+                >
+                  {item.name}
+                </Link>
+              )
             ))}
           </div>
 
@@ -124,14 +137,27 @@ export function Header() {
           <div className="header-mobile-menu-container">
             <div className="header-mobile-menu-content">
               {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className="header-mobile-nav-link"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
+                item.external ? (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="header-mobile-nav-link"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </a>
+                ) : (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className="header-mobile-nav-link"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                )
               ))}
               
               <div className="header-mobile-auth-section">

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 
 // Define types locally to avoid import issues
-type CustomerType = 'homeowner' | 'hvac-professional' | 'city-official'
+type CustomerType = 'homeowner' | 'hvac-professional' | 'distributor' | 'city-official'
 
 interface CustomerTypeConfig {
   type: CustomerType
@@ -21,13 +21,13 @@ const customerTypes: CustomerTypeConfig[] = [
   {
     type: 'homeowner',
     title: 'Homeowner',
-    description: 'Protect your home from costly water damage with easy-to-install AC drain solutions.',
+    description: 'Protect your home from costly water damage with professional-grade AC drain solutions. Direct purchase with professional installation support.',
     features: [
-      'Easy DIY installation',
-      'Prevents water damage',
-      'Clear visual monitoring',
-      '30-minute setup',
-      'Retail pricing available'
+      'Direct purchase available',
+      'Professional installation support',
+      'Prevents costly water damage',
+      'Clear visual inspection',
+      'Peace of mind with proactive maintenance'
     ],
     cta: 'Shop Products',
     pricing: 'retail'
@@ -35,27 +35,41 @@ const customerTypes: CustomerTypeConfig[] = [
   {
     type: 'hvac-professional',
     title: 'HVAC Professional',
-    description: 'Streamline your service calls and increase efficiency with professional-grade tools and bulk pricing.',
+    description: 'Boost efficiency and increase profitability with bulk pricing and professional tools. Access contractor pricing and bulk ordering.',
     features: [
-      'Bulk ordering available',
-      'Professional pricing',
-      'Installation guides',
-      'Technical support',
-      'ICC code compliance docs'
+      '35% faster cleanouts',
+      'Bulk pricing (20-pack, 50-pack)',
+      'Professional tools and support',
+      'Upsell opportunities',
+      'IMC code compliance'
     ],
     cta: 'Access Pro Portal',
     pricing: 'pro'
   },
   {
+    type: 'distributor',
+    title: 'Distributor',
+    description: 'Grow your business with wholesale pricing and strong unit economics. Stock-friendly case packs and distributor margins.',
+    features: [
+      'Wholesale pricing tiers',
+      'Strong unit economics (25%, 30%, 35% margins)',
+      'Stock-friendly case packs',
+      'Distributor support program',
+      'Simple story, clear kits'
+    ],
+    cta: 'Access Distributor Portal',
+    pricing: 'bulk'
+  },
+  {
     type: 'city-official',
     title: 'City & Code Official',
-    description: 'Manage municipal AC systems with centralized monitoring and compliance solutions.',
+    description: 'Ensure compliance and proper maintenance access with IMC-approved solutions. Access compliance documentation and demo scheduling.',
     features: [
-      'Centralized monitoring',
-      'Compliance reporting',
-      'Bulk system management',
-      'Custom solutions',
-      'Demo scheduling'
+      'IMC code compliance (307.2.5, 307.2.2, 307.2.1.1)',
+      'Clear maintenance access documentation',
+      'Approved disposal location references',
+      'Non-contact water-level detection',
+      'Demo scheduling available'
     ],
     cta: 'Request Demo',
     pricing: 'contact'
@@ -65,6 +79,7 @@ const customerTypes: CustomerTypeConfig[] = [
 const icons = {
   homeowner: HomeIcon,
   'hvac-professional': WrenchScrewdriverIcon,
+  'distributor': BuildingOfficeIcon,
   'city-official': BuildingOfficeIcon
 }
 
@@ -82,6 +97,9 @@ export function CustomerTypeSelector() {
         break
       case 'hvac-professional':
         navigate('/auth/signin', { state: { from: { pathname: '/products', search: '?type=hvac-professional' } } })
+        break
+      case 'distributor':
+        navigate('/auth/signin', { state: { from: { pathname: '/products', search: '?type=distributor' } } })
         break
       case 'city-official':
         navigate('/contact?type=demo-request')
@@ -117,6 +135,7 @@ export function CustomerTypeSelector() {
                   <div className={`customer-type-icon-wrapper ${
                     config.type === 'homeowner' ? 'customer-type-icon-homeowner' :
                     config.type === 'hvac-professional' ? 'customer-type-icon-hvac' :
+                    config.type === 'distributor' ? 'customer-type-icon-distributor' :
                     'customer-type-icon-city'
                   }`}>
                     <Icon className="customer-type-icon" />
@@ -140,6 +159,7 @@ export function CustomerTypeSelector() {
                 <button className={`customer-type-cta-button ${
                   config.pricing === 'retail' ? 'customer-type-cta-primary' :
                   config.pricing === 'pro' ? 'customer-type-cta-outline' :
+                  config.pricing === 'bulk' ? 'customer-type-cta-outline' :
                   'customer-type-cta-secondary'
                 }`}>
                   {config.cta}

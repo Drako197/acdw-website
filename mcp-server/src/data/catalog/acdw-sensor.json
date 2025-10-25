@@ -1,0 +1,71 @@
+{
+  "product_id": "ACDW-SENSOR",
+  "name": "ACDW Sensor",
+  "status": "Pre-launch (spec draft)",
+  "description": "First-of-its-kind, no-contact capacitive water-level sensor that snaps into the ACDW Mini's bayonet port. Measures air displacement around a PCB probe to infer water level—avoids biofilm issues seen in float switches.",
+  "key_benefits": [
+    "No moving parts; no direct water contact",
+    "Avoids biofilm-related failures common to float switches",
+    "Wi-Fi alerts (SMS/email) with daily reporting",
+    "Two models: Alert-only (battery) or Alert + AC shutoff (DC + battery)"
+  ],
+  "models": [
+    { "model_id": "ACDW-SENSOR-WIFI-BATT", "power": "Battery (target life ~2 years)", "ac_shutoff": false },
+    { "model_id": "ACDW-SENSOR-WIFI-DC", "power": "DC primary + backup battery", "ac_shutoff": true, "shutoff_threshold_pct": 90 }
+  ],
+  "measurement_logic": {
+    "method": "Capacitive; measures air volume proxy inside Mini manifold",
+    "range_pct": "10–100 (indicative, calibration TBD)",
+    "normal_band_pct": "5–15",
+    "alert_threshold_pct": 50,
+    "shutoff_threshold_pct": 90
+  },
+  "alerts_reporting": {
+    "channels": ["SMS", "Email"],
+    "daily_report": true,
+    "battery_level_reporting": true
+  },
+  "provisioning": {
+    "technician_installed": true,
+    "requires_homeowner_wifi": true,
+    "steps": [
+      "Insert battery → device beacons SSID; LED blinks red (pairing)",
+      "Tech connects to sensor SSID (captive portal)",
+      "Select homeowner Wi-Fi and enter password",
+      "Tech logs in to ACDW Sensor Admin (contractor account)",
+      "LED turns green when online and reporting"
+    ]
+  },
+  "hardware": {
+    "interface": "Snap-to-lock bayonet (same as Mini)",
+    "housing": "Two-piece plastic with removable battery door",
+    "led_states": { "pairing": "Red blinking", "online": "Green solid" }
+  },
+  "codes_and_compliance": {
+    "references": ["IMC 307.2.3"],
+    "notes": "Water-level detection device; DC model can perform AC shutoff similar to float switch behavior."
+  },
+  "integration": {
+    "dashboard": "ACDW Sensor Admin",
+    "features": [
+      "Multi-client/multi-site management for HVAC Pros",
+      "Device list, location tagging (TBD)",
+      "Event history and daily summaries",
+      "Low-battery notifications"
+    ]
+  },
+  "packaging": {
+    "battery_model_includes": ["Sensor", "Battery (field-installed)", "Quick-start guide"],
+    "dc_model_includes": ["Sensor", "DC pigtail", "Backup battery", "Quick-start guide"]
+  },
+  "pricing": { "msrp_usd": "TBD", "contractor": "TBD", "distributor": "TBD" },
+  "open_items": [
+    "Battery chemistry and exact life claim",
+    "DC input voltage/current range",
+    "Relay type and rating (A/V), NO/NC",
+    "Wi-Fi bands and security (2.4 GHz vs dual-band; WPA2/WPA3)",
+    "Ingress rating target (IP) and regulatory marks (FCC/IC/CE)",
+    "Sampling frequency, debounce, and calibration details",
+    "Offline behavior (buffering, retries)"
+  ]
+}

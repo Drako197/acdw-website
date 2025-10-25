@@ -1,0 +1,47 @@
+{
+  "product_id": "ACDW-CORE-1.0",
+  "name": "AC Drain Wiz (Core 1.0)",
+  "status": "GA",
+  "description": "One-time installed drain line maintenance access/cleanout device that enables fast, repeatable service without cutting lines.",
+  "key_benefits": [
+    "One-time install; ongoing access without cutting",
+    "Proactive, faster cleanouts; fewer emergency calls",
+    "Clear visual inspection of water/flow",
+    "Increases technician efficiency and daily job count",
+    "Upsell opportunities (e.g., UV air sanitation)"
+  ],
+  "compatibility": {
+    "drain_line_size": "3/4 in (typical residential)",
+    "transfer_pump_compatible": true
+  },
+  "codes_and_compliance": {
+    "notes": "Supports maintenance access and approved disposal locations per IMC sections commonly referenced for residential condensate lines.",
+    "references": ["IMC 307.2.5", "IMC 307.2.2", "IMC 307.2.1.1"]
+  },
+  "install": {
+    "typical_time_minutes": 30,
+    "tools_required": "Standard HVAC service tools; no specialized tools required",
+    "process_highlights": [
+      "Solvent weld into line (TBD: exact joint details)",
+      "Use clear body to verify flow/blockage",
+      "No recurring disassembly to service"
+    ]
+  },
+  "pricing": {
+    "msrp_usd": 59.99,
+    "contractor_tiers": [
+      { "pack": "Single Retail Box", "tier_1_qty": "1-20", "tier_1_price": 43.0, "tier_2_qty": "21-100", "tier_2_price": 39.0, "tier_3_qty": "101-500", "tier_3_price": "Price upon request" },
+      { "pack": "Contractor 20 Pack", "tier_1_qty": "1-20", "tier_1_price": 40.0, "tier_2_qty": "21-100", "tier_2_price": 37.0, "tier_3_qty": "101-500", "tier_3_price": "Price upon request" },
+      { "pack": "Contractor 50 Pack", "tier_1_qty": "1-20", "tier_1_price": 38.75, "tier_2_qty": "21-100", "tier_2_price": 35.75, "tier_3_qty": "101-500", "tier_3_price": "Price upon request" }
+    ],
+    "distributor_tiers": [
+      { "pack": "Single Retail Box", "margin": ["25%", "30%", "35%"], "tier_1_qty": "500-1,000", "tier_2_qty": "1,001-2,000", "tier_3_qty": "2,001-4,000", "suggested_contractor_price": 39.0, "distributor_prices": [29.25, 27.3, 25.0] },
+      { "pack": "Contractor 20 Pack", "margin": ["25%", "30%", "35%"], "suggested_contractor_price": 35.38, "distributor_prices": [26.53, 24.76, 23.0] },
+      { "pack": "Contractor 50 Pack", "margin": ["25%", "30%", "35%"], "suggested_contractor_price": 34.38, "distributor_prices": [25.78, 24.0, 22.34] }
+    ]
+  },
+  "open_items": [
+    "Exact materials/resin spec and UV/temp ratings",
+    "Final socket dimensions, wall thickness, and tolerances"
+  ]
+}
