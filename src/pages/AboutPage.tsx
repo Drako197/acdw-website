@@ -15,72 +15,72 @@ export function AboutPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-16">
+    <div className="about-page-container">
+      <div className="about-page-content">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="heading-1 mb-6">About AC Drain Wiz</h1>
-          <p className="text-large text-gray-600 max-w-3xl mx-auto">
+        <div className="about-page-header">
+          <h1 className="about-page-title">About AC Drain Wiz</h1>
+          <p className="about-page-subtitle">
             Making AC maintenance easier, faster, and more profitable with innovative 
             one-time installed solutions that proactively keep condensate drain lines clear.
           </p>
         </div>
 
         {/* Mission Section */}
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-16">
-          <h2 className="heading-2 mb-6 text-center">Our Mission</h2>
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="text-xl text-gray-700 mb-6">
+        <div className="about-page-section">
+          <h2 className="about-page-section-title">Our Mission</h2>
+          <div className="about-page-mission-content">
+            <p className="about-page-mission-text">
               Make AC maintenance easier, faster, and more profitable with a one-time installed solution 
               that proactively keeps condensate drain lines clear.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckCircleIcon className="h-8 w-8 text-blue-600" />
+            <div className="about-page-mission-grid">
+              <div className="about-page-mission-item">
+                <div className="about-page-mission-icon about-page-mission-icon-easier">
+                  <CheckCircleIcon className="about-page-mission-icon-svg" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Easier</h3>
-                <p className="text-sm text-gray-600">One-time installation eliminates repeated cutting and reconnection</p>
+                <h3 className="about-page-mission-item-title">Easier</h3>
+                <p className="about-page-mission-item-description">One-time installation eliminates repeated cutting and reconnection</p>
               </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckCircleIcon className="h-8 w-8 text-green-600" />
+              <div className="about-page-mission-item">
+                <div className="about-page-mission-icon about-page-mission-icon-faster">
+                  <CheckCircleIcon className="about-page-mission-icon-svg" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Faster</h3>
-                <p className="text-sm text-gray-600">35% faster cleanouts with streamlined maintenance process</p>
+                <h3 className="about-page-mission-item-title">Faster</h3>
+                <p className="about-page-mission-item-description">35% faster cleanouts with streamlined maintenance process</p>
               </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckCircleIcon className="h-8 w-8 text-purple-600" />
+              <div className="about-page-mission-item">
+                <div className="about-page-mission-icon about-page-mission-icon-profitable">
+                  <CheckCircleIcon className="about-page-mission-icon-svg" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">More Profitable</h3>
-                <p className="text-sm text-gray-600">Increased technician efficiency and upsell opportunities</p>
+                <h3 className="about-page-mission-item-title">More Profitable</h3>
+                <p className="about-page-mission-item-description">Increased technician efficiency and upsell opportunities</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Markets & Audiences */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <h2 className="heading-2 mb-6">Primary Markets</h2>
-            <ul className="space-y-3">
+        <div className="about-page-info-grid">
+          <div className="about-page-info-card">
+            <h2 className="about-page-info-card-title">Primary Markets</h2>
+            <ul className="about-page-info-list">
               {markets.map((market, index) => (
-                <li key={index} className="flex items-center">
-                  <CheckCircleIcon className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                  <span className="text-gray-700">{market}</span>
+                <li key={index} className="about-page-info-item">
+                  <CheckCircleIcon className="about-page-info-icon about-page-info-icon-green" />
+                  <span className="about-page-info-text">{market}</span>
                 </li>
               ))}
             </ul>
           </div>
           
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <h2 className="heading-2 mb-6">Target Audiences</h2>
-            <ul className="space-y-3">
+          <div className="about-page-info-card">
+            <h2 className="about-page-info-card-title">Target Audiences</h2>
+            <ul className="about-page-info-list">
               {audiences.map((audience, index) => (
-                <li key={index} className="flex items-center">
-                  <CheckCircleIcon className="h-5 w-5 text-blue-500 mr-3 flex-shrink-0" />
-                  <span className="text-gray-700">{audience}</span>
+                <li key={index} className="about-page-info-item">
+                  <CheckCircleIcon className="about-page-info-icon about-page-info-icon-blue" />
+                  <span className="about-page-info-text">{audience}</span>
                 </li>
               ))}
             </ul>
@@ -88,34 +88,34 @@ export function AboutPage() {
         </div>
 
         {/* Leadership */}
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-16">
-          <h2 className="heading-2 mb-8 text-center">Leadership</h2>
-          <div className="max-w-2xl mx-auto">
-            <div className="flex items-center space-x-6">
-              <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <BuildingOfficeIcon className="h-12 w-12 text-blue-600" />
+        <div className="about-page-section about-page-leadership">
+          <h2 className="about-page-section-title">Leadership</h2>
+          <div className="about-page-leadership-content">
+            <div className="about-page-leadership-profile">
+              <div className="about-page-leadership-avatar">
+                <BuildingOfficeIcon className="about-page-leadership-avatar-icon" />
               </div>
-              <div className="flex-1">
-                <h3 className="text-2xl font-bold text-gray-900">Alan Riddle</h3>
-                <p className="text-lg text-blue-600 mb-4">Founder & CEO</p>
-                <p className="text-gray-600 mb-4">
+              <div className="about-page-leadership-details">
+                <h3 className="about-page-leadership-name">Alan Riddle</h3>
+                <p className="about-page-leadership-role">Founder & CEO</p>
+                <p className="about-page-leadership-bio">
                   Leading the development of innovative AC drain line maintenance solutions 
                   that revolutionize how HVAC professionals approach condensate line maintenance.
                 </p>
-                <div className="flex items-center space-x-4">
+                <div className="about-page-leadership-contact">
                   <a 
                     href="mailto:ariddle@acdrainwiz.com" 
-                    className="flex items-center text-blue-600 hover:text-blue-700"
+                    className="about-page-leadership-contact-link"
                   >
-                    <EnvelopeIcon className="h-5 w-5 mr-2" />
-                    <span className="text-sm">ariddle@acdrainwiz.com</span>
+                    <EnvelopeIcon className="about-page-leadership-contact-icon" />
+                    <span className="about-page-leadership-contact-text">ariddle@acdrainwiz.com</span>
                   </a>
                   <a 
                     href="tel:+15616545237" 
-                    className="flex items-center text-blue-600 hover:text-blue-700"
+                    className="about-page-leadership-contact-link"
                   >
-                    <PhoneIcon className="h-5 w-5 mr-2" />
-                    <span className="text-sm">(561) 654-5237</span>
+                    <PhoneIcon className="about-page-leadership-contact-icon" />
+                    <span className="about-page-leadership-contact-text">(561) 654-5237</span>
                   </a>
                 </div>
               </div>
@@ -124,32 +124,32 @@ export function AboutPage() {
         </div>
 
         {/* Company Info */}
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <h2 className="heading-2 mb-6 text-center">Company Information</h2>
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Brand</h3>
-                <p className="text-gray-600">AC Drain Wiz</p>
+        <div className="about-page-section">
+          <h2 className="about-page-section-title">Company Information</h2>
+          <div className="about-page-company-content">
+            <div className="about-page-company-grid">
+              <div className="about-page-company-item">
+                <h3 className="about-page-company-item-title">Brand</h3>
+                <p className="about-page-company-item-text">AC Drain Wiz</p>
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Catalog Version</h3>
-                <p className="text-gray-600">2025-10-22</p>
+              <div className="about-page-company-item">
+                <h3 className="about-page-company-item-title">Catalog Version</h3>
+                <p className="about-page-company-item-text">2025-10-22</p>
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Product Status</h3>
-                <div className="space-y-1">
-                  <p className="text-gray-600">• Mini: Pre-launch (spec draft)</p>
-                  <p className="text-gray-600">• Sensor: Pre-launch (spec draft)</p>
-                  <p className="text-gray-500 italic">• Core 1.0: Deprecated (legacy product - full support for existing customers)</p>
+              <div className="about-page-company-item">
+                <h3 className="about-page-company-item-title">Product Status</h3>
+                <div className="about-page-company-item-list">
+                  <p className="about-page-company-item-text">• Mini: Pre-launch (spec draft)</p>
+                  <p className="about-page-company-item-text">• Sensor: Pre-launch (spec draft)</p>
+                  <p className="about-page-company-item-text about-page-company-item-text-deprecated">• Core 1.0: Deprecated (legacy product - full support for existing customers)</p>
                 </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Compliance</h3>
-                <div className="space-y-1">
-                  <p className="text-gray-600">• IMC 307.2.5</p>
-                  <p className="text-gray-600">• IMC 307.2.2</p>
-                  <p className="text-gray-600">• IMC 307.2.1.1</p>
+              <div className="about-page-company-item">
+                <h3 className="about-page-company-item-title">Compliance</h3>
+                <div className="about-page-company-item-list">
+                  <p className="about-page-company-item-text">• IMC 307.2.5</p>
+                  <p className="about-page-company-item-text">• IMC 307.2.2</p>
+                  <p className="about-page-company-item-text">• IMC 307.2.1.1</p>
                 </div>
               </div>
             </div>

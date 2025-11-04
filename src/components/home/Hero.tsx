@@ -2,11 +2,13 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRightIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline'
 import { useAuth } from '../../contexts/AuthContext'
+import { VideoModal } from './VideoModal'
 
 export function Hero() {
   const navigate = useNavigate()
   const { user, isAuthenticated } = useAuth()
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
   
   // Check if user is a contractor
   const isContractor = isAuthenticated && user?.role === 'HVAC_PROFESSIONAL'
@@ -158,7 +160,7 @@ export function Hero() {
               </button>
               
               <button 
-                onClick={() => navigate('/products?product=mini&action=demo')}
+                onClick={() => setIsVideoModalOpen(true)}
                 className="hero-secondary-button"
               >
                 See How It Works
@@ -1065,6 +1067,12 @@ export function Hero() {
           </div>
         </div>
       </div>
+
+      {/* Video Modal */}
+      <VideoModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+      />
     </>
   )
 }

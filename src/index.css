@@ -351,6 +351,19 @@
     margin-bottom: 0;
     border-radius: 0;
   }
+
+  /* Gradient overlay for Sensor card - black to transparent from bottom up to headline */
+  .product-showcase-card-sensor.product-showcase-card-full-width::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 400px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 30%, rgba(0, 0, 0, 0.3) 60%, transparent 100%);
+    z-index: 5;
+    pointer-events: none;
+  }
   
   /* Full width Mini+Sensor combo card - EXACT HERO COPY */
   .product-showcase-card-mini.product-showcase-card-full-width {
@@ -734,7 +747,7 @@
   }
 
   .signin-benefits-signup-button {
-    @apply w-full bg-blue-600 text-white py-3 px-6 rounded-md font-semibold text-base hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg;
+    @apply w-full btn-outline py-3 px-6 font-semibold text-base;
   }
 
   .signin-form {
@@ -1862,6 +1875,241 @@
 
   .footer-badges {
     @apply text-gray-500 text-xs mt-2;
+  }
+
+  /* Video Modal */
+  .video-modal-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4;
+  }
+
+  .video-modal-container {
+    @apply relative w-full max-w-4xl bg-black rounded-lg overflow-hidden;
+    max-height: 90vh;
+  }
+
+  .video-modal-close {
+    @apply absolute top-4 right-4 z-10 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-2 transition-colors;
+  }
+
+  .video-modal-close-icon {
+    @apply h-6 w-6 text-white;
+  }
+
+  .video-modal-content {
+    @apply relative w-full;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  }
+
+  .video-modal-embed {
+    @apply absolute top-0 left-0 w-full h-full;
+  }
+
+  .video-modal-iframe {
+    @apply w-full h-full;
+  }
+
+  /* About Page */
+  .about-page-container {
+    @apply min-h-screen bg-gray-50;
+  }
+
+  .about-page-content {
+    @apply container mx-auto px-4 py-16;
+  }
+
+  .about-page-header {
+    @apply text-center mb-16;
+  }
+
+  .about-page-title {
+    @apply heading-1 mb-6;
+  }
+
+  .about-page-subtitle {
+    @apply text-large text-gray-600 max-w-3xl mx-auto;
+  }
+
+  .about-page-section {
+    @apply bg-white rounded-lg shadow-lg p-8 mb-16;
+  }
+
+  .about-page-section-title {
+    @apply heading-2 mb-6 text-center;
+  }
+
+  .about-page-mission-content {
+    @apply max-w-4xl mx-auto text-center;
+  }
+
+  .about-page-mission-text {
+    @apply text-xl text-gray-700 mb-6;
+  }
+
+  .about-page-mission-grid {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-8 mt-8;
+  }
+
+  .about-page-mission-item {
+    @apply text-center;
+  }
+
+  .about-page-mission-icon {
+    @apply w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4;
+  }
+
+  .about-page-mission-icon-easier {
+    @apply bg-blue-100;
+  }
+
+  .about-page-mission-icon-faster {
+    @apply bg-green-100;
+  }
+
+  .about-page-mission-icon-profitable {
+    @apply bg-purple-100;
+  }
+
+  .about-page-mission-icon-svg {
+    @apply h-8 w-8;
+  }
+
+  .about-page-mission-icon-easier .about-page-mission-icon-svg {
+    @apply text-blue-600;
+  }
+
+  .about-page-mission-icon-faster .about-page-mission-icon-svg {
+    @apply text-green-600;
+  }
+
+  .about-page-mission-icon-profitable .about-page-mission-icon-svg {
+    @apply text-purple-600;
+  }
+
+  .about-page-mission-item-title {
+    @apply font-semibold text-gray-900 mb-2;
+  }
+
+  .about-page-mission-item-description {
+    @apply text-sm text-gray-600;
+  }
+
+  .about-page-info-grid {
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16;
+  }
+
+  .about-page-info-card {
+    @apply bg-white rounded-lg shadow-lg p-8;
+  }
+
+  .about-page-info-card-title {
+    @apply heading-2 mb-6;
+  }
+
+  .about-page-info-list {
+    @apply space-y-3;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .about-page-info-item {
+    @apply flex items-center;
+  }
+
+  .about-page-info-icon {
+    @apply h-5 w-5 mr-3 flex-shrink-0;
+  }
+
+  .about-page-info-icon-green {
+    @apply text-green-500;
+  }
+
+  .about-page-info-icon-blue {
+    @apply text-blue-500;
+  }
+
+  .about-page-info-text {
+    @apply text-gray-700;
+  }
+
+  .about-page-leadership {
+    @apply mb-16;
+  }
+
+  .about-page-leadership-content {
+    @apply max-w-2xl mx-auto;
+  }
+
+  .about-page-leadership-profile {
+    @apply flex items-center space-x-6;
+  }
+
+  .about-page-leadership-avatar {
+    @apply w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0;
+  }
+
+  .about-page-leadership-avatar-icon {
+    @apply h-12 w-12 text-blue-600;
+  }
+
+  .about-page-leadership-details {
+    @apply flex-1;
+  }
+
+  .about-page-leadership-name {
+    @apply text-2xl font-bold text-gray-900;
+  }
+
+  .about-page-leadership-role {
+    @apply text-lg text-blue-600 mb-4;
+  }
+
+  .about-page-leadership-bio {
+    @apply text-gray-600 mb-4;
+  }
+
+  .about-page-leadership-contact {
+    @apply flex items-center space-x-4;
+  }
+
+  .about-page-leadership-contact-link {
+    @apply flex items-center text-blue-600 hover:text-blue-700;
+  }
+
+  .about-page-leadership-contact-icon {
+    @apply h-5 w-5 mr-2;
+  }
+
+  .about-page-leadership-contact-text {
+    @apply text-sm;
+  }
+
+  .about-page-company-content {
+    @apply max-w-4xl mx-auto;
+  }
+
+  .about-page-company-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-8;
+  }
+
+  .about-page-company-item {
+    /* No additional base styles */
+  }
+
+  .about-page-company-item-title {
+    @apply font-semibold text-gray-900 mb-3;
+  }
+
+  .about-page-company-item-text {
+    @apply text-gray-600;
+  }
+
+  .about-page-company-item-list {
+    @apply space-y-1;
+  }
+
+  .about-page-company-item-text-deprecated {
+    @apply text-gray-500 italic;
   }
 
 }
