@@ -32,20 +32,23 @@ export function Hero() {
   const riskReversalRef = useRef<HTMLDivElement>(null)
   const socialProofRef = useRef<HTMLDivElement>(null)
   const faqRef = useRef<HTMLDivElement>(null)
+  const ctaBandsRef = useRef<HTMLDivElement>(null)
+  const heritageRef = useRef<HTMLDivElement>(null)
 
   // Intersection Observer for scroll-based background changes
   // Similar to Google Home's approach: sections change background when prominently in viewport
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '-30% 0px -30% 0px', // Activate when section is in center 40% of viewport
-      threshold: 0.3 // Section must be at least 30% visible
+      rootMargin: '-20% 0px -20% 0px', // Activate when section is in center 60% of viewport
+      threshold: [0, 0.25, 0.5, 0.75, 1.0] // Multiple thresholds for smoother transitions
     }
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
-        // Add active class when section is prominently in viewport
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
+        // Add active class when section is prominently in viewport (at least 25% visible in center)
+        // This mimics Google Home's smooth background transitions
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
           entry.target.classList.add('section-active')
         } else {
           entry.target.classList.remove('section-active')
@@ -64,7 +67,9 @@ export function Hero() {
       techSpecsRef.current,
       riskReversalRef.current,
       socialProofRef.current,
-      faqRef.current
+      faqRef.current,
+      ctaBandsRef.current,
+      heritageRef.current
     ].filter(Boolean) as HTMLDivElement[]
 
     sections.forEach((section) => observer.observe(section))
@@ -629,57 +634,14 @@ export function Hero() {
               </div>
             </div>
           </div>
-
-          <div className="product-comparison-footer">
-            <p className="text-gray-600 text-center">
-              Not sure which to choose? <button onClick={() => navigate('/products')} className="text-blue-600 font-semibold hover:underline">View all products →</button>
-            </p>
-            <p className="text-gray-600 text-center">
-              Want to bundle? <button onClick={() => navigate('/products?product=mini&product=sensor')} className="text-blue-600 font-semibold hover:underline">Mini + Sensor = maximum protection →</button>
-            </p>
-            <p className="text-sm text-gray-500 text-center mt-2 italic">
-              *Core 1.0 (deprecated): Our foundation product that pioneered AC drain line maintenance. 
-              <button onClick={() => navigate('/contact?type=core-1.0-support')} className="text-blue-600 hover:underline ml-1">
-                Learn more about our product evolution →
-              </button>
-            </p>
-          </div>
         </div>
       </div>
 
-      {/* Proof Stack Section - Certifications, Testimonials, Case Study */}
+      {/* Proof Stack Section - Testimonials, Case Study */}
       <div ref={proofStackRef} className="proof-stack-container">
         <div className="proof-stack-content">
           <div className="proof-stack-header">
             <h2 className="proof-stack-title">Trusted by the Pros, Designed for Everyone</h2>
-          </div>
-
-          {/* Certifications Row */}
-          <div className="proof-stack-certifications">
-            <div className="proof-stack-cert-badge">
-              <svg className="proof-stack-cert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <h3 className="proof-stack-cert-title">IMC Code Compliant</h3>
-              <p className="proof-stack-cert-description">Meeting International Mechanical Code standards</p>
-            </div>
-            
-            <div className="proof-stack-cert-badge">
-              <svg className="proof-stack-cert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <h3 className="proof-stack-cert-title">Made in USA</h3>
-              <p className="proof-stack-cert-description">Quality you can trust</p>
-            </div>
-            
-            <div className="proof-stack-cert-badge">
-              <svg className="proof-stack-cert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              <h3 className="proof-stack-cert-title">150 PSI Rated</h3>
-              <p className="proof-stack-cert-description">Tested for reliability</p>
-            </div>
           </div>
 
           {/* Testimonials Carousel */}
@@ -987,49 +949,50 @@ export function Hero() {
       </div>
 
       {/* Secondary CTA Bands */}
-      
-      {/* Talk to Sales CTA - For Pros */}
-      <div className="cta-band-sales">
-        <div className="cta-band-content">
-          <div className="cta-band-text">
-            <h3 className="cta-band-title">Looking for Bulk Pricing or Professional Support?</h3>
-            <p className="cta-band-description">
-              Get custom pricing for your business, access technical resources, and join our contractor partner program. Schedule a 15-minute call with our team.
-            </p>
-          </div>
-          <div className="cta-band-buttons">
-            <button onClick={() => navigate('/contact?type=sales')} className="cta-band-btn-primary">
-              Schedule Sales Call
-            </button>
-            <button onClick={() => navigate('/auth/signin')} className="cta-band-btn-secondary">
-              View Contractor Portal
-            </button>
+      <div ref={ctaBandsRef} className="cta-bands-container">
+        {/* Talk to Sales CTA - For Pros */}
+        <div className="cta-band-sales">
+          <div className="cta-band-content">
+            <div className="cta-band-text">
+              <h3 className="cta-band-title">Looking for Bulk Pricing or Professional Support?</h3>
+              <p className="cta-band-description">
+                Get custom pricing for your business, access technical resources, and join our contractor partner program. Schedule a 15-minute call with our team.
+              </p>
+            </div>
+            <div className="cta-band-buttons">
+              <button onClick={() => navigate('/contact?type=sales')} className="cta-band-btn-primary">
+                Schedule Sales Call
+              </button>
+              <button onClick={() => navigate('/auth/signin')} className="cta-band-btn-secondary">
+                View Contractor Portal
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Find a Contractor CTA - For Homeowners */}
-      <div className="cta-band-contractor">
-        <div className="cta-band-content">
-          <div className="cta-band-text">
-            <h3 className="cta-band-title">Prefer Professional Installation?</h3>
-            <p className="cta-band-description">
-              We'll connect you with certified HVAC contractors in your area who are trained in AC Drain Wiz installation.
-            </p>
-          </div>
-          <div className="cta-band-buttons">
-            <button onClick={() => navigate('/contact?type=installer')} className="cta-band-btn-primary">
-              Find an Installer Near Me
-            </button>
-            <button onClick={() => navigate('/products')} className="cta-band-btn-secondary">
-              Learn About DIY Installation
-            </button>
+        {/* Find a Contractor CTA - For Homeowners */}
+        <div className="cta-band-contractor">
+          <div className="cta-band-content">
+            <div className="cta-band-text">
+              <h3 className="cta-band-title">Prefer Professional Installation?</h3>
+              <p className="cta-band-description">
+                We'll connect you with certified HVAC contractors in your area who are trained in AC Drain Wiz installation.
+              </p>
+            </div>
+            <div className="cta-band-buttons">
+              <button onClick={() => navigate('/contact?type=installer')} className="cta-band-btn-primary">
+                Find an Installer Near Me
+              </button>
+              <button onClick={() => navigate('/products')} className="cta-band-btn-secondary">
+                Learn About DIY Installation
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Heritage Section - Core 1.0 Historical Reference */}
-      <div className="heritage-section-container">
+      <div ref={heritageRef} className="heritage-section-container">
         <div className="heritage-section-content">
           <div className="heritage-section-header">
             <h2 className="heritage-section-title">Where It Started</h2>
@@ -1056,13 +1019,6 @@ export function Hero() {
               >
                 Contact Support for Core 1.0
               </button>
-            </div>
-            <div className="heritage-section-image">
-              <img 
-                src="/images/acdw-core-showcase-background.png" 
-                alt="AC Drain Wiz Core 1.0 - The foundation product that started it all"
-                className="heritage-section-image-img"
-              />
             </div>
           </div>
         </div>

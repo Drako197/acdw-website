@@ -281,14 +281,12 @@
 
   /* Product Showcase Section */
   .product-showcase-container {
-    @apply bg-gray-50 w-full transition-colors duration-700 ease-in-out;
+    @apply bg-gray-50 w-full;
     padding: 0;
     margin: 0;
   }
   
-  .product-showcase-container.section-active {
-    @apply bg-white;
-  }
+  /* Product Showcase does not change color on section-active */
 
   .product-showcase-header {
     @apply text-center mb-12 px-4 py-12;
@@ -770,13 +768,6 @@
     @apply appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm;
   }
 
-  .signin-form-error {
-    @apply rounded-md bg-red-50 p-4;
-  }
-
-  .signin-form-error-text {
-    @apply text-sm text-red-700;
-  }
 
   .signin-form-submit-button {
     @apply relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed;
@@ -917,8 +908,10 @@
 
   /* How It Works Section Styles */
   .how-it-works-container {
-    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-white transition-colors duration-700 ease-in-out;
+    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-white;
   }
+
+  /* How It Works does not change color on section-active */
 
   .how-it-works-content {
     @apply max-w-7xl mx-auto;
@@ -974,11 +967,25 @@
 
   /* Benefits Section Styles */
   .benefits-section-container {
-    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-white transition-colors duration-700 ease-in-out;
+    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-white;
+    transition: background-color 0.7s ease-in-out;
+    will-change: background-color;
   }
   
   .benefits-section-container.section-active {
-    @apply bg-gray-50;
+    @apply bg-black;
+  }
+
+  /* Text colors need to change when background is black */
+  .benefits-section-container.section-active .benefits-section-title,
+  .benefits-section-container.section-active .benefit-title,
+  .benefits-section-container.section-active .benefit-description {
+    @apply text-white;
+  }
+
+  /* Cards inside black sections need different backgrounds */
+  .benefits-section-container.section-active .benefit-card {
+    @apply bg-gray-900 border-gray-800;
   }
 
   .benefits-section-content {
@@ -1011,12 +1018,12 @@
 
   /* Product Comparison Section Styles */
   .product-comparison-container {
-    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-gray-50 transition-colors duration-700 ease-in-out;
+    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-gray-50;
+    transition: background-color 0.7s ease-in-out;
+    will-change: background-color;
   }
   
-  .product-comparison-container.section-active {
-    @apply bg-white;
-  }
+  /* Product Comparison stays gray-50 (even section - no change) */
 
   .product-comparison-content {
     @apply max-w-7xl mx-auto;
@@ -1076,11 +1083,32 @@
 
   /* Proof Stack Section Styles */
   .proof-stack-container {
-    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-white transition-colors duration-700 ease-in-out;
+    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-white;
+    transition: background-color 0.7s ease-in-out;
+    will-change: background-color;
   }
   
   .proof-stack-container.section-active {
-    @apply bg-gray-50;
+    @apply bg-black;
+  }
+
+  /* Text colors need to change when background is black */
+  .proof-stack-container.section-active .proof-stack-title,
+  .proof-stack-container.section-active .proof-stack-testimonials-title,
+  .proof-stack-container.section-active .proof-stack-testimonial-text,
+  .proof-stack-container.section-active .proof-stack-testimonial-name,
+  .proof-stack-container.section-active .proof-stack-testimonial-role,
+  .proof-stack-container.section-active .proof-stack-case-study-title,
+  .proof-stack-container.section-active .proof-stack-case-study-subtitle,
+  .proof-stack-container.section-active .proof-stack-stat-number,
+  .proof-stack-container.section-active .proof-stack-stat-label {
+    @apply text-white;
+  }
+
+  /* Cards inside black sections need different backgrounds */
+  .proof-stack-container.section-active .proof-stack-testimonial-card,
+  .proof-stack-container.section-active .proof-stack-case-study {
+    @apply bg-gray-900 border-gray-800;
   }
 
   .proof-stack-content {
@@ -1093,27 +1121,6 @@
 
   .proof-stack-title {
     @apply text-4xl font-bold text-gray-900 mb-4;
-  }
-
-  /* Certifications */
-  .proof-stack-certifications {
-    @apply grid grid-cols-1 md:grid-cols-3 gap-8 mb-16;
-  }
-
-  .proof-stack-cert-badge {
-    @apply bg-white rounded-xl p-8 text-center shadow-sm;
-  }
-
-  .proof-stack-cert-icon {
-    @apply w-16 h-16 mx-auto mb-4 text-blue-600;
-  }
-
-  .proof-stack-cert-title {
-    @apply text-xl font-bold text-gray-900 mb-2;
-  }
-
-  .proof-stack-cert-description {
-    @apply text-gray-600 text-sm;
   }
 
   /* Testimonials */
@@ -1216,12 +1223,12 @@
 
   /* Tech Specs / Compatibility Strip Styles */
   .tech-specs-container {
-    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-white transition-colors duration-700 ease-in-out;
+    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-white;
+    transition: background-color 0.7s ease-in-out;
+    will-change: background-color;
   }
   
-  .tech-specs-container.section-active {
-    @apply bg-gray-50;
-  }
+  /* Tech Specs stays white (even section - no change) */
 
   .tech-specs-content {
     @apply max-w-7xl mx-auto;
@@ -1232,7 +1239,7 @@
   }
 
   .tech-specs-title {
-    @apply text-3xl font-bold text-gray-900 mb-4;
+    @apply text-4xl font-bold text-gray-900 mb-4;
   }
 
   .tech-specs-grid {
@@ -1265,11 +1272,27 @@
 
   /* Risk-Reversal Section Styles */
   .risk-reversal-container {
-    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-gray-50 transition-colors duration-700 ease-in-out;
+    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-gray-50;
+    transition: background-color 0.7s ease-in-out;
+    will-change: background-color;
   }
   
   .risk-reversal-container.section-active {
-    @apply bg-white;
+    @apply bg-black;
+  }
+
+  /* Text colors need to change when background is black */
+  .risk-reversal-container.section-active .risk-reversal-title,
+  .risk-reversal-container.section-active .risk-reversal-card-title,
+  .risk-reversal-container.section-active .risk-reversal-card-description,
+  .risk-reversal-container.section-active .risk-reversal-footer-text {
+    @apply text-white;
+  }
+
+  /* Cards inside black sections need different backgrounds */
+  .risk-reversal-container.section-active .risk-reversal-card,
+  .risk-reversal-container.section-active .risk-reversal-footer {
+    @apply bg-gray-900 border-gray-800;
   }
 
   .risk-reversal-content {
@@ -1326,12 +1349,12 @@
 
   /* Social Proof Section Styles */
   .social-proof-container {
-    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-white transition-colors duration-700 ease-in-out;
+    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-white;
+    transition: background-color 0.7s ease-in-out;
+    will-change: background-color;
   }
   
-  .social-proof-container.section-active {
-    @apply bg-gray-50;
-  }
+  /* Social Proof stays white (even section - no change) */
 
   .social-proof-content {
     @apply max-w-7xl mx-auto;
@@ -1375,11 +1398,39 @@
 
   /* FAQ Section Styles */
   .faq-container {
-    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-gray-50 transition-colors duration-700 ease-in-out;
+    @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-gray-50;
+    transition: background-color 0.7s ease-in-out;
+    will-change: background-color;
   }
   
   .faq-container.section-active {
-    @apply bg-white;
+    @apply bg-black;
+  }
+
+  /* Text colors need to change when background is black */
+  .faq-container.section-active .faq-title,
+  .faq-container.section-active .faq-subtitle,
+  .faq-container.section-active .faq-question-text,
+  .faq-container.section-active .faq-chevron {
+    @apply text-white;
+  }
+
+  /* FAQ items inside black sections need different backgrounds */
+  .faq-container.section-active .faq-item {
+    @apply bg-gray-900 border-gray-800;
+  }
+
+  /* FAQ question hover state when section is active - darker gray on black */
+  .faq-container.section-active .faq-question {
+    @apply hover:bg-gray-800;
+  }
+
+  .faq-container.section-active .faq-answer {
+    @apply text-white;
+  }
+
+  .faq-container.section-active .faq-answer p {
+    @apply text-white;
   }
 
   .faq-content {
@@ -1419,7 +1470,8 @@
   }
 
   .faq-answer {
-    @apply px-6 pb-6 pt-0;
+    @apply px-6 pb-6;
+    padding-top: 15px;
   }
 
   .faq-answer p {
@@ -1439,6 +1491,14 @@
   }
 
   /* Secondary CTA Bands Styles */
+  /* CTA Bands Container */
+  .cta-bands-container {
+    transition: background-color 0.7s ease-in-out;
+    will-change: background-color;
+  }
+
+  /* CTA Bands stays (even section - no change) */
+
   .cta-band-sales {
     @apply py-24 md:py-32 px-4 sm:px-6 lg:px-8;
     background: linear-gradient(135deg, #0077C5 0%, #00B8F5 100%);
@@ -1490,11 +1550,55 @@
 
   /* Heritage Section Styles */
   .heritage-section-container {
-    @apply py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gray-50;
+    @apply px-4 sm:px-6 lg:px-8;
+    background-image: url('/images/acdw-core-showcase-background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.7s ease-in-out;
+    will-change: background-color;
+  }
+
+  /* Overlay gradient for text readability */
+  .heritage-section-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.3) 100%);
+    z-index: 1;
+  }
+
+  .heritage-section-container.section-active {
+    @apply bg-black;
+  }
+
+  /* Text colors need to change when background is black */
+  .heritage-section-container.section-active .heritage-section-title,
+  .heritage-section-container.section-active .heritage-section-subtitle,
+  .heritage-section-container.section-active .heritage-section-card-title,
+  .heritage-section-container.section-active .heritage-section-card-description {
+    @apply text-white;
+  }
+
+  /* Keep note text black even when section is active */
+  .heritage-section-container.section-active .heritage-section-card-note,
+  .heritage-section-container.section-active .heritage-section-card-note strong {
+    @apply text-black;
   }
 
   .heritage-section-content {
-    @apply max-w-4xl mx-auto;
+    @apply max-w-4xl mx-auto relative z-10;
+  }
+
+  .heritage-section-container.section-active .heritage-section-content {
+    @apply w-full;
   }
 
   .heritage-section-header {
@@ -1502,15 +1606,15 @@
   }
 
   .heritage-section-title {
-    @apply text-3xl font-bold text-gray-900 mb-2;
+    @apply text-4xl font-bold text-white mb-2;
   }
 
   .heritage-section-subtitle {
-    @apply text-lg text-gray-600;
+    @apply text-lg text-white/90;
   }
 
   .heritage-section-card {
-    @apply bg-white rounded-xl p-8 shadow-sm flex flex-col md:flex-row gap-8 items-center;
+    @apply bg-white/30 backdrop-blur-md rounded-xl p-8 shadow-lg border border-white/20;
   }
 
   .heritage-section-text {
@@ -1522,31 +1626,38 @@
   }
 
   .heritage-icon {
-    @apply w-12 h-12 text-gray-400;
-  }
-
-  .heritage-section-image {
-    @apply flex-shrink-0 w-full md:w-1/3;
-  }
-
-  .heritage-section-image-img {
-    @apply w-full h-auto rounded-lg object-cover shadow-md;
+    @apply w-12 h-12 text-white;
   }
 
   .heritage-section-card-title {
-    @apply text-2xl font-bold text-gray-900 mb-4;
+    @apply text-2xl font-bold text-white mb-4;
   }
 
   .heritage-section-card-description {
-    @apply text-gray-700 leading-relaxed mb-4;
+    @apply text-white leading-relaxed mb-4;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
 
   .heritage-section-card-note {
-    @apply text-sm text-gray-600 bg-blue-50 p-4 rounded-lg mb-4 leading-relaxed;
+    @apply text-sm text-black bg-white/20 backdrop-blur-sm p-4 rounded-lg mb-4 leading-relaxed border border-white/30;
+  }
+
+  .heritage-section-card-note strong {
+    @apply text-black;
   }
 
   .heritage-section-cta {
-    @apply btn-outline px-6 py-2 text-sm;
+    @apply px-6 py-2 text-sm font-semibold;
+    background: rgba(255, 255, 255, 0.9);
+    color: #0077C5;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  .heritage-section-cta:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(255, 255, 255, 1);
   }
 
   /* Products Page */

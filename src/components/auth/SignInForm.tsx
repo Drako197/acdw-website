@@ -97,8 +97,8 @@ export function SignInForm() {
           </div>
 
           {error && (
-            <div className="signin-form-error">
-              <div className="signin-form-error-text">{error}</div>
+            <div className="rounded-md bg-red-50 p-4">
+              <div className="text-sm text-red-700">{error}</div>
             </div>
           )}
 
