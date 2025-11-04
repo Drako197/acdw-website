@@ -2,80 +2,82 @@ import { Link } from 'react-router-dom'
 import { 
   EnvelopeIcon, 
   PhoneIcon, 
-  MapPinIcon,
-  WrenchScrewdriverIcon
+  MapPinIcon
 } from '@heroicons/react/24/outline'
 
 export function Footer() {
   return (
-    <footer className="bg-gray-900" aria-labelledby="footer-heading">
-      <h2 id="footer-heading" className="sr-only">
+    <footer className="footer-container" aria-labelledby="footer-heading">
+      <h2 id="footer-heading" className="footer-heading-sr-only">
         Footer
       </h2>
-      <div className="container section">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="footer-content">
+        <div className="footer-grid">
           {/* Company Info */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                <WrenchScrewdriverIcon className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-xl font-bold text-white">AC Drain Wiz</span>
+          <div className="footer-company-section">
+            <div className="footer-brand">
+              <Link to="/" className="footer-logo-link">
+                <img 
+                  src="/images/ac-drain-wiz-logo.png" 
+                  alt="AC Drain Wiz Logo" 
+                  className="footer-logo-image"
+                />
+              </Link>
             </div>
-            <p className="text-gray-300 mb-6 max-w-md">
+            <p className="footer-description">
               Professional-grade AC drain line maintenance solutions that prevent costly water damage 
               and streamline HVAC service operations.
             </p>
             
             {/* Contact Info */}
-            <div className="space-y-3">
-              <div className="flex items-center text-gray-300">
-                <EnvelopeIcon className="h-5 w-5 mr-3 flex-shrink-0" />
+            <div className="footer-contact-info">
+              <div className="footer-contact-item">
+                <EnvelopeIcon className="footer-contact-icon" />
                 <span>info@acdrainwiz.com</span>
               </div>
-              <div className="flex items-center text-gray-300">
-                <PhoneIcon className="h-5 w-5 mr-3 flex-shrink-0" />
+              <div className="footer-contact-item">
+                <PhoneIcon className="footer-contact-icon" />
                 <span>1-800-AC-DRAIN</span>
               </div>
-              <div className="flex items-center text-gray-300">
-                <MapPinIcon className="h-5 w-5 mr-3 flex-shrink-0" />
+              <div className="footer-contact-item">
+                <MapPinIcon className="footer-contact-icon" />
                 <span>United States</span>
               </div>
             </div>
           </div>
 
           {/* Products */}
-          <div>
-            <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-4">
+          <div className="footer-section">
+            <h3 className="footer-section-title">
               Products
             </h3>
-            <ul className="space-y-3">
-              <li><Link to="/products" className="text-gray-300 hover:text-white transition-colors">AC Drain Wiz 1.0</Link></li>
-              <li><Link to="/products" className="text-gray-300 hover:text-white transition-colors">AC Drain Wiz Mini</Link></li>
-              <li><Link to="/products" className="text-gray-300 hover:text-white transition-colors">AC Drain Wiz Sensor</Link></li>
+            <ul className="footer-link-list">
+              <li><Link to="/products?product=mini" className="footer-link">AC Drain Wiz Mini</Link></li>
+              <li><Link to="/products?product=sensor" className="footer-link">AC Drain Wiz Sensor</Link></li>
+              <li><Link to="/products?product=mini&product=sensor" className="footer-link">Mini + Sensor</Link></li>
             </ul>
           </div>
 
           {/* Resources */}
-          <div>
-            <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-4">
+          <div className="footer-section">
+            <h3 className="footer-section-title">
               Resources
             </h3>
-            <ul className="space-y-3">
-              <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/contact" className="text-gray-300 hover:text-white transition-colors">Contact</Link></li>
-              <li><Link to="/products" className="text-gray-300 hover:text-white transition-colors">Products</Link></li>
+            <ul className="footer-link-list">
+              <li><Link to="/about" className="footer-link">About Us</Link></li>
+              <li><Link to="/contact" className="footer-link">Contact</Link></li>
+              <li><Link to="/products" className="footer-link">Products</Link></li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Section */}
-        <div className="mt-12 pt-8 border-t border-gray-800">
-          <div className="text-center">
-            <p className="text-gray-400 text-sm">
+        <div className="footer-bottom">
+          <div className="footer-bottom-content">
+            <p className="footer-copyright">
               &copy; {new Date().getFullYear()} AC Drain Wiz. All rights reserved.
             </p>
-            <p className="text-gray-500 text-xs mt-2">
+            <p className="footer-badges">
               ICC Code Compliant • Professional Grade • Made in USA
             </p>
           </div>

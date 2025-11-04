@@ -71,7 +71,7 @@ export function SignUpForm() {
             Create your account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Join HVAC professionals and city officials
+            Create your contractor account to access exclusive pricing
           </p>
         </div>
         
@@ -123,19 +123,20 @@ export function SignUpForm() {
                 onChange={handleChange}
               >
                 <option value="HVAC_PROFESSIONAL">HVAC Professional</option>
-                <option value="CITY_OFFICIAL">City Official</option>
-                <option value="ADMIN">Administrator</option>
+                <option value="DISTRIBUTOR">Distributor</option>
+                <option value="CITY_OFFICIAL">City and Code Official</option>
               </select>
             </div>
 
             <div>
               <label htmlFor="company" className="block text-sm font-medium text-gray-700">
-                Company (Optional)
+                Company
               </label>
               <input
                 id="company"
                 name="company"
                 type="text"
+                required
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 placeholder="ABC HVAC Services"
                 value={formData.company}

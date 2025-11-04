@@ -139,9 +139,9 @@ export function AboutPage() {
               <div>
                 <h3 className="font-semibold text-gray-900 mb-3">Product Status</h3>
                 <div className="space-y-1">
-                  <p className="text-gray-600">• Core 1.0: General Availability</p>
                   <p className="text-gray-600">• Mini: Pre-launch (spec draft)</p>
                   <p className="text-gray-600">• Sensor: Pre-launch (spec draft)</p>
+                  <p className="text-gray-500 italic">• Core 1.0: Deprecated (legacy product - full support for existing customers)</p>
                 </div>
               </div>
               <div>

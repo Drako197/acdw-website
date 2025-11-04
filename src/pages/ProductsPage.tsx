@@ -1,13 +1,19 @@
-import { CheckIcon, ClockIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/outline'
+import { CheckIcon, ClockIcon, WrenchScrewdriverIcon, SquaresPlusIcon } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
 
 export function ProductsPage() {
+  const navigate = useNavigate()
+  const { isAuthenticated, user } = useAuth()
+  const isContractor = isAuthenticated && user?.role === 'HVAC_PROFESSIONAL'
+
   const products = [
     {
       id: 'mini',
       name: 'ACDW Mini',
-      status: 'Pre-launch',
-      statusText: 'Coming Soon',
-      statusColor: 'bg-blue-100 text-blue-800',
+      status: 'GA',
+      statusText: 'Available Now',
+      statusColorClass: 'products-card-status-available',
       description: 'Our flagship compact maintenance manifold (~5" length) with a single snap-to-lock bayonet port and a bi-directional valve.',
       keyBenefits: [
         'Flagship product with versatile attachment system',
@@ -18,19 +24,22 @@ export function ProductsPage() {
       ],
       compatibility: '3/4" PVC (most residential condensate lines)',
       installationTime: '30 minutes',
+      size: '5" × 3" × 2"',
       pricing: {
-        msrp: 'TBD',
-        contractor: 'TBD',
-        distributor: 'TBD'
+        msrp: '$49.99',
+        contractor: 'Sign in for pricing',
+        distributor: 'Contact for pricing'
       },
-      compliance: ['IMC 307.2.5', 'IMC 307.2.2', 'IMC 307.2.1.1']
+      compliance: ['IMC 307.2.5', 'IMC 307.2.2', 'IMC 307.2.1.1'],
+      contractorOnly: false
     },
     {
       id: 'sensor',
       name: 'ACDW Sensor',
-      status: 'Pre-launch',
-      statusText: 'Coming Soon',
-      statusColor: 'bg-purple-100 text-purple-800',
+      status: 'GA',
+      statusText: 'Available Now',
+      statusColorClass: 'products-card-status-available',
+      contractorOnly: true,
       description: 'First-of-its-kind, no-contact capacitive water-level sensor that snaps into the ACDW Mini\'s bayonet port.',
       keyBenefits: [
         'Smart monitoring with Wi-Fi connectivity',
@@ -40,112 +49,155 @@ export function ProductsPage() {
         'Two models: Alert-only (battery) or Alert + AC shutoff (DC + battery)'
       ],
       compatibility: 'Integrates with ACDW Mini',
-      installationTime: '30 minutes + sensor setup',
+      installationTime: '15 minutes',
+      size: '2" × 3" × 1.5"',
       pricing: {
-        msrp: 'TBD',
-        contractor: 'TBD',
-        distributor: 'TBD'
+        msrp: '$79.99',
+        contractor: 'Sign in for pricing',
+        distributor: 'Contact for pricing'
       },
       compliance: ['IMC 307.2.3']
     },
     {
-      id: 'core-1-0',
-      name: 'AC Drain Wiz (Core 1.0)',
+      id: 'mini-sensor',
+      name: 'Mini + Sensor',
       status: 'GA',
       statusText: 'Available Now',
-      statusColor: 'bg-green-100 text-green-800',
-      description: 'Proven foundation solution - one-time installed drain line maintenance access/cleanout device that enables fast, repeatable service without cutting lines.',
+      statusColorClass: 'products-card-status-available',
+      contractorOnly: true,
+      description: 'Complete protection system combining the Mini\'s proactive cleaning with the Sensor\'s smart monitoring for maximum protection against water damage.',
       keyBenefits: [
-        'Proven, reliable foundation solution',
-        'One-time install; ongoing access without cutting',
-        'Proactive, faster cleanouts; fewer emergency calls',
-        'Clear visual inspection of water/flow',
-        'Increases technician efficiency and daily job count'
+        'Maximum protection with proactive cleaning and smart monitoring',
+        '24/7 smart alerts + manual access',
+        'Complete solution for HVAC contractors',
+        'Reduce callbacks and increase customer satisfaction',
+        'Differentiate your services with premium maintenance packages'
       ],
-      compatibility: '3/4 in (typical residential)',
-      installationTime: '30 minutes',
+      compatibility: '3/4" PVC + Mini integration',
+      installationTime: '45 minutes total',
+      size: '5" × 3" × 2" (Mini) + Sensor',
       pricing: {
-        msrp: '$59.99',
-        contractor: 'From $35.75',
-        distributor: 'From $22.34'
+        msrp: 'Pricing available on sign in',
+        contractor: 'Sign in for pricing',
+        distributor: 'Contact for pricing'
       },
-      compliance: ['IMC 307.2.5', 'IMC 307.2.2', 'IMC 307.2.1.1']
+      compliance: ['IMC 307.2.5', 'IMC 307.2.2', 'IMC 307.2.1.1', 'IMC 307.2.3']
     }
   ]
 
+  const handleProductCTA = (productId: string, isContractorOnly: boolean) => {
+    if (isContractorOnly) {
+      if (!isAuthenticated) {
+        navigate('/auth/signin')
+      } else {
+        if (productId === 'mini-sensor') {
+          navigate('/products?product=mini&product=sensor')
+        } else {
+          navigate(`/products?product=${productId}`)
+        }
+      }
+    } else {
+      navigate(`/products?product=${productId}`)
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-16">
+    <div className="products-page-container">
+      <div className="products-page-content">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="heading-1 mb-6">AC Drain Wiz Product Ecosystem</h1>
-          <p className="text-large text-gray-600 max-w-3xl mx-auto">
+        <div className="products-page-header">
+          <h1 className="products-page-title">AC Drain Wiz Product Ecosystem</h1>
+          <p className="products-page-subtitle">
             Professional-grade AC drain line maintenance solutions designed to make maintenance easier, 
             faster, and more profitable. From basic maintenance access to smart monitoring systems.
           </p>
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+        <div className="products-page-grid">
           {products.map((product) => (
-            <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div key={product.id} className="products-card">
               {/* Product Header */}
-              <div className="p-6 border-b border-gray-200">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-gray-900">{product.name}</h3>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${product.statusColor}`}>
-                    {product.statusText}
-                  </span>
+              <div className="products-card-header">
+                <div className="products-card-title-section">
+                  <h3 className="products-card-title">{product.name}</h3>
+                  <div className="products-card-badges">
+                    <span className={`products-card-status ${product.statusColorClass}`}>
+                      {product.statusText}
+                    </span>
+                    {product.contractorOnly && (
+                      <span className="products-card-badge-contractor">
+                        Contractor Only
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <p className="text-gray-600">{product.description}</p>
+                <p className="products-card-description">{product.description}</p>
               </div>
 
               {/* Key Benefits */}
-              <div className="p-6">
-                <h4 className="font-semibold text-gray-900 mb-3">Key Benefits</h4>
-                <ul className="space-y-2">
+              <div className="products-card-benefits">
+                <h4 className="products-card-benefits-title">Key Benefits</h4>
+                <ul className="products-card-benefits-list">
                   {product.keyBenefits.map((benefit, index) => (
-                    <li key={index} className="flex items-start">
-                      <CheckIcon className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-gray-600">{benefit}</span>
+                    <li key={index} className="products-card-benefit-item">
+                      <CheckIcon className="products-card-benefit-icon" />
+                      <span className="products-card-benefit-text">{benefit}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
               {/* Specifications */}
-              <div className="p-6 border-t border-gray-200 bg-gray-50">
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="flex items-center">
-                    <WrenchScrewdriverIcon className="h-5 w-5 text-gray-400 mr-2" />
-                    <span className="text-sm text-gray-600">
+              <div className="products-card-specs">
+                <div className="products-card-specs-grid">
+                  <div className="products-card-spec-item">
+                    <WrenchScrewdriverIcon className="products-card-spec-icon" />
+                    <span className="products-card-spec-text">
                       <strong>Compatibility:</strong> {product.compatibility}
                     </span>
                   </div>
-                  <div className="flex items-center">
-                    <ClockIcon className="h-5 w-5 text-gray-400 mr-2" />
-                    <span className="text-sm text-gray-600">
+                  <div className="products-card-spec-item">
+                    <ClockIcon className="products-card-spec-icon" />
+                    <span className="products-card-spec-text">
                       <strong>Installation:</strong> {product.installationTime}
                     </span>
                   </div>
+                  {product.size && (
+                    <div className="products-card-spec-item">
+                      <WrenchScrewdriverIcon className="products-card-spec-icon" />
+                      <span className="products-card-spec-text">
+                        <strong>Size:</strong> {product.size}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Pricing */}
-                <div className="mt-4">
-                  <h5 className="font-semibold text-gray-900 mb-2">Pricing</h5>
-                  <div className="text-sm text-gray-600 space-y-1">
-                    <div><strong>MSRP:</strong> {product.pricing.msrp}</div>
-                    <div><strong>Contractor:</strong> {product.pricing.contractor}</div>
-                    <div><strong>Distributor:</strong> {product.pricing.distributor}</div>
+                <div className="products-card-pricing">
+                  <h5 className="products-card-pricing-title">Pricing</h5>
+                  <div className="products-card-pricing-list">
+                    <div className="products-card-pricing-item"><strong>MSRP:</strong> {product.pricing.msrp}</div>
+                    {isContractor && (
+                      <>
+                        <div className="products-card-pricing-item"><strong>Contractor:</strong> {product.pricing.contractor}</div>
+                        <div className="products-card-pricing-item"><strong>Distributor:</strong> {product.pricing.distributor}</div>
+                      </>
+                    )}
+                    {!isContractor && product.contractorOnly && (
+                      <div className="products-card-pricing-note">
+                        Sign in for contractor pricing
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 {/* Compliance */}
-                <div className="mt-4">
-                  <h5 className="font-semibold text-gray-900 mb-2">Compliance</h5>
-                  <div className="flex flex-wrap gap-1">
+                <div className="products-card-compliance">
+                  <h5 className="products-card-compliance-title">Compliance</h5>
+                  <div className="products-card-compliance-badges">
                     {product.compliance.map((code, index) => (
-                      <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">
+                      <span key={index} className="products-card-compliance-badge">
                         {code}
                       </span>
                     ))}
@@ -154,13 +206,21 @@ export function ProductsPage() {
               </div>
 
               {/* CTA Button */}
-              <div className="p-6 border-t border-gray-200">
+              <div className="products-card-cta">
                 {product.status === 'GA' ? (
-                  <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
-                    View Details & Pricing
+                  <button 
+                    onClick={() => handleProductCTA(product.id, product.contractorOnly || false)}
+                    className="products-card-cta-button"
+                  >
+                    {product.contractorOnly && !isAuthenticated 
+                      ? 'Sign In to Buy' 
+                      : product.id === 'mini-sensor' && !isContractor
+                      ? 'Sign In for Pricing'
+                      : 'View Details & Pricing'
+                    }
                   </button>
                 ) : (
-                  <button className="w-full bg-gray-300 text-gray-600 py-2 px-4 rounded-md cursor-not-allowed">
+                  <button className="products-card-cta-button-disabled">
                     Coming Soon
                   </button>
                 )}
@@ -170,32 +230,57 @@ export function ProductsPage() {
         </div>
 
         {/* Product Evolution */}
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <h2 className="heading-2 mb-6 text-center">Product Evolution</h2>
-          <div className="flex items-center justify-between">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <WrenchScrewdriverIcon className="h-8 w-8 text-blue-600" />
+        <div className="products-page-evolution">
+          <h2 className="products-page-evolution-title">Product Evolution</h2>
+          <div className="products-page-evolution-timeline">
+            <div className="products-page-evolution-item">
+              <div className="products-page-evolution-icon products-page-evolution-icon-core">
+                <CheckIcon className="products-page-evolution-icon-svg" />
               </div>
-              <h3 className="font-semibold text-gray-900">Mini</h3>
-              <p className="text-sm text-gray-600">Flagship compact design</p>
+              <h3 className="products-page-evolution-item-title">Core 1.0</h3>
+              <p className="products-page-evolution-item-description">Heritage product</p>
+              <span className="products-page-evolution-item-status products-page-evolution-item-status-deprecated">Deprecated</span>
             </div>
-            <div className="flex-1 h-0.5 bg-gray-300 mx-4"></div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <ClockIcon className="h-8 w-8 text-purple-600" />
+            <div className="products-page-evolution-divider"></div>
+            <div className="products-page-evolution-item">
+              <div className="products-page-evolution-icon products-page-evolution-icon-mini">
+                <WrenchScrewdriverIcon className="products-page-evolution-icon-svg" />
               </div>
-              <h3 className="font-semibold text-gray-900">Sensor</h3>
-              <p className="text-sm text-gray-600">Smart monitoring</p>
+              <h3 className="products-page-evolution-item-title">Mini</h3>
+              <p className="products-page-evolution-item-description">Flagship compact design</p>
+              <span className="products-page-evolution-item-status">Available Now</span>
             </div>
-            <div className="flex-1 h-0.5 bg-gray-300 mx-4"></div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckIcon className="h-8 w-8 text-green-600" />
+            <div className="products-page-evolution-divider"></div>
+            <div className="products-page-evolution-item">
+              <div className="products-page-evolution-icon products-page-evolution-icon-sensor">
+                <ClockIcon className="products-page-evolution-icon-svg" />
               </div>
-              <h3 className="font-semibold text-gray-900">Core 1.0</h3>
-              <p className="text-sm text-gray-600">Proven foundation</p>
+              <h3 className="products-page-evolution-item-title">Sensor</h3>
+              <p className="products-page-evolution-item-description">Smart monitoring</p>
+              <span className="products-page-evolution-item-status">Available Now</span>
             </div>
+            <div className="products-page-evolution-divider"></div>
+            <div className="products-page-evolution-item">
+              <div className="products-page-evolution-icon products-page-evolution-icon-combo">
+                <SquaresPlusIcon className="products-page-evolution-icon-svg" />
+              </div>
+              <h3 className="products-page-evolution-item-title">Mini + Sensor</h3>
+              <p className="products-page-evolution-item-description">Complete protection system</p>
+              <span className="products-page-evolution-item-status">Available Now</span>
+            </div>
+          </div>
+          <div className="products-page-evolution-footer">
+            <p className="products-page-evolution-footer-text">
+              Core 1.0 was our foundation product that pioneered AC drain line maintenance. 
+              It's now deprecated in favor of the more compact and versatile Mini. 
+              Existing Core 1.0 customers continue to receive full support.
+            </p>
+            <button 
+              onClick={() => navigate('/contact?type=core-1.0-support')}
+              className="products-page-evolution-footer-link"
+            >
+              Contact Support for Core 1.0 →
+            </button>
           </div>
         </div>
       </div>
