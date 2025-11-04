@@ -382,7 +382,7 @@ export function Hero() {
           
           <div className="how-it-works-ctas">
             <button 
-              onClick={() => navigate('/products?product=mini&action=demo')}
+              onClick={() => setIsVideoModalOpen(true)}
               className="how-it-works-cta-primary"
             >
               Watch Installation Video
