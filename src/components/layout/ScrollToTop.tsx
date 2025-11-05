@@ -5,10 +5,12 @@ export function ScrollToTop() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    // Scroll to top when navigating to sign-in or sign-up pages
-    if (pathname === '/auth/signin' || pathname === '/auth/signup') {
-      window.scrollTo(0, 0)
-    }
+    // Scroll to top on all route changes
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant' // Use 'instant' for immediate scroll, 'smooth' for animated scroll
+    })
   }, [pathname])
 
   return null

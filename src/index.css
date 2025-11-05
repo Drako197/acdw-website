@@ -387,6 +387,13 @@
     background-repeat: no-repeat;
   }
 
+  /* Tablet-specific adjustment for sensor card background */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .product-showcase-card-sensor.product-showcase-card-full-width .product-showcase-card-background {
+      background-position-y: -140px;
+    }
+  }
+
   /* Mini + Sensor combo card - full width - matches hero background approach */
   .product-showcase-card-mini.product-showcase-card-full-width .product-showcase-card-background {
     background-image: url('/images/hvac-tech-mini-sensor-combined.png');
