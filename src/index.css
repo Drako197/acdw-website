@@ -353,38 +353,22 @@
     -webkit-transform: translateZ(0);
   }
 
-  /* Gradient overlay for Sensor card using box-shadow technique for Safari compatibility */
-  .product-showcase-card-sensor.product-showcase-card-full-width .sensor-gradient-shadow {
+  /* Gradient overlay for Sensor card using SVG for Safari compatibility */
+  .product-showcase-card-sensor.product-showcase-card-full-width .sensor-gradient-svg {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100%;
-    height: 1px;
+    height: 400px;
     z-index: 5;
     pointer-events: none;
-    /* Create gradient effect using massive box-shadow */
-    box-shadow: 
-      0 0 50px 50px rgba(0, 0, 0, 0.9),
-      0 0 100px 100px rgba(0, 0, 0, 0.8),
-      0 0 150px 150px rgba(0, 0, 0, 0.7),
-      0 0 200px 200px rgba(0, 0, 0, 0.5),
-      0 0 250px 250px rgba(0, 0, 0, 0.3),
-      0 0 300px 300px rgba(0, 0, 0, 0.15),
-      0 0 350px 350px rgba(0, 0, 0, 0.05);
-    -webkit-box-shadow: 
-      0 0 50px 50px rgba(0, 0, 0, 0.9),
-      0 0 100px 100px rgba(0, 0, 0, 0.8),
-      0 0 150px 150px rgba(0, 0, 0, 0.7),
-      0 0 200px 200px rgba(0, 0, 0, 0.5),
-      0 0 250px 250px rgba(0, 0, 0, 0.3),
-      0 0 300px 300px rgba(0, 0, 0, 0.15),
-      0 0 350px 350px rgba(0, 0, 0, 0.05);
+    display: block;
   }
 
-  /* Ensure shadow renders properly in Safari portrait */
+  /* Ensure SVG renders properly in Safari portrait */
   @media screen and (max-width: 1024px) and (orientation: portrait) {
-    .product-showcase-card-sensor.product-showcase-card-full-width .sensor-gradient-shadow {
+    .product-showcase-card-sensor.product-showcase-card-full-width .sensor-gradient-svg {
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
