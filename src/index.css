@@ -405,6 +405,15 @@
     }
   }
 
+  /* Portrait mode - reset background positioning to show full image */
+  @media screen and (orientation: portrait) {
+    .product-showcase-card-sensor.product-showcase-card-full-width .product-showcase-card-background {
+      background-position: center center;
+      background-position-y: 0;
+      background-size: cover;
+    }
+  }
+
   /* Mini + Sensor combo card - full width - matches hero background approach */
   .product-showcase-card-mini.product-showcase-card-full-width .product-showcase-card-background {
     background-image: url('/images/hvac-tech-mini-sensor-combined.png');
