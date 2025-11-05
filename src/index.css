@@ -398,8 +398,8 @@
     background-repeat: no-repeat;
   }
 
-  /* Tablet-specific adjustment for sensor card background */
-  @media (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet-specific adjustment for sensor card background (iPad Pro and similar tablets) */
+  @media (min-width: 768px) and (max-width: 1366px) {
     .product-showcase-card-sensor.product-showcase-card-full-width .product-showcase-card-background {
       background-position-y: -140px;
     }
