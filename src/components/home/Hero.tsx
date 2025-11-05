@@ -221,19 +221,6 @@ export function Hero() {
           {/* Sensor product image background */}
         </div>
         
-        {/* Gradient overlay for Safari compatibility - using SVG */}
-        <svg className="sensor-gradient-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 400" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="sensorGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style={{ stopColor: '#000000', stopOpacity: 0 }} />
-              <stop offset="40%" style={{ stopColor: '#000000', stopOpacity: 0.3 }} />
-              <stop offset="70%" style={{ stopColor: '#000000', stopOpacity: 0.6 }} />
-              <stop offset="100%" style={{ stopColor: '#000000', stopOpacity: 0.8 }} />
-            </linearGradient>
-          </defs>
-          <rect x="0" y="0" width="100" height="400" fill="url(#sensorGradient)" />
-        </svg>
-        
         <div className="product-showcase-card-content">
           <div className="product-showcase-card-header">
             <h3 className="product-showcase-card-title">ACDW Sensor</h3>
