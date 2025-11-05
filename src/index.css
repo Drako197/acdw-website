@@ -353,39 +353,64 @@
     -webkit-transform: translateZ(0);
   }
 
-  /* Gradient overlay for Sensor card - black to transparent from bottom up to headline */
-  .product-showcase-card-sensor.product-showcase-card-full-width::after {
-    content: '';
+  /* Multi-layer gradient for Sensor card - Safari-compatible approach using layered divs */
+  .product-showcase-card-sensor.product-showcase-card-full-width .sensor-gradient-wrapper {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100%;
     height: 400px;
-    display: block;
-    /* Safari-compatible gradient - use rgba(0,0,0,0) instead of transparent */
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 30%, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0) 100%);
     z-index: 5;
     pointer-events: none;
-    /* Force GPU acceleration for Safari rendering */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    will-change: opacity;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    /* Ensure proper rendering in all orientations */
-    min-height: 400px;
   }
 
-  /* Additional fixes for iPad Safari portrait orientation */
+  .product-showcase-card-sensor.product-showcase-card-full-width .sensor-gradient-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: #000000;
+  }
+
+  /* Layer 1 - Darkest at bottom (80% opacity) */
+  .product-showcase-card-sensor.product-showcase-card-full-width .sensor-gradient-layer-1 {
+    bottom: 0;
+    height: 100px;
+    opacity: 0.8;
+  }
+
+  /* Layer 2 - Mid-dark (60% opacity) */
+  .product-showcase-card-sensor.product-showcase-card-full-width .sensor-gradient-layer-2 {
+    bottom: 100px;
+    height: 100px;
+    opacity: 0.6;
+  }
+
+  /* Layer 3 - Lighter (30% opacity) */
+  .product-showcase-card-sensor.product-showcase-card-full-width .sensor-gradient-layer-3 {
+    bottom: 200px;
+    height: 100px;
+    opacity: 0.3;
+  }
+
+  /* Layer 4 - Lightest (15% opacity) */
+  .product-showcase-card-sensor.product-showcase-card-full-width .sensor-gradient-layer-4 {
+    bottom: 300px;
+    height: 100px;
+    opacity: 0.15;
+  }
+
+  /* Ensure layers render properly in Safari portrait */
   @media screen and (max-width: 1024px) and (orientation: portrait) {
-    .product-showcase-card-sensor.product-showcase-card-full-width::after {
-      /* Force re-render in portrait */
-      -webkit-transform: translate3d(0, 0, 0);
-      transform: translate3d(0, 0, 0);
-      /* Ensure gradient is visible */
-      opacity: 1;
-      visibility: visible;
+    .product-showcase-card-sensor.product-showcase-card-full-width .sensor-gradient-wrapper {
+      display: block !important;
+      visibility: visible !important;
+    }
+    
+    .product-showcase-card-sensor.product-showcase-card-full-width .sensor-gradient-layer {
+      display: block !important;
+      visibility: visible !important;
     }
   }
   

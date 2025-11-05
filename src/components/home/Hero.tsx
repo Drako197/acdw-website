@@ -221,6 +221,14 @@ export function Hero() {
           {/* Sensor product image background */}
         </div>
         
+        {/* Multi-layer gradient overlay for Safari compatibility */}
+        <div className="sensor-gradient-wrapper">
+          <div className="sensor-gradient-layer sensor-gradient-layer-1"></div>
+          <div className="sensor-gradient-layer sensor-gradient-layer-2"></div>
+          <div className="sensor-gradient-layer sensor-gradient-layer-3"></div>
+          <div className="sensor-gradient-layer sensor-gradient-layer-4"></div>
+        </div>
+        
         <div className="product-showcase-card-content">
           <div className="product-showcase-card-header">
             <h3 className="product-showcase-card-title">ACDW Sensor</h3>
