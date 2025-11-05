@@ -699,7 +699,7 @@ export function Hero() {
           <div className="proof-stack-case-study">
             <div className="proof-stack-case-study-content">
               <div className="proof-stack-case-study-text">
-                <h3 className="proof-stack-case-study-title">Real Results from Real Customers</h3>
+                <h3 className="proof-stack-case-study-title">Real Results from Real Pros</h3>
                 <p className="proof-stack-case-study-subtitle">See how one mid-size HVAC contractor transformed their business</p>
                 <div className="proof-stack-case-study-stats">
                   <div className="proof-stack-stat">
