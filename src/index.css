@@ -366,12 +366,10 @@
     display: block;
   }
 
-  /* Ensure SVG renders properly in Safari portrait */
+  /* Hide gradient in portrait mode on tablets/mobile - Safari rendering issues */
   @media screen and (max-width: 1024px) and (orientation: portrait) {
     .product-showcase-card-sensor.product-showcase-card-full-width .sensor-gradient-svg {
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
+      display: none !important;
     }
   }
   
