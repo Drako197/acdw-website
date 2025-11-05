@@ -358,9 +358,14 @@
     left: 0;
     right: 0;
     height: 400px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 30%, rgba(0, 0, 0, 0.3) 60%, transparent 100%);
+    display: block;
+    /* Safari-compatible gradient - use rgba(0,0,0,0) instead of transparent */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 30%, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0) 100%);
     z-index: 5;
     pointer-events: none;
+    /* Force GPU acceleration for Safari rendering */
+    transform: translateZ(0);
+    will-change: opacity;
   }
   
   /* Full width Mini+Sensor combo card - EXACT HERO COPY */
