@@ -348,6 +348,9 @@
     height: 100vh;
     margin-bottom: 0;
     border-radius: 0;
+    /* Ensure proper stacking context for Safari */
+    isolation: isolate;
+    -webkit-transform: translateZ(0);
   }
 
   /* Gradient overlay for Sensor card - black to transparent from bottom up to headline */
@@ -357,6 +360,7 @@
     bottom: 0;
     left: 0;
     right: 0;
+    width: 100%;
     height: 400px;
     display: block;
     /* Safari-compatible gradient - use rgba(0,0,0,0) instead of transparent */
@@ -365,7 +369,24 @@
     pointer-events: none;
     /* Force GPU acceleration for Safari rendering */
     transform: translateZ(0);
+    -webkit-transform: translateZ(0);
     will-change: opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    /* Ensure proper rendering in all orientations */
+    min-height: 400px;
+  }
+
+  /* Additional fixes for iPad Safari portrait orientation */
+  @media screen and (max-width: 1024px) and (orientation: portrait) {
+    .product-showcase-card-sensor.product-showcase-card-full-width::after {
+      /* Force re-render in portrait */
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      /* Ensure gradient is visible */
+      opacity: 1;
+      visibility: visible;
+    }
   }
   
   /* Full width Mini+Sensor combo card - EXACT HERO COPY */
