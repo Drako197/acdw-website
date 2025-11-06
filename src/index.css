@@ -114,6 +114,15 @@
     background-image: url('/images/acdw-mini-hero-background.png');
   }
 
+  /* Tablet portrait mode - adjust hero background position and size */
+  @media screen and (max-width: 1366px) and (orientation: portrait) {
+    .hero-background-image {
+      background-position-x: -300px;
+      background-size: 160% auto !important;
+      background-color: black;
+    }
+  }
+
   .hero-background-image::before {
     content: '';
     position: absolute;
