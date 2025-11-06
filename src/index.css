@@ -445,7 +445,7 @@
 
   /* Tablet portrait mode - adjust combo card background position */
   @media screen and (max-width: 1366px) and (orientation: portrait) {
-    .product-showcase-card-mini.product-showcase-card-full-width .product-showcase-card-background {
+    .product-showcase-card-mini .product-showcase-card-background {
       background-position-x: -385px;
     }
   }
