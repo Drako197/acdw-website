@@ -707,7 +707,7 @@ export function Hero() {
                     <div className="proof-stack-stat-label">Fewer Callbacks</div>
                   </div>
                   <div className="proof-stack-stat">
-                    <div className="proof-stack-stat-number">35%</div>
+                    <div className="proof-stack-stat-number">10X</div>
                     <div className="proof-stack-stat-label">Faster Cleanouts</div>
                   </div>
                   <div className="proof-stack-stat">
