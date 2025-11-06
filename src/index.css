@@ -447,6 +447,7 @@
   @media screen and (max-width: 1366px) and (orientation: portrait) {
     .product-showcase-card-mini .product-showcase-card-background {
       background-position-x: -385px !important;
+      background-size: 75% auto !important;
     }
   }
 
