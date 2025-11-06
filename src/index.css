@@ -373,6 +373,27 @@
       display: none !important;
     }
   }
+
+  /* Gradient overlay for Mini + Sensor combo card - black to transparent from bottom up to headline */
+  .product-showcase-card-mini.product-showcase-card-full-width::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 400px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 30%, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0) 100%);
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  /* Hide gradient in portrait mode on all browsers */
+  @media screen and (orientation: portrait) {
+    .product-showcase-card-mini.product-showcase-card-full-width::after {
+      display: none !important;
+    }
+  }
   
   /* Full width Mini+Sensor combo card - EXACT HERO COPY */
   .product-showcase-card-mini.product-showcase-card-full-width {
