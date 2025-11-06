@@ -1,6 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShieldCheckIcon, WrenchScrewdriverIcon, HomeIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { 
+  ShieldCheckIcon, 
+  WrenchScrewdriverIcon, 
+  HomeIcon, 
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+  BeakerIcon,
+  BuildingOfficeIcon,
+  CurrencyDollarIcon,
+  WrenchIcon,
+  LockClosedIcon
+} from '@heroicons/react/24/outline';
 
 export function HomeownerHomePage() {
   const navigate = useNavigate();
@@ -79,19 +90,25 @@ export function HomeownerHomePage() {
           
           <div className="homeowner-problem-stats">
             <div className="homeowner-stat">
-              <div className="homeowner-stat-icon">⚠️</div>
+              <div className="homeowner-stat-icon-wrapper">
+                <ExclamationTriangleIcon className="homeowner-stat-icon" />
+              </div>
               <div className="homeowner-stat-number">$2,386</div>
               <div className="homeowner-stat-label">Average water damage repair cost</div>
             </div>
             
             <div className="homeowner-stat">
-              <div className="homeowner-stat-icon">💧</div>
+              <div className="homeowner-stat-icon-wrapper">
+                <BeakerIcon className="homeowner-stat-icon" />
+              </div>
               <div className="homeowner-stat-number">$3,000+</div>
               <div className="homeowner-stat-label">Mold remediation can add thousands more</div>
             </div>
             
             <div className="homeowner-stat">
-              <div className="homeowner-stat-icon">🏠</div>
+              <div className="homeowner-stat-icon-wrapper">
+                <BuildingOfficeIcon className="homeowner-stat-icon" />
+              </div>
               <div className="homeowner-stat-number">1 in 3</div>
               <div className="homeowner-stat-label">Homes with AC experience drain clogs</div>
             </div>
@@ -223,7 +240,9 @@ export function HomeownerHomePage() {
         
         <div className="homeowner-benefits-grid">
           <div className="homeowner-benefit-card">
-            <div className="homeowner-benefit-icon">💰</div>
+            <div className="homeowner-benefit-icon-wrapper">
+              <CurrencyDollarIcon className="homeowner-benefit-icon" />
+            </div>
             <h3 className="homeowner-benefit-title">Save Thousands</h3>
             <p className="homeowner-benefit-description">
               One $49.99 installation can prevent $2,000-10,000+ in water damage repairs, mold remediation, and ceiling/wall replacement.
@@ -231,7 +250,9 @@ export function HomeownerHomePage() {
           </div>
           
           <div className="homeowner-benefit-card">
-            <div className="homeowner-benefit-icon">🛠️</div>
+            <div className="homeowner-benefit-icon-wrapper">
+              <WrenchIcon className="homeowner-benefit-icon" />
+            </div>
             <h3 className="homeowner-benefit-title">DIY-Friendly</h3>
             <p className="homeowner-benefit-description">
               No plumber needed! Simple 30-minute installation with basic tools. Step-by-step instructions and video guide included with every unit.
@@ -239,7 +260,9 @@ export function HomeownerHomePage() {
           </div>
           
           <div className="homeowner-benefit-card">
-            <div className="homeowner-benefit-icon">🔒</div>
+            <div className="homeowner-benefit-icon-wrapper">
+              <LockClosedIcon className="homeowner-benefit-icon" />
+            </div>
             <h3 className="homeowner-benefit-title">Set and Forget</h3>
             <p className="homeowner-benefit-description">
               Install once and forget it. No maintenance, no chemicals, no filters to replace. Works automatically 24/7 for 5+ years.

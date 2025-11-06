@@ -2409,8 +2409,12 @@
   @apply bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20;
 }
 
+.homeowner-stat-icon-wrapper {
+  @apply w-16 h-16 mx-auto mb-4 bg-orange-500/20 rounded-full flex items-center justify-center;
+}
+
 .homeowner-stat-icon {
-  @apply text-4xl mb-3;
+  @apply h-8 w-8 text-orange-400;
 }
 
 .homeowner-stat-number {
@@ -2581,8 +2585,12 @@
   @apply bg-gray-50 rounded-xl p-8 text-center hover:shadow-lg transition-shadow;
 }
 
+.homeowner-benefit-icon-wrapper {
+  @apply w-20 h-20 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center;
+}
+
 .homeowner-benefit-icon {
-  @apply text-5xl mb-4;
+  @apply h-10 w-10 text-blue-600;
 }
 
 .homeowner-benefit-title {
@@ -2659,9 +2667,10 @@
   @apply px-6 pb-4 text-gray-600;
 }
 
-/* Final CTA Section */
+/* Final CTA Section - matches cta-band-sales gradient */
 .homeowner-final-cta-container {
-  @apply bg-gradient-to-r from-blue-600 to-blue-500 py-20;
+  @apply py-20;
+  background: linear-gradient(135deg, #0077C5 0%, #00B8F5 100%);
 }
 
 .homeowner-final-cta-content {
