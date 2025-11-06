@@ -344,7 +344,7 @@
 
   /* Full width Sensor card - EXACT HERO COPY */
   .product-showcase-card-sensor.product-showcase-card-full-width {
-    @apply relative overflow-hidden;
+    @apply relative overflow-hidden bg-black;
     height: 100vh;
     margin-bottom: 0;
     border-radius: 0;
