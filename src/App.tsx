@@ -4,6 +4,7 @@ import { Header } from './components/layout/Header'
 import { Footer } from './components/layout/Footer'
 import { ScrollToTop } from './components/layout/ScrollToTop'
 import { HomePage } from './pages/HomePage'
+import { HomeownerHomePage } from './pages/HomeownerHomePage'
 import { CustomerSelectionPage } from './pages/CustomerSelectionPage'
 import { ProductsPage } from './pages/ProductsPage'
 import { SolutionsPage } from './pages/SolutionsPage'
@@ -23,6 +24,7 @@ function App() {
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<HomePage />} />
+              <Route path="/homeowner" element={<HomeownerHomePage />} />
               <Route path="/customer-selection" element={<CustomerSelectionPage />} />
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/solutions" element={<SolutionsPage />} />

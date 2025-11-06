@@ -2290,3 +2290,447 @@
   }
 
 }
+/* ==========================================
+   HOMEOWNER LANDING PAGE STYLES
+   ========================================== */
+
+/* Homeowner Hero Section */
+.homeowner-hero-container {
+  @apply relative overflow-hidden bg-blue-600;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.homeowner-hero-background {
+  @apply absolute inset-0 bg-cover bg-center bg-no-repeat;
+  background-image: url('/images/acdw-mini-hero-background.png');
+}
+
+.homeowner-hero-background-overlay {
+  @apply absolute inset-0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+}
+
+.homeowner-hero-content {
+  @apply relative container mx-auto px-6 py-20;
+  z-index: 10;
+}
+
+.homeowner-hero-text {
+  @apply max-w-3xl;
+}
+
+.homeowner-hero-headline {
+  @apply text-5xl md:text-6xl font-bold text-white mb-6;
+  line-height: 1.1;
+}
+
+.homeowner-hero-highlight {
+  @apply text-orange-400;
+}
+
+.homeowner-hero-subheadline {
+  @apply text-2xl text-white font-semibold mb-4;
+}
+
+.homeowner-hero-description {
+  @apply text-xl text-white/90 mb-8 leading-relaxed;
+}
+
+.homeowner-hero-ctas {
+  @apply flex flex-col sm:flex-row gap-4 mb-8;
+}
+
+.homeowner-hero-cta-primary {
+  @apply px-8 py-4 bg-orange-500 text-white font-bold text-lg rounded-lg hover:bg-orange-600 transition-colors shadow-lg;
+}
+
+.homeowner-hero-cta-secondary {
+  @apply px-8 py-4 bg-white/10 text-white font-semibold text-lg rounded-lg hover:bg-white/20 transition-colors border-2 border-white backdrop-blur-sm;
+}
+
+.homeowner-hero-trust-badges {
+  @apply flex flex-wrap gap-6;
+}
+
+.homeowner-trust-badge {
+  @apply flex items-center text-white/90;
+}
+
+.homeowner-trust-icon {
+  @apply h-5 w-5 mr-2 text-green-400;
+}
+
+.homeowner-trust-text {
+  @apply text-sm font-medium;
+}
+
+/* Homeowner Problem Section */
+.homeowner-problem-section {
+  @apply relative overflow-hidden bg-gray-900;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+}
+
+.homeowner-problem-background {
+  @apply absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30;
+  background-image: url('/images/acdw-sensor-showcase-background.png');
+}
+
+.homeowner-problem-overlay {
+  @apply absolute inset-0 bg-gradient-to-b from-gray-900/90 to-gray-900/80;
+}
+
+.homeowner-problem-content {
+  @apply relative container mx-auto px-6 py-20 text-center;
+  z-index: 10;
+}
+
+.homeowner-problem-headline {
+  @apply text-4xl md:text-5xl font-bold text-white mb-4;
+}
+
+.homeowner-problem-subheadline {
+  @apply text-xl text-white/80 mb-12;
+}
+
+.homeowner-problem-stats {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto;
+}
+
+.homeowner-stat {
+  @apply bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20;
+}
+
+.homeowner-stat-icon {
+  @apply text-4xl mb-3;
+}
+
+.homeowner-stat-number {
+  @apply text-3xl font-bold text-orange-400 mb-2;
+}
+
+.homeowner-stat-label {
+  @apply text-white/90 text-sm;
+}
+
+/* How It Works Section */
+.homeowner-how-it-works-container {
+  @apply bg-white py-20;
+}
+
+.homeowner-how-it-works-header {
+  @apply text-center mb-16 container mx-auto px-6;
+}
+
+.homeowner-how-it-works-title {
+  @apply text-4xl font-bold text-gray-900 mb-4;
+}
+
+.homeowner-how-it-works-subtitle {
+  @apply text-xl text-gray-600 max-w-2xl mx-auto;
+}
+
+.homeowner-how-it-works-steps {
+  @apply container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 mb-12;
+}
+
+.homeowner-step {
+  @apply text-center;
+}
+
+.homeowner-step-icon {
+  @apply w-20 h-20 mx-auto mb-6 bg-blue-100 rounded-full flex items-center justify-center;
+}
+
+.homeowner-icon {
+  @apply h-10 w-10 text-blue-600;
+}
+
+.homeowner-step-number {
+  @apply text-sm font-semibold text-blue-600 uppercase tracking-wide mb-2;
+}
+
+.homeowner-step-title {
+  @apply text-2xl font-bold text-gray-900 mb-3;
+}
+
+.homeowner-step-description {
+  @apply text-gray-600 leading-relaxed;
+}
+
+.homeowner-how-it-works-cta {
+  @apply text-center;
+}
+
+.homeowner-cta-watch-video {
+  @apply px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors;
+}
+
+/* Product Showcase Section */
+.homeowner-product-showcase-container {
+  @apply bg-gray-50 py-20;
+}
+
+.homeowner-product-showcase-title {
+  @apply text-4xl font-bold text-gray-900 text-center mb-4;
+}
+
+.homeowner-product-showcase-subtitle {
+  @apply text-xl text-gray-600 text-center mb-12 max-w-2xl mx-auto;
+}
+
+.homeowner-product-card {
+  @apply container mx-auto px-6 max-w-5xl bg-white rounded-2xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-8 p-8;
+}
+
+.homeowner-product-image {
+  @apply flex items-center justify-center;
+}
+
+.homeowner-product-image img {
+  @apply max-w-full h-auto;
+  max-height: 400px;
+}
+
+.homeowner-product-details {
+  @apply flex flex-col justify-center;
+}
+
+.homeowner-product-features {
+  @apply space-y-4 mb-8;
+}
+
+.homeowner-feature {
+  @apply flex items-start;
+}
+
+.homeowner-feature-icon {
+  @apply h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-0.5;
+}
+
+.homeowner-feature-text {
+  @apply text-gray-700;
+}
+
+.homeowner-product-pricing {
+  @apply mb-6 border-t border-b border-gray-200 py-6;
+}
+
+.homeowner-price-main {
+  @apply flex items-baseline gap-3 mb-2;
+}
+
+.homeowner-price-amount {
+  @apply text-4xl font-bold text-blue-600;
+}
+
+.homeowner-price-label {
+  @apply text-gray-600;
+}
+
+.homeowner-price-comparison {
+  @apply text-sm text-gray-500 italic;
+}
+
+.homeowner-product-cta {
+  @apply w-full py-4 bg-orange-500 text-white font-bold text-lg rounded-lg hover:bg-orange-600 transition-colors mb-4;
+}
+
+.homeowner-product-guarantee {
+  @apply flex items-start p-4 bg-green-50 rounded-lg border border-green-200;
+}
+
+.homeowner-guarantee-icon {
+  @apply h-6 w-6 text-green-600 mr-3 flex-shrink-0 mt-0.5;
+}
+
+.homeowner-guarantee-text {
+  @apply flex flex-col;
+}
+
+.homeowner-guarantee-text strong {
+  @apply text-green-900 mb-1;
+}
+
+.homeowner-guarantee-text span {
+  @apply text-sm text-green-700;
+}
+
+/* Benefits Section */
+.homeowner-benefits-container {
+  @apply bg-white py-20;
+}
+
+.homeowner-benefits-title {
+  @apply text-4xl font-bold text-gray-900 text-center mb-16;
+}
+
+.homeowner-benefits-grid {
+  @apply container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8;
+}
+
+.homeowner-benefit-card {
+  @apply bg-gray-50 rounded-xl p-8 text-center hover:shadow-lg transition-shadow;
+}
+
+.homeowner-benefit-icon {
+  @apply text-5xl mb-4;
+}
+
+.homeowner-benefit-title {
+  @apply text-2xl font-bold text-gray-900 mb-3;
+}
+
+.homeowner-benefit-description {
+  @apply text-gray-600 leading-relaxed;
+}
+
+/* Testimonials Section */
+.homeowner-testimonials-container {
+  @apply bg-gray-50 py-20;
+}
+
+.homeowner-testimonials-title {
+  @apply text-4xl font-bold text-gray-900 text-center mb-4;
+}
+
+.homeowner-testimonials-subtitle {
+  @apply text-xl text-gray-600 text-center mb-12;
+}
+
+.homeowner-testimonials-grid {
+  @apply container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8;
+}
+
+.homeowner-testimonial-card {
+  @apply bg-white rounded-xl p-6 shadow-lg;
+}
+
+.homeowner-testimonial-stars {
+  @apply text-yellow-400 text-xl mb-4;
+}
+
+.homeowner-testimonial-text {
+  @apply text-gray-700 mb-6 italic;
+}
+
+.homeowner-testimonial-author {
+  @apply flex flex-col;
+}
+
+.homeowner-testimonial-author strong {
+  @apply text-gray-900 font-semibold;
+}
+
+.homeowner-testimonial-author span {
+  @apply text-sm text-gray-500;
+}
+
+/* FAQ Section */
+.homeowner-faq-container {
+  @apply bg-white py-20;
+}
+
+.homeowner-faq-title {
+  @apply text-4xl font-bold text-gray-900 text-center mb-12;
+}
+
+.homeowner-faq-list {
+  @apply container mx-auto px-6 max-w-3xl space-y-4;
+}
+
+.homeowner-faq-item {
+  @apply bg-white border border-gray-200 rounded-lg overflow-hidden;
+}
+
+.homeowner-faq-question {
+  @apply px-6 py-4 font-semibold text-gray-900 cursor-pointer hover:bg-gray-50 transition-colors list-none;
+}
+
+.homeowner-faq-answer {
+  @apply px-6 pb-4 text-gray-600;
+}
+
+/* Final CTA Section */
+.homeowner-final-cta-container {
+  @apply bg-gradient-to-r from-blue-600 to-blue-500 py-20;
+}
+
+.homeowner-final-cta-content {
+  @apply container mx-auto px-6 text-center;
+}
+
+.homeowner-final-cta-title {
+  @apply text-4xl md:text-5xl font-bold text-white mb-4;
+}
+
+.homeowner-final-cta-subtitle {
+  @apply text-xl text-white/90 mb-8 max-w-2xl mx-auto;
+}
+
+.homeowner-final-cta-buttons {
+  @apply flex flex-col sm:flex-row gap-4 justify-center mb-8;
+}
+
+.homeowner-final-cta-primary {
+  @apply px-8 py-4 bg-orange-500 text-white font-bold text-lg rounded-lg hover:bg-orange-600 transition-colors shadow-lg;
+}
+
+.homeowner-final-cta-secondary {
+  @apply px-8 py-4 bg-white/10 text-white font-semibold text-lg rounded-lg hover:bg-white/20 transition-colors border-2 border-white backdrop-blur-sm;
+}
+
+.homeowner-final-trust-badges {
+  @apply flex flex-wrap justify-center gap-6;
+}
+
+.homeowner-final-badge {
+  @apply text-white/90 text-sm font-medium;
+}
+
+/* Tablet portrait mode adjustments for homeowner hero */
+@media screen and (max-width: 1366px) and (orientation: portrait) {
+  .homeowner-hero-background {
+    background-position-x: -300px;
+    background-size: 160% auto !important;
+    background-color: black;
+  }
+}
+
+
+/* Homeowner Banner at top of contractor page */
+.homeowner-banner {
+  @apply bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 shadow-md;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.homeowner-banner-content {
+  @apply container mx-auto px-6 flex items-center justify-between flex-wrap gap-4;
+}
+
+.homeowner-banner-text {
+  @apply text-sm md:text-base;
+}
+
+.homeowner-banner-text strong {
+  @apply font-bold mr-2;
+}
+
+.homeowner-banner-cta {
+  @apply flex items-center gap-2 px-6 py-2 bg-white text-orange-600 font-semibold rounded-full hover:bg-orange-50 transition-colors text-sm;
+}
+
+.homeowner-banner-icon {
+  @apply h-4 w-4;
+}
+

@@ -136,6 +136,22 @@ export function Hero() {
 
   return (
     <>
+      {/* Homeowner Banner - Directs homeowners to their dedicated page */}
+      <div className="homeowner-banner">
+        <div className="homeowner-banner-content">
+          <span className="homeowner-banner-text">
+            <strong>Homeowner?</strong> Get DIY-friendly protection for your home
+          </span>
+          <button 
+            onClick={() => navigate('/homeowner')}
+            className="homeowner-banner-cta"
+          >
+            Shop for Your Home
+            <ArrowRightIcon className="homeowner-banner-icon" />
+          </button>
+        </div>
+      </div>
+
       {/* Hero Section - Mini Focus */}
       <div className="hero-main-container">
         {/* Background Image for Mini */}
