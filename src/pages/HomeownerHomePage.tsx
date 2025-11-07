@@ -37,12 +37,16 @@ export function HomeownerHomePage() {
           <div className="homeowner-hero-cards-grid">
             {/* Card 1: Easy DIY Installation (Wide) */}
             <div className="homeowner-hero-card homeowner-hero-card-wide homeowner-hero-card-1">
-              <div className="homeowner-hero-card-image-placeholder">
-                {/* Placeholder for installation image */}
-                <span className="homeowner-hero-card-placeholder-text">Installation Image</span>
+              {/* Background image will fill entire card */}
+              <div className="homeowner-hero-card-background homeowner-hero-card-bg-1">
+                {/* Placeholder background */}
               </div>
               
-              <div className="homeowner-hero-card-content">
+              {/* Gradient overlay for text readability */}
+              <div className="homeowner-hero-card-overlay"></div>
+              
+              {/* Content overlaid on image */}
+              <div className="homeowner-hero-card-content-overlay">
                 <div className="homeowner-hero-card-badge">DIY Installation</div>
                 <h3 className="homeowner-hero-card-title">Install in 30 Minutes</h3>
                 <p className="homeowner-hero-card-description">
@@ -60,12 +64,16 @@ export function HomeownerHomePage() {
             
             {/* Card 2: Clear Inspection Window (Tall) */}
             <div className="homeowner-hero-card homeowner-hero-card-tall homeowner-hero-card-2">
-              <div className="homeowner-hero-card-image-placeholder homeowner-hero-card-image-tall">
-                {/* Placeholder for inspection window image */}
-                <span className="homeowner-hero-card-placeholder-text">Inspection Window Image</span>
+              {/* Background image will fill entire card */}
+              <div className="homeowner-hero-card-background homeowner-hero-card-bg-2">
+                {/* Placeholder background */}
               </div>
               
-              <div className="homeowner-hero-card-content">
+              {/* Gradient overlay for text readability */}
+              <div className="homeowner-hero-card-overlay"></div>
+              
+              {/* Content overlaid on image */}
+              <div className="homeowner-hero-card-content-overlay">
                 <div className="homeowner-hero-card-badge">Visual Monitoring</div>
                 <h3 className="homeowner-hero-card-title">Clear Inspection Window</h3>
                 <p className="homeowner-hero-card-description">
@@ -76,12 +84,16 @@ export function HomeownerHomePage() {
             
             {/* Card 3: Cost Savings (Wide) */}
             <div className="homeowner-hero-card homeowner-hero-card-wide homeowner-hero-card-3">
-              <div className="homeowner-hero-card-image-placeholder">
-                {/* Placeholder for water damage prevention image */}
-                <span className="homeowner-hero-card-placeholder-text">Cost Savings Image</span>
+              {/* Background image will fill entire card */}
+              <div className="homeowner-hero-card-background homeowner-hero-card-bg-3">
+                {/* Placeholder background */}
               </div>
               
-              <div className="homeowner-hero-card-content">
+              {/* Gradient overlay for text readability */}
+              <div className="homeowner-hero-card-overlay"></div>
+              
+              {/* Content overlaid on image */}
+              <div className="homeowner-hero-card-content-overlay">
                 <div className="homeowner-hero-card-badge">Prevent Damage</div>
                 <h3 className="homeowner-hero-card-title">Save Thousands in Repairs</h3>
                 <p className="homeowner-hero-card-description">

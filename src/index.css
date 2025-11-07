@@ -2331,50 +2331,57 @@
 /* Individual Card Styles */
 .homeowner-hero-card {
   @apply relative overflow-hidden rounded-3xl transition-transform duration-300 hover:scale-[1.02];
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
 }
 
 /* Wide cards (Card 1 and Card 3) */
 .homeowner-hero-card-wide {
   @apply md:col-span-1;
   min-height: 400px;
-  display: flex;
-  flex-direction: column;
 }
 
 /* Tall card (Card 2) */
 .homeowner-hero-card-tall {
   @apply md:row-span-2;
   min-height: 600px;
-  display: flex;
-  flex-direction: column;
 }
 
-/* Card Image Placeholders */
-.homeowner-hero-card-image-placeholder {
-  @apply relative flex-1;
-  min-height: 250px;
-  background: rgba(255, 255, 255, 0.1);
+/* Card Background Images - Fill entire card */
+.homeowner-hero-card-background {
+  @apply absolute inset-0 bg-cover bg-center bg-no-repeat;
+  /* Placeholder backgrounds with white borders */
+  background-color: rgba(255, 255, 255, 0.1);
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 1.5rem 1.5rem 0 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.homeowner-hero-card-image-tall {
-  min-height: 400px;
+/* Specific background image placeholders */
+.homeowner-hero-card-bg-1 {
+  /* Will be replaced with: background-image: url('/images/homeowner-installation.jpg'); */
 }
 
-.homeowner-hero-card-placeholder-text {
-  @apply text-white/50 text-sm font-medium;
+.homeowner-hero-card-bg-2 {
+  /* Will be replaced with: background-image: url('/images/inspection-window-flow.jpg'); */
 }
 
-/* Card Content Area */
-.homeowner-hero-card-content {
-  @apply p-6 flex flex-col gap-3;
-  background: rgba(0, 0, 0, 0.3);
+.homeowner-hero-card-bg-3 {
+  /* Will be replaced with: background-image: url('/images/water-damage-prevention.jpg'); */
+}
+
+/* Gradient overlay for text readability */
+.homeowner-hero-card-overlay {
+  @apply absolute inset-0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+}
+
+/* Content overlaid on background image */
+.homeowner-hero-card-content-overlay {
+  @apply relative z-10 p-6 mt-auto flex flex-col gap-3;
 }
 
 .homeowner-hero-card-badge {
