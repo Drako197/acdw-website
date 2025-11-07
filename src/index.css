@@ -2294,40 +2294,24 @@
    HOMEOWNER LANDING PAGE STYLES
    ========================================== */
 
-/* Homeowner Hero Section */
-.homeowner-hero-container {
-  @apply relative overflow-hidden bg-blue-600;
+/* Homeowner Hero Section - Card-Based Design (Google Home Style) */
+.homeowner-hero-container-cards {
+  @apply bg-gray-900 py-16 md:py-24;
   min-height: 100vh;
   display: flex;
   align-items: center;
 }
 
-.homeowner-hero-background {
-  @apply absolute inset-0 bg-cover bg-center bg-no-repeat;
-  background-image: url('/images/acdw-mini-hero-background.png');
+.homeowner-hero-content-cards {
+  @apply container mx-auto px-6;
 }
 
-.homeowner-hero-background-overlay {
-  @apply absolute inset-0;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.5) 0%,
-    rgba(0, 0, 0, 0.3) 50%,
-    rgba(0, 0, 0, 0.4) 100%
-  );
+.homeowner-hero-header {
+  @apply text-center mb-12 md:mb-16;
 }
 
-.homeowner-hero-content {
-  @apply relative container mx-auto px-6 py-20;
-  z-index: 10;
-}
-
-.homeowner-hero-text {
-  @apply max-w-3xl;
-}
-
-.homeowner-hero-headline {
-  @apply text-5xl md:text-6xl font-bold text-white mb-6;
+.homeowner-hero-headline-cards {
+  @apply text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6;
   line-height: 1.1;
 }
 
@@ -2335,40 +2319,118 @@
   @apply text-orange-400;
 }
 
-.homeowner-hero-subheadline {
-  @apply text-2xl text-white font-semibold mb-4;
+.homeowner-hero-subheadline-cards {
+  @apply text-lg md:text-xl text-white/80 max-w-3xl mx-auto;
 }
 
-.homeowner-hero-description {
-  @apply text-xl text-white/90 mb-8 leading-relaxed;
+/* Feature Cards Grid */
+.homeowner-hero-cards-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6 mb-12;
 }
 
-.homeowner-hero-ctas {
-  @apply flex flex-col sm:flex-row gap-4 mb-8;
+/* Individual Card Styles */
+.homeowner-hero-card {
+  @apply relative overflow-hidden rounded-3xl transition-transform duration-300 hover:scale-[1.02];
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
 }
 
-.homeowner-hero-cta-primary {
-  @apply px-8 py-4 bg-orange-500 text-white font-bold text-lg rounded-lg hover:bg-orange-600 transition-colors shadow-lg;
+/* Wide cards (Card 1 and Card 3) */
+.homeowner-hero-card-wide {
+  @apply md:col-span-1;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
 }
 
-.homeowner-hero-cta-secondary {
-  @apply px-8 py-4 bg-white/10 text-white font-semibold text-lg rounded-lg hover:bg-white/20 transition-colors border-2 border-white backdrop-blur-sm;
+/* Tall card (Card 2) */
+.homeowner-hero-card-tall {
+  @apply md:row-span-2;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
 }
 
-.homeowner-hero-trust-badges {
-  @apply flex flex-wrap gap-6;
+/* Card Image Placeholders */
+.homeowner-hero-card-image-placeholder {
+  @apply relative flex-1;
+  min-height: 250px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1.5rem 1.5rem 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.homeowner-trust-badge {
-  @apply flex items-center text-white/90;
+.homeowner-hero-card-image-tall {
+  min-height: 400px;
 }
 
-.homeowner-trust-icon {
+.homeowner-hero-card-placeholder-text {
+  @apply text-white/50 text-sm font-medium;
+}
+
+/* Card Content Area */
+.homeowner-hero-card-content {
+  @apply p-6 flex flex-col gap-3;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.homeowner-hero-card-badge {
+  @apply inline-block self-start px-3 py-1 bg-white/20 text-white/90 text-xs font-semibold rounded-full;
+}
+
+.homeowner-hero-card-title {
+  @apply text-xl md:text-2xl font-bold text-white;
+}
+
+.homeowner-hero-card-description {
+  @apply text-white/80 text-sm md:text-base;
+}
+
+/* Card CTAs */
+.homeowner-hero-card-cta {
+  @apply mt-2 px-6 py-3 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-colors border border-white/30;
+}
+
+.homeowner-hero-card-cta-primary {
+  @apply bg-orange-500 hover:bg-orange-600 border-orange-500;
+}
+
+/* Trust Badges Below Cards */
+.homeowner-hero-trust-badges-cards {
+  @apply flex flex-wrap justify-center gap-8;
+}
+
+.homeowner-trust-badge-card {
+  @apply flex items-center text-white/80;
+}
+
+.homeowner-trust-icon-card {
   @apply h-5 w-5 mr-2 text-green-400;
 }
 
-.homeowner-trust-text {
+.homeowner-trust-text-card {
   @apply text-sm font-medium;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .homeowner-hero-card-1 {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  
+  .homeowner-hero-card-2 {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+  
+  .homeowner-hero-card-3 {
+    grid-column: 1;
+    grid-row: 2;
+  }
 }
 
 /* Homeowner Problem Section */
@@ -2705,14 +2767,6 @@
   @apply text-white/90 text-sm font-medium;
 }
 
-/* Tablet portrait mode adjustments for homeowner hero */
-@media screen and (max-width: 1366px) and (orientation: portrait) {
-  .homeowner-hero-background {
-    background-position-x: -300px;
-    background-size: 160% auto !important;
-    background-color: black;
-  }
-}
 
 
 /* Homeowner Banner at top of contractor page */

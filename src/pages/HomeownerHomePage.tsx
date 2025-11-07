@@ -19,56 +19,98 @@ export function HomeownerHomePage() {
 
   return (
     <div className="homeowner-page">
-      {/* Hero Section */}
-      <div className="homeowner-hero-container">
-        <div className="homeowner-hero-background">
-          {/* Background image */}
-        </div>
-        
-        <div className="homeowner-hero-background-overlay"></div>
-        
-        <div className="homeowner-hero-content">
-          <div className="homeowner-hero-text">
-            <h1 className="homeowner-hero-headline">
+      {/* Hero Section - Card-Based Design */}
+      <div className="homeowner-hero-container-cards">
+        <div className="homeowner-hero-content-cards">
+          {/* Hero Headline and Subheadline */}
+          <div className="homeowner-hero-header">
+            <h1 className="homeowner-hero-headline-cards">
               Stop AC Water Damage <span className="homeowner-hero-highlight">Before It Starts</span>
             </h1>
             
-            <p className="homeowner-hero-subheadline">
+            <p className="homeowner-hero-subheadline-cards">
               Professional-grade protection. Homeowner-friendly installation. No plumber needed.
             </p>
-            
-            <p className="homeowner-hero-description">
-              One simple 30-minute installation protects your home from thousands in water damage repairs. Join over 10,000+ homeowners who sleep better knowing their AC is protected.
-            </p>
-            
-            <div className="homeowner-hero-ctas">
-              <button 
-                onClick={() => navigate('/products?product=mini')}
-                className="homeowner-hero-cta-primary"
-              >
-                Get Protected Now - $49.99
-              </button>
-              <button 
-                onClick={() => setIsVideoModalOpen(true)}
-                className="homeowner-hero-cta-secondary"
-              >
-                Watch 2-Minute Installation
-              </button>
+          </div>
+          
+          {/* Feature Cards Grid */}
+          <div className="homeowner-hero-cards-grid">
+            {/* Card 1: Easy DIY Installation (Wide) */}
+            <div className="homeowner-hero-card homeowner-hero-card-wide homeowner-hero-card-1">
+              <div className="homeowner-hero-card-image-placeholder">
+                {/* Placeholder for installation image */}
+                <span className="homeowner-hero-card-placeholder-text">Installation Image</span>
+              </div>
+              
+              <div className="homeowner-hero-card-content">
+                <div className="homeowner-hero-card-badge">DIY Installation</div>
+                <h3 className="homeowner-hero-card-title">Install in 30 Minutes</h3>
+                <p className="homeowner-hero-card-description">
+                  No plumber needed. Simple step-by-step guide included.
+                </p>
+                
+                <button 
+                  onClick={() => setIsVideoModalOpen(true)}
+                  className="homeowner-hero-card-cta"
+                >
+                  View Installation Video
+                </button>
+              </div>
             </div>
             
-            <div className="homeowner-hero-trust-badges">
-              <div className="homeowner-trust-badge">
-                <CheckCircleIcon className="homeowner-trust-icon" />
-                <span className="homeowner-trust-text">30-Day Money Back</span>
+            {/* Card 2: Clear Inspection Window (Tall) */}
+            <div className="homeowner-hero-card homeowner-hero-card-tall homeowner-hero-card-2">
+              <div className="homeowner-hero-card-image-placeholder homeowner-hero-card-image-tall">
+                {/* Placeholder for inspection window image */}
+                <span className="homeowner-hero-card-placeholder-text">Inspection Window Image</span>
               </div>
-              <div className="homeowner-trust-badge">
-                <CheckCircleIcon className="homeowner-trust-icon" />
-                <span className="homeowner-trust-text">Free Shipping</span>
+              
+              <div className="homeowner-hero-card-content">
+                <div className="homeowner-hero-card-badge">Visual Monitoring</div>
+                <h3 className="homeowner-hero-card-title">Clear Inspection Window</h3>
+                <p className="homeowner-hero-card-description">
+                  See water flowing freely. Know your system is working.
+                </p>
               </div>
-              <div className="homeowner-trust-badge">
-                <CheckCircleIcon className="homeowner-trust-icon" />
-                <span className="homeowner-trust-text">Made in USA</span>
+            </div>
+            
+            {/* Card 3: Cost Savings (Wide) */}
+            <div className="homeowner-hero-card homeowner-hero-card-wide homeowner-hero-card-3">
+              <div className="homeowner-hero-card-image-placeholder">
+                {/* Placeholder for water damage prevention image */}
+                <span className="homeowner-hero-card-placeholder-text">Cost Savings Image</span>
               </div>
+              
+              <div className="homeowner-hero-card-content">
+                <div className="homeowner-hero-card-badge">Prevent Damage</div>
+                <h3 className="homeowner-hero-card-title">Save Thousands in Repairs</h3>
+                <p className="homeowner-hero-card-description">
+                  Protect your home from $2,000-10,000+ in water damage costs.
+                </p>
+                
+                <button 
+                  onClick={() => navigate('/products?product=mini')}
+                  className="homeowner-hero-card-cta homeowner-hero-card-cta-primary"
+                >
+                  Buy Now - $49.99
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          {/* Trust Badges Below Cards */}
+          <div className="homeowner-hero-trust-badges-cards">
+            <div className="homeowner-trust-badge-card">
+              <CheckCircleIcon className="homeowner-trust-icon-card" />
+              <span className="homeowner-trust-text-card">30-Day Money Back</span>
+            </div>
+            <div className="homeowner-trust-badge-card">
+              <CheckCircleIcon className="homeowner-trust-icon-card" />
+              <span className="homeowner-trust-text-card">Free Shipping</span>
+            </div>
+            <div className="homeowner-trust-badge-card">
+              <CheckCircleIcon className="homeowner-trust-icon-card" />
+              <span className="homeowner-trust-text-card">Made in USA</span>
             </div>
           </div>
         </div>
