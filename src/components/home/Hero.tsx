@@ -9,6 +9,7 @@ export function Hero() {
   const { user, isAuthenticated } = useAuth()
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false)
   
   // Check if user is a contractor
   const isContractor = isAuthenticated && user?.role === 'HVAC_PROFESSIONAL'
@@ -1026,12 +1027,28 @@ export function Hero() {
               <p className="heritage-section-card-description">
                 The proven foundation solution that started it all. Our Core 1.0 system pioneered the AC drain line maintenance category, establishing the clear PVC design and maintenance access principles that evolved into our flagship Mini. While Core 1.0 is now deprecated in favor of the more compact and versatile Mini, it remains a testament to our commitment to innovation and reliability.
               </p>
+              
+              {/* Exclusive Upgrade Offer */}
+              <div className="heritage-upgrade-offer">
+                <div className="heritage-upgrade-badge">🎁 Exclusive Loyalty Offer</div>
+                <h4 className="heritage-upgrade-title">Free Upgrade to AC Drain Wiz Mini</h4>
+                <p className="heritage-upgrade-description">
+                  Thank you for being an early adopter! As a Core 1.0 customer, you're eligible for a <strong>FREE upgrade to the new Mini</strong>. Simply share a photo of your installed Core 1.0 unit, and we'll ship you a brand new Mini at no cost—you just pay $10.99 shipping.
+                </p>
+                <button 
+                  onClick={() => setIsUpgradeModalOpen(true)}
+                  className="heritage-upgrade-cta"
+                >
+                  Claim Your Free Upgrade
+                </button>
+              </div>
+              
               <p className="heritage-section-card-note">
-                <strong>For existing Core 1.0 customers:</strong> Your system continues to be fully supported. If you need replacement parts or have questions about your Core 1.0 installation, please contact our support team.
+                <strong>Need support?</strong> Your Core 1.0 system continues to be fully supported. If you need replacement parts or have questions, please contact our support team.
               </p>
               <button 
                 onClick={() => navigate('/contact?type=core-1.0-support')}
-                className="heritage-section-cta"
+                className="heritage-section-cta-secondary"
               >
                 Contact Support for Core 1.0
               </button>
@@ -1045,6 +1062,117 @@ export function Hero() {
         isOpen={isVideoModalOpen} 
         onClose={() => setIsVideoModalOpen(false)} 
       />
+      
+      {/* Core 1.0 Upgrade Modal */}
+      {isUpgradeModalOpen && (
+        <div className="upgrade-modal-overlay" onClick={() => setIsUpgradeModalOpen(false)}>
+          <div className="upgrade-modal-container" onClick={(e) => e.stopPropagation()}>
+            <button className="upgrade-modal-close" onClick={() => setIsUpgradeModalOpen(false)}>
+              ×
+            </button>
+            
+            <div className="upgrade-modal-content">
+              <div className="upgrade-modal-header">
+                <h3 className="upgrade-modal-title">Free Upgrade to AC Drain Wiz Mini</h3>
+                <p className="upgrade-modal-subtitle">
+                  Complete the form below to claim your free upgrade. We'll review your submission and ship your new Mini within 2-3 business days.
+                </p>
+              </div>
+              
+              <form className="upgrade-modal-form" onSubmit={(e) => {
+                e.preventDefault()
+                // Form will be submitted via standard form action
+                alert('Thank you! Your upgrade request has been submitted. We\'ll contact you within 24 hours.')
+                setIsUpgradeModalOpen(false)
+              }}>
+                <div className="upgrade-form-group">
+                  <label className="upgrade-form-label" htmlFor="upgrade-name">Full Name *</label>
+                  <input 
+                    type="text" 
+                    id="upgrade-name" 
+                    name="name"
+                    className="upgrade-form-input" 
+                    required 
+                    placeholder="John Smith"
+                  />
+                </div>
+                
+                <div className="upgrade-form-group">
+                  <label className="upgrade-form-label" htmlFor="upgrade-email">Email Address *</label>
+                  <input 
+                    type="email" 
+                    id="upgrade-email" 
+                    name="email"
+                    className="upgrade-form-input" 
+                    required 
+                    placeholder="john@example.com"
+                  />
+                </div>
+                
+                <div className="upgrade-form-group">
+                  <label className="upgrade-form-label" htmlFor="upgrade-phone">Phone Number *</label>
+                  <input 
+                    type="tel" 
+                    id="upgrade-phone" 
+                    name="phone"
+                    className="upgrade-form-input" 
+                    required 
+                    placeholder="(555) 123-4567"
+                  />
+                </div>
+                
+                <div className="upgrade-form-group">
+                  <label className="upgrade-form-label" htmlFor="upgrade-photo">Photo of Installed Core 1.0 *</label>
+                  <p className="upgrade-form-helper">
+                    Please upload a clear photo showing your Core 1.0 unit installed on your AC drain line.
+                  </p>
+                  <input 
+                    type="file" 
+                    id="upgrade-photo" 
+                    name="photo"
+                    className="upgrade-form-file" 
+                    accept="image/*"
+                    required 
+                  />
+                </div>
+                
+                <div className="upgrade-form-group">
+                  <label className="upgrade-form-label" htmlFor="upgrade-address">Shipping Address *</label>
+                  <textarea 
+                    id="upgrade-address" 
+                    name="address"
+                    className="upgrade-form-textarea" 
+                    rows={3}
+                    required 
+                    placeholder="123 Main Street&#10;Apt 4B&#10;City, State 12345"
+                  ></textarea>
+                </div>
+                
+                <div className="upgrade-form-acknowledgment">
+                  <label className="upgrade-form-checkbox-label">
+                    <input 
+                      type="checkbox" 
+                      name="acknowledge"
+                      className="upgrade-form-checkbox" 
+                      required 
+                    />
+                    <span>I understand that I will be charged $10.99 for shipping and handling. My new Mini will ship within 2-3 business days of approval.</span>
+                  </label>
+                </div>
+                
+                <div className="upgrade-form-actions">
+                  <button type="button" onClick={() => setIsUpgradeModalOpen(false)} className="upgrade-form-cancel">
+                    Cancel
+                  </button>
+                  <button type="submit" className="upgrade-form-submit">
+                    Submit Upgrade Request
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

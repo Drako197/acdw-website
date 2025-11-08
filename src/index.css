@@ -1726,6 +1726,160 @@
     border-color: rgba(255, 255, 255, 1);
   }
 
+  .heritage-section-cta-secondary {
+    @apply px-6 py-2 text-sm font-semibold;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  .heritage-section-cta-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+
+  /* Heritage Upgrade Offer */
+  .heritage-upgrade-offer {
+    @apply bg-gradient-to-r from-orange-500/20 to-orange-600/20 backdrop-blur-sm rounded-xl p-6 my-6;
+    border: 2px solid rgba(255, 165, 0, 0.3);
+  }
+
+  .heritage-upgrade-badge {
+    @apply inline-block text-sm font-bold text-white bg-orange-600 px-3 py-1 rounded-full mb-3;
+  }
+
+  .heritage-upgrade-title {
+    @apply text-2xl font-bold text-white mb-3;
+  }
+
+  .heritage-upgrade-description {
+    @apply text-white text-base leading-relaxed mb-4;
+  }
+
+  .heritage-upgrade-description strong {
+    @apply text-orange-200 font-bold;
+  }
+
+  .heritage-upgrade-cta {
+    @apply px-8 py-3 text-base font-bold bg-orange-600 text-white rounded-lg;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .heritage-upgrade-cta:hover {
+    @apply bg-orange-700;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Upgrade Modal */
+  .upgrade-modal-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50;
+    backdrop-filter: blur(4px);
+  }
+
+  .upgrade-modal-container {
+    @apply bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .upgrade-modal-close {
+    @apply absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-4xl font-light;
+    width: 40px;
+    height: 40px;
+    line-height: 1;
+  }
+
+  .upgrade-modal-content {
+    @apply p-8;
+  }
+
+  .upgrade-modal-header {
+    @apply mb-6 pr-8;
+  }
+
+  .upgrade-modal-title {
+    @apply text-3xl font-bold text-gray-900 mb-2;
+  }
+
+  .upgrade-modal-subtitle {
+    @apply text-gray-600 text-base leading-relaxed;
+  }
+
+  .upgrade-modal-form {
+    @apply space-y-5;
+  }
+
+  .upgrade-form-group {
+    @apply space-y-2;
+  }
+
+  .upgrade-form-label {
+    @apply block text-sm font-semibold text-gray-900;
+  }
+
+  .upgrade-form-helper {
+    @apply text-sm text-gray-600 mb-2;
+  }
+
+  .upgrade-form-input {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg text-base;
+    @apply focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all;
+  }
+
+  .upgrade-form-textarea {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg text-base;
+    @apply focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all;
+    resize: vertical;
+  }
+
+  .upgrade-form-file {
+    @apply w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg text-base;
+    @apply bg-gray-50 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0;
+    @apply file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700;
+    @apply hover:file:bg-blue-100 cursor-pointer;
+  }
+
+  .upgrade-form-acknowledgment {
+    @apply bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded;
+  }
+
+  .upgrade-form-checkbox-label {
+    @apply flex items-start gap-3 cursor-pointer;
+  }
+
+  .upgrade-form-checkbox {
+    @apply mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded;
+    @apply focus:ring-2 focus:ring-blue-500 cursor-pointer;
+  }
+
+  .upgrade-form-checkbox-label span {
+    @apply text-sm text-gray-700 flex-1;
+  }
+
+  .upgrade-form-actions {
+    @apply flex justify-end gap-3 pt-4 border-t border-gray-200 mt-6;
+  }
+
+  .upgrade-form-cancel {
+    @apply px-6 py-3 text-base font-semibold text-gray-700 bg-gray-100 rounded-lg;
+    @apply hover:bg-gray-200 transition-colors;
+  }
+
+  .upgrade-form-submit {
+    @apply px-8 py-3 text-base font-bold text-white bg-orange-600 rounded-lg;
+    @apply hover:bg-orange-700 transition-all;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .upgrade-form-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
   /* Products Page */
   .products-page-container {
     @apply min-h-screen bg-gray-50;
