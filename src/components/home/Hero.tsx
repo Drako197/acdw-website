@@ -225,7 +225,7 @@ export function Hero() {
       {/* Product Showcase Section */}
       <div ref={productShowcaseRef} className="product-showcase-container">
         <div className="product-showcase-header">
-          <h2 className="product-showcase-title">Professional AC Maintenance Solutions for Contractors</h2>
+          <h2 className="product-showcase-title">Code Mandated Float Switch Replacement</h2>
           <p className="product-showcase-subtitle">
             Smart monitoring and complete protection systems designed for HVAC professionals. Boost efficiency and deliver premium service to your customers.
           </p>
