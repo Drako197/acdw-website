@@ -542,7 +542,7 @@ export function Hero() {
                 <tr>
                   <td className="product-comparison-td sticky left-0 bg-white">Price (MSRP)</td>
                   <td className="product-comparison-td font-bold text-lg">$49.99</td>
-                  <td className="product-comparison-td font-bold text-lg">$79.99</td>
+                  <td className="product-comparison-td text-sm text-gray-600 italic">Pricing available on sign in</td>
                   <td className="product-comparison-td text-sm text-gray-600 italic">Pricing available on sign in</td>
                 </tr>
                 <tr>
@@ -619,7 +619,7 @@ export function Hero() {
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between"><span className="font-medium">Status:</span> <span className="text-green-600">Available Now</span></div>
-                <div className="flex justify-between"><span className="font-medium">Price:</span> <span className="font-bold">$79.99</span></div>
+                <div className="flex justify-between"><span className="font-medium">Price:</span> <span className="text-gray-600 italic">Pricing available on sign in</span></div>
                 <div className="flex justify-between"><span className="font-medium">Size:</span> <span>2" × 3" × 1.5"</span></div>
                 <div className="flex justify-between"><span className="font-medium">Best For:</span> <span className="text-right">Early warning</span></div>
               </div>
