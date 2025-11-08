@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRightIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline'
+import { ArrowRightIcon, ChevronDownIcon, ChevronUpIcon, GiftIcon } from '@heroicons/react/24/outline'
 import { useAuth } from '../../contexts/AuthContext'
 import { VideoModal } from './VideoModal'
 
@@ -1030,7 +1030,10 @@ export function Hero() {
               
               {/* Exclusive Upgrade Offer */}
               <div className="heritage-upgrade-offer">
-                <div className="heritage-upgrade-badge">🎁 Exclusive Loyalty Offer</div>
+                <div className="heritage-upgrade-badge">
+                  <GiftIcon className="heritage-upgrade-badge-icon" />
+                  Exclusive Loyalty Offer
+                </div>
                 <h4 className="heritage-upgrade-title">Free Upgrade to AC Drain Wiz Mini</h4>
                 <p className="heritage-upgrade-description">
                   Thank you for being an early adopter! As a Core 1.0 customer, you're eligible for a <strong>FREE upgrade to the new Mini</strong>. Simply share a photo of your installed Core 1.0 unit, and we'll ship you a brand new Mini at no cost—you just pay $10.99 shipping.
