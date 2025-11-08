@@ -164,7 +164,7 @@ export function Hero() {
           {/* Hero Header */}
           <div className="hero-header-section">
             <h1 className="hero-main-heading">
-              Prevent Drain Line Clogs and{' '}
+              Prevent AC Drain Line Clogs And{' '}
               <span className="hero-brand-highlight">Expensive Water Damage</span>
             </h1>
             
