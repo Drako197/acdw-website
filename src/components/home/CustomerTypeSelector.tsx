@@ -37,7 +37,7 @@ const customerTypes: CustomerTypeConfig[] = [
     title: 'HVAC Professional',
     description: 'Boost efficiency and increase profitability with bulk pricing and professional tools. Access contractor pricing and bulk ordering.',
     features: [
-      '35% faster cleanouts',
+      '10X faster cleanouts',
       'Bulk pricing (20-pack, 50-pack)',
       'Professional tools and support',
       'Upsell opportunities',
