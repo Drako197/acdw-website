@@ -2783,11 +2783,33 @@
 }
 
 .homeowner-supporting-tool-media {
-  @apply flex items-center justify-center;
+  display: grid;
+  gap: 1rem;
 }
 
 .homeowner-supporting-tool-image {
   @apply max-w-full h-auto rounded-xl shadow-lg border border-white/20;
+  width: 100%;
+  object-fit: contain;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.homeowner-supporting-tool-image-main {
+  max-height: 260px;
+}
+
+.homeowner-supporting-tool-thumbs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.homeowner-supporting-tool-thumb {
+  @apply rounded-xl border border-white/20 shadow-lg;
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  background: rgba(15, 23, 42, 0.35);
 }
 
 /* Product Showcase Section */

@@ -265,9 +265,21 @@ export function HomeownerHomePage() {
               <div className="homeowner-supporting-tool-media">
                 <img
                   src="/images/Transfer_Pump.png"
-                  alt="Milwaukee M18 Transfer Pump"
-                  className="homeowner-supporting-tool-image"
+                  alt="Milwaukee M18 Transfer Pump front view"
+                  className="homeowner-supporting-tool-image homeowner-supporting-tool-image-main"
                 />
+                <div className="homeowner-supporting-tool-thumbs">
+                  <img
+                    src="/images/Transfer_Pump2.png"
+                    alt="Milwaukee M18 Transfer Pump hose attachment view"
+                    className="homeowner-supporting-tool-thumb"
+                  />
+                  <img
+                    src="/images/Transfer_Pump3.png"
+                    alt="Milwaukee M18 Transfer Pump in use"
+                    className="homeowner-supporting-tool-thumb"
+                  />
+                </div>
               </div>
             </div>
           </div>
