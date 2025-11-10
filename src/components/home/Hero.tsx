@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowRightIcon, ChevronDownIcon, ChevronUpIcon, GiftIcon } from '@heroicons/react/24/outline'
 import { useAuth } from '../../contexts/AuthContext'
 import { VideoModal } from './VideoModal'
+import { CustomerTypeSelector } from './CustomerTypeSelector'
 
 export function Hero() {
   const navigate = useNavigate()
@@ -221,6 +222,9 @@ export function Hero() {
           </div>
         </div>
       </div>
+
+      {/* Customer Type Selector */}
+      <CustomerTypeSelector />
 
       {/* Product Showcase Section */}
       <div ref={productShowcaseRef} className="product-showcase-container">
