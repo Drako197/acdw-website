@@ -625,15 +625,15 @@
   .customer-type-cta-button {
     @apply w-full;
   }
-  
+
   .customer-type-cta-primary {
     @apply btn w-full justify-center py-4 text-base font-semibold bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800;
   }
-  
+
   .customer-type-cta-outline {
     @apply btn w-full justify-center py-4 text-base font-semibold border border-primary-600 text-primary-600 hover:bg-primary-50 active:bg-primary-100;
   }
-  
+
   .customer-type-cta-secondary {
     @apply btn w-full justify-center py-4 text-base font-semibold bg-secondary-100 text-secondary-900 hover:bg-secondary-200 active:bg-secondary-300;
   }
@@ -2474,11 +2474,19 @@
 }
 
 .homeowner-hero-highlight {
-  @apply text-orange-400;
+  @apply text-orange-500;
 }
 
 .homeowner-hero-subheadline-cards {
   @apply text-lg md:text-xl text-white/80 max-w-3xl mx-auto;
+}
+
+.homeowner-hero-badge-row {
+  @apply flex flex-col sm:flex-row items-center justify-center gap-3 mt-6;
+}
+
+.homeowner-hero-badge {
+  @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 text-white text-sm font-semibold backdrop-blur-md border border-white/20;
 }
 
 /* Feature Cards Grid */
@@ -2600,19 +2608,21 @@
 
 /* Homeowner Problem Section */
 .homeowner-problem-section {
-  @apply relative overflow-hidden bg-gray-900;
+  @apply relative overflow-hidden;
+  background: linear-gradient(135deg, #0077C5 0%, #00B8F5 100%);
   min-height: 600px;
   display: flex;
   align-items: center;
 }
 
 .homeowner-problem-background {
-  @apply absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30;
-  background-image: url('/images/acdw-sensor-showcase-background.png');
+  @apply absolute inset-0;
+  background: transparent;
 }
 
 .homeowner-problem-overlay {
-  @apply absolute inset-0 bg-gradient-to-b from-gray-900/90 to-gray-900/80;
+  @apply absolute inset-0;
+  background: linear-gradient(180deg, rgba(0, 32, 64, 0.75) 0%, rgba(0, 64, 128, 0.65) 60%, rgba(0, 96, 160, 0.55) 100%);
 }
 
 .homeowner-problem-content {
@@ -2625,7 +2635,7 @@
 }
 
 .homeowner-problem-subheadline {
-  @apply text-xl text-white/80 mb-12;
+  @apply text-xl text-white/90 mb-12;
 }
 
 .homeowner-problem-stats {
@@ -2633,23 +2643,23 @@
 }
 
 .homeowner-stat {
-  @apply bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20;
+  @apply bg-white/10 backdrop-blur-lg rounded-xl p-8 border border-white/20 shadow-lg;
 }
 
 .homeowner-stat-icon-wrapper {
-  @apply w-16 h-16 mx-auto mb-4 bg-orange-500/20 rounded-full flex items-center justify-center;
+  @apply w-16 h-16 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center;
 }
 
 .homeowner-stat-icon {
-  @apply h-8 w-8 text-orange-400;
+  @apply h-8 w-8 text-white;
 }
 
 .homeowner-stat-number {
-  @apply text-3xl font-bold text-orange-400 mb-2;
+  @apply text-3xl font-bold text-white mb-2;
 }
 
 .homeowner-stat-label {
-  @apply text-white/90 text-sm;
+  @apply text-white/80 text-sm;
 }
 
 /* How It Works Section */
@@ -2703,6 +2713,59 @@
 
 .homeowner-cta-watch-video {
   @apply px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors;
+}
+
+.homeowner-supporting-tools-container {
+  @apply py-20;
+  background: linear-gradient(135deg, rgba(0, 23, 46, 1) 0%, rgba(0, 64, 128, 1) 60%, rgba(0, 109, 182, 1) 100%);
+}
+
+.homeowner-supporting-tools-content {
+  @apply container mx-auto px-6;
+}
+
+.homeowner-supporting-tools-header {
+  @apply text-center max-w-3xl mx-auto mb-12;
+}
+
+.homeowner-supporting-tools-title {
+  @apply text-4xl font-bold text-white mb-4;
+}
+
+.homeowner-supporting-tools-subtitle {
+  @apply text-lg text-white/80;
+}
+
+.homeowner-supporting-tools-grid {
+  @apply grid grid-cols-1 gap-8 max-w-4xl mx-auto;
+}
+
+.homeowner-supporting-tool-card {
+  @apply bg-white/10 border border-white/20 rounded-2xl p-8 backdrop-blur-lg text-white shadow-xl;
+}
+
+.homeowner-supporting-tool-tag {
+  @apply inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-wide bg-white/20 rounded-full mb-4;
+}
+
+.homeowner-supporting-tool-name {
+  @apply text-2xl font-bold mb-3;
+}
+
+.homeowner-supporting-tool-description {
+  @apply text-white/80 mb-6;
+}
+
+.homeowner-supporting-tool-features {
+  @apply list-disc pl-6 space-y-2 text-white/80 mb-6;
+}
+
+.homeowner-supporting-tool-cta {
+  @apply inline-flex items-center justify-center px-6 py-3 bg-white text-slate-900 font-semibold rounded-lg shadow-lg hover:bg-slate-200 transition-colors;
+}
+
+.homeowner-supporting-tool-disclaimer {
+  @apply text-xs text-white/60 mt-4;
 }
 
 /* Product Showcase Section */

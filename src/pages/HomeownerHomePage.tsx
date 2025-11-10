@@ -25,12 +25,17 @@ export function HomeownerHomePage() {
           {/* Hero Headline and Subheadline */}
           <div className="homeowner-hero-header">
             <h1 className="homeowner-hero-headline-cards">
-              Stop AC Water Damage <span className="homeowner-hero-highlight">Before It Starts</span>
+              DIY AC Drain Protection <span className="homeowner-hero-highlight">Made Simple</span>
             </h1>
             
             <p className="homeowner-hero-subheadline-cards">
-              Professional-grade protection. Homeowner-friendly installation. No plumber needed.
+              Install the AC Drain Wiz Mini in under 30 minutes. Designed for confident DIYers with optional pro backup.
             </p>
+
+            <div className="homeowner-hero-badge-row">
+              <span className="homeowner-hero-badge">Trusted by 10,000+ homeowners</span>
+              <span className="homeowner-hero-badge">30-Day Money-Back Guarantee</span>
+            </div>
           </div>
           
           {/* Feature Cards Grid */}
@@ -131,15 +136,15 @@ export function HomeownerHomePage() {
       {/* Problem Section */}
       <div className="homeowner-problem-section">
         <div className="homeowner-problem-background">
-          {/* Water damage image background */}
+          {/* Background intentionally removed */}
         </div>
         
         <div className="homeowner-problem-overlay"></div>
         
         <div className="homeowner-problem-content">
-          <h2 className="homeowner-problem-headline">The $10,000 Problem Hiding in Your AC</h2>
+          <h2 className="homeowner-problem-headline">Why Drain Line Clogs Cost Homeowners Thousands</h2>
           <p className="homeowner-problem-subheadline">
-            Most homeowners don't know they're at risk until it's too late
+            AC condensate backups can damage drywall, trigger mold, and lead to emergency service calls. One proactive install keeps your system dry and safe.
           </p>
           
           <div className="homeowner-problem-stats">
@@ -224,65 +229,37 @@ export function HomeownerHomePage() {
         </div>
       </div>
 
-      {/* Product Showcase */}
-      <div className="homeowner-product-showcase-container">
-        <h2 className="homeowner-product-showcase-title">AC Drain Wiz Mini</h2>
-        <p className="homeowner-product-showcase-subtitle">
-          Universal fit for most residential AC systems. Professional protection at a homeowner-friendly price.
-        </p>
-        
-        <div className="homeowner-product-card">
-          <div className="homeowner-product-image">
-            <img src="/images/ac-drain-wiz-logo.png" alt="AC Drain Wiz Mini" />
+      {/* Supporting Tools Section */}
+      <div className="homeowner-supporting-tools-container">
+        <div className="homeowner-supporting-tools-content">
+          <div className="homeowner-supporting-tools-header">
+            <h2 className="homeowner-supporting-tools-title">Tools Pros Trust for a Smoother Cleanout</h2>
+            <p className="homeowner-supporting-tools-subtitle">
+              Pair your AC Drain Wiz Mini with proven accessories that simplify maintenance—especially when a garden hose isn’t within reach.
+            </p>
           </div>
-          
-          <div className="homeowner-product-details">
-            <div className="homeowner-product-features">
-              <div className="homeowner-feature">
-                <CheckCircleIcon className="homeowner-feature-icon" />
-                <span className="homeowner-feature-text">Universal fit for most residential AC systems</span>
-              </div>
-              <div className="homeowner-feature">
-                <CheckCircleIcon className="homeowner-feature-icon" />
-                <span className="homeowner-feature-text">Patented anti-clog technology</span>
-              </div>
-              <div className="homeowner-feature">
-                <CheckCircleIcon className="homeowner-feature-icon" />
-                <span className="homeowner-feature-text">No maintenance required for 5+ years</span>
-              </div>
-              <div className="homeowner-feature">
-                <CheckCircleIcon className="homeowner-feature-icon" />
-                <span className="homeowner-feature-text">Chemical-free operation</span>
-              </div>
-              <div className="homeowner-feature">
-                <CheckCircleIcon className="homeowner-feature-icon" />
-                <span className="homeowner-feature-text">Includes all installation hardware</span>
-              </div>
-            </div>
-            
-            <div className="homeowner-product-pricing">
-              <div className="homeowner-price-main">
-                <span className="homeowner-price-amount">$49.99</span>
-                <span className="homeowner-price-label">One-time purchase</span>
-              </div>
-              <div className="homeowner-price-comparison">
-                Professional installation costs $200-400
-              </div>
-            </div>
-            
-            <button 
-              onClick={() => navigate('/products?product=mini&action=buy')}
-              className="homeowner-product-cta"
-            >
-              Add to Cart
-            </button>
-            
-            <div className="homeowner-product-guarantee">
-              <ShieldCheckIcon className="homeowner-guarantee-icon" />
-              <div className="homeowner-guarantee-text">
-                <strong>100% Money-Back Guarantee</strong>
-                <span>If you're not satisfied within 30 days, we'll refund your purchase</span>
-              </div>
+
+          <div className="homeowner-supporting-tools-grid">
+            <div className="homeowner-supporting-tool-card">
+              <div className="homeowner-supporting-tool-tag">Recommended Tool</div>
+              <h3 className="homeowner-supporting-tool-name">Milwaukee M18 Transfer Pump</h3>
+              <p className="homeowner-supporting-tool-description">
+                Compact, battery-powered pump that delivers up to 8 gallons per minute and 18 feet of lift. Draws clean water from a bucket and pushes it through your drain line when hose hookups are inaccessible.
+              </p>
+              <ul className="homeowner-supporting-tool-features">
+                <li>Runs on standard Milwaukee® M18 batteries—no cords required</li>
+                <li>Stainless steel construction built for job-site durability</li>
+                <li>Self-priming design keeps water moving fast with minimal setup</li>
+              </ul>
+              <button
+                className="homeowner-supporting-tool-cta"
+                onClick={() => window.open('https://www.amazon.com/DXYLYX-Milwaukee-Stainless-Electric-Portable/dp/B0BX2TVH7M/ref=sr_1_7?crid=312STP0O2ASP9&dib=eyJ2IjoiMSJ9.6QqovlXkbtC9nC4KH-E0HtJWpOH5TaTPi0vBEfk3T_POn_gzttZg-faLj0AR9s3xTOk1F8Ig4ab24lMJB9uNBdG5kNp7o41UrNAetN9BiJdyCPEIQpIbC151MVrLtH-swIfZyds1fql9vmsWZt9D5hmw17Z6NaaeKwWSaK5tZHoTP4_wjaNFZ5npTBHnPlbn7VIUpMf5JrzN6G2PdGWmq9TgFkvoOlSDQ6aTJaGp963vlt_ArzOK3ZL-SkxafEJoGIVVMyPCSegaOGBvLVWdWofg0b6m-WSkb0YMDXONsRY.eOBnmAqTtc9iOl8jVYmFDXMuXmGGN1X3ubZiFj07pgk&dib_tag=se&keywords=cordless+electric+water+transfer+pump+red&qid=1762802915&sprefix=cordless+electric+water+transfer+pump+red%2Caps%2C175&sr=8-7', '_blank', 'noopener,noreferrer')}
+              >
+                Shop on Amazon
+              </button>
+              <p className="homeowner-supporting-tool-disclaimer">
+                AC Drain Wiz is not affiliated with Milwaukee®. We recommend this tool because it meets the performance standards our contractors rely on for fast, reliable drain flushes.
+              </p>
             </div>
           </div>
         </div>
@@ -422,6 +399,17 @@ export function HomeownerHomePage() {
             <div className="homeowner-faq-answer">
               <p>
                 No! The AC Drain Wiz Mini is installed in your drain line, which is not part of your AC unit's sealed refrigeration system. Adding a drain line accessory does not affect your manufacturer's warranty. In fact, preventing water damage from clogged drains can help protect your entire HVAC investment.
+              </p>
+            </div>
+          </details>
+
+          <details className="homeowner-faq-item">
+            <summary className="homeowner-faq-question">
+              Do I need any extra tools to flush the drain line?
+            </summary>
+            <div className="homeowner-faq-answer">
+              <p>
+                Basic hand tools (PVC cutter or hacksaw) are all you need for installation. For ongoing maintenance, we recommend a transfer pump like the Milwaukee M18 model to push clean water through the line when a hose spigot isn’t handy. It delivers up to 8 GPM, runs on cordless M18 batteries, and makes attic or crawl-space flushes quick and mess-free.
               </p>
             </div>
           </details>
