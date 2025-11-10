@@ -2547,6 +2547,22 @@
   );
 }
 
+.homeowner-hero-card-tall .homeowner-hero-card-overlay {
+  background: transparent;
+}
+
+.homeowner-hero-card-badge-light {
+  @apply bg-blue-100 text-blue-700;
+}
+
+.homeowner-hero-card-title-dark {
+  @apply text-gray-900;
+}
+
+.homeowner-hero-card-description-dark {
+  @apply text-gray-700;
+}
+
 /* Content overlaid on background image */
 .homeowner-hero-card-content-overlay {
   @apply relative z-10 p-6 mt-auto flex flex-col gap-3;
