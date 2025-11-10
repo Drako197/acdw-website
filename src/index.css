@@ -623,19 +623,19 @@
   }
 
   .customer-type-cta-button {
-    @apply btn w-full;
+    @apply w-full;
   }
-
+  
   .customer-type-cta-primary {
-    @apply btn-primary;
+    @apply btn-primary btn-lg w-full;
   }
-
+  
   .customer-type-cta-outline {
-    @apply btn-outline;
+    @apply btn-outline btn-lg w-full;
   }
-
+  
   .customer-type-cta-secondary {
-    @apply btn-secondary;
+    @apply btn-secondary btn-lg w-full;
   }
 
   /* Header Classes */
