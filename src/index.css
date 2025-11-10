@@ -2569,7 +2569,7 @@
 }
 
 .homeowner-hero-card-content-overlay-light {
-  @apply relative z-10 p-8 gap-4 bg-white/85 border border-white/70 rounded-2xl shadow-lg text-left;
+  @apply relative z-10 p-8 gap-4 rounded-2xl shadow-lg text-left;
   align-self: flex-start;
   max-width: 85%;
 }
