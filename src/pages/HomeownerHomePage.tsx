@@ -264,7 +264,7 @@ export function HomeownerHomePage() {
               </div>
               <div className="homeowner-supporting-tool-media">
                 <img
-                  src="https://images-na.ssl-images-amazon.com/images/I/61vVCOgH14L._AC_SL1500_.jpg"
+                  src="/images/Transfer_Pump.png"
                   alt="Milwaukee M18 Transfer Pump"
                   className="homeowner-supporting-tool-image"
                 />
