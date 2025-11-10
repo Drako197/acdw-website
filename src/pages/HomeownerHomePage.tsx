@@ -203,7 +203,7 @@ export function HomeownerHomePage() {
             <div className="homeowner-step-number">Step 2</div>
             <h3 className="homeowner-step-title">Automatic Protection</h3>
             <p className="homeowner-step-description">
-              AC Drain Wiz automatically prevents clogs and buildup. Patented technology ensures 24/7 protection without any maintenance required.
+              AC Drain Wiz gives you a clear window into your drain line so you can spot buildup early. Patented clear-view technology lets you flush the line before biofilm turns into a clog.
             </p>
           </div>
           
