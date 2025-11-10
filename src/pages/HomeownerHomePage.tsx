@@ -233,7 +233,7 @@ export function HomeownerHomePage() {
       <div className="homeowner-supporting-tools-container">
         <div className="homeowner-supporting-tools-content">
           <div className="homeowner-supporting-tools-header">
-            <h2 className="homeowner-supporting-tools-title">Tools Pros Trust for a Smoother Cleanout</h2>
+            <h2 className="homeowner-supporting-tools-title">Clean Like a Pro: Our Recommended Transfer Pump</h2>
             <p className="homeowner-supporting-tools-subtitle">
               Pair your AC Drain Wiz Mini with proven accessories that simplify maintenance—especially when a garden hose isn’t within reach.
             </p>
@@ -241,25 +241,34 @@ export function HomeownerHomePage() {
 
           <div className="homeowner-supporting-tools-grid">
             <div className="homeowner-supporting-tool-card">
-              <div className="homeowner-supporting-tool-tag">Recommended Tool</div>
-              <h3 className="homeowner-supporting-tool-name">Milwaukee M18 Transfer Pump</h3>
-              <p className="homeowner-supporting-tool-description">
-                Compact, battery-powered pump that delivers up to 8 gallons per minute and 18 feet of lift. Draws clean water from a bucket and pushes it through your drain line when hose hookups are inaccessible.
-              </p>
-              <ul className="homeowner-supporting-tool-features">
-                <li>Runs on standard Milwaukee® M18 batteries—no cords required</li>
-                <li>Stainless steel construction built for job-site durability</li>
-                <li>Self-priming design keeps water moving fast with minimal setup</li>
-              </ul>
-              <button
-                className="homeowner-supporting-tool-cta"
-                onClick={() => window.open('https://www.amazon.com/DXYLYX-Milwaukee-Stainless-Electric-Portable/dp/B0BX2TVH7M/ref=sr_1_7?crid=312STP0O2ASP9&dib=eyJ2IjoiMSJ9.6QqovlXkbtC9nC4KH-E0HtJWpOH5TaTPi0vBEfk3T_POn_gzttZg-faLj0AR9s3xTOk1F8Ig4ab24lMJB9uNBdG5kNp7o41UrNAetN9BiJdyCPEIQpIbC151MVrLtH-swIfZyds1fql9vmsWZt9D5hmw17Z6NaaeKwWSaK5tZHoTP4_wjaNFZ5npTBHnPlbn7VIUpMf5JrzN6G2PdGWmq9TgFkvoOlSDQ6aTJaGp963vlt_ArzOK3ZL-SkxafEJoGIVVMyPCSegaOGBvLVWdWofg0b6m-WSkb0YMDXONsRY.eOBnmAqTtc9iOl8jVYmFDXMuXmGGN1X3ubZiFj07pgk&dib_tag=se&keywords=cordless+electric+water+transfer+pump+red&qid=1762802915&sprefix=cordless+electric+water+transfer+pump+red%2Caps%2C175&sr=8-7', '_blank', 'noopener,noreferrer')}
-              >
-                Shop on Amazon
-              </button>
-              <p className="homeowner-supporting-tool-disclaimer">
-                AC Drain Wiz is not affiliated with Milwaukee®. We recommend this tool because it meets the performance standards our contractors rely on for fast, reliable drain flushes.
-              </p>
+              <div className="homeowner-supporting-tool-info">
+                <div className="homeowner-supporting-tool-tag">Recommended Tool</div>
+                <h3 className="homeowner-supporting-tool-name">Milwaukee M18 Transfer Pump</h3>
+                <p className="homeowner-supporting-tool-description">
+                  Compact, battery-powered pump that delivers up to 8 gallons per minute and 18 feet of lift. Draws clean water from a bucket and pushes it through your drain line when hose hookups are inaccessible.
+                </p>
+                <ul className="homeowner-supporting-tool-features">
+                  <li>Runs on standard Milwaukee® M18 batteries—no cords required</li>
+                  <li>Stainless steel construction built for job-site durability</li>
+                  <li>Self-priming design keeps water moving fast with minimal setup</li>
+                </ul>
+                <button
+                  className="homeowner-supporting-tool-cta"
+                  onClick={() => window.open('https://www.amazon.com/DXYLYX-Milwaukee-Stainless-Electric-Portable/dp/B0BX2TVH7M/ref=sr_1_7?crid=312STP0O2ASP9&dib=eyJ2IjoiMSJ9.6QqovlXkbtC9nC4KH-E0HtJWpOH5TaTPi0vBEfk3T_POn_gzttZg-faLj0AR9s3xTOk1F8Ig4ab24lMJB9uNBdG5kNp7o41UrNAetN9BiJdyCPEIQpIbC151MVrLtH-swIfZyds1fql9vmsWZt9D5hmw17Z6NaaeKwWSaK5tZHoTP4_wjaNFZ5npTBHnPlbn7VIUpMf5JrzN6G2PdGWmq9TgFkvoOlSDQ6aTJaGp963vlt_ArzOK3ZL-SkxafEJoGIVVMyPCSegaOGBvLVWdWofg0b6m-WSkb0YMDXONsRY.eOBnmAqTtc9iOl8jVYmFDXMuXmGGN1X3ubZiFj07pgk&dib_tag=se&keywords=cordless+electric+water+transfer+pump+red&qid=1762802915&sprefix=cordless+electric+water+transfer+pump+red%2Caps%2C175&sr=8-7', '_blank', 'noopener,noreferrer')}
+                >
+                  Shop on Amazon
+                </button>
+                <p className="homeowner-supporting-tool-disclaimer">
+                  AC Drain Wiz is not affiliated with Milwaukee®. We recommend this tool because it meets the performance standards our contractors rely on for fast, reliable drain flushes.
+                </p>
+              </div>
+              <div className="homeowner-supporting-tool-media">
+                <img
+                  src="https://images-na.ssl-images-amazon.com/images/I/61vVCOgH14L._AC_SL1500_.jpg"
+                  alt="Milwaukee M18 Transfer Pump"
+                  className="homeowner-supporting-tool-image"
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -2742,6 +2742,15 @@
 
 .homeowner-supporting-tool-card {
   @apply bg-white/10 border border-white/20 rounded-2xl p-8 backdrop-blur-lg text-white shadow-xl;
+  display: grid;
+  gap: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+  .homeowner-supporting-tool-card {
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+  }
 }
 
 .homeowner-supporting-tool-tag {
@@ -2756,16 +2765,29 @@
   @apply text-white/80 mb-6;
 }
 
-.homeowner-supporting-tool-features {
-  @apply list-disc pl-6 space-y-2 text-white/80 mb-6;
-}
-
 .homeowner-supporting-tool-cta {
   @apply inline-flex items-center justify-center px-6 py-3 bg-white text-slate-900 font-semibold rounded-lg shadow-lg hover:bg-slate-200 transition-colors;
 }
 
 .homeowner-supporting-tool-disclaimer {
   @apply text-xs text-white/60 mt-4;
+}
+
+.homeowner-supporting-tool-info {
+  @apply flex flex-col;
+  gap: 1rem;
+}
+
+.homeowner-supporting-tool-features {
+  @apply list-disc pl-6 space-y-2 text-white/80 mb-4;
+}
+
+.homeowner-supporting-tool-media {
+  @apply flex items-center justify-center;
+}
+
+.homeowner-supporting-tool-image {
+  @apply max-w-full h-auto rounded-xl shadow-lg border border-white/20;
 }
 
 /* Product Showcase Section */
