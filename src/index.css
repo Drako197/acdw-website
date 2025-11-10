@@ -2805,9 +2805,8 @@
 }
 
 .homeowner-supporting-tool-thumb {
-  @apply rounded-xl border border-white/20 shadow-lg;
+  @apply rounded-xl shadow-lg;
   width: 100%;
-  height: 150px;
   object-fit: contain;
   background: rgba(255, 255, 255, 0.95);
 }
