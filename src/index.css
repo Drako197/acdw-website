@@ -2527,7 +2527,10 @@
 }
 
 .homeowner-hero-card-bg-2 {
-  /* Will be replaced with: background-image: url('/images/inspection-window-flow.jpg'); */
+  background-image: url('/images/ACDW-Mini-Cap-blk.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .homeowner-hero-card-bg-3 {
