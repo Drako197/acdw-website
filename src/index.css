@@ -627,15 +627,15 @@
   }
   
   .customer-type-cta-primary {
-    @apply btn-primary btn-lg w-full;
+    @apply btn w-full justify-center py-4 text-base font-semibold bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800;
   }
   
   .customer-type-cta-outline {
-    @apply btn-outline btn-lg w-full;
+    @apply btn w-full justify-center py-4 text-base font-semibold border border-primary-600 text-primary-600 hover:bg-primary-50 active:bg-primary-100;
   }
   
   .customer-type-cta-secondary {
-    @apply btn-secondary btn-lg w-full;
+    @apply btn w-full justify-center py-4 text-base font-semibold bg-secondary-100 text-secondary-900 hover:bg-secondary-200 active:bg-secondary-300;
   }
 
   /* Header Classes */
