@@ -78,10 +78,10 @@ export function HomeownerHomePage() {
               <div className="homeowner-hero-card-overlay"></div>
               
               {/* Content overlaid on image */}
-              <div className="homeowner-hero-card-content-overlay">
-              <div className="homeowner-hero-card-badge homeowner-hero-card-badge-light">Visual Monitoring</div>
-              <h3 className="homeowner-hero-card-title homeowner-hero-card-title-dark">Clear Inspection Window</h3>
-              <p className="homeowner-hero-card-description homeowner-hero-card-description-dark">
+              <div className="homeowner-hero-card-content-overlay homeowner-hero-card-content-overlay-light">
+                <div className="homeowner-hero-card-badge homeowner-hero-card-badge-light">Visual Monitoring</div>
+                <h3 className="homeowner-hero-card-title homeowner-hero-card-title-light">Clear Inspection Window</h3>
+                <p className="homeowner-hero-card-description homeowner-hero-card-description-light">
                   See water flowing freely. Know your system is working.
                 </p>
               </div>
