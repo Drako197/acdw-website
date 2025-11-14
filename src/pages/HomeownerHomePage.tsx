@@ -33,8 +33,8 @@ export function HomeownerHomePage() {
             </p>
 
             <div className="homeowner-hero-badge-row">
-              <span className="homeowner-hero-badge">Trusted by 10,000+ homeowners</span>
               <span className="homeowner-hero-badge">Professional-Grade Quality</span>
+              <span className="homeowner-hero-badge">30-Day Money-Back Guarantee</span>
             </div>
           </div>
           
