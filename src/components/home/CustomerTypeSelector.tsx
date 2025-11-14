@@ -20,7 +20,7 @@ import {
 const customerTypes: CustomerTypeConfig[] = [
   {
     type: 'homeowner',
-    title: 'Homeowner Installation Support',
+    title: 'Homeowners',
     description: 'Confident DIY homeowners can install the AC Drain Wiz Mini with our step-by-step guidance, while still having the option to partner with a pro if needed.',
     features: [
       'Designed for DIY installation',
@@ -34,7 +34,7 @@ const customerTypes: CustomerTypeConfig[] = [
   },
   {
     type: 'hvac-professional',
-    title: 'HVAC Pro Service Toolkit',
+    title: 'Contractors and HVAC Pros',
     description: 'Boost efficiency and increase profitability with bulk pricing and professional tools. Access contractor pricing and bulk ordering.',
     features: [
       '10X faster cleanouts',
@@ -48,7 +48,7 @@ const customerTypes: CustomerTypeConfig[] = [
   },
   {
     type: 'distributor',
-    title: 'Distributor Wholesale Program',
+    title: 'Distributors',
     description: 'Grow your business with wholesale pricing and strong unit economics. Stock-friendly case packs and distributor margins.',
     features: [
       'Wholesale pricing tiers',
@@ -62,7 +62,7 @@ const customerTypes: CustomerTypeConfig[] = [
   },
   {
     type: 'city-official',
-    title: 'Code Compliance Resources',
+    title: 'City & Code Officials',
     description: 'Ensure compliance and proper maintenance access with IMC-approved solutions. Access compliance documentation and demo scheduling.',
     features: [
       'IMC code compliance (307.2.5, 307.2.2, 307.2.1.1)',
