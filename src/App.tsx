@@ -5,6 +5,7 @@ import { Footer } from './components/layout/Footer'
 import { ScrollToTop } from './components/layout/ScrollToTop'
 import { HomePage } from './pages/HomePage'
 import { HomeownerHomePage } from './pages/HomeownerHomePage'
+import { PromoPage } from './pages/PromoPage'
 import { CustomerSelectionPage } from './pages/CustomerSelectionPage'
 import { ProductsPage } from './pages/ProductsPage'
 import { SolutionsPage } from './pages/SolutionsPage'
@@ -25,6 +26,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/homeowner" element={<HomeownerHomePage />} />
+              <Route path="/promo" element={<PromoPage />} />
               <Route path="/customer-selection" element={<CustomerSelectionPage />} />
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/solutions" element={<SolutionsPage />} />

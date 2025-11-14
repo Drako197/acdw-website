@@ -138,17 +138,17 @@ export function Hero() {
 
   return (
     <>
-      {/* Homeowner Banner - Directs homeowners to their dedicated page */}
+      {/* Promo Banner - Special offer for homeowners */}
       <div className="homeowner-banner">
         <div className="homeowner-banner-content">
           <span className="homeowner-banner-text">
-            <strong>Homeowner?</strong> Get DIY-friendly protection for your home
+            <strong>Special Offer:</strong> Get an exclusive discount when you join our email list
           </span>
           <button 
-            onClick={() => navigate('/homeowner')}
+            onClick={() => navigate('/promo')}
             className="homeowner-banner-cta"
           >
-            Shop for Your Home
+            Claim Your Discount
             <ArrowRightIcon className="homeowner-banner-icon" />
           </button>
         </div>

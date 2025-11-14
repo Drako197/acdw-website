@@ -20,21 +20,21 @@ import {
 const customerTypes: CustomerTypeConfig[] = [
   {
     type: 'homeowner',
-    title: 'Homeowner',
-    description: 'Protect your home from costly water damage with professional-grade AC drain solutions. Direct purchase with professional installation support.',
+    title: 'Homeowner Installation Support',
+    description: 'Confident DIY homeowners can install the AC Drain Wiz Mini with our step-by-step guidance, while still having the option to partner with a pro if needed.',
     features: [
-      'Direct purchase available',
-      'Professional installation support',
-      'Prevents costly water damage',
-      'Clear visual inspection',
-      'Peace of mind with proactive maintenance'
+      'Designed for DIY installation',
+      'Optional access to local pros',
+      'Clear inspection window',
+      'Protects against costly water damage',
+      'Maintenance reminders and tips'
     ],
-    cta: 'Shop Products',
+    cta: 'Shop ACDW Mini',
     pricing: 'retail'
   },
   {
     type: 'hvac-professional',
-    title: 'HVAC Professional',
+    title: 'HVAC Pro Service Toolkit',
     description: 'Boost efficiency and increase profitability with bulk pricing and professional tools. Access contractor pricing and bulk ordering.',
     features: [
       '10X faster cleanouts',
@@ -48,7 +48,7 @@ const customerTypes: CustomerTypeConfig[] = [
   },
   {
     type: 'distributor',
-    title: 'Distributor',
+    title: 'Distributor Wholesale Program',
     description: 'Grow your business with wholesale pricing and strong unit economics. Stock-friendly case packs and distributor margins.',
     features: [
       'Wholesale pricing tiers',
@@ -62,7 +62,7 @@ const customerTypes: CustomerTypeConfig[] = [
   },
   {
     type: 'city-official',
-    title: 'City & Code Official',
+    title: 'Code Compliance Resources',
     description: 'Ensure compliance and proper maintenance access with IMC-approved solutions. Access compliance documentation and demo scheduling.',
     features: [
       'IMC code compliance (307.2.5, 307.2.2, 307.2.1.1)',
@@ -93,7 +93,7 @@ export function CustomerTypeSelector() {
     // Navigate based on customer type
     switch (type) {
       case 'homeowner':
-        navigate('/products?type=homeowner')
+        navigate('/homeowner')
         break
       case 'hvac-professional':
         navigate('/auth/signin', { state: { from: { pathname: '/products', search: '?type=hvac-professional' } } })
@@ -129,7 +129,6 @@ export function CustomerTypeSelector() {
               <div
                 key={config.type}
                 className="customer-type-card"
-                onClick={() => handleSelect(config.type)}
               >
                 <div className="customer-type-card-header">
                   <div className={`customer-type-icon-wrapper ${
@@ -156,11 +155,14 @@ export function CustomerTypeSelector() {
                   ))}
                 </ul>
                 
-                <button className={`customer-type-cta-button ${
+                <button
+                  onClick={() => handleSelect(config.type)}
+                  className={`customer-type-cta-button ${
                   config.pricing === 'retail' ? 'customer-type-cta-primary' :
                   config.pricing === 'pro' ? 'customer-type-cta-outline' :
                   'customer-type-cta-secondary'
-                }`}>
+                }`}
+                >
                   {config.cta}
                 </button>
               </div>
