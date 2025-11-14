@@ -8,9 +8,10 @@ import { HomeownerHomePage } from './pages/HomeownerHomePage'
 import { PromoPage } from './pages/PromoPage'
 import { CustomerSelectionPage } from './pages/CustomerSelectionPage'
 import { ProductsPage } from './pages/ProductsPage'
-import { SolutionsPage } from './pages/SolutionsPage'
 import { ContactPage } from './pages/ContactPage'
 import { AboutPage } from './pages/AboutPage'
+import { SupportPage } from './pages/SupportPage'
+import { CompliancePage } from './pages/CompliancePage'
 import { SignInPage } from './pages/SignInPage'
 import { SignUpPage } from './pages/SignUpPage'
 import { DashboardPage } from './pages/DashboardPage'
@@ -28,11 +29,13 @@ function App() {
               <Route path="/homeowner" element={<HomeownerHomePage />} />
               <Route path="/promo" element={<PromoPage />} />
               <Route path="/customer-selection" element={<CustomerSelectionPage />} />
-              <Route path="/products" element={<ProductsPage />} />
-              <Route path="/solutions" element={<SolutionsPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/auth/signin" element={<SignInPage />} />
+                    <Route path="/products" element={<ProductsPage />} />
+                    <Route path="/solutions" element={<ProductsPage />} />
+                    <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/support" element={<SupportPage />} />
+                    <Route path="/compliance" element={<CompliancePage />} />
+                    <Route path="/auth/signin" element={<SignInPage />} />
               <Route path="/auth/signup" element={<SignUpPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
             </Routes>

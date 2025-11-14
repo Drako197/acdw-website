@@ -11,6 +11,7 @@
   
   body {
     @apply text-gray-900 antialiased;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
     width: 100%;
     margin: 0;
@@ -55,6 +56,12 @@
   
   .input {
     @apply flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  /* Textarea specific styling - override height for textareas */
+  textarea.input {
+    @apply min-h-[4.5rem] resize-y;
+    height: auto;
   }
   
   .card {
@@ -764,7 +771,7 @@
 
   /* Sign In Form Classes */
   .signin-page-container {
-    @apply min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8;
+    @apply min-h-screen flex items-center justify-center bg-gray-50 py-16 px-4 sm:px-6 lg:px-8;
   }
 
   .signin-form-wrapper {
@@ -865,7 +872,7 @@
   }
 
   .dashboard-content-wrapper {
-    @apply container mx-auto px-4 py-8;
+    @apply container mx-auto px-4 py-16;
   }
 
   .dashboard-main-content {
@@ -3296,5 +3303,1102 @@
 
 .promo-success-link {
   @apply px-8 py-4 text-gray-600 font-medium hover:text-gray-900 transition-colors;
+}
+
+/* Unified Products Page Styles (Google Home-inspired layout) */
+.unified-products-page {
+  @apply min-h-screen bg-gray-50;
+}
+
+/* Hero Section */
+.unified-products-hero {
+  @apply bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-20 md:py-32;
+}
+
+.unified-products-hero-content {
+  @apply container mx-auto px-6 text-center max-w-4xl;
+}
+
+.unified-products-hero-title {
+  @apply text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight;
+}
+
+.unified-products-hero-subtitle {
+  @apply text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed;
+}
+
+/* Section Styles */
+.unified-products-section,
+.unified-solutions-section,
+.unified-how-it-works-section,
+.unified-compatibility-section,
+.unified-why-choose-section,
+.unified-faq-section {
+  @apply py-16 md:py-24;
+}
+
+.unified-products-section {
+  @apply bg-white;
+}
+
+.unified-solutions-section {
+  background-color: #f5f5f5;
+}
+
+.unified-how-it-works-section {
+  @apply bg-white;
+}
+
+.unified-compatibility-section {
+  background-color: #f5f5f5;
+}
+
+.unified-why-choose-section {
+  @apply bg-white;
+}
+
+.unified-faq-section {
+  background-color: #f5f5f5;
+}
+
+.unified-products-content {
+  @apply container mx-auto px-6 max-w-7xl;
+}
+
+.unified-section-header {
+  @apply text-center mb-12 md:mb-16;
+}
+
+.unified-section-title {
+  @apply text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4;
+}
+
+.unified-section-subtitle {
+  @apply text-lg md:text-xl text-gray-600 max-w-3xl mx-auto;
+}
+
+/* Products Stacked Layout */
+.unified-products-stacked {
+  @apply space-y-16;
+}
+
+.unified-product-stacked-item {
+  @apply flex flex-col md:flex-row gap-6 items-stretch;
+}
+
+.unified-product-stacked-left {
+  @apply flex-row;
+}
+
+.unified-product-stacked-right {
+  @apply flex-row-reverse;
+}
+
+/* Product Shot Card */
+.unified-product-shot-card {
+  @apply bg-white rounded-2xl shadow-lg overflow-hidden;
+  flex: 2;
+  min-width: 0;
+}
+
+.unified-product-shot-container {
+  @apply relative w-full h-full;
+  min-height: 400px;
+}
+
+.unified-product-shot-gradient {
+  @apply absolute inset-0 rounded-2xl;
+  border: 3px solid white;
+}
+
+/* Gradient placeholders for each product */
+.unified-product-shot-gradient-mini {
+  background: linear-gradient(135deg, #0077C5 0%, #00B8F5 50%, #4FC3F7 100%);
+}
+
+.unified-product-shot-gradient-sensor {
+  background: linear-gradient(135deg, #7B1FA2 0%, #9C27B0 50%, #BA68C8 100%);
+}
+
+.unified-product-shot-gradient-minisensor {
+  background: linear-gradient(135deg, #1565C0 0%, #1976D2 50%, #42A5F5 100%);
+}
+
+/* Product Information Card */
+.unified-product-info-card {
+  @apply bg-white rounded-2xl shadow-lg p-8;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.unified-product-info-header {
+  @apply mb-6;
+}
+
+.unified-product-info-title-section {
+  @apply mb-4;
+}
+
+.unified-product-info-title {
+  @apply text-3xl font-bold text-gray-900 mb-3;
+}
+
+.unified-product-info-badges {
+  @apply flex flex-wrap gap-2 mb-3;
+}
+
+.unified-product-info-status {
+  @apply px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.unified-product-info-badge-contractor {
+  @apply px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium;
+}
+
+.unified-product-info-description {
+  @apply text-gray-600 text-base leading-relaxed;
+}
+
+/* Product Drawers (styled like tabs with underlines) */
+.unified-product-tabs {
+  @apply mb-6 flex-1 flex flex-col space-y-1;
+  overflow-y: auto;
+}
+
+.unified-product-drawer-button {
+  @apply w-full px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors;
+  @apply flex items-center justify-between text-left;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  outline: none;
+  cursor: pointer;
+}
+
+.unified-product-drawer-button:focus {
+  @apply outline-none;
+}
+
+.unified-product-drawer-button-active {
+  @apply text-blue-600;
+  border-bottom: 2px solid #2563eb;
+}
+
+.unified-product-drawer-button-content {
+  @apply flex items-center gap-2;
+}
+
+.unified-product-drawer-badge {
+  @apply px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600 rounded-full;
+}
+
+.unified-product-drawer-button-active .unified-product-drawer-badge {
+  @apply bg-blue-100 text-blue-600;
+}
+
+.unified-product-drawer-content {
+  @apply px-4 py-3 border-b border-gray-200;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.unified-product-tab-content-list {
+  @apply space-y-3;
+}
+
+.unified-product-tab-content-item {
+  @apply flex items-start gap-3 text-sm text-gray-600;
+}
+
+.unified-product-tab-content-icon {
+  @apply h-5 w-5 text-green-500 flex-shrink-0 mt-0.5;
+}
+
+.unified-product-tab-content-specs {
+  @apply space-y-3;
+}
+
+.unified-product-tab-content-spec-item {
+  @apply flex items-center gap-3 text-sm text-gray-600;
+}
+
+.unified-product-tab-content-spec-icon {
+  @apply h-5 w-5 text-blue-500 flex-shrink-0;
+}
+
+.unified-product-tab-content-pricing {
+  @apply space-y-2;
+}
+
+.unified-product-tab-content-pricing-item {
+  @apply text-sm text-gray-600;
+}
+
+.unified-product-tab-content-pricing-note {
+  @apply text-xs text-gray-500 italic;
+}
+
+.unified-product-tab-content-compliance {
+  @apply p-2;
+}
+
+.unified-product-tab-content-compliance-badges {
+  @apply flex flex-wrap gap-2;
+}
+
+.unified-product-tab-content-compliance-badge {
+  @apply px-3 py-1 bg-gray-100 text-gray-700 rounded text-xs font-mono;
+}
+
+.unified-product-info-cta {
+  @apply pt-6 border-t border-gray-200;
+}
+
+.unified-product-info-cta-button {
+  @apply w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors;
+}
+
+.unified-product-info-cta-icon {
+  @apply h-5 w-5;
+}
+
+.unified-product-info-cta-button-disabled {
+  @apply w-full px-6 py-3 bg-gray-300 text-gray-500 font-semibold rounded-lg cursor-not-allowed;
+}
+
+.unified-product-card {
+  @apply bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.unified-product-card:hover {
+  @apply shadow-xl;
+  transform: translateY(-4px);
+}
+
+.unified-product-card-header {
+  @apply p-6 border-b border-gray-200;
+}
+
+.unified-product-card-title-section {
+  @apply mb-4;
+}
+
+.unified-product-card-title {
+  @apply text-2xl font-bold text-gray-900 mb-3;
+}
+
+.unified-product-card-badges {
+  @apply flex flex-wrap gap-2 mb-3;
+}
+
+.unified-product-card-status {
+  @apply px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.products-card-status-available {
+  @apply bg-green-100 text-green-800;
+}
+
+.unified-product-card-badge-contractor {
+  @apply px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium;
+}
+
+.unified-product-card-description {
+  @apply text-gray-600 text-sm leading-relaxed;
+}
+
+.unified-product-card-benefits {
+  @apply p-6 flex-1;
+}
+
+.unified-product-card-benefits-title {
+  @apply font-semibold text-gray-900 mb-3;
+}
+
+.unified-product-card-benefits-list {
+  @apply space-y-2;
+}
+
+.unified-product-card-benefit-item {
+  @apply flex items-start gap-2 text-sm text-gray-600;
+}
+
+.unified-product-card-benefit-icon {
+  @apply h-5 w-5 text-green-500 flex-shrink-0 mt-0.5;
+}
+
+.unified-product-card-specs {
+  @apply p-6 border-t border-gray-200 space-y-4;
+}
+
+.unified-product-card-specs-grid {
+  @apply space-y-2;
+}
+
+.unified-product-card-spec-item {
+  @apply flex items-center gap-2 text-sm text-gray-600;
+}
+
+.unified-product-card-spec-icon {
+  @apply h-5 w-5 text-blue-500 flex-shrink-0;
+}
+
+.unified-product-card-pricing {
+  @apply pt-4 border-t border-gray-100;
+}
+
+.unified-product-card-pricing-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.unified-product-card-pricing-list {
+  @apply space-y-1 text-sm text-gray-600;
+}
+
+.unified-product-card-pricing-note {
+  @apply text-xs text-gray-500 italic;
+}
+
+.unified-product-card-compliance {
+  @apply pt-4 border-t border-gray-100;
+}
+
+.unified-product-card-compliance-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.unified-product-card-compliance-badges {
+  @apply flex flex-wrap gap-2;
+}
+
+.unified-product-card-compliance-badge {
+  @apply px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-mono;
+}
+
+.unified-product-card-cta {
+  @apply p-6 border-t border-gray-200;
+}
+
+.unified-product-card-cta-button {
+  @apply w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors;
+}
+
+.unified-product-card-cta-icon {
+  @apply h-5 w-5;
+}
+
+.unified-product-card-cta-button-disabled {
+  @apply w-full px-6 py-3 bg-gray-300 text-gray-500 font-semibold rounded-lg cursor-not-allowed;
+}
+
+/* Solutions Grid */
+.unified-solutions-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8;
+}
+
+.unified-solution-card {
+  @apply bg-white rounded-2xl shadow-lg p-8 flex flex-col;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.unified-solution-card:hover {
+  @apply shadow-xl;
+  transform: translateY(-4px);
+}
+
+.unified-solution-card-icon-wrapper {
+  @apply w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6;
+}
+
+.unified-solution-card-icon {
+  @apply h-8 w-8 text-blue-600;
+}
+
+.unified-solution-card-title {
+  @apply text-2xl font-bold text-gray-900 mb-3;
+}
+
+.unified-solution-card-description {
+  @apply text-gray-600 mb-6 leading-relaxed;
+}
+
+.unified-solution-card-features {
+  @apply mb-6 flex-1;
+}
+
+.unified-solution-card-features-title {
+  @apply font-semibold text-gray-900 mb-3;
+}
+
+.unified-solution-card-features-list {
+  @apply space-y-2;
+}
+
+.unified-solution-card-feature-item {
+  @apply flex items-start gap-2 text-sm text-gray-600;
+}
+
+.unified-solution-card-feature-icon {
+  @apply h-5 w-5 text-green-500 flex-shrink-0 mt-0.5;
+}
+
+.unified-solution-card-benefits {
+  @apply mb-6;
+}
+
+.unified-solution-card-benefits-title {
+  @apply font-semibold text-gray-900 mb-3;
+}
+
+.unified-solution-card-benefits-list {
+  @apply space-y-2;
+}
+
+.unified-solution-card-benefit-item {
+  @apply flex items-start gap-2 text-sm text-gray-600;
+}
+
+.unified-solution-card-benefit-icon {
+  @apply h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5;
+}
+
+.unified-solution-card-footer {
+  @apply pt-6 border-t border-gray-200;
+}
+
+.unified-solution-card-pricing {
+  @apply text-sm text-gray-600 mb-4;
+}
+
+.unified-solution-card-cta {
+  @apply w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors;
+}
+
+.unified-solution-card-cta-icon {
+  @apply h-5 w-5;
+}
+
+/* How It Works */
+.unified-how-it-works-steps {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8;
+}
+
+.unified-how-it-works-step {
+  @apply text-center;
+}
+
+.unified-how-it-works-step-icon {
+  @apply w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6;
+}
+
+.unified-how-it-works-icon {
+  @apply h-10 w-10 text-blue-600;
+}
+
+.unified-how-it-works-step-title {
+  @apply text-2xl font-bold text-gray-900 mb-4;
+}
+
+.unified-how-it-works-step-description {
+  @apply text-gray-600 leading-relaxed;
+}
+
+/* Compatibility */
+.unified-compatibility-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8;
+}
+
+.unified-compatibility-item {
+  @apply flex items-center gap-3 p-4 bg-white rounded-lg shadow-sm;
+}
+
+.unified-compatibility-icon {
+  @apply h-6 w-6 text-green-500 flex-shrink-0;
+}
+
+.unified-compatibility-footer {
+  @apply text-center;
+}
+
+.unified-compatibility-link {
+  @apply text-blue-600 hover:text-blue-700 font-medium;
+}
+
+/* Why Choose */
+.unified-why-choose-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8;
+}
+
+.unified-why-choose-card {
+  @apply text-center;
+}
+
+.unified-why-choose-icon {
+  @apply w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4;
+}
+
+.unified-why-choose-icon-svg {
+  @apply h-8 w-8 text-blue-600;
+}
+
+.unified-why-choose-title {
+  @apply text-xl font-bold text-gray-900 mb-3;
+}
+
+.unified-why-choose-description {
+  @apply text-gray-600 text-sm leading-relaxed;
+}
+
+/* FAQ */
+.unified-faq-list {
+  @apply max-w-3xl mx-auto space-y-4;
+}
+
+.unified-faq-item {
+  @apply bg-white rounded-lg shadow-sm overflow-hidden;
+}
+
+.unified-faq-question {
+  @apply w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors;
+}
+
+.unified-faq-question-text {
+  @apply font-semibold text-gray-900 pr-4;
+}
+
+.unified-faq-chevron {
+  @apply h-5 w-5 text-gray-500 flex-shrink-0;
+}
+
+.unified-faq-answer {
+  @apply px-6 pb-6 text-gray-600 leading-relaxed;
+}
+
+.unified-faq-footer {
+  @apply text-center mt-12;
+}
+
+.unified-faq-link {
+  @apply text-blue-600 hover:text-blue-700 font-medium;
+}
+
+/* Support Page Classes */
+.support-page-container {
+  @apply min-h-screen bg-gray-50;
+}
+
+.support-page-header {
+  @apply text-center mb-16;
+}
+
+.support-quick-help-cards {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-6 mb-16;
+}
+
+.support-help-card {
+  @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow text-left;
+}
+
+.support-help-card-icon {
+  @apply h-10 w-10 text-blue-600 mb-4;
+}
+
+.support-help-card-title {
+  @apply text-lg font-semibold text-gray-900 mb-2;
+}
+
+.support-help-card-description {
+  @apply text-sm text-gray-600;
+}
+
+.support-section-container {
+  @apply max-w-4xl mx-auto space-y-6;
+}
+
+.support-accordion-section {
+  @apply bg-white rounded-lg shadow-md overflow-hidden;
+}
+
+.support-accordion-button {
+  @apply w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors;
+}
+
+.support-accordion-header {
+  @apply flex items-center space-x-3;
+}
+
+.support-accordion-icon {
+  @apply h-6 w-6 text-blue-600;
+}
+
+.support-accordion-title {
+  @apply text-xl font-semibold text-gray-900;
+}
+
+.support-accordion-chevron {
+  @apply h-5 w-5 text-gray-500;
+}
+
+.support-accordion-content {
+  @apply px-6 py-4 border-t border-gray-200;
+}
+
+.support-content-section {
+  @apply space-y-6;
+}
+
+.support-resource-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+}
+
+.support-resource-card {
+  @apply border border-gray-200 rounded-lg p-4;
+}
+
+.support-resource-icon {
+  @apply h-8 w-8 text-blue-600 mb-2;
+}
+
+.support-resource-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.support-resource-description {
+  @apply text-sm text-gray-600 mb-3;
+}
+
+.support-resource-link {
+  @apply text-blue-600 text-sm font-medium hover:text-blue-700;
+}
+
+.support-step-list {
+  @apply space-y-3;
+}
+
+.support-step-item {
+  @apply flex items-start;
+}
+
+.support-step-number {
+  @apply flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-semibold mr-3;
+}
+
+.support-info-box {
+  @apply bg-blue-50 rounded-lg p-4;
+}
+
+.support-info-text {
+  @apply text-sm text-gray-700;
+}
+
+.support-troubleshooting-item {
+  @apply border-l-4 p-4;
+}
+
+.support-troubleshooting-item-warning {
+  @apply border-yellow-400 bg-yellow-50;
+}
+
+.support-troubleshooting-item-error {
+  @apply border-red-400 bg-red-50;
+}
+
+.support-troubleshooting-item-info {
+  @apply border-blue-400 bg-blue-50;
+}
+
+.support-troubleshooting-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.support-troubleshooting-list {
+  @apply text-sm text-gray-700 space-y-1 list-disc list-inside;
+}
+
+.support-contact-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+}
+
+.support-contact-card {
+  @apply border border-gray-200 rounded-lg p-4;
+}
+
+.support-contact-icon {
+  @apply h-8 w-8 text-blue-600 mb-2;
+}
+
+.support-contact-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.support-contact-details {
+  @apply text-sm text-gray-600 mb-2;
+}
+
+.support-contact-link {
+  @apply text-blue-600 font-medium hover:text-blue-700;
+}
+
+.support-action-buttons {
+  @apply flex flex-wrap gap-3;
+}
+
+.support-action-button-primary {
+  @apply inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors;
+}
+
+.support-action-button-secondary {
+  @apply inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors;
+}
+
+.support-action-icon {
+  @apply h-4 w-4 mr-2;
+}
+
+/* Compliance Page Classes */
+.compliance-page-container {
+  @apply min-h-screen bg-gray-50;
+}
+
+.compliance-page-header {
+  @apply text-center mb-16;
+}
+
+.compliance-content-wrapper {
+  @apply max-w-4xl mx-auto mb-16;
+}
+
+.compliance-overview-card {
+  @apply bg-white rounded-lg shadow-md p-8 mb-8;
+}
+
+.compliance-overview-header {
+  @apply flex items-start space-x-4 mb-6;
+}
+
+.compliance-overview-icon-wrapper {
+  @apply flex-shrink-0;
+}
+
+.compliance-overview-icon {
+  @apply h-12 w-12 text-blue-600;
+}
+
+.compliance-overview-title {
+  @apply text-2xl font-semibold text-gray-900 mb-3;
+}
+
+.compliance-overview-description {
+  @apply text-gray-600 mb-4;
+}
+
+.compliance-highlight-box {
+  @apply bg-green-50 border border-green-200 rounded-lg p-4;
+}
+
+.compliance-highlight-content {
+  @apply flex items-start;
+}
+
+.compliance-highlight-icon {
+  @apply h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5;
+}
+
+.compliance-highlight-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.compliance-highlight-text {
+  @apply text-sm text-gray-700;
+}
+
+.compliance-code-section {
+  @apply bg-white rounded-lg shadow-md p-8 mb-8;
+}
+
+.compliance-code-title {
+  @apply text-2xl font-semibold text-gray-900 mb-6;
+}
+
+.compliance-code-list {
+  @apply space-y-4;
+}
+
+.compliance-code-item {
+  @apply border-l-4 border-blue-500 bg-blue-50 p-4 rounded;
+}
+
+.compliance-code-item-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.compliance-code-item-description {
+  @apply text-sm text-gray-700 mb-2;
+}
+
+.compliance-code-item-note {
+  @apply text-xs text-gray-600;
+}
+
+.compliance-documentation-section {
+  @apply bg-white rounded-lg shadow-md p-8 mb-8;
+}
+
+.compliance-documentation-title {
+  @apply text-2xl font-semibold text-gray-900 mb-6;
+}
+
+.compliance-documentation-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.compliance-documentation-card {
+  @apply border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow;
+}
+
+.compliance-documentation-icon {
+  @apply h-10 w-10 text-blue-600 mb-4;
+}
+
+.compliance-documentation-card-title {
+  @apply text-lg font-semibold text-gray-900 mb-2;
+}
+
+.compliance-documentation-card-description {
+  @apply text-sm text-gray-600 mb-4;
+}
+
+.compliance-documentation-link {
+  @apply text-blue-600 text-sm font-medium hover:text-blue-700;
+}
+
+.compliance-guidelines-section {
+  @apply bg-white rounded-lg shadow-md p-8 mb-8;
+}
+
+.compliance-guidelines-title {
+  @apply text-2xl font-semibold text-gray-900 mb-6;
+}
+
+.compliance-guidelines-list {
+  @apply space-y-4;
+}
+
+.compliance-guideline-item {
+  @apply bg-gray-50 rounded-lg p-4;
+}
+
+.compliance-guideline-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.compliance-guideline-text {
+  @apply text-sm text-gray-700;
+}
+
+.compliance-contact-section {
+  @apply bg-blue-50 rounded-lg p-8;
+}
+
+.compliance-contact-title {
+  @apply text-2xl font-semibold text-gray-900 mb-4;
+}
+
+.compliance-contact-description {
+  @apply text-gray-700 mb-6;
+}
+
+.compliance-contact-buttons {
+  @apply flex flex-wrap gap-4;
+}
+
+.compliance-contact-button-primary {
+  @apply inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors;
+}
+
+.compliance-contact-button-secondary {
+  @apply inline-flex items-center px-6 py-3 border border-gray-300 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-colors;
+}
+
+.compliance-contact-icon {
+  @apply h-4 w-4 ml-2;
+}
+
+/* Contact Page Classes */
+.contact-page-container {
+  @apply min-h-screen bg-gray-50;
+}
+
+.contact-page-header {
+  @apply text-center mb-12;
+}
+
+.contact-tabs-container {
+  @apply bg-white rounded-t-lg shadow-md border-b border-gray-200 mb-8;
+}
+
+.contact-tabs-wrapper {
+  @apply flex flex-wrap gap-2 p-4 overflow-x-auto;
+}
+
+.contact-tab-button {
+  @apply flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors;
+}
+
+.contact-tab-button-active {
+  @apply bg-blue-600 text-white;
+}
+
+.contact-tab-button-inactive {
+  @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
+}
+
+.contact-tab-icon {
+  @apply h-5 w-5;
+}
+
+.contact-content-wrapper {
+  @apply max-w-6xl mx-auto;
+}
+
+.contact-layout-grid {
+  @apply flex flex-col gap-8;
+}
+
+.contact-sidebar {
+  @apply w-full;
+}
+
+.contact-sidebar-card {
+  @apply bg-white rounded-lg shadow-lg p-6;
+}
+
+.contact-sidebar-title {
+  @apply heading-2 mb-6;
+}
+
+.contact-leadership-section {
+  @apply mb-6;
+}
+
+.contact-leadership-title {
+  @apply text-lg font-semibold text-gray-900 mb-4;
+}
+
+.contact-leadership-content {
+  @apply flex items-start space-x-3;
+}
+
+.contact-leadership-avatar {
+  @apply w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0;
+}
+
+.contact-leadership-icon {
+  @apply h-5 w-5 text-blue-600;
+}
+
+.contact-leadership-name {
+  @apply font-semibold text-gray-900;
+}
+
+.contact-leadership-role {
+  @apply text-blue-600 text-sm mb-2;
+}
+
+.contact-leadership-links {
+  @apply space-y-1;
+}
+
+.contact-leadership-link {
+  @apply flex items-center text-gray-600 hover:text-blue-600 text-sm;
+}
+
+.contact-leadership-link-icon {
+  @apply h-4 w-4 mr-2;
+}
+
+.contact-quick-info-section {
+  @apply border-t border-gray-200 pt-6;
+}
+
+.contact-quick-info-title {
+  @apply text-sm font-semibold text-gray-900 mb-3;
+}
+
+.contact-quick-info-list {
+  @apply space-y-2 text-sm text-gray-600;
+}
+
+.contact-form-section {
+  @apply w-full;
+}
+
+.contact-form-card {
+  @apply bg-white rounded-lg shadow-lg p-8;
+}
+
+.contact-form-header {
+  @apply flex items-center gap-3 mb-6;
+}
+
+.contact-form-icon-wrapper {
+  @apply w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center;
+}
+
+.contact-form-icon {
+  @apply h-6 w-6 text-blue-600;
+}
+
+.contact-form-title-section {
+  @apply flex-1;
+}
+
+.contact-form-title {
+  @apply heading-2;
+}
+
+.contact-form-description {
+  @apply text-gray-600 text-sm mt-1;
+}
+
+.contact-form-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.contact-form-field {
+  @apply space-y-6;
+}
+
+.contact-form-label {
+  @apply block text-sm font-medium text-gray-700 mb-2;
+}
+
+.contact-form-char-count {
+  @apply mt-2 flex justify-end;
+}
+
+.contact-form-char-count-text {
+  @apply text-xs text-gray-500;
+}
+
+.contact-form-char-count-warning {
+  @apply text-orange-600 font-medium;
+}
+
+.contact-form-submit-button {
+  @apply w-full btn btn-primary btn-lg;
 }
 

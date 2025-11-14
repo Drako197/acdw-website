@@ -8,10 +8,10 @@ export function AboutPage() {
   ]
 
   const audiences = [
+    'Homeowners',
     'HVAC Contractors',
     'HVAC Distributors/Wholesalers',
-    'City/Code Officials (AHJs)',
-    'Homeowners (via contractors)'
+    'City/Code Officials (AHJs)'
   ]
 
   return (
@@ -47,7 +47,7 @@ export function AboutPage() {
                   <CheckCircleIcon className="about-page-mission-icon-svg" />
                 </div>
                 <h3 className="about-page-mission-item-title">Faster</h3>
-                <p className="about-page-mission-item-description">35% faster cleanouts with streamlined maintenance process</p>
+                <p className="about-page-mission-item-description">10X faster cleanouts with streamlined maintenance process</p>
               </div>
               <div className="about-page-mission-item">
                 <div className="about-page-mission-icon about-page-mission-icon-profitable">
@@ -139,8 +139,9 @@ export function AboutPage() {
               <div className="about-page-company-item">
                 <h3 className="about-page-company-item-title">Product Status</h3>
                 <div className="about-page-company-item-list">
-                  <p className="about-page-company-item-text">• Mini: Pre-launch (spec draft)</p>
-                  <p className="about-page-company-item-text">• Sensor: Pre-launch (spec draft)</p>
+                  <p className="about-page-company-item-text">• Mini: Available Now</p>
+                  <p className="about-page-company-item-text">• Sensor: Available Now</p>
+                  <p className="about-page-company-item-text">• Mini + Sensor: Available Now</p>
                   <p className="about-page-company-item-text about-page-company-item-text-deprecated">• Core 1.0: Deprecated (legacy product - full support for existing customers)</p>
                 </div>
               </div>

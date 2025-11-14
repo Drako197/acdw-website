@@ -52,10 +52,11 @@ export function Footer() {
               Products
             </h3>
             <ul className="footer-link-list">
+              <li><Link to="/products" className="footer-link">All Products</Link></li>
               <li><Link to="/products?product=mini" className="footer-link">AC Drain Wiz Mini</Link></li>
               <li><Link to="/products?product=sensor" className="footer-link">AC Drain Wiz Sensor</Link></li>
               <li><Link to="/products?product=mini&product=sensor" className="footer-link">Mini + Sensor</Link></li>
-              <li><Link to="/products" className="footer-link">All Products</Link></li>
+              <li><Link to="/homeowner" className="footer-link">For Homeowners</Link></li>
             </ul>
           </div>
 
@@ -66,8 +67,8 @@ export function Footer() {
             </h3>
             <ul className="footer-link-list">
               <li><Link to="/about" className="footer-link">About Us</Link></li>
-              <li><Link to="/solutions" className="footer-link">Solutions</Link></li>
               <li><Link to="/contact" className="footer-link">Contact</Link></li>
+              <li><Link to="/promo" className="footer-link">Special Offers</Link></li>
             </ul>
           </div>
 
@@ -77,8 +78,7 @@ export function Footer() {
               Support
             </h3>
             <ul className="footer-link-list">
-              <li><Link to="/contact?type=support" className="footer-link">Help & Support</Link></li>
-              <li><Link to="/contact?type=core-1.0-support" className="footer-link">Core 1.0 Support</Link></li>
+              <li><Link to="/support" className="footer-link">Get Help</Link></li>
               <li><a href="https://monitor.acdrainwiz.com/login" className="footer-link" target="_blank" rel="noopener noreferrer">Sensor Monitoring</a></li>
             </ul>
           </div>
@@ -91,7 +91,9 @@ export function Footer() {
             <ul className="footer-link-list">
               <li><Link to="/contact?type=sales" className="footer-link">Bulk Ordering</Link></li>
               <li><Link to="/contact?type=sales" className="footer-link">Partner Program</Link></li>
+              <li><Link to="/contact?type=demo-request" className="footer-link">Request Demo</Link></li>
               <li><Link to="/auth/signin" className="footer-link">Contractor Portal</Link></li>
+              <li><Link to="/compliance" className="footer-link">Compliance Resources</Link></li>
             </ul>
           </div>
         </div>

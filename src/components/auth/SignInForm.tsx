@@ -46,7 +46,7 @@ export function SignInForm() {
             Access exclusive contractor pricing and professional resources
           </p>
         </div>
-
+        
         <form className="signin-form" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
@@ -70,17 +70,17 @@ export function SignInForm() {
                 Password
               </label>
               <div className="mt-1 relative">
-                <input
-                  id="password"
-                  name="password"
+              <input
+                id="password"
+                name="password"
                   type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
-                  required
+                autoComplete="current-password"
+                required
                   className="appearance-none relative block w-full px-3 pr-10 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
                 <button
                   type="button"
                   className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none z-10"
@@ -149,13 +149,13 @@ export function SignInForm() {
             </li>
           </ul>
           <div className="signin-benefits-cta">
-            <button
-              type="button"
-              onClick={() => navigate('/auth/signup')}
+              <button
+                type="button"
+                onClick={() => navigate('/auth/signup')}
               className="signin-benefits-signup-button"
-            >
+              >
               Create Your Contractor Account
-            </button>
+              </button>
           </div>
         </div>
       </div>

@@ -10,7 +10,6 @@ import { useAuth } from '../../contexts/AuthContext'
 
 const navigation = [
   { name: 'Products', href: '/products' },
-  { name: 'Solutions', href: '/solutions' },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },
   { name: 'Sensor Monitoring', href: 'https://monitor.acdrainwiz.com/login', external: true },

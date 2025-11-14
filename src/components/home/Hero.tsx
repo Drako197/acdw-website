@@ -834,7 +834,7 @@ export function Hero() {
               <p className="risk-reversal-card-description">
                 If you're not satisfied with your AC Drain Wiz within 60 days, we'll refund your full purchase price—no questions asked. Plus, all products come with our industry-leading warranty.
               </p>
-              <button onClick={() => navigate('/products?tab=warranty')} className="risk-reversal-card-link">
+              <button onClick={() => navigate('/support#warranty-returns')} className="risk-reversal-card-link">
                 See full warranty terms →
               </button>
             </div>
@@ -850,7 +850,7 @@ export function Hero() {
               <p className="risk-reversal-card-description">
                 Not a DIYer? We offer free installation guidance via phone, email, and live chat. Our team helps thousands of homeowners every year. Average response time: under 2 hours.
               </p>
-              <button onClick={() => navigate('/contact?type=support')} className="risk-reversal-card-link">
+              <button onClick={() => navigate('/support#contact')} className="risk-reversal-card-link">
                 View support hours →
               </button>
             </div>
@@ -866,7 +866,7 @@ export function Hero() {
               <p className="risk-reversal-card-description">
                 Changed your mind? Return any unused product within 60 days for a full refund. We'll even cover return shipping within the continental US.
               </p>
-              <button onClick={() => navigate('/products?tab=returns')} className="risk-reversal-card-link">
+              <button onClick={() => navigate('/support#warranty-returns')} className="risk-reversal-card-link">
                 View return policy →
               </button>
             </div>
@@ -1054,7 +1054,7 @@ export function Hero() {
                 <strong>Need support?</strong> Your Core 1.0 system continues to be fully supported. If you need replacement parts or have questions, please contact our support team.
               </p>
               <button 
-                onClick={() => navigate('/contact?type=core-1.0-support')}
+                onClick={() => navigate('/support#product-support')}
                 className="heritage-section-cta-secondary"
               >
                 Contact Support for Core 1.0
