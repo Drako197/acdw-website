@@ -191,8 +191,7 @@ export function Hero() {
             </div>
             
             <p className="hero-description-text">
-              Keep your AC running smoothly with the<br />
-              AC Drain Wiz™ Mini
+              Keep your AC running smoothly with the AC Drain Wiz™ Mini
             </p>
           </div>
         </div>
@@ -571,7 +570,7 @@ export function Hero() {
                   </td>
                   <td className="product-comparison-td">
                     <button onClick={handleSensorCTA} className="product-comparison-btn-primary">
-                      Sign In to Buy
+                      Sign in for Pricing
                     </button>
                   </td>
                   <td className="product-comparison-td">
@@ -619,7 +618,7 @@ export function Hero() {
                   <span className="text-sm text-orange-600 font-semibold">Contractor Only</span>
                 </div>
                 <button onClick={handleSensorCTA} className="product-comparison-btn-primary">
-                  Sign In to Buy
+                  Sign in for Pricing
                 </button>
               </div>
               <div className="space-y-2 text-sm">

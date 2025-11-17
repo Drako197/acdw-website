@@ -103,6 +103,13 @@
     height: 100vh;
   }
 
+  /* Mobile - hero container height */
+  @media (max-width: 767px) {
+    .hero-main-container {
+      min-height: 100vh;
+    }
+  }
+
   .hero-background-pattern {
     @apply absolute inset-0 opacity-20;
   }
@@ -116,13 +123,30 @@
     @apply text-center;
   }
 
+  /* Mobile - hero header section margin */
+  @media (max-width: 767px) {
+    .hero-header-section {
+      margin-top: 330px;
+    }
+  }
+
   .hero-background-image {
     @apply absolute inset-0 bg-cover bg-center bg-no-repeat;
     background-image: url('/images/acdw-mini-hero-background.png');
   }
 
+  /* Mobile - adjust hero background position and size */
+  @media (max-width: 767px) {
+    .hero-background-image {
+      background-position-x: -150px;
+      background-size: 160% auto !important;
+      background-color: black;
+      background-position-y: 0px !important;
+    }
+  }
+
   /* Tablet portrait mode - adjust hero background position and size */
-  @media screen and (max-width: 1366px) and (orientation: portrait) {
+  @media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
     .hero-background-image {
       background-position-x: -300px;
       background-size: 160% auto !important;
@@ -164,11 +188,32 @@
 
   .hero-description-text {
     @apply text-xl text-primary-100 mb-8 leading-relaxed text-left;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Mobile - ensure natural text wrapping */
+  @media (max-width: 767px) {
+    .hero-description-text {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      margin-top: 35px;
+      text-align: center;
+    }
   }
 
   .hero-cta-buttons {
     @apply flex flex-col sm:flex-row gap-4 mb-4;
     margin-top: 190px;
+  }
+
+  /* Mobile - hero CTA buttons margin and layout */
+  @media (max-width: 767px) {
+    .hero-cta-buttons {
+      margin-top: 50px !important;
+      flex-direction: row !important;
+    }
   }
 
   .hero-primary-button {
@@ -369,6 +414,13 @@
     -webkit-transform: translateZ(0);
   }
 
+  /* Mobile - sensor card height */
+  @media (max-width: 767px) {
+    .product-showcase-card-sensor.product-showcase-card-full-width {
+      height: 120vh;
+    }
+  }
+
   /* Gradient overlay for Sensor card - black to transparent from bottom up to headline */
   .product-showcase-card-sensor.product-showcase-card-full-width::after {
     content: '';
@@ -419,6 +471,13 @@
     border-radius: 0;
   }
 
+  /* Mobile - mini card height */
+  @media (max-width: 767px) {
+    .product-showcase-card-mini.product-showcase-card-full-width {
+      height: 120vh;
+    }
+  }
+
 
 
   .product-showcase-card-background {
@@ -435,6 +494,13 @@
     background-repeat: no-repeat;
   }
 
+  /* Mobile - sensor card background position */
+  @media (max-width: 767px) {
+    .product-showcase-card-sensor.product-showcase-card-full-width .product-showcase-card-background {
+      background-position-y: -120px;
+    }
+  }
+
   /* Tablet-specific adjustment for sensor card background (iPad Pro and similar tablets) */
   @media (min-width: 768px) and (max-width: 1366px) {
     .product-showcase-card-sensor.product-showcase-card-full-width .product-showcase-card-background {
@@ -445,8 +511,6 @@
   /* Portrait mode - reset background positioning to show full image */
   @media screen and (orientation: portrait) {
     .product-showcase-card-sensor.product-showcase-card-full-width .product-showcase-card-background {
-      background-position: center center;
-      background-position-y: 0;
       background-size: cover;
     }
   }
@@ -457,6 +521,16 @@
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+  }
+
+  /* Mobile - mini card background styles */
+  @media (max-width: 767px) {
+    .product-showcase-card-mini.product-showcase-card-full-width .product-showcase-card-background {
+      background-position-x: -90px !important;
+      background-size: 150% auto !important;
+      background-color: black;
+      background-position-y: 30px !important;
+    }
   }
 
   /* Tablet portrait mode - adjust combo card background position */
@@ -471,6 +545,18 @@
 
   .product-showcase-card-content {
     @apply relative z-10 p-8 h-full flex flex-col justify-center items-center text-center;
+  }
+
+  /* Mobile - product showcase card content */
+  @media (max-width: 767px) {
+    .product-showcase-card-content {
+      justify-content: flex-end;
+      padding-bottom: 8rem !important;
+      width: 100%;
+      max-width: none;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
   }
 
   .product-showcase-card-sensor.product-showcase-card-full-width .product-showcase-card-content {
@@ -698,7 +784,7 @@
   }
 
   .header-user-menu-container {
-    @apply relative;
+    @apply hidden md:block relative;
   }
 
   .header-user-menu-button {
@@ -722,7 +808,7 @@
   }
 
   .header-auth-buttons {
-    @apply flex items-center space-x-2;
+    @apply hidden md:flex items-center space-x-2;
   }
 
   .header-signin-link {
@@ -741,32 +827,217 @@
     @apply h-6 w-6;
   }
 
-  .header-mobile-menu-container {
-    @apply lg:hidden border-t border-gray-200 py-4;
+  /* Mobile Menu - Slide-over (Meta style) - Mobile only */
+  @media (max-width: 767px) {
+    .header-mobile-menu-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .header-mobile-menu-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 95%;
+      max-width: none;
+      background-color: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+      animation: slideInRight 0.3s ease-out;
+      overflow-y: auto;
+    }
+
+    .header-mobile-menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+    }
+
+    .header-mobile-menu-logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .header-mobile-menu-logo-image {
+      height: 2rem;
+      width: auto;
+    }
+
+    .header-mobile-menu-close {
+      padding: 0.5rem;
+      color: #374151;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
+    }
+
+    .header-mobile-menu-close:hover {
+      color: #111827;
+    }
+
+    .header-mobile-menu-close-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    .header-mobile-menu-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+
+    .header-mobile-nav {
+      flex: 1;
+      padding: 1rem 0;
+    }
+
+    .header-mobile-nav-item {
+      display: block;
+      padding: 1rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #111827;
+      text-decoration: none;
+      transition: background-color 0.2s;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .header-mobile-nav-item:hover,
+    .header-mobile-nav-item:active {
+      background-color: #f9fafb;
+      color: #111827;
+    }
+
+    .header-mobile-auth-section {
+      padding: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .header-mobile-auth-button {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: center;
+      text-decoration: none;
+      color: #111827;
+      background-color: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .header-mobile-auth-button:hover {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .header-mobile-auth-button-primary {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      color: white;
+      background-color: #2563eb;
+      border: none;
+      border-radius: 0.5rem;
+      transition: background-color 0.2s;
+    }
+
+    .header-mobile-auth-button-primary:hover {
+      background-color: #1d4ed8;
+    }
+
+    .header-mobile-auth-button-secondary {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: center;
+      text-decoration: none;
+      color: #111827;
+      background-color: white;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .header-mobile-auth-button-secondary:hover {
+      background-color: #f9fafb;
+      border-color: #9ca3af;
+    }
+
+    .header-mobile-signout-button {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: center;
+      color: #dc2626;
+      background-color: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .header-mobile-signout-button:hover {
+      background-color: #fef2f2;
+      border-color: #dc2626;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
   }
 
-  .header-mobile-menu-content {
-    @apply space-y-4;
-  }
-
-  .header-mobile-nav-link {
-    @apply block text-sm font-medium text-gray-700 hover:text-primary-600;
-  }
-
-  .header-mobile-auth-section {
-    @apply pt-4 border-t border-gray-200 space-y-2;
-  }
-
-  .header-mobile-auth-link {
-    @apply block text-sm font-medium text-gray-700 hover:text-primary-600;
-  }
-
-  .header-mobile-signout-button {
-    @apply block w-full text-left text-sm font-medium text-gray-700 hover:text-primary-600;
-  }
-
-  .header-mobile-signup-link {
-    @apply block text-sm font-medium text-primary-600 hover:text-primary-700;
+  /* Hide mobile menu styles on tablet and desktop */
+  @media (min-width: 768px) {
+    .header-mobile-menu-backdrop,
+    .header-mobile-menu-panel {
+      display: none;
+    }
   }
 
   /* Sign In Form Classes */
@@ -1667,7 +1938,7 @@
   }
 
   .heritage-section-content {
-    @apply max-w-4xl mx-auto relative z-10;
+    @apply max-w-4xl mx-auto relative z-10 py-24 md:py-32;
   }
 
   .heritage-section-container.section-active .heritage-section-content {
@@ -2477,92 +2748,113 @@
    HOMEOWNER LANDING PAGE STYLES
    ========================================== */
 
-/* Homeowner Hero Section - Card-Based Design (Google Home Style) */
-.homeowner-hero-container-cards {
-  @apply bg-gray-900 py-16 md:py-24;
-  min-height: 100vh;
+/* Homeowner Hero Section - Matching Property Manager Style */
+.homeowner-hero-container {
+  @apply bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 md:py-24;
+  min-height: 80vh;
   display: flex;
   align-items: center;
 }
 
-.homeowner-hero-content-cards {
+.homeowner-hero-content {
   @apply container mx-auto px-6;
 }
 
 .homeowner-hero-header {
-  @apply text-center mb-12 md:mb-16;
+  @apply text-center max-w-4xl mx-auto;
 }
 
-.homeowner-hero-headline-cards {
-  @apply text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6;
+.homeowner-hero-headline {
+  @apply text-4xl md:text-5xl lg:text-6xl font-bold mb-6;
   line-height: 1.1;
 }
 
 .homeowner-hero-highlight {
-  @apply text-orange-500;
+  @apply text-orange-400;
 }
 
-.homeowner-hero-subheadline-cards {
-  @apply text-lg md:text-xl text-white/80 max-w-3xl mx-auto;
+.homeowner-hero-subheadline {
+  @apply text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto;
 }
 
 .homeowner-hero-badge-row {
-  @apply flex flex-col sm:flex-row items-center justify-center gap-3 mt-6;
+  @apply flex flex-col sm:flex-row items-center justify-center gap-3 mb-8;
 }
 
 .homeowner-hero-badge {
   @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 text-white text-sm font-semibold backdrop-blur-md border border-white/20;
 }
 
-/* Feature Cards Grid */
-.homeowner-hero-cards-grid {
+.homeowner-hero-ctas {
+  @apply flex flex-col sm:flex-row items-center justify-center gap-4 mt-8;
+}
+
+.homeowner-hero-cta-primary {
+  @apply btn btn-lg bg-white text-blue-700 hover:bg-blue-50 font-semibold px-8;
+}
+
+.homeowner-hero-cta-secondary {
+  @apply btn btn-lg border-2 border-white text-white hover:bg-white hover:text-blue-700 font-semibold px-8;
+}
+
+/* Feature Cards Section - Moved Below Hero */
+.homeowner-features-section {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.homeowner-features-content {
+  @apply container mx-auto px-6;
+}
+
+.homeowner-features-grid {
   @apply grid grid-cols-1 md:grid-cols-2 gap-6 mb-12;
 }
 
-/* Individual Card Styles */
-.homeowner-hero-card {
+/* Individual Feature Card Styles */
+.homeowner-feature-card {
   @apply relative overflow-hidden rounded-3xl transition-transform duration-300 hover:scale-[1.02];
   display: flex;
   flex-direction: column;
 }
 
-/* Wide cards (Card 1 and Card 3) */
-.homeowner-hero-card-wide {
+.homeowner-feature-card-1 {
   @apply md:col-span-1;
   min-height: 400px;
 }
 
-/* Tall card (Card 2) */
-.homeowner-hero-card-tall {
+.homeowner-feature-card-2 {
   @apply md:row-span-2;
   min-height: 600px;
 }
 
-/* Card Background Images - Fill entire card */
-.homeowner-hero-card-background {
+.homeowner-feature-card-3 {
+  @apply md:col-span-1;
+  min-height: 400px;
+}
+
+/* Card Background Images */
+.homeowner-feature-card-background {
   @apply absolute inset-0 bg-cover bg-center bg-no-repeat;
-  /* Placeholder backgrounds with white borders */
   background-color: rgba(255, 255, 255, 0.1);
   border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Specific background image placeholders */
-.homeowner-hero-card-bg-1 {
+.homeowner-feature-card-bg-1 {
   /* Will be replaced with: background-image: url('/images/homeowner-installation.jpg'); */
 }
 
-.homeowner-hero-card-bg-2 {
+.homeowner-feature-card-bg-2 {
   background-image: url('/images/ACDW-Mini-Cap-blk.png');
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.homeowner-hero-card-bg-3 {
+.homeowner-feature-card-bg-3 {
   /* Will be replaced with: background-image: url('/images/water-damage-prevention.jpg'); */
 }
 
 /* Gradient overlay for text readability */
-.homeowner-hero-card-overlay {
+.homeowner-feature-card-overlay {
   @apply absolute inset-0;
   background: linear-gradient(
     to top,
@@ -2572,96 +2864,84 @@
   );
 }
 
-.homeowner-hero-card-tall .homeowner-hero-card-overlay {
+.homeowner-feature-card-2 .homeowner-feature-card-overlay {
   background: transparent;
 }
 
-.homeowner-hero-card-badge-light {
-  @apply bg-blue-100 text-blue-700;
-}
-
-.homeowner-hero-card-title-dark {
-  @apply text-gray-900;
-}
-
-.homeowner-hero-card-description-dark {
-  @apply text-gray-700;
-}
-
 /* Content overlaid on background image */
-.homeowner-hero-card-content-overlay {
+.homeowner-feature-card-content {
   @apply relative z-10 p-6 mt-auto flex flex-col gap-3;
 }
 
-.homeowner-hero-card-content-overlay-light {
+.homeowner-feature-card-content-light {
   @apply relative z-10 p-8 gap-4 rounded-2xl text-left;
   align-self: flex-start;
   max-width: 85%;
 }
 
-.homeowner-hero-card-badge {
+.homeowner-feature-card-badge {
   @apply inline-block self-start px-3 py-1 bg-white/20 text-white/90 text-xs font-semibold rounded-full;
 }
 
-.homeowner-hero-card-badge-light {
+.homeowner-feature-card-badge-light {
   @apply inline-block self-start px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full;
 }
 
-.homeowner-hero-card-title {
+.homeowner-feature-card-title {
   @apply text-xl md:text-2xl font-bold text-white;
 }
 
-.homeowner-hero-card-title-light {
+.homeowner-feature-card-title-light {
   @apply text-2xl md:text-3xl font-bold text-gray-900;
 }
 
-.homeowner-hero-card-description {
+.homeowner-feature-card-description {
   @apply text-white/80 text-sm md:text-base;
 }
 
-.homeowner-hero-card-description-light {
+.homeowner-feature-card-description-light {
   @apply text-gray-700 text-base leading-relaxed;
 }
 
 /* Card CTAs */
-.homeowner-hero-card-cta {
+.homeowner-feature-card-cta {
   @apply mt-2 px-6 py-3 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-colors border border-white/30;
 }
 
-.homeowner-hero-card-cta-primary {
+.homeowner-feature-card-cta-primary {
   @apply bg-orange-500 hover:bg-orange-600 border-orange-500;
 }
 
-/* Trust Badges Below Cards */
-.homeowner-hero-trust-badges-cards {
+/* Trust Badges */
+.homeowner-features-trust-badges {
   @apply flex flex-wrap justify-center gap-8;
 }
 
-.homeowner-trust-badge-card {
-  @apply flex items-center text-white/80;
+.homeowner-trust-badge-item {
+  @apply flex items-center text-gray-700;
 }
 
-.homeowner-trust-icon-card {
-  @apply h-5 w-5 mr-2 text-green-400;
+.homeowner-trust-icon {
+  @apply h-5 w-5 mr-2 text-green-600;
 }
 
-.homeowner-trust-text-card {
+.homeowner-trust-text {
   @apply text-sm font-medium;
 }
 
 /* Responsive adjustments */
 @media (min-width: 768px) {
-  .homeowner-hero-card-1 {
+  .homeowner-feature-card-1 {
     grid-column: 1;
     grid-row: 1;
   }
   
-  .homeowner-hero-card-2 {
+  .homeowner-feature-card-2 {
     grid-column: 2;
     grid-row: 1 / 3;
   }
   
-  .homeowner-hero-card-3 {
+  .homeowner-feature-card-3 {
     grid-column: 1;
     grid-row: 2;
   }

@@ -19,16 +19,15 @@ export function HomeownerHomePage() {
 
   return (
     <div className="homeowner-page">
-      {/* Hero Section - Card-Based Design */}
-      <div className="homeowner-hero-container-cards">
-        <div className="homeowner-hero-content-cards">
-          {/* Hero Headline and Subheadline */}
+      {/* Hero Section */}
+      <div className="homeowner-hero-container">
+        <div className="homeowner-hero-content">
           <div className="homeowner-hero-header">
-            <h1 className="homeowner-hero-headline-cards">
+            <h1 className="homeowner-hero-headline">
               DIY AC Drain Protection <span className="homeowner-hero-highlight">Made Simple</span>
             </h1>
             
-            <p className="homeowner-hero-subheadline-cards">
+            <p className="homeowner-hero-subheadline">
               Install the AC Drain Wiz Mini in under 30 minutes. Designed for confident DIYers with optional pro backup.
             </p>
 
@@ -36,78 +35,73 @@ export function HomeownerHomePage() {
               <span className="homeowner-hero-badge">Professional-Grade Quality</span>
               <span className="homeowner-hero-badge">30-Day Money-Back Guarantee</span>
             </div>
+
+            <div className="homeowner-hero-ctas">
+              <button 
+                onClick={() => navigate('/products?product=mini')}
+                className="homeowner-hero-cta-primary"
+              >
+                Shop ACDW Mini
+              </button>
+              <button 
+                onClick={() => setIsVideoModalOpen(true)}
+                className="homeowner-hero-cta-secondary"
+              >
+                Watch Installation Video
+              </button>
+            </div>
           </div>
-          
-          {/* Feature Cards Grid */}
-          <div className="homeowner-hero-cards-grid">
-            {/* Card 1: Easy DIY Installation (Wide) */}
-            <div className="homeowner-hero-card homeowner-hero-card-wide homeowner-hero-card-1">
-              {/* Background image will fill entire card */}
-              <div className="homeowner-hero-card-background homeowner-hero-card-bg-1">
-                {/* Placeholder background */}
-              </div>
-              
-              {/* Gradient overlay for text readability */}
-              <div className="homeowner-hero-card-overlay"></div>
-              
-              {/* Content overlaid on image */}
-              <div className="homeowner-hero-card-content-overlay">
-                <div className="homeowner-hero-card-badge">DIY Installation</div>
-                <h3 className="homeowner-hero-card-title">Install in 30 Minutes</h3>
-                <p className="homeowner-hero-card-description">
+        </div>
+      </div>
+
+      {/* Feature Cards Section */}
+      <div className="homeowner-features-section">
+        <div className="homeowner-features-content">
+          <div className="homeowner-features-grid">
+            {/* Card 1: Easy DIY Installation */}
+            <div className="homeowner-feature-card homeowner-feature-card-1">
+              <div className="homeowner-feature-card-background homeowner-feature-card-bg-1"></div>
+              <div className="homeowner-feature-card-overlay"></div>
+              <div className="homeowner-feature-card-content">
+                <div className="homeowner-feature-card-badge">DIY Installation</div>
+                <h3 className="homeowner-feature-card-title">Install in 30 Minutes</h3>
+                <p className="homeowner-feature-card-description">
                   No plumber needed. Simple step-by-step guide included.
                 </p>
-                
                 <button 
                   onClick={() => setIsVideoModalOpen(true)}
-                  className="homeowner-hero-card-cta"
+                  className="homeowner-feature-card-cta"
                 >
                   View Installation Video
                 </button>
               </div>
             </div>
             
-            {/* Card 2: Clear Inspection Window (Tall) */}
-            <div className="homeowner-hero-card homeowner-hero-card-tall homeowner-hero-card-2">
-              {/* Background image will fill entire card */}
-              <div className="homeowner-hero-card-background homeowner-hero-card-bg-2">
-                {/* Placeholder background */}
-              </div>
-              
-              {/* Gradient overlay for text readability */}
-              <div className="homeowner-hero-card-overlay"></div>
-              
-              {/* Content overlaid on image */}
-              <div className="homeowner-hero-card-content-overlay homeowner-hero-card-content-overlay-light">
-                <div className="homeowner-hero-card-badge homeowner-hero-card-badge-light">Visual Monitoring</div>
-                <h3 className="homeowner-hero-card-title homeowner-hero-card-title-light">Clear Inspection Window</h3>
-                <p className="homeowner-hero-card-description homeowner-hero-card-description-light">
+            {/* Card 2: Clear Inspection Window */}
+            <div className="homeowner-feature-card homeowner-feature-card-2">
+              <div className="homeowner-feature-card-background homeowner-feature-card-bg-2"></div>
+              <div className="homeowner-feature-card-content homeowner-feature-card-content-light">
+                <div className="homeowner-feature-card-badge homeowner-feature-card-badge-light">Visual Monitoring</div>
+                <h3 className="homeowner-feature-card-title homeowner-feature-card-title-light">Clear Inspection Window</h3>
+                <p className="homeowner-feature-card-description homeowner-feature-card-description-light">
                   See water flowing freely. Know your system is working.
                 </p>
               </div>
             </div>
             
-            {/* Card 3: Cost Savings (Wide) */}
-            <div className="homeowner-hero-card homeowner-hero-card-wide homeowner-hero-card-3">
-              {/* Background image will fill entire card */}
-              <div className="homeowner-hero-card-background homeowner-hero-card-bg-3">
-                {/* Placeholder background */}
-              </div>
-              
-              {/* Gradient overlay for text readability */}
-              <div className="homeowner-hero-card-overlay"></div>
-              
-              {/* Content overlaid on image */}
-              <div className="homeowner-hero-card-content-overlay">
-                <div className="homeowner-hero-card-badge">Prevent Damage</div>
-                <h3 className="homeowner-hero-card-title">Save Thousands in Repairs</h3>
-                <p className="homeowner-hero-card-description">
+            {/* Card 3: Cost Savings */}
+            <div className="homeowner-feature-card homeowner-feature-card-3">
+              <div className="homeowner-feature-card-background homeowner-feature-card-bg-3"></div>
+              <div className="homeowner-feature-card-overlay"></div>
+              <div className="homeowner-feature-card-content">
+                <div className="homeowner-feature-card-badge">Prevent Damage</div>
+                <h3 className="homeowner-feature-card-title">Save Thousands in Repairs</h3>
+                <p className="homeowner-feature-card-description">
                   Protect your home from $2,000-10,000+ in water damage costs.
                 </p>
-                
                 <button 
                   onClick={() => navigate('/products?product=mini')}
-                  className="homeowner-hero-card-cta homeowner-hero-card-cta-primary"
+                  className="homeowner-feature-card-cta homeowner-feature-card-cta-primary"
                 >
                   Buy Now - $49.99
                 </button>
@@ -115,19 +109,19 @@ export function HomeownerHomePage() {
             </div>
           </div>
           
-          {/* Trust Badges Below Cards */}
-          <div className="homeowner-hero-trust-badges-cards">
-            <div className="homeowner-trust-badge-card">
-              <CheckCircleIcon className="homeowner-trust-icon-card" />
-              <span className="homeowner-trust-text-card">30-Day Money Back</span>
+          {/* Trust Badges */}
+          <div className="homeowner-features-trust-badges">
+            <div className="homeowner-trust-badge-item">
+              <CheckCircleIcon className="homeowner-trust-icon" />
+              <span className="homeowner-trust-text">30-Day Money Back</span>
             </div>
-            <div className="homeowner-trust-badge-card">
-              <CheckCircleIcon className="homeowner-trust-icon-card" />
-              <span className="homeowner-trust-text-card">Free Shipping</span>
+            <div className="homeowner-trust-badge-item">
+              <CheckCircleIcon className="homeowner-trust-icon" />
+              <span className="homeowner-trust-text">Free Shipping</span>
             </div>
-            <div className="homeowner-trust-badge-card">
-              <CheckCircleIcon className="homeowner-trust-icon-card" />
-              <span className="homeowner-trust-text-card">Made in USA</span>
+            <div className="homeowner-trust-badge-item">
+              <CheckCircleIcon className="homeowner-trust-icon" />
+              <span className="homeowner-trust-text">Made in USA</span>
             </div>
           </div>
         </div>

@@ -62,12 +62,12 @@ export function Header() {
 
           {/* Right side actions */}
           <div className="header-actions-section">
-            {/* Cart */}
+            {/* Cart - visible on all screen sizes */}
             <button className="header-cart-button">
               <ShoppingCartIcon className="header-cart-icon" />
             </button>
             
-            {/* User menu */}
+            {/* User menu - Desktop only */}
             {isAuthenticated ? (
               <div className="header-user-menu-container">
                 <button
@@ -131,75 +131,106 @@ export function Header() {
           </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu - Slide-over panel */}
         {mobileMenuOpen && (
-          <div className="header-mobile-menu-container">
-            <div className="header-mobile-menu-content">
-              {navigation.map((item) => (
-                item.external ? (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="header-mobile-nav-link"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item.name}
-                  </a>
-                ) : (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className="header-mobile-nav-link"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
-                )
-              ))}
+          <>
+            {/* Backdrop */}
+            <div 
+              className="header-mobile-menu-backdrop"
+              onClick={() => setMobileMenuOpen(false)}
+            />
+            
+            {/* Slide-over panel */}
+            <div className="header-mobile-menu-panel">
+              {/* Header with logo and close button */}
+              <div className="header-mobile-menu-header">
+                <Link to="/" className="header-mobile-menu-logo" onClick={() => setMobileMenuOpen(false)}>
+                  <img 
+                    src="/images/ac-drain-wiz-logo.png" 
+                    alt="AC Drain Wiz Logo" 
+                    className="header-mobile-menu-logo-image"
+                  />
+                </Link>
+                <button
+                  type="button"
+                  className="header-mobile-menu-close"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <XMarkIcon className="header-mobile-menu-close-icon" />
+                </button>
+              </div>
               
-              <div className="header-mobile-auth-section">
-                {isAuthenticated ? (
-                  <>
-                    <Link
-                      to="/dashboard"
-                      className="header-mobile-auth-link"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Dashboard
-                    </Link>
-                    <button
-                      onClick={() => {
-                        logout()
-                        setMobileMenuOpen(false)
-                      }}
-                      className="header-mobile-signout-button"
-                    >
-                      Sign Out
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      to="/auth/signin"
-                      className="header-mobile-auth-link"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Sign In
-                    </Link>
-                    <Link
-                      to="/auth/signup"
-                      className="header-mobile-signup-link"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Sign Up
-                    </Link>
-                  </>
-                )}
+              {/* Navigation content */}
+              <div className="header-mobile-menu-content">
+                <nav className="header-mobile-nav">
+                  {navigation.map((item) => (
+                    item.external ? (
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="header-mobile-nav-item"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.name}
+                      </a>
+                    ) : (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className="header-mobile-nav-item"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
+                    )
+                  ))}
+                </nav>
+                
+                {/* Auth section at bottom */}
+                <div className="header-mobile-auth-section">
+                  {isAuthenticated ? (
+                    <>
+                      <Link
+                        to="/dashboard"
+                        className="header-mobile-auth-button"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Dashboard
+                      </Link>
+                      <button
+                        onClick={() => {
+                          logout()
+                          setMobileMenuOpen(false)
+                        }}
+                        className="header-mobile-signout-button"
+                      >
+                        Sign Out
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        to="/auth/signin"
+                        className="header-mobile-auth-button-secondary"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Sign In
+                      </Link>
+                      <Link
+                        to="/auth/signup"
+                        className="header-mobile-auth-button-primary"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Sign Up
+                      </Link>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          </>
         )}
       </nav>
     </header>
