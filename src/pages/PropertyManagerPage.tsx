@@ -1,9 +1,7 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ShieldCheckIcon, 
   BuildingOfficeIcon, 
-  CheckCircleIcon,
   ExclamationTriangleIcon,
   ChartBarIcon,
   BellIcon,

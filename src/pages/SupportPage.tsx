@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { 
   WrenchScrewdriverIcon, 
   QuestionMarkCircleIcon, 
@@ -16,7 +16,6 @@ import {
 } from '@heroicons/react/24/outline'
 
 export function SupportPage() {
-  const navigate = useNavigate()
   const location = useLocation()
   const [openSection, setOpenSection] = useState<string | null>('installation')
 
