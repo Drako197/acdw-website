@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 
 // Define types locally to avoid import issues
-type CustomerType = 'homeowner' | 'hvac-professional' | 'distributor' | 'city-official'
+type CustomerType = 'homeowner' | 'hvac-professional' | 'property-manager' | 'city-official'
 
 interface CustomerTypeConfig {
   type: CustomerType
@@ -47,18 +47,18 @@ const customerTypes: CustomerTypeConfig[] = [
     pricing: 'pro'
   },
   {
-    type: 'distributor',
-    title: 'Distributors',
-    description: 'Grow your business with wholesale pricing and strong unit economics. Stock-friendly case packs and distributor margins.',
+    type: 'property-manager',
+    title: 'Property Managers',
+    description: 'Protect your portfolio from costly water damage and reduce emergency maintenance calls. Bulk installation and remote monitoring solutions for multi-unit properties.',
     features: [
-      'Wholesale pricing tiers',
-      'Strong unit economics (25%, 30%, 35% margins)',
-      'Stock-friendly case packs',
-      'Distributor support program',
-      'Simple story, clear kits'
+      'Prevent water damage across your portfolio',
+      '24/7 remote monitoring with Sensor',
+      'Bulk pricing for multi-unit installations',
+      'Reduce emergency maintenance calls',
+      'Professional installation support'
     ],
-    cta: 'Access Distributor Portal',
-    pricing: 'pro'
+    cta: 'Register & Request Demo',
+    pricing: 'contact'
   },
   {
     type: 'city-official',
@@ -79,7 +79,7 @@ const customerTypes: CustomerTypeConfig[] = [
 const icons = {
   homeowner: HomeIcon,
   'hvac-professional': WrenchScrewdriverIcon,
-  'distributor': BuildingOfficeIcon,
+  'property-manager': BuildingOfficeIcon,
   'city-official': BuildingOfficeIcon
 }
 
@@ -98,8 +98,8 @@ export function CustomerTypeSelector() {
       case 'hvac-professional':
         navigate('/auth/signin', { state: { from: { pathname: '/products', search: '?type=hvac-professional' } } })
         break
-      case 'distributor':
-        navigate('/auth/signin', { state: { from: { pathname: '/products', search: '?type=distributor' } } })
+      case 'property-manager':
+        navigate('/property-manager')
         break
       case 'city-official':
         navigate('/contact?type=demo-request')
@@ -116,7 +116,7 @@ export function CustomerTypeSelector() {
           </h2>
           <p className="customer-selector-description">
             Get a personalized experience tailored to your specific needs. 
-            Whether you're a homeowner, HVAC professional, or city official, 
+            Whether you're a homeowner, HVAC professional, property manager, or city official, 
             we have solutions designed for you.
           </p>
         </div>
@@ -134,7 +134,7 @@ export function CustomerTypeSelector() {
                   <div className={`customer-type-icon-wrapper ${
                     config.type === 'homeowner' ? 'customer-type-icon-homeowner' :
                     config.type === 'hvac-professional' ? 'customer-type-icon-hvac' :
-                    config.type === 'distributor' ? 'customer-type-icon-distributor' :
+                    config.type === 'property-manager' ? 'customer-type-icon-property-manager' :
                     'customer-type-icon-city'
                   }`}>
                     <Icon className="customer-type-icon" />

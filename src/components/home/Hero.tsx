@@ -880,7 +880,7 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Social Proof Section - Distributor Logos */}
+      {/* Social Proof Section - Trusted Partners */}
       <div ref={socialProofRef} className="social-proof-container">
         <div className="social-proof-content">
           <div className="social-proof-header">
@@ -888,7 +888,7 @@ export function Hero() {
           </div>
 
           <div className="social-proof-grid">
-            {/* Distributor Placeholder */}
+            {/* Partner Placeholder */}
             <div className="social-proof-logo">
               <div className="social-proof-placeholder-logo">
                 <svg className="social-proof-placeholder-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -898,7 +898,7 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Distributor Placeholder */}
+            {/* Partner Placeholder */}
             <div className="social-proof-logo">
               <div className="social-proof-placeholder-logo">
                 <svg className="social-proof-placeholder-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -908,7 +908,7 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Distributor Placeholder */}
+            {/* Partner Placeholder */}
             <div className="social-proof-logo">
               <div className="social-proof-placeholder-logo">
                 <svg className="social-proof-placeholder-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">

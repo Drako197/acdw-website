@@ -1,7 +1,7 @@
 // Define our own types for the application
-export type UserRole = 'HOMEOWNER' | 'HVAC_PROFESSIONAL' | 'DISTRIBUTOR' | 'CITY_OFFICIAL' | 'ADMIN'
+export type UserRole = 'HOMEOWNER' | 'HVAC_PROFESSIONAL' | 'PROPERTY_MANAGER' | 'CITY_OFFICIAL' | 'ADMIN'
 export type ProductCategory = 'DRAIN_WIZ_1_0' | 'DRAIN_WIZ_MINI' | 'DRAIN_WIZ_SENSOR'
-export type CustomerType = 'homeowner' | 'hvac-professional' | 'city-official'
+export type CustomerType = 'homeowner' | 'hvac-professional' | 'property-manager' | 'city-official'
 
 export interface User {
   id: string

@@ -45,7 +45,7 @@ export function ProductsPage() {
       pricing: {
         msrp: '$49.99',
         contractor: 'Sign in for pricing',
-        distributor: 'Contact for pricing'
+        'property-manager': 'Contact for pricing'
       },
       compliance: ['IMC 307.2.5', 'IMC 307.2.2', 'IMC 307.2.1.1'],
       contractorOnly: false
@@ -71,7 +71,7 @@ export function ProductsPage() {
       pricing: {
         msrp: 'Pricing available on sign in',
         contractor: 'Sign in for pricing',
-        distributor: 'Contact for pricing'
+        'property-manager': 'Contact for pricing'
       },
       compliance: ['IMC 307.2.3']
     },
@@ -96,7 +96,7 @@ export function ProductsPage() {
       pricing: {
         msrp: 'Pricing available on sign in',
         contractor: 'Sign in for pricing',
-        distributor: 'Contact for pricing'
+        'property-manager': 'Contact for pricing'
       },
       compliance: ['IMC 307.2.5', 'IMC 307.2.2', 'IMC 307.2.1.1', 'IMC 307.2.3']
     }
@@ -361,7 +361,7 @@ export function ProductsPage() {
                                 <strong>Contractor:</strong> {product.pricing.contractor}
                               </div>
                               <div className="unified-product-tab-content-pricing-item">
-                                <strong>Distributor:</strong> {product.pricing.distributor}
+                                <strong>Property Manager:</strong> {product.pricing['property-manager']}
                               </div>
                             </>
                           )}

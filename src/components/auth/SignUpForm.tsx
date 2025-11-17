@@ -1,22 +1,28 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import type { UserRole } from '../../types'
 
 export function SignUpForm() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { register } = useAuth()
+  
+  // Get role and redirect from URL parameters
+  const searchParams = new URLSearchParams(location.search)
+  const roleParam = searchParams.get('role') as UserRole | null
+  const redirectParam = searchParams.get('redirect') || '/dashboard'
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'HVAC_PROFESSIONAL' as UserRole,
+    role: (roleParam || 'HVAC_PROFESSIONAL') as UserRole,
     company: ''
   })
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  
-  const { register } = useAuth()
-  const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
@@ -52,7 +58,8 @@ export function SignUpForm() {
       })
       
       if (success) {
-        navigate('/dashboard')
+        // Redirect to specified URL or default to dashboard
+        navigate(redirectParam)
       } else {
         setError('Registration failed. Please try again.')
       }
@@ -123,7 +130,7 @@ export function SignUpForm() {
                 onChange={handleChange}
               >
                 <option value="HVAC_PROFESSIONAL">HVAC Professional</option>
-                <option value="DISTRIBUTOR">Distributor</option>
+                <option value="PROPERTY_MANAGER">Property Manager</option>
                 <option value="CITY_OFFICIAL">City and Code Official</option>
               </select>
             </div>

@@ -10,7 +10,7 @@ export function AboutPage() {
   const audiences = [
     'Homeowners',
     'HVAC Contractors',
-    'HVAC Distributors/Wholesalers',
+    'Property Managers',
     'City/Code Officials (AHJs)'
   ]
 

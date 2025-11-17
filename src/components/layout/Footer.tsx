@@ -12,8 +12,9 @@ export function Footer() {
         Footer
       </h2>
       <div className="footer-content">
-        <div className="footer-grid">
-          {/* Company Info */}
+        {/* Top Section: Brand and Links */}
+        <div className="footer-top">
+          {/* Company Info - Left Column */}
           <div className="footer-company-section">
             <div className="footer-brand">
               <Link to="/" className="footer-logo-link">
@@ -28,73 +29,78 @@ export function Footer() {
               Professional-grade AC drain line maintenance solutions that prevent costly water damage 
               and streamline HVAC service operations.
             </p>
-            
-            {/* Contact Info */}
-            <div className="footer-contact-info">
-              <div className="footer-contact-item">
-                <EnvelopeIcon className="footer-contact-icon" />
-                <span>info@acdrainwiz.com</span>
-              </div>
-              <div className="footer-contact-item">
-                <PhoneIcon className="footer-contact-icon" />
-                <span>1-800-AC-DRAIN</span>
-              </div>
-              <div className="footer-contact-item">
-                <MapPinIcon className="footer-contact-icon" />
-                <span>United States</span>
-              </div>
+          </div>
+
+          {/* Links Grid - Right Columns */}
+          <div className="footer-links-grid">
+            {/* Products */}
+            <div className="footer-section">
+              <h3 className="footer-section-title">
+                Products
+              </h3>
+              <ul className="footer-link-list">
+                <li><Link to="/products" className="footer-link">All Products</Link></li>
+                <li><Link to="/products?product=mini" className="footer-link">AC Drain Wiz Mini</Link></li>
+                <li><Link to="/products?product=sensor" className="footer-link">AC Drain Wiz Sensor</Link></li>
+                <li><Link to="/products?product=mini&product=sensor" className="footer-link">Mini + Sensor</Link></li>
+                <li><Link to="/homeowner" className="footer-link">For Homeowners</Link></li>
+              </ul>
+            </div>
+
+            {/* Company */}
+            <div className="footer-section">
+              <h3 className="footer-section-title">
+                Company
+              </h3>
+              <ul className="footer-link-list">
+                <li><Link to="/about" className="footer-link">About Us</Link></li>
+                <li><Link to="/contact" className="footer-link">Contact</Link></li>
+                <li><Link to="/promo" className="footer-link">Special Offers</Link></li>
+              </ul>
+            </div>
+
+            {/* Support */}
+            <div className="footer-section">
+              <h3 className="footer-section-title">
+                Support
+              </h3>
+              <ul className="footer-link-list">
+                <li><Link to="/support" className="footer-link">Get Help</Link></li>
+                <li><a href="https://monitor.acdrainwiz.com/login" className="footer-link" target="_blank" rel="noopener noreferrer">Sensor Monitoring</a></li>
+              </ul>
+            </div>
+
+            {/* Business */}
+            <div className="footer-section">
+              <h3 className="footer-section-title">
+                Business
+              </h3>
+              <ul className="footer-link-list">
+                <li><Link to="/contact?type=sales" className="footer-link">Bulk Ordering</Link></li>
+                <li><Link to="/contact?type=sales" className="footer-link">Partner Program</Link></li>
+                <li><Link to="/contact?type=demo-request" className="footer-link">Request Demo</Link></li>
+                <li><Link to="/auth/signin" className="footer-link">Contractor Portal</Link></li>
+                <li><Link to="/compliance" className="footer-link">Compliance Resources</Link></li>
+              </ul>
             </div>
           </div>
+        </div>
 
-          {/* Products */}
-          <div className="footer-section">
-            <h3 className="footer-section-title">
-              Products
-            </h3>
-            <ul className="footer-link-list">
-              <li><Link to="/products" className="footer-link">All Products</Link></li>
-              <li><Link to="/products?product=mini" className="footer-link">AC Drain Wiz Mini</Link></li>
-              <li><Link to="/products?product=sensor" className="footer-link">AC Drain Wiz Sensor</Link></li>
-              <li><Link to="/products?product=mini&product=sensor" className="footer-link">Mini + Sensor</Link></li>
-              <li><Link to="/homeowner" className="footer-link">For Homeowners</Link></li>
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div className="footer-section">
-            <h3 className="footer-section-title">
-              Company
-            </h3>
-            <ul className="footer-link-list">
-              <li><Link to="/about" className="footer-link">About Us</Link></li>
-              <li><Link to="/contact" className="footer-link">Contact</Link></li>
-              <li><Link to="/promo" className="footer-link">Special Offers</Link></li>
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div className="footer-section">
-            <h3 className="footer-section-title">
-              Support
-            </h3>
-            <ul className="footer-link-list">
-              <li><Link to="/support" className="footer-link">Get Help</Link></li>
-              <li><a href="https://monitor.acdrainwiz.com/login" className="footer-link" target="_blank" rel="noopener noreferrer">Sensor Monitoring</a></li>
-            </ul>
-          </div>
-
-          {/* Business */}
-          <div className="footer-section">
-            <h3 className="footer-section-title">
-              Business
-            </h3>
-            <ul className="footer-link-list">
-              <li><Link to="/contact?type=sales" className="footer-link">Bulk Ordering</Link></li>
-              <li><Link to="/contact?type=sales" className="footer-link">Partner Program</Link></li>
-              <li><Link to="/contact?type=demo-request" className="footer-link">Request Demo</Link></li>
-              <li><Link to="/auth/signin" className="footer-link">Contractor Portal</Link></li>
-              <li><Link to="/compliance" className="footer-link">Compliance Resources</Link></li>
-            </ul>
+        {/* Contact Info Section */}
+        <div className="footer-contact-section">
+          <div className="footer-contact-info">
+            <div className="footer-contact-item">
+              <EnvelopeIcon className="footer-contact-icon" />
+              <span>info@acdrainwiz.com</span>
+            </div>
+            <div className="footer-contact-item">
+              <PhoneIcon className="footer-contact-icon" />
+              <span>1-800-AC-DRAIN</span>
+            </div>
+            <div className="footer-contact-item">
+              <MapPinIcon className="footer-contact-icon" />
+              <span>United States</span>
+            </div>
           </div>
         </div>
 

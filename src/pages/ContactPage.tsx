@@ -202,6 +202,7 @@ export function ContactPage() {
         <div className="contact-content-wrapper">
           {/* Tabs */}
           <div className="contact-tabs-container">
+            <h3 className="contact-tabs-subhead">Choose the contact form that best fits your inquiry</h3>
             <div className="contact-tabs-wrapper">
               {Object.entries(formTypeConfig).map(([type, config]) => {
                 const Icon = config.icon
@@ -318,7 +319,7 @@ export function ContactPage() {
                           <option value="">Select your customer type</option>
                           <option value="homeowner">Homeowner</option>
                           <option value="hvac-contractor">HVAC Contractor</option>
-                          <option value="distributor">Distributor/Wholesaler</option>
+                          <option value="property-manager">Property Manager</option>
                           <option value="city-official">City/Code Official</option>
                           <option value="other">Other</option>
                         </select>
@@ -406,7 +407,7 @@ export function ContactPage() {
                           >
                             <option value="">Select your role</option>
                             <option value="hvac-contractor">HVAC Contractor</option>
-                            <option value="distributor">Distributor/Wholesaler</option>
+                            <option value="property-manager">Property Manager</option>
                             <option value="retailer">Retailer</option>
                             <option value="purchasing-manager">Purchasing Manager</option>
                             <option value="other">Other</option>
@@ -446,7 +447,7 @@ export function ContactPage() {
                           <option value="">Select interest type</option>
                           <option value="bulk-pricing">Bulk Pricing</option>
                           <option value="partner-program">Partner Program</option>
-                          <option value="distributor-opportunity">Distributor Opportunity</option>
+                          <option value="portfolio-installation">Portfolio Installation</option>
                           <option value="custom-solution">Custom Solution</option>
                           <option value="other">Other</option>
                         </select>

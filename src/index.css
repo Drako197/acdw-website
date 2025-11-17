@@ -597,7 +597,7 @@
     @apply bg-green-100 text-green-600;
   }
 
-  .customer-type-icon-distributor {
+  .customer-type-icon-property-manager {
     @apply bg-orange-100 text-orange-600;
   }
 
@@ -2137,7 +2137,7 @@
 
   /* Footer */
   .footer-container {
-    @apply bg-gray-900;
+    @apply bg-gray-900 text-white;
   }
 
   .footer-heading-sr-only {
@@ -2145,15 +2145,17 @@
   }
 
   .footer-content {
-    @apply container section;
+    @apply container mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16;
   }
 
-  .footer-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8;
+  /* Top Section: Brand + Links Grid */
+  .footer-top {
+    @apply grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-12;
   }
 
+  /* Company Section - Left Column */
   .footer-company-section {
-    @apply lg:col-span-2;
+    @apply lg:col-span-4;
   }
 
   .footer-brand {
@@ -2169,27 +2171,24 @@
   }
 
   .footer-description {
-    @apply text-gray-300 mb-6 max-w-md;
+    @apply text-gray-300 text-sm leading-relaxed max-w-sm;
   }
 
-  .footer-contact-info {
-    @apply space-y-3;
-  }
-
-  .footer-contact-item {
-    @apply flex items-center text-gray-300;
-  }
-
-  .footer-contact-icon {
-    @apply h-5 w-5 mr-3 flex-shrink-0;
+  /* Links Grid - Right Columns */
+  .footer-links-grid {
+    @apply grid grid-cols-2 md:grid-cols-4 lg:col-span-8 gap-8 lg:gap-12;
   }
 
   .footer-section {
-    /* No additional base styles needed */
+    @apply flex flex-col;
   }
 
   .footer-section-title {
-    @apply text-sm font-semibold text-white tracking-wider uppercase mb-4;
+    @apply text-sm font-semibold text-white mb-4;
+    /* Ensure all titles align at the same baseline */
+    min-height: 1.5rem;
+    display: flex;
+    align-items: flex-start;
   }
 
   .footer-link-list {
@@ -2200,11 +2199,30 @@
   }
 
   .footer-link {
-    @apply text-gray-300 hover:text-white transition-colors;
+    @apply text-gray-300 hover:text-white transition-colors text-sm;
+    display: inline-block;
   }
 
+  /* Contact Info Section - Below main content */
+  .footer-contact-section {
+    @apply pt-8 border-t border-gray-800;
+  }
+
+  .footer-contact-info {
+    @apply flex flex-col sm:flex-row gap-6 sm:gap-8 justify-center items-center sm:items-start;
+  }
+
+  .footer-contact-item {
+    @apply flex items-center text-gray-300 text-sm;
+  }
+
+  .footer-contact-icon {
+    @apply h-5 w-5 mr-3 flex-shrink-0;
+  }
+
+  /* Bottom Section */
   .footer-bottom {
-    @apply mt-12 pt-8 border-t border-gray-800;
+    @apply mt-8 pt-8 border-t border-gray-800;
   }
 
   .footer-bottom-content {
@@ -4250,6 +4268,10 @@
   @apply bg-white rounded-t-lg shadow-md border-b border-gray-200 mb-8;
 }
 
+.contact-tabs-subhead {
+  @apply heading-3 px-4 pt-4 pb-2 text-gray-700;
+}
+
 .contact-tabs-wrapper {
   @apply flex flex-wrap gap-2 p-4 overflow-x-auto;
 }
@@ -4400,5 +4422,273 @@
 
 .contact-form-submit-button {
   @apply w-full btn btn-primary btn-lg;
+}
+
+/* ==========================================
+   PROPERTY MANAGER LANDING PAGE STYLES
+   ========================================== */
+
+.property-manager-page {
+  @apply min-h-screen bg-gray-50;
+}
+
+/* Hero Section */
+.property-manager-hero-container {
+  @apply bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 md:py-24;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+}
+
+.property-manager-hero-content {
+  @apply container mx-auto px-6;
+}
+
+.property-manager-hero-header {
+  @apply text-center max-w-4xl mx-auto;
+}
+
+.property-manager-hero-headline {
+  @apply text-4xl md:text-5xl lg:text-6xl font-bold mb-6;
+  line-height: 1.1;
+}
+
+.property-manager-hero-highlight {
+  @apply text-orange-400;
+}
+
+.property-manager-hero-subheadline {
+  @apply text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto;
+}
+
+.property-manager-hero-badge-row {
+  @apply flex flex-col sm:flex-row items-center justify-center gap-3 mb-8;
+}
+
+.property-manager-hero-badge {
+  @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 text-white text-sm font-semibold backdrop-blur-md border border-white/20;
+}
+
+.property-manager-hero-ctas {
+  @apply flex flex-col sm:flex-row items-center justify-center gap-4 mt-8;
+}
+
+.property-manager-hero-cta-primary {
+  @apply btn btn-lg bg-white text-blue-700 hover:bg-blue-50 font-semibold px-8;
+}
+
+.property-manager-hero-cta-secondary {
+  @apply btn btn-lg border-2 border-white text-white hover:bg-white hover:text-blue-700 font-semibold px-8;
+}
+
+/* Problem Section */
+.property-manager-problem-section {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.property-manager-problem-content {
+  @apply container mx-auto px-6 max-w-6xl;
+}
+
+.property-manager-problem-headline {
+  @apply heading-2 text-center mb-6;
+}
+
+.property-manager-problem-subheadline {
+  @apply text-large text-center max-w-3xl mx-auto mb-12;
+}
+
+.property-manager-problem-stats {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8 mt-12;
+}
+
+.property-manager-problem-stat {
+  @apply flex items-start gap-4 p-6 bg-gray-50 rounded-lg;
+}
+
+.property-manager-problem-stat-icon {
+  @apply h-8 w-8 text-orange-600 flex-shrink-0;
+}
+
+.property-manager-problem-stat-content {
+  @apply flex-1;
+}
+
+.property-manager-problem-stat-number {
+  @apply text-3xl font-bold text-gray-900 mb-1;
+}
+
+.property-manager-problem-stat-label {
+  @apply text-sm text-gray-600;
+}
+
+/* Solution Section */
+.property-manager-solution-section {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.property-manager-solution-content {
+  @apply container mx-auto px-6 max-w-6xl;
+}
+
+.property-manager-section-title {
+  @apply heading-2 text-center mb-4;
+}
+
+.property-manager-section-subtitle {
+  @apply text-large text-center max-w-3xl mx-auto mb-12;
+}
+
+.property-manager-solution-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8;
+}
+
+.property-manager-solution-card {
+  @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow;
+}
+
+.property-manager-solution-icon-wrapper {
+  @apply w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4;
+}
+
+.property-manager-solution-icon {
+  @apply h-8 w-8 text-blue-600;
+}
+
+.property-manager-solution-card-title {
+  @apply text-xl font-bold text-gray-900 mb-3;
+}
+
+.property-manager-solution-card-description {
+  @apply text-gray-600 mb-4;
+}
+
+.property-manager-solution-features {
+  @apply space-y-2 list-none pl-0;
+}
+
+.property-manager-solution-features li {
+  @apply text-sm text-gray-600 flex items-start gap-2;
+}
+
+.property-manager-solution-features li::before {
+  content: '✓';
+  @apply text-green-600 font-bold;
+}
+
+/* Benefits Section */
+.property-manager-benefits-section {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.property-manager-benefits-content {
+  @apply container mx-auto px-6 max-w-6xl;
+}
+
+.property-manager-benefits-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12;
+}
+
+.property-manager-benefit-item {
+  @apply text-center p-6;
+}
+
+.property-manager-benefit-icon {
+  @apply h-12 w-12 text-blue-600 mx-auto mb-4;
+}
+
+.property-manager-benefit-title {
+  @apply text-lg font-semibold text-gray-900 mb-2;
+}
+
+.property-manager-benefit-description {
+  @apply text-sm text-gray-600;
+}
+
+/* ROI Section */
+.property-manager-roi-section {
+  @apply py-16 md:py-24 bg-gradient-to-br from-blue-50 to-gray-50;
+}
+
+.property-manager-roi-content {
+  @apply container mx-auto px-6 max-w-6xl;
+}
+
+.property-manager-roi-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8 mt-12;
+}
+
+.property-manager-roi-card {
+  @apply bg-white rounded-lg shadow-md p-8 text-center;
+}
+
+.property-manager-roi-card-title {
+  @apply text-lg font-semibold text-gray-900 mb-4;
+}
+
+.property-manager-roi-card-value {
+  @apply text-4xl font-bold text-blue-600 mb-4;
+}
+
+.property-manager-roi-card-description {
+  @apply text-sm text-gray-600;
+}
+
+/* How It Works Section */
+.property-manager-how-it-works-section {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.property-manager-how-it-works-content {
+  @apply container mx-auto px-6 max-w-6xl;
+}
+
+.property-manager-steps {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8 mt-12;
+}
+
+.property-manager-step {
+  @apply text-center p-6;
+}
+
+.property-manager-step-number {
+  @apply w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4;
+}
+
+.property-manager-step-title {
+  @apply text-xl font-semibold text-gray-900 mb-3;
+}
+
+.property-manager-step-description {
+  @apply text-gray-600;
+}
+
+/* CTA Section */
+.property-manager-cta-section {
+  @apply py-16 md:py-24 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white;
+}
+
+.property-manager-cta-content {
+  @apply container mx-auto px-6 max-w-4xl text-center;
+}
+
+.property-manager-cta-title {
+  @apply heading-2 mb-4 text-white;
+}
+
+.property-manager-cta-subtitle {
+  @apply text-lg text-white/90 mb-8 max-w-2xl mx-auto;
+}
+
+.property-manager-cta-buttons {
+  @apply flex flex-col sm:flex-row items-center justify-center gap-4;
+}
+
+.property-manager-cta-button-primary {
+  @apply btn btn-lg bg-white text-blue-700 hover:bg-blue-50 font-semibold px-8;
+}
+
+.property-manager-cta-button-secondary {
+  @apply btn btn-lg border-2 border-white text-white hover:bg-white hover:text-blue-700 font-semibold px-8;
 }
 
