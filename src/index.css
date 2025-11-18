@@ -900,9 +900,9 @@
     .header-mobile-menu-close-icon {
       width: 1.5rem;
       height: 1.5rem;
-    }
+  }
 
-    .header-mobile-menu-content {
+  .header-mobile-menu-content {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -929,9 +929,9 @@
     .header-mobile-nav-item:active {
       background-color: #f9fafb;
       color: #111827;
-    }
+  }
 
-    .header-mobile-auth-section {
+  .header-mobile-auth-section {
       padding: 1.5rem;
       border-top: 1px solid #e5e7eb;
       display: flex;
@@ -996,9 +996,9 @@
     .header-mobile-auth-button-secondary:hover {
       background-color: #f9fafb;
       border-color: #9ca3af;
-    }
+  }
 
-    .header-mobile-signout-button {
+  .header-mobile-signout-button {
       display: block;
       width: 100%;
       padding: 0.75rem 1.5rem;
@@ -4809,56 +4809,135 @@
 
 /* Solution Section */
 .property-manager-solution-section {
-  @apply py-16 md:py-24 bg-gray-50;
+  @apply py-16 md:py-24 bg-gray-900;
 }
 
 .property-manager-solution-content {
-  @apply container mx-auto px-6 max-w-6xl;
+  @apply container mx-auto px-6 max-w-7xl;
 }
 
 .property-manager-section-title {
-  @apply heading-2 text-center mb-4;
+  @apply heading-2 text-center mb-4 text-white;
 }
 
 .property-manager-section-subtitle {
-  @apply text-large text-center max-w-3xl mx-auto mb-12;
+  @apply text-large text-center max-w-3xl mx-auto mb-12 text-gray-300;
 }
 
 .property-manager-solution-grid {
-  @apply grid grid-cols-1 md:grid-cols-3 gap-8;
+  @apply grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6;
 }
 
 .property-manager-solution-card {
-  @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow;
+  @apply bg-gray-800 rounded-xl border border-gray-700 p-8 relative flex flex-col;
+}
+
+.property-manager-solution-card-featured {
+  @apply border-2 border-primary-600 bg-gray-800;
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+@media (max-width: 1023px) {
+  .property-manager-solution-card-featured {
+    transform: scale(1);
+  }
+}
+
+.property-manager-solution-badge {
+  @apply absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary-600 text-white text-sm font-semibold px-4 py-1 rounded-full;
+}
+
+.property-manager-solution-card-header {
+  @apply mb-6;
 }
 
 .property-manager-solution-icon-wrapper {
-  @apply w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4;
+  @apply w-12 h-12 bg-primary-600/20 rounded-lg flex items-center justify-center mb-4;
 }
 
 .property-manager-solution-icon {
-  @apply h-8 w-8 text-blue-600;
+  @apply h-6 w-6 text-primary-400;
 }
 
 .property-manager-solution-card-title {
-  @apply text-xl font-bold text-gray-900 mb-3;
+  @apply text-2xl font-bold text-white mb-3;
 }
 
 .property-manager-solution-card-description {
-  @apply text-gray-600 mb-4;
+  @apply text-gray-400 mb-6 text-sm leading-relaxed;
+}
+
+.property-manager-solution-pricing {
+  @apply flex flex-col items-start mb-6;
+}
+
+.property-manager-solution-price {
+  @apply text-sm text-gray-400 mb-1;
+}
+
+.property-manager-solution-price-amount {
+  @apply text-4xl font-bold text-white mb-1;
+}
+
+.property-manager-solution-price-unit {
+  @apply text-sm text-gray-400;
 }
 
 .property-manager-solution-features {
-  @apply space-y-2 list-none pl-0;
+  @apply space-y-3 list-none pl-0 mb-8 flex-grow;
 }
 
-.property-manager-solution-features li {
-  @apply text-sm text-gray-600 flex items-start gap-2;
+.property-manager-solution-feature-item {
+  @apply text-sm text-gray-300 flex items-start gap-3;
 }
 
-.property-manager-solution-features li::before {
-  content: '✓';
-  @apply text-green-600 font-bold;
+.property-manager-solution-feature-item.property-manager-solution-feature-new {
+  @apply text-gray-200;
+  position: relative;
+  padding: 0.5rem 0.75rem;
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+  background-color: rgba(55, 65, 81, 0.5);
+  border: 1px solid rgba(156, 163, 175, 0.3);
+  border-radius: 0.375rem;
+}
+
+.property-manager-solution-feature-item.property-manager-solution-feature-premium {
+  @apply font-medium;
+  position: relative;
+  padding: 0.5rem 0.75rem;
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+  background-color: rgba(31, 41, 55, 0.6);
+  color: #f97316;
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  border-radius: 0.375rem;
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.1);
+}
+
+.property-manager-solution-check-icon {
+  @apply w-5 h-5 text-primary-400 flex-shrink-0 mt-0.5;
+}
+
+.property-manager-solution-feature-item.property-manager-solution-feature-new .property-manager-solution-check-icon {
+  @apply text-white;
+}
+
+.property-manager-solution-feature-item.property-manager-solution-feature-premium .property-manager-solution-check-icon {
+  color: #f97316;
+}
+
+.property-manager-solution-cta {
+  @apply w-full py-3 px-6 rounded-lg font-semibold text-base transition-all mt-auto;
+}
+
+.property-manager-solution-cta-primary {
+  @apply bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800;
+}
+
+.property-manager-solution-cta-secondary {
+  @apply bg-gray-700 text-white border border-gray-600 hover:bg-gray-600 active:bg-gray-500;
 }
 
 /* Benefits Section */

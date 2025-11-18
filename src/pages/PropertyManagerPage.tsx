@@ -104,52 +104,256 @@ export function PropertyManagerPage() {
           </p>
 
           <div className="property-manager-solution-grid">
-            <div className="property-manager-solution-card">
-              <div className="property-manager-solution-icon-wrapper">
-                <WrenchScrewdriverIcon className="property-manager-solution-icon" />
+            {/* ACDW Mini - Base Tier */}
+            <div className="property-manager-solution-card property-manager-solution-card-mini">
+              <div className="property-manager-solution-card-header">
+                <div className="property-manager-solution-icon-wrapper">
+                  <WrenchScrewdriverIcon className="property-manager-solution-icon" />
+                </div>
+                <h3 className="property-manager-solution-card-title">ACDW Mini</h3>
+                <p className="property-manager-solution-card-description">
+                  Proactive maintenance access for all units. Installs in 5 minutes or less per unit with professional support available.
+                </p>
+                <div className="property-manager-solution-pricing">
+                  <span className="property-manager-solution-price">Starting at</span>
+                  <span className="property-manager-solution-price-amount">$99.99</span>
+                  <span className="property-manager-solution-price-unit">per unit</span>
+                </div>
               </div>
-              <h3 className="property-manager-solution-card-title">ACDW Mini</h3>
-              <p className="property-manager-solution-card-description">
-                Proactive maintenance access for all units. Installs in 5 minutes or less per unit with professional support available.
-              </p>
               <ul className="property-manager-solution-features">
-                <li>Prevent clogs before they cause damage</li>
-                <li>10X faster maintenance cleanouts</li>
-                <li>Clear visual inspection window</li>
-                <li>Bulk installation pricing</li>
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Prevent clogs before they cause damage</span>
+                </li>
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>10X faster maintenance cleanouts</span>
+                </li>
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Clear visual inspection window</span>
+                </li>
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Bulk installation pricing</span>
+                </li>
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Professional installation support</span>
+                </li>
               </ul>
+              <button 
+                onClick={handleRegisterAndDemo}
+                className="property-manager-solution-cta property-manager-solution-cta-secondary"
+              >
+                Register & View Custom Pricing
+              </button>
             </div>
 
-            <div className="property-manager-solution-card">
-              <div className="property-manager-solution-icon-wrapper">
-                <BellIcon className="property-manager-solution-icon" />
+            {/* ACDW Sensor - Middle Tier */}
+            <div className="property-manager-solution-card property-manager-solution-card-sensor">
+              <div className="property-manager-solution-card-header">
+                <div className="property-manager-solution-icon-wrapper">
+                  <BellIcon className="property-manager-solution-icon" />
+                </div>
+                <h3 className="property-manager-solution-card-title">ACDW Sensor</h3>
+                <p className="property-manager-solution-card-description">
+                  24/7 remote monitoring with instant alerts. Monitor all units from a centralized dashboard.
+                </p>
+                <div className="property-manager-solution-pricing">
+                  <span className="property-manager-solution-price">Starting at</span>
+                  <span className="property-manager-solution-price-amount">Contact</span>
+                  <span className="property-manager-solution-price-unit">for pricing</span>
+                </div>
               </div>
-              <h3 className="property-manager-solution-card-title">ACDW Sensor</h3>
-              <p className="property-manager-solution-card-description">
-                24/7 remote monitoring with instant alerts. Monitor all units from a centralized dashboard.
-              </p>
               <ul className="property-manager-solution-features">
-                <li>Real-time water level monitoring</li>
-                <li>Email and SMS alerts before failures</li>
-                <li>Centralized dashboard for all properties</li>
-                <li>No moving parts, reliable operation</li>
+                {/* All Mini features */}
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Prevent clogs before they cause damage</span>
+                </li>
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>10X faster maintenance cleanouts</span>
+                </li>
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Clear visual inspection window</span>
+                </li>
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Bulk installation pricing</span>
+                </li>
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Professional installation support</span>
+                </li>
+                {/* Sensor-specific features */}
+                <li className="property-manager-solution-feature-item property-manager-solution-feature-new">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Real-time water level monitoring</span>
+                </li>
+                <li className="property-manager-solution-feature-item property-manager-solution-feature-new">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Email and SMS alerts before failures</span>
+                </li>
+                <li className="property-manager-solution-feature-item property-manager-solution-feature-new">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Centralized dashboard for all properties</span>
+                </li>
+                <li className="property-manager-solution-feature-item property-manager-solution-feature-new">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>No moving parts, reliable operation</span>
+                </li>
               </ul>
+              <button 
+                onClick={handleRegisterAndDemo}
+                className="property-manager-solution-cta property-manager-solution-cta-secondary"
+              >
+                Register & View Custom Pricing
+              </button>
             </div>
 
-            <div className="property-manager-solution-card">
-              <div className="property-manager-solution-icon-wrapper">
-                <BuildingOfficeIcon className="property-manager-solution-icon" />
+            {/* Complete System - Premium Tier (Emphasized) */}
+            <div className="property-manager-solution-card property-manager-solution-card-complete property-manager-solution-card-featured">
+              <div className="property-manager-solution-badge">Most Popular</div>
+              <div className="property-manager-solution-card-header">
+                <div className="property-manager-solution-icon-wrapper">
+                  <BuildingOfficeIcon className="property-manager-solution-icon" />
+                </div>
+                <h3 className="property-manager-solution-card-title">Complete System</h3>
+                <p className="property-manager-solution-card-description">
+                  Mini + Sensor combination provides maximum protection with proactive maintenance and smart monitoring.
+                </p>
+                <div className="property-manager-solution-pricing">
+                  <span className="property-manager-solution-price">Starting at</span>
+                  <span className="property-manager-solution-price-amount">Contact</span>
+                  <span className="property-manager-solution-price-unit">for pricing</span>
+                </div>
               </div>
-              <h3 className="property-manager-solution-card-title">Complete System</h3>
-              <p className="property-manager-solution-card-description">
-                Mini + Sensor combination provides maximum protection with proactive maintenance and smart monitoring.
-              </p>
               <ul className="property-manager-solution-features">
-                <li>Proactive cleaning + smart alerts</li>
-                <li>Reduce emergency calls by 85%</li>
-                <li>Professional installation support</li>
-                <li>Portfolio-wide monitoring</li>
+                {/* All Mini features */}
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Prevent clogs before they cause damage</span>
+                </li>
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>10X faster maintenance cleanouts</span>
+                </li>
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Clear visual inspection window</span>
+                </li>
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Bulk installation pricing</span>
+                </li>
+                <li className="property-manager-solution-feature-item">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Professional installation support</span>
+                </li>
+                {/* All Sensor features */}
+                <li className="property-manager-solution-feature-item property-manager-solution-feature-new">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Real-time water level monitoring</span>
+                </li>
+                <li className="property-manager-solution-feature-item property-manager-solution-feature-new">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Email and SMS alerts before failures</span>
+                </li>
+                <li className="property-manager-solution-feature-item property-manager-solution-feature-new">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Centralized dashboard for all properties</span>
+                </li>
+                <li className="property-manager-solution-feature-item property-manager-solution-feature-new">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>No moving parts, reliable operation</span>
+                </li>
+                {/* Complete System-specific features */}
+                <li className="property-manager-solution-feature-item property-manager-solution-feature-premium">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Proactive cleaning + smart alerts</span>
+                </li>
+                <li className="property-manager-solution-feature-item property-manager-solution-feature-premium">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Reduce emergency calls by 85%</span>
+                </li>
+                <li className="property-manager-solution-feature-item property-manager-solution-feature-premium">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Portfolio-wide monitoring</span>
+                </li>
+                <li className="property-manager-solution-feature-item property-manager-solution-feature-premium">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Maximum ROI with combined protection</span>
+                </li>
+                <li className="property-manager-solution-feature-item property-manager-solution-feature-premium">
+                  <svg className="property-manager-solution-check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Priority installation and support</span>
+                </li>
               </ul>
+              <button 
+                onClick={handleRegisterAndDemo}
+                className="property-manager-solution-cta property-manager-solution-cta-primary"
+              >
+                Register & Request Demo
+              </button>
             </div>
           </div>
         </div>
