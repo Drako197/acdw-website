@@ -544,7 +544,8 @@
 
 
   .product-showcase-card-content {
-    @apply relative z-10 p-8 h-full flex flex-col justify-center items-center text-center;
+    @apply relative z-10 p-8 flex flex-col justify-center items-center text-center;
+    height: 1120px;
   }
 
   /* Mobile - product showcase card content */
