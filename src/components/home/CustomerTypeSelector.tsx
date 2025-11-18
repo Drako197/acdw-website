@@ -71,7 +71,7 @@ const customerTypes: CustomerTypeConfig[] = [
       'Non-contact water-level detection',
       'Demo scheduling available'
     ],
-    cta: 'Request Demo',
+    cta: 'Register & Request Demo',
     pricing: 'contact'
   }
 ]
