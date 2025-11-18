@@ -73,7 +73,7 @@ export function PropertyManagerPage() {
             <div className="property-manager-problem-stat">
               <ExclamationTriangleIcon className="property-manager-problem-stat-icon" />
               <div className="property-manager-problem-stat-content">
-                <div className="property-manager-problem-stat-number">$5K-$20K</div>
+                <div className="property-manager-problem-stat-number">$15k - $50k</div>
                 <div className="property-manager-problem-stat-label">Average water damage cost per incident</div>
               </div>
             </div>
