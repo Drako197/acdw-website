@@ -364,7 +364,7 @@
 
   /* Product Showcase Separator */
   .product-showcase-separator {
-    @apply py-16 px-4;
+    @apply py-8 px-4;
     margin: 4rem 0;
   }
 
