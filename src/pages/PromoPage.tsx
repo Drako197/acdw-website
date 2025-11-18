@@ -29,10 +29,11 @@ export function PromoPage() {
             </div>
             <h1 className="promo-success-title">Check Your Email!</h1>
             <p className="promo-success-message">
-              We've sent your exclusive discount code to <strong>{email}</strong>
+              We've sent your discount code to <strong>{email}</strong>
             </p>
             <p className="promo-success-subtitle">
-              Use it at checkout to save on your AC Drain Wiz Mini purchase.
+              Check your inbox to see if you received 10% off or won the 50% off code! 
+              Use your code at checkout to save on your AC Drain Wiz Mini purchase.
             </p>
             <div className="promo-success-actions">
               <button 
@@ -60,13 +61,14 @@ export function PromoPage() {
       {/* Hero Section */}
       <div className="promo-hero-section">
         <div className="promo-hero-content">
-          <div className="promo-badge">Special Offer</div>
+          <div className="promo-badge">Limited Time Offer</div>
           <h1 className="promo-hero-title">
-            Get Exclusive Savings on AC Drain Wiz Mini
+            Get 10% Off Your ACDW Mini Guaranteed, Plus a Chance to Win 50% Off
           </h1>
           <p className="promo-hero-subtitle">
-            Join our email list and receive a special discount code for homeowners. 
-            Stay updated on maintenance tips, product updates, and exclusive offers.
+            Register for our email list and receive a discount code for your AC Drain Wiz Mini purchase. Every subscriber gets 10% off their ACDW Mini, 
+            and 1 in 10 randomly selected subscribers will receive a 50% off code for their ACDW Mini. 
+            Plus, get expert maintenance tips, product updates, and special offers delivered to your inbox.
           </p>
         </div>
       </div>
@@ -78,9 +80,10 @@ export function PromoPage() {
           <div className="promo-registration-card">
             <div className="promo-registration-header">
               <EnvelopeIcon className="promo-registration-icon" />
-              <h2 className="promo-registration-title">Claim Your Discount</h2>
+              <h2 className="promo-registration-title">Get Your ACDW Mini Discount Code</h2>
               <p className="promo-registration-subtitle">
-                Enter your email to receive your exclusive discount code
+                Register with your email to receive your discount code for the AC Drain Wiz Mini. You'll get 10% off your ACDW Mini guaranteed, 
+                with a 1 in 10 chance to receive 50% off your ACDW Mini (randomly selected).
               </p>
             </div>
             
@@ -119,7 +122,7 @@ export function PromoPage() {
                 className="promo-form-submit"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Sending...' : 'Get My Discount Code'}
+                {isSubmitting ? 'Sending...' : 'Get My Code (10% Off Guaranteed)'}
                 <ArrowRightIcon className="promo-form-submit-icon" />
               </button>
             </form>
@@ -131,9 +134,9 @@ export function PromoPage() {
               <div className="promo-benefit-icon">
                 <CheckIcon className="h-8 w-8" />
               </div>
-              <h3 className="promo-benefit-title">Exclusive Discount</h3>
+              <h3 className="promo-benefit-title">10% Off ACDW Mini Guaranteed</h3>
               <p className="promo-benefit-description">
-                Save on your AC Drain Wiz Mini purchase with a special code just for email subscribers.
+                Every email subscriber receives a 10% off discount code for their ACDW Mini purchase. Plus, 1 in 10 randomly selected subscribers will receive a 50% off code for their ACDW Mini.
               </p>
             </div>
 
@@ -167,7 +170,7 @@ export function PromoPage() {
           <div className="promo-product-grid">
             <div className="promo-product-card">
               <h3 className="promo-product-card-title">AC Drain Wiz Mini</h3>
-              <p className="promo-product-card-price">$49.99</p>
+              <p className="promo-product-card-price">$99.99</p>
               <p className="promo-product-card-description">
                 Compact, DIY-friendly solution for proactive AC drain line maintenance. 
                 Install in 30 minutes and protect your home from costly water damage.

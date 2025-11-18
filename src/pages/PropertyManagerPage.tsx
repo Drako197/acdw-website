@@ -219,7 +219,7 @@ export function PropertyManagerPage() {
           <div className="property-manager-roi-grid">
             <div className="property-manager-roi-card">
               <h3 className="property-manager-roi-card-title">Cost Per Unit</h3>
-              <div className="property-manager-roi-card-value">$49.99+</div>
+              <div className="property-manager-roi-card-value">$99.99+</div>
               <p className="property-manager-roi-card-description">
                 One-time installation cost per unit (Mini). Sensor available for enhanced monitoring.
               </p>

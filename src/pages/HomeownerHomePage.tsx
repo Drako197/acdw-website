@@ -103,7 +103,7 @@ export function HomeownerHomePage() {
                   onClick={() => navigate('/products?product=mini')}
                   className="homeowner-feature-card-cta homeowner-feature-card-cta-primary"
                 >
-                  Buy Now - $49.99
+                  Buy Now - $99.99
                 </button>
               </div>
             </div>
@@ -291,7 +291,7 @@ export function HomeownerHomePage() {
             </div>
             <h3 className="homeowner-benefit-title">Save Thousands</h3>
             <p className="homeowner-benefit-description">
-              One $49.99 installation can prevent $2,000-10,000+ in water damage repairs, mold remediation, and ceiling/wall replacement.
+              One $99.99 installation can prevent $2,000-10,000+ in water damage repairs, mold remediation, and ceiling/wall replacement.
             </p>
           </div>
           
@@ -444,7 +444,7 @@ export function HomeownerHomePage() {
               onClick={() => navigate('/products?product=mini')}
               className="homeowner-final-cta-primary"
             >
-              Shop Now - $49.99
+              Shop Now - $99.99
             </button>
             <button 
               onClick={() => navigate('/contact')}

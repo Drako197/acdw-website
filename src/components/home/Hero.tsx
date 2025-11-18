@@ -142,13 +142,13 @@ export function Hero() {
       <div className="homeowner-banner">
         <div className="homeowner-banner-content">
           <span className="homeowner-banner-text">
-            <strong>Special Offer:</strong> Get an exclusive discount when you join our email list
+            <strong>Limited Time:</strong> Join our email list and get 10% off guaranteed on your ACDW Mini, with a chance to win 50% off
           </span>
           <button 
             onClick={() => navigate('/promo')}
             className="homeowner-banner-cta"
           >
-            Claim Your Discount
+            Get Discount Code
             <ArrowRightIcon className="homeowner-banner-icon" />
           </button>
         </div>
@@ -545,7 +545,7 @@ export function Hero() {
                 </tr>
                 <tr>
                   <td className="product-comparison-td sticky left-0 bg-white">Price (MSRP)</td>
-                  <td className="product-comparison-td font-bold text-lg">$49.99</td>
+                  <td className="product-comparison-td font-bold text-lg">$99.99</td>
                   <td className="product-comparison-td text-sm text-gray-600 italic">Pricing available on sign in</td>
                   <td className="product-comparison-td text-sm text-gray-600 italic">Pricing available on sign in</td>
                 </tr>
@@ -604,7 +604,7 @@ export function Hero() {
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between"><span className="font-medium">Status:</span> <span className="text-green-600">Available Now</span></div>
-                <div className="flex justify-between"><span className="font-medium">Price:</span> <span className="font-bold">$49.99</span></div>
+                <div className="flex justify-between"><span className="font-medium">Price:</span> <span className="font-bold">$99.99</span></div>
                 <div className="flex justify-between"><span className="font-medium">Size:</span> <span>5" × 3" × 2"</span></div>
                 <div className="flex justify-between"><span className="font-medium">Best For:</span> <span className="text-right">Space-constrained</span></div>
               </div>

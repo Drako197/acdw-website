@@ -43,7 +43,7 @@ export function ProductsPage() {
       installationTime: '30 minutes',
       size: '5" × 3" × 2"',
       pricing: {
-        msrp: '$49.99',
+        msrp: '$99.99',
         contractor: 'Sign in for pricing',
         'property-manager': 'Contact for pricing'
       },
@@ -121,7 +121,7 @@ export function ProductsPage() {
         'Professional installation support',
         'IMC code compliance'
       ],
-      pricing: 'Starting at $49.99 MSRP',
+      pricing: 'Starting at $99.99 MSRP',
       status: 'Available Now'
     },
     {
