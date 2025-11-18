@@ -114,7 +114,7 @@ export function SupportPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-3">Installation Guides</h3>
                     <p className="text-gray-600 mb-4">
-                      AC Drain Wiz products are designed for easy installation. Most homeowners complete installation in about 30 minutes using basic tools.
+                      AC Drain Wiz products are designed for easy installation. Most homeowners complete installation in 5 minutes or less using basic tools.
                     </p>
                     <div className="support-resource-grid">
                       <div className="support-resource-card">

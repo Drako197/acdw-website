@@ -92,7 +92,7 @@ export function Hero() {
     },
     {
       question: "Can I install AC Drain Wiz myself?",
-      answer: "Yes! Most homeowners complete installation in about 30 minutes using basic tools. We provide step-by-step guides, installation videos, and free support if you get stuck."
+      answer: "Yes! Most homeowners complete installation in 5 minutes or less using basic tools. We provide step-by-step guides, installation videos, and free support if you get stuck."
     },
     {
       question: "Will AC Drain Wiz work with my existing AC system?",
@@ -376,7 +376,7 @@ export function Hero() {
               </div>
               <h3 className="how-it-works-step-title">Install</h3>
               <p className="how-it-works-step-description">
-                Cut your existing drain line, solvent-weld AC Drain Wiz in place (about 30 minutes). Works with 3/4" PVC drain lines.
+                Cut your existing drain line, solvent-weld AC Drain Wiz in place (5 minutes or less). Works with 3/4" PVC drain lines.
               </p>
             </div>
             
@@ -444,8 +444,8 @@ export function Hero() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="benefit-title">Quick 30-Minute Installation</h3>
-              <p className="benefit-description">Get up and running fast with our simple installation process that takes just 30 minutes to complete.</p>
+              <h3 className="benefit-title">5-Minute Installation</h3>
+              <p className="benefit-description">Get up and running fast with our simple installation process that takes 5 minutes or less to complete.</p>
             </div>
 
             <div className="benefit-card">
@@ -533,7 +533,7 @@ export function Hero() {
                 </tr>
                 <tr>
                   <td className="product-comparison-td sticky left-0 bg-white">Installation</td>
-                  <td className="product-comparison-td">30 min</td>
+                  <td className="product-comparison-td">5 min</td>
                   <td className="product-comparison-td">15 min</td>
                   <td className="product-comparison-td">45 min total</td>
                 </tr>

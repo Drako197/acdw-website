@@ -28,7 +28,7 @@ export function HomeownerHomePage() {
             </h1>
             
             <p className="homeowner-hero-subheadline">
-              Install the AC Drain Wiz Mini in under 30 minutes. Designed for confident DIYers with optional pro backup.
+              Installs in 5 minutes or less. Designed for confident DIYers with optional pro backup.
             </p>
 
             <div className="homeowner-hero-badge-row">
@@ -64,7 +64,7 @@ export function HomeownerHomePage() {
               <div className="homeowner-feature-card-overlay"></div>
               <div className="homeowner-feature-card-content">
                 <div className="homeowner-feature-card-badge">DIY Installation</div>
-                <h3 className="homeowner-feature-card-title">Install in 30 Minutes</h3>
+                <h3 className="homeowner-feature-card-title">Installs in 5 Minutes or Less</h3>
                 <p className="homeowner-feature-card-description">
                   No plumber needed. Simple step-by-step guide included.
                 </p>
@@ -146,7 +146,7 @@ export function HomeownerHomePage() {
               <div className="homeowner-stat-icon-wrapper">
                 <ExclamationTriangleIcon className="homeowner-stat-icon" />
               </div>
-              <div className="homeowner-stat-number">$2,386</div>
+              <div className="homeowner-stat-number">$12,514</div>
               <div className="homeowner-stat-label">Average water damage repair cost</div>
             </div>
             
@@ -154,7 +154,7 @@ export function HomeownerHomePage() {
               <div className="homeowner-stat-icon-wrapper">
                 <BeakerIcon className="homeowner-stat-icon" />
               </div>
-              <div className="homeowner-stat-number">$3,000+</div>
+              <div className="homeowner-stat-number">$7,500+</div>
               <div className="homeowner-stat-label">Mold remediation can add thousands more</div>
             </div>
             
@@ -162,7 +162,7 @@ export function HomeownerHomePage() {
               <div className="homeowner-stat-icon-wrapper">
                 <BuildingOfficeIcon className="homeowner-stat-icon" />
               </div>
-              <div className="homeowner-stat-number">1 in 3</div>
+              <div className="homeowner-stat-number">9 in 10</div>
               <div className="homeowner-stat-label">Homes with AC experience drain clogs</div>
             </div>
           </div>
@@ -174,7 +174,7 @@ export function HomeownerHomePage() {
         <div className="homeowner-how-it-works-header">
           <h2 className="homeowner-how-it-works-title">Install Protection in 3 Easy Steps</h2>
           <p className="homeowner-how-it-works-subtitle">
-            No plumber needed. No special tools required. Just 30 minutes to peace of mind.
+            No plumber needed. No special tools required. Just 5 minutes to peace of mind.
           </p>
         </div>
         
@@ -184,7 +184,7 @@ export function HomeownerHomePage() {
               <WrenchScrewdriverIcon className="homeowner-icon" />
             </div>
             <div className="homeowner-step-number">Step 1</div>
-            <h3 className="homeowner-step-title">Install in 30 Minutes</h3>
+            <h3 className="homeowner-step-title">Installs in 5 Minutes or Less</h3>
             <p className="homeowner-step-description">
               Simple DIY installation. Cut your existing drain line and attach with included fittings. Detailed instructions and video guide included.
             </p>
@@ -301,7 +301,7 @@ export function HomeownerHomePage() {
             </div>
             <h3 className="homeowner-benefit-title">DIY-Friendly</h3>
             <p className="homeowner-benefit-description">
-              No plumber needed! Simple 30-minute installation with basic tools. Step-by-step instructions and video guide included with every unit.
+              No plumber needed! Installs in 5 minutes or less with basic tools. Step-by-step instructions and video guide included with every unit.
             </p>
           </div>
           

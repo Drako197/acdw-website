@@ -40,7 +40,7 @@ export function ProductsPage() {
         'Supports code-compliant maintenance access'
       ],
       compatibility: '3/4" PVC (most residential condensate lines)',
-      installationTime: '30 minutes',
+      installationTime: '5 minutes or less',
       size: '5" × 3" × 2"',
       pricing: {
         msrp: '$99.99',
@@ -111,7 +111,7 @@ export function ProductsPage() {
       features: [
         'One-time installation eliminates repeated cutting',
         'Clear visual inspection of drain lines',
-        '30-minute professional installation',
+        'Installs in 5 minutes or less',
         'Prevents costly water damage',
         'Increases home value and peace of mind'
       ],
@@ -504,7 +504,7 @@ export function ProductsPage() {
               </div>
               <h3 className="unified-how-it-works-step-title">Install</h3>
               <p className="unified-how-it-works-step-description">
-                Cut your existing drain line, solvent-weld AC Drain Wiz in place (about 30 minutes). 
+                Cut your existing drain line, solvent-weld AC Drain Wiz in place (5 minutes or less). 
                 Works with 3/4" PVC drain lines.
               </p>
             </div>
@@ -609,9 +609,9 @@ export function ProductsPage() {
               <div className="unified-why-choose-icon">
                 <ClockIcon className="unified-why-choose-icon-svg" />
               </div>
-              <h3 className="unified-why-choose-title">Quick 30-Minute Installation</h3>
+              <h3 className="unified-why-choose-title">5-Minute Installation</h3>
               <p className="unified-why-choose-description">
-                Get up and running fast with our simple installation process that takes just 30 minutes to complete.
+                Get up and running fast with our simple installation process that takes 5 minutes or less to complete.
               </p>
             </div>
 

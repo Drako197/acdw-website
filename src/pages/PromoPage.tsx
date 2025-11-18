@@ -173,10 +173,10 @@ export function PromoPage() {
               <p className="promo-product-card-price">$99.99</p>
               <p className="promo-product-card-description">
                 Compact, DIY-friendly solution for proactive AC drain line maintenance. 
-                Install in 30 minutes and protect your home from costly water damage.
+                Installs in 5 minutes or less and protects your home from costly water damage.
               </p>
               <ul className="promo-product-features">
-                <li>✓ 30-minute installation</li>
+                <li>✓ Installs in 5 minutes or less</li>
                 <li>✓ Clear inspection window</li>
                 <li>✓ Works with 3/4" PVC drain lines</li>
                 <li>✓ Made in USA</li>

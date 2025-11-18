@@ -110,7 +110,7 @@ export function PropertyManagerPage() {
               </div>
               <h3 className="property-manager-solution-card-title">ACDW Mini</h3>
               <p className="property-manager-solution-card-description">
-                Proactive maintenance access for all units. Quick 30-minute installation per unit with professional support available.
+                Proactive maintenance access for all units. Installs in 5 minutes or less per unit with professional support available.
               </p>
               <ul className="property-manager-solution-features">
                 <li>Prevent clogs before they cause damage</li>
@@ -258,7 +258,7 @@ export function PropertyManagerPage() {
               <div className="property-manager-step-number">2</div>
               <h3 className="property-manager-step-title">Bulk Installation</h3>
               <p className="property-manager-step-description">
-                Professional installation across your properties with bulk pricing. 30 minutes per unit.
+                Professional installation across your properties with bulk pricing. 5 minutes or less per unit.
               </p>
             </div>
             <div className="property-manager-step">

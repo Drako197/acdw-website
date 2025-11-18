@@ -10,7 +10,7 @@ export function SolutionsPage() {
       features: [
         'One-time installation eliminates repeated cutting',
         'Clear visual inspection of drain lines',
-        '30-minute professional installation',
+        'Installs in 5 minutes or less',
         'Prevents costly water damage',
         'Increases home value and peace of mind'
       ],
