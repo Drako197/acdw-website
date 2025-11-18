@@ -430,7 +430,7 @@ export function PropertyManagerPage() {
             </div>
             <div className="property-manager-roi-card">
               <h3 className="property-manager-roi-card-title">Potential Savings</h3>
-              <div className="property-manager-roi-card-value">$5K-$20K</div>
+              <div className="property-manager-roi-card-value">$15k - $50k</div>
               <p className="property-manager-roi-card-description">
                 Prevented water damage cost per incident. One prevented incident pays for 100+ units.
               </p>

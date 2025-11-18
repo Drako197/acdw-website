@@ -2755,7 +2755,8 @@
 
 /* Homeowner Hero Section - Matching Property Manager Style */
 .homeowner-hero-container {
-  @apply bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 md:py-24;
+  @apply text-white py-16 md:py-24;
+  background: linear-gradient(45deg, #2563eb 0%, #1e40af 50%, #172554 100%);
   min-height: 80vh;
   display: flex;
   align-items: center;
@@ -4719,7 +4720,8 @@
 
 /* Hero Section */
 .property-manager-hero-container {
-  @apply bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 md:py-24;
+  @apply text-white py-16 md:py-24;
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 50%, #172554 100%);
   min-height: 80vh;
   display: flex;
   align-items: center;
@@ -4971,7 +4973,7 @@
 
 /* ROI Section */
 .property-manager-roi-section {
-  @apply py-16 md:py-24 bg-gradient-to-br from-blue-50 to-gray-50;
+  @apply py-16 md:py-24 bg-gray-800;
 }
 
 .property-manager-roi-content {
