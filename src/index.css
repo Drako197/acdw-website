@@ -406,7 +406,7 @@
   /* Full width Sensor card - EXACT HERO COPY */
   .product-showcase-card-sensor.product-showcase-card-full-width {
     @apply relative overflow-hidden bg-black;
-    height: 160vh;
+    min-height: 140vh;
     margin-bottom: 0;
     border-radius: 0;
     /* Ensure proper stacking context for Safari */
@@ -414,10 +414,10 @@
     -webkit-transform: translateZ(0);
   }
 
-  /* Mobile - sensor card height */
+  /* Mobile - sensor card height - flexible to grow with content */
   @media (max-width: 767px) {
     .product-showcase-card-sensor.product-showcase-card-full-width {
-      height: 120vh;
+      min-height: 120vh;
     }
   }
 
@@ -544,28 +544,35 @@
 
 
   .product-showcase-card-content {
-    @apply relative z-10 p-8 flex flex-col justify-center items-center text-center;
-    height: 1120px;
-  }
-
-  /* Mobile - product showcase card content */
-  @media (max-width: 767px) {
-    .product-showcase-card-content {
-      justify-content: flex-end;
-      padding-bottom: 8rem !important;
-      width: 100%;
-      max-width: none;
-      margin: 0 auto;
-      box-sizing: border-box;
-    }
+    @apply relative z-10 p-8 h-full flex flex-col justify-center items-center text-center;
+    margin-top: 950px !important;
   }
 
   .product-showcase-card-sensor.product-showcase-card-full-width .product-showcase-card-content {
-    @apply justify-end pb-12;
+    @apply justify-end;
     width: 100%;
     max-width: none;
     margin: 0 auto;
     box-sizing: border-box;
+  }
+
+  /* Mobile - product showcase card content - flexible height */
+  @media (max-width: 767px) {
+    .product-showcase-card-content {
+      justify-content: flex-end;
+      padding-bottom: 6rem !important;
+      width: 100%;
+      max-width: none;
+      margin: 0 auto;
+      box-sizing: border-box;
+      min-height: auto;
+      height: auto;
+      margin-top: 600px !important;
+    }
+
+    .product-showcase-card-sensor.product-showcase-card-full-width .product-showcase-card-content {
+      padding-bottom: 4rem !important;
+    }
   }
 
   .product-showcase-card-mini.product-showcase-card-full-width .product-showcase-card-content {
