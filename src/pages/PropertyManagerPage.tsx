@@ -8,7 +8,8 @@ import {
   WrenchScrewdriverIcon,
   CurrencyDollarIcon,
   ClockIcon,
-  UserGroupIcon
+  UserGroupIcon,
+  SparklesIcon
 } from '@heroicons/react/24/outline';
 
 export function PropertyManagerPage() {
@@ -106,6 +107,7 @@ export function PropertyManagerPage() {
           <div className="property-manager-solution-grid">
             {/* ACDW Mini - Base Tier */}
             <div className="property-manager-solution-card property-manager-solution-card-mini">
+              <div className="property-manager-solution-badge">Good</div>
               <div className="property-manager-solution-card-header">
                 <div className="property-manager-solution-icon-wrapper">
                   <WrenchScrewdriverIcon className="property-manager-solution-icon" />
@@ -162,6 +164,7 @@ export function PropertyManagerPage() {
 
             {/* ACDW Sensor - Middle Tier */}
             <div className="property-manager-solution-card property-manager-solution-card-sensor">
+              <div className="property-manager-solution-badge">Better</div>
               <div className="property-manager-solution-card-header">
                 <div className="property-manager-solution-icon-wrapper">
                   <BellIcon className="property-manager-solution-icon" />
@@ -247,7 +250,7 @@ export function PropertyManagerPage() {
               <div className="property-manager-solution-badge">Most Popular</div>
               <div className="property-manager-solution-card-header">
                 <div className="property-manager-solution-icon-wrapper">
-                  <BuildingOfficeIcon className="property-manager-solution-icon" />
+                  <SparklesIcon className="property-manager-solution-icon" />
                 </div>
                 <h3 className="property-manager-solution-card-title">Complete System</h3>
                 <p className="property-manager-solution-card-description">
@@ -462,14 +465,14 @@ export function PropertyManagerPage() {
               <div className="property-manager-step-number">2</div>
               <h3 className="property-manager-step-title">Bulk Installation</h3>
               <p className="property-manager-step-description">
-                Professional installation across your properties with bulk pricing. 5 minutes or less per unit.
+                Professional installation of ACDW Mini and Sensor across your properties with bulk pricing. Mini installation takes 5 minutes or less per unit, with Sensor setup adding less than 5 additional minutes for complete system deployment.
               </p>
             </div>
             <div className="property-manager-step">
               <div className="property-manager-step-number">3</div>
               <h3 className="property-manager-step-title">Monitor & Maintain</h3>
               <p className="property-manager-step-description">
-                Access centralized dashboard for remote monitoring. Receive alerts and schedule proactive maintenance.
+                Access to a centralized dashboard for remote monitoring with the Sensor, while the Mini provides clear visual verification of drain line health. Together, they offer the best of both worlds: real-time alerts and visual confirmation, resulting in happy tenants and bottom lines.
               </p>
             </div>
           </div>

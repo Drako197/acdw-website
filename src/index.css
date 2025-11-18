@@ -5005,6 +5005,10 @@
   @apply py-16 md:py-24 bg-white;
 }
 
+.property-manager-how-it-works-section .property-manager-section-title {
+  @apply text-gray-900;
+}
+
 .property-manager-how-it-works-content {
   @apply container mx-auto px-6 max-w-6xl;
 }
