@@ -966,7 +966,10 @@ export function ContactPage() {
                                 mode="single"
                                 selected={stringToDate(formData.preferredDate)}
                                 onSelect={handleDateChange}
-                                disabled={{ before: new Date() }}
+                                disabled={[
+                                  { before: new Date() },
+                                  { dayOfWeek: [0, 6] } // Disable Sunday (0) and Saturday (6)
+                                ]}
                                 showOutsideDays
                                 className="rdp-custom"
                               />

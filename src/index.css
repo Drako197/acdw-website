@@ -81,11 +81,11 @@
   .calendar-popup {
     @apply absolute top-full left-0 mt-2 z-50;
     width: 100%;
-    min-width: 350px;
+    min-width: 320px;
   }
   
   .rdp-custom {
-    @apply bg-white border border-gray-200 rounded-2xl shadow-2xl;
+    @apply bg-white border border-gray-200 rounded-2xl shadow-2xl w-full;
     padding: 1.25rem;
     font-family: inherit;
   }
@@ -112,6 +112,7 @@
   /* Table */
   .rdp-table {
     width: 100%;
+    table-layout: fixed;
   }
   
   /* Head (Day Names) */
