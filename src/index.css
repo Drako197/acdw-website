@@ -213,7 +213,8 @@
   }
   
   /* Custom Selected Date styling - Solid Blue Circle with White Text */
-  .my-selected {
+  .my-selected,
+  .rdp-day_outside.my-selected {
     background-color: #2563eb !important;
     color: #ffffff !important;
     font-weight: 500 !important;
@@ -223,9 +224,11 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    opacity: 1 !important;
   }
   
-  .my-selected:hover {
+  .my-selected:hover,
+  .rdp-day_outside.my-selected:hover {
     background-color: #1d4ed8 !important;
     color: #ffffff !important;
   }
