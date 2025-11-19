@@ -302,7 +302,7 @@ export function ContactPage() {
     return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
   }
   
-  const stringToDate = (dateString: string): Date | undefined => {
+  const stringToDate = (dateString: string | undefined): Date | undefined => {
     if (!dateString) return undefined
     // Parse YYYY-MM-DD as local date to avoid timezone issues
     const [year, month, day] = dateString.split('-').map(Number)
