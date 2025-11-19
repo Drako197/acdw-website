@@ -192,17 +192,28 @@ All forms include:
 
 ### Phone Masking
 
-All phone fields use `react-input-mask` with format: `(999) 999-9999`
+All phone fields use `react-imask` (React 19 compatible) with format: `(000) 000-0000`
 
 ```tsx
-<InputMask
-  mask="(999) 999-9999"
+import { IMaskInput } from 'react-imask'
+
+<IMaskInput
+  mask="(000) 000-0000"
   type="tel"
   name="phone"
   className="input"
   placeholder="(555) 123-4567"
+  unmask={false}
+  onAccept={(value) => {
+    const event = {
+      target: { name: 'phone', value, type: 'tel' }
+    } as React.ChangeEvent<HTMLInputElement>
+    handleInputChange(event)
+  }}
 />
 ```
+
+**Note:** We use `react-imask` instead of `react-input-mask` because the latter uses the deprecated `findDOMNode` API which was removed in React 19.
 
 ---
 
