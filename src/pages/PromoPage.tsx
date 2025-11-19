@@ -17,8 +17,15 @@ export function PromoPage() {
     
     // Prepare form data for Netlify
     const form = e.target as HTMLFormElement
-    const netlifyData = new FormData(form)
-    netlifyData.append('form-name', 'promo-signup')
+    const formData = new FormData(form)
+    
+    // Build submission data object
+    const submissionData: Record<string, string> = {
+      'form-name': 'promo-signup',
+      firstName: firstName,
+      email: email,
+      consent: formData.get('consent') ? 'yes' : 'no'
+    }
     
     // Check if we're in development mode
     const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost'
@@ -31,7 +38,7 @@ export function PromoPage() {
         console.log('📝 [DEV MODE] Promo signup simulated:', {
           email,
           firstName,
-          data: Object.fromEntries(netlifyData)
+          data: submissionData
         })
         // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 1000))
@@ -42,7 +49,7 @@ export function PromoPage() {
         response = await fetch('/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(netlifyData as any).toString()
+          body: new URLSearchParams(submissionData).toString()
         })
       }
       

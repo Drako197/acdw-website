@@ -22,10 +22,13 @@ export function UnsubscribePage() {
     setIsSubmitting(true)
     setSubmitError('')
     
-    // Prepare form data for Netlify
-    const form = e.target as HTMLFormElement
-    const netlifyData = new FormData(form)
-    netlifyData.append('form-name', 'unsubscribe')
+    // Build submission data object
+    const submissionData: Record<string, string> = {
+      'form-name': 'unsubscribe',
+      email: email,
+      reason: reason,
+      feedback: feedback || ''
+    }
     
     // Check if we're in development mode
     const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost'
@@ -38,7 +41,7 @@ export function UnsubscribePage() {
         console.log('📝 [DEV MODE] Unsubscribe request simulated:', {
           email,
           reason,
-          data: Object.fromEntries(netlifyData)
+          data: submissionData
         })
         // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 1000))
@@ -49,7 +52,7 @@ export function UnsubscribePage() {
         response = await fetch('/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(netlifyData as any).toString()
+          body: new URLSearchParams(submissionData).toString()
         })
       }
       

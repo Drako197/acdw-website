@@ -34,10 +34,16 @@ export function EmailPreferencesPage() {
     setIsSubmitting(true)
     setSubmitError('')
     
-    // Prepare form data for Netlify
-    const form = e.target as HTMLFormElement
-    const netlifyData = new FormData(form)
-    netlifyData.append('form-name', 'email-preferences')
+    // Build submission data object
+    const submissionData: Record<string, string> = {
+      'form-name': 'email-preferences',
+      email: email,
+      productUpdates: preferences.productUpdates ? 'yes' : 'no',
+      promotions: preferences.promotions ? 'yes' : 'no',
+      newsletter: preferences.newsletter ? 'yes' : 'no',
+      orderUpdates: preferences.orderUpdates ? 'yes' : 'no',
+      supportEmails: preferences.supportEmails ? 'yes' : 'no'
+    }
     
     // Check if we're in development mode
     const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost'
@@ -50,7 +56,7 @@ export function EmailPreferencesPage() {
         console.log('📝 [DEV MODE] Email preferences update simulated:', {
           email,
           preferences,
-          data: Object.fromEntries(netlifyData)
+          data: submissionData
         })
         // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 1000))
@@ -61,7 +67,7 @@ export function EmailPreferencesPage() {
         response = await fetch('/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(netlifyData as any).toString()
+          body: new URLSearchParams(submissionData).toString()
         })
       }
       

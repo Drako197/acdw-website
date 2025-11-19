@@ -382,12 +382,34 @@ export function ContactPage() {
     }
     
     // Prepare form data for Netlify
-    const form = e.target as HTMLFormElement
     const formName = `contact-${activeFormType}`
-    const netlifyData = new FormData(form)
     
-    // Add form-name for Netlify
-    netlifyData.append('form-name', formName)
+    // Build form data object manually from state to ensure all fields are included
+    const submissionData: Record<string, string> = {
+      'form-name': formName,
+      name: formData.name,
+      email: formData.email,
+      company: formData.company || '',
+      phone: formData.phone || '',
+      customerType: formData.customerType,
+      message: formData.message,
+      referralSource: formData.referralSource || '',
+      consent: formData.consent ? 'yes' : 'no'
+    }
+    
+    // Add form-specific fields
+    if (formData.product) submissionData.product = formData.product
+    if (formData.issueType) submissionData.issueType = formData.issueType
+    if (formData.priority) submissionData.priority = formData.priority
+    if (formData.role) submissionData.role = formData.role
+    if (formData.annualVolume) submissionData.annualVolume = formData.annualVolume
+    if (formData.interest) submissionData.interest = formData.interest
+    if (formData.location) submissionData.location = formData.location
+    if (formData.preferredContact) submissionData.preferredContact = formData.preferredContact
+    if (formData.productToInstall) submissionData.productToInstall = formData.productToInstall
+    if (formData.demoType) submissionData.demoType = formData.demoType
+    if (formData.preferredDate) submissionData.preferredDate = formData.preferredDate
+    if (formData.preferredTime) submissionData.preferredTime = formData.preferredTime
     
     // Check if we're in development mode (multiple checks for reliability)
     const isDevelopment = 
@@ -402,7 +424,7 @@ export function ContactPage() {
       console.log('📝 [DEV MODE] Form submission simulated:', {
         formName,
         formType: activeFormType,
-        data: Object.fromEntries(netlifyData)
+        data: submissionData
       })
       
       // Simulate network delay
@@ -448,7 +470,7 @@ export function ContactPage() {
       const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(netlifyData as any).toString()
+        body: new URLSearchParams(submissionData).toString()
       })
       
       if (response.ok) {

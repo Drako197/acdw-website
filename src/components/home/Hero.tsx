@@ -1096,8 +1096,22 @@ export function Hero() {
                   e.preventDefault()
                   
                   const form = e.target as HTMLFormElement
-                  const netlifyData = new FormData(form)
-                  netlifyData.append('form-name', 'core-upgrade')
+                  const formData = new FormData(form)
+                  
+                  // Build submission data object
+                  const submissionData: Record<string, string> = {
+                    'form-name': 'core-upgrade',
+                    name: formData.get('name') as string || '',
+                    email: formData.get('email') as string || '',
+                    phone: formData.get('phone') as string || '',
+                    photo: formData.get('photo') as string || '',
+                    street: formData.get('street') as string || '',
+                    unit: formData.get('unit') as string || '',
+                    city: formData.get('city') as string || '',
+                    state: formData.get('state') as string || '',
+                    zip: formData.get('zip') as string || '',
+                    acknowledge: formData.get('acknowledge') ? 'yes' : 'no'
+                  }
                   
                   // Check if we're in development mode
                   const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost'
@@ -1108,7 +1122,7 @@ export function Hero() {
                     if (isDevelopment) {
                       // In development, simulate a successful submission
                       console.log('📝 [DEV MODE] Core upgrade request simulated:', {
-                        data: Object.fromEntries(netlifyData)
+                        data: submissionData
                       })
                       // Simulate network delay
                       await new Promise(resolve => setTimeout(resolve, 1000))
@@ -1118,7 +1132,8 @@ export function Hero() {
                       // In production, submit to Netlify
                       response = await fetch('/', {
                         method: 'POST',
-                        body: netlifyData
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams(submissionData).toString()
                       })
                     }
                     
