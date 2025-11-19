@@ -16,5 +16,103 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Hidden forms for Netlify Forms detection (DO NOT REMOVE) -->
+    <form name="contact-general" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="company" />
+      <input type="tel" name="phone" />
+      <input type="text" name="customerType" />
+      <textarea name="message"></textarea>
+      <input type="text" name="referralSource" />
+      <input type="checkbox" name="consent" />
+    </form>
+
+    <form name="contact-support" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="company" />
+      <input type="tel" name="phone" />
+      <input type="text" name="customerType" />
+      <textarea name="message"></textarea>
+      <input type="text" name="referralSource" />
+      <input type="checkbox" name="consent" />
+      <input type="text" name="product" />
+      <input type="text" name="issueType" />
+      <input type="text" name="priority" />
+    </form>
+
+    <form name="contact-sales" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="company" />
+      <input type="tel" name="phone" />
+      <input type="text" name="customerType" />
+      <textarea name="message"></textarea>
+      <input type="text" name="referralSource" />
+      <input type="checkbox" name="consent" />
+      <input type="text" name="role" />
+      <input type="text" name="annualVolume" />
+      <input type="text" name="interest" />
+    </form>
+
+    <form name="contact-installer" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="company" />
+      <input type="tel" name="phone" />
+      <input type="text" name="customerType" />
+      <textarea name="message"></textarea>
+      <input type="text" name="referralSource" />
+      <input type="checkbox" name="consent" />
+      <input type="text" name="location" />
+      <input type="text" name="preferredContact" />
+      <input type="text" name="productToInstall" />
+    </form>
+
+    <form name="contact-demo" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="company" />
+      <input type="tel" name="phone" />
+      <input type="text" name="customerType" />
+      <textarea name="message"></textarea>
+      <input type="text" name="referralSource" />
+      <input type="checkbox" name="consent" />
+      <input type="text" name="demoType" />
+      <input type="text" name="preferredDate" />
+      <input type="text" name="preferredTime" />
+    </form>
+
+    <form name="promo-signup" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="text" name="zipCode" />
+      <input type="checkbox" name="consent" />
+    </form>
+
+    <form name="core-upgrade" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="text" name="company" />
+      <input type="text" name="interest" />
+      <textarea name="message"></textarea>
+    </form>
+
+    <form name="email-preferences" data-netlify="true" hidden>
+      <input type="email" name="email" />
+      <input type="checkbox" name="productUpdates" />
+      <input type="checkbox" name="promotions" />
+      <input type="checkbox" name="newsletters" />
+      <input type="checkbox" name="support" />
+    </form>
+
+    <form name="unsubscribe" data-netlify="true" hidden>
+      <input type="email" name="email" />
+      <input type="text" name="reason" />
+    </form>
   </body>
 </html>
