@@ -200,24 +200,23 @@
     max-width: none !important;
   }
   
-  /* Today - Blue Text */
+  /* Today - Light Gray Background */
   .rdp-day_today:not(.rdp-day_selected) {
-    color: #3b82f6 !important;
+    color: #111827 !important;
     font-weight: 400 !important;
-    background: transparent !important;
+    background-color: #f3f4f6 !important;
   }
   
-  /* Selected Date - Blue Outline Circle */
+  /* Selected Date - Solid Blue Circle with White Text */
   .rdp-day_selected {
-    background-color: transparent !important;
-    color: #111827 !important;
+    background-color: #2563eb !important;
+    color: #ffffff !important;
     font-weight: 500 !important;
-    border: 2px solid #3b82f6 !important;
+    border: none !important;
   }
   
   .rdp-day_selected:hover {
-    background-color: #eff6ff !important;
-    border: 2px solid #3b82f6 !important;
+    background-color: #1d4ed8 !important;
   }
   
   /* Current Month Dates - Black Text */
