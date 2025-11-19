@@ -36,6 +36,7 @@ interface FormData {
   // Installer-specific
   location?: string
   preferredContact?: string
+  productToInstall?: string
   // Demo-specific
   demoType?: string
   preferredDate?: string
@@ -194,6 +195,11 @@ export function ContactPage() {
           return 'Please enter your location'
         }
         break
+      case 'productToInstall':
+        if (activeFormType === 'installer' && (!value || (typeof value === 'string' && value.trim().length === 0))) {
+          return 'Please select a product to be installed'
+        }
+        break
       case 'demoType':
         if (activeFormType === 'demo' && (!value || (typeof value === 'string' && value.trim().length === 0))) {
           return 'Please select a demo type'
@@ -286,7 +292,7 @@ export function ContactPage() {
       fieldsToValidate.push('role', 'interest')
     }
     if (activeFormType === 'installer') {
-      fieldsToValidate.push('location')
+      fieldsToValidate.push('location', 'productToInstall')
     }
     if (activeFormType === 'demo') {
       fieldsToValidate.push('demoType')
@@ -356,6 +362,7 @@ export function ContactPage() {
         interest: '',
         location: '',
         preferredContact: '',
+        productToInstall: '',
         demoType: '',
         preferredDate: '',
         preferredTime: ''
@@ -398,6 +405,7 @@ export function ContactPage() {
           interest: '',
           location: '',
           preferredContact: '',
+          productToInstall: '',
           demoType: '',
           preferredDate: '',
           preferredTime: ''
@@ -799,6 +807,28 @@ export function ContactPage() {
                         />
                         {fieldErrors.location && (
                           <p className="field-error-message">{fieldErrors.location}</p>
+                        )}
+                      </div>
+                      <div>
+                        <label htmlFor="productToInstall" className="contact-form-label">
+                          Product to be installed *
+                        </label>
+                        <select
+                          id="productToInstall"
+                          name="productToInstall"
+                          value={formData.productToInstall || ''}
+                          onChange={handleInputChange}
+                          onBlur={handleBlur}
+                          required
+                          className={`input ${fieldErrors.productToInstall ? 'input-error' : ''}`}
+                        >
+                          <option value="">Select a product</option>
+                          <option value="mini">ACDW Mini</option>
+                          <option value="sensor">ACDW Sensor</option>
+                          <option value="mini-sensor">ACDW Mini & Sensor Combo</option>
+                        </select>
+                        {fieldErrors.productToInstall && (
+                          <p className="field-error-message">{fieldErrors.productToInstall}</p>
                         )}
                       </div>
                       <div>
