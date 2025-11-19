@@ -179,31 +179,63 @@ export function ContactPage() {
     // Add form-name for Netlify
     netlifyData.append('form-name', formName)
     
-    // Check if we're in development mode
-    const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost'
+    // Check if we're in development mode (multiple checks for reliability)
+    const isDevelopment = 
+      import.meta.env.DEV || 
+      import.meta.env.MODE === 'development' ||
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1' ||
+      window.location.port === '5173'
     
-    try {
-      let response: Response
+    // In development, simulate submission without making network request
+    if (isDevelopment) {
+      console.log('📝 [DEV MODE] Form submission simulated:', {
+        formName,
+        formType: activeFormType,
+        data: Object.fromEntries(netlifyData)
+      })
       
-      if (isDevelopment) {
-        // In development, simulate a successful submission
-        console.log('📝 [DEV MODE] Form submission simulated:', {
-          formName,
-          formType: activeFormType,
-          data: Object.fromEntries(netlifyData)
-        })
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        // Create a mock successful response
-        response = new Response(null, { status: 200, statusText: 'OK' })
-      } else {
-        // In production, submit to Netlify
-        response = await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(netlifyData as any).toString()
-        })
-      }
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      // Simulate success
+      setSubmitSuccess(true)
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        company: '',
+        phone: '',
+        customerType: '',
+        message: '',
+        referralSource: '',
+        consent: false,
+        product: '',
+        issueType: '',
+        priority: '',
+        role: '',
+        annualVolume: '',
+        interest: '',
+        location: '',
+        preferredContact: '',
+        demoType: '',
+        preferredDate: '',
+        preferredTime: ''
+      })
+      
+      // Reset success message after 5 seconds
+      setTimeout(() => setSubmitSuccess(false), 5000)
+      setIsSubmitting(false)
+      return
+    }
+    
+    // Production: Submit to Netlify
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(netlifyData as any).toString()
+      })
       
       if (response.ok) {
         setSubmitSuccess(true)
