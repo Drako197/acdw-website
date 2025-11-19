@@ -126,19 +126,6 @@ export function ContactPage() {
     const newType = getFormTypeFromURL()
     setActiveFormType(newType)
   }, [location.search])
-  
-  // Close calendar when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement
-      if (showCalendar && !target.closest('.calendar-popup') && !target.closest('#preferredDate')) {
-        setShowCalendar(false)
-      }
-    }
-    
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [showCalendar])
 
   // Update URL when tab changes (without reload)
   const handleTabChange = (type: ContactFormType) => {
@@ -321,6 +308,19 @@ export function ContactPage() {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({})
   const [showCalendar, setShowCalendar] = useState(false)
+
+  // Close calendar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      if (showCalendar && !target.closest('.calendar-popup') && !target.closest('#preferredDate')) {
+        setShowCalendar(false)
+      }
+    }
+    
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showCalendar])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
