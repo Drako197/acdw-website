@@ -207,15 +207,17 @@
     background: transparent !important;
   }
   
-  /* Selected Date - Black Circle */
+  /* Selected Date - Blue Outline Circle */
   .rdp-day_selected {
-    background-color: #1f2937 !important;
-    color: #ffffff !important;
+    background-color: transparent !important;
+    color: #111827 !important;
     font-weight: 500 !important;
+    border: 2px solid #3b82f6 !important;
   }
   
   .rdp-day_selected:hover {
-    background-color: #111827 !important;
+    background-color: #eff6ff !important;
+    border: 2px solid #3b82f6 !important;
   }
   
   /* Current Month Dates - Black Text */
