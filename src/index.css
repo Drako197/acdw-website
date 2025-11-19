@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import react-datepicker CSS first, then our custom styles will override */
-@import 'react-datepicker/dist/react-datepicker.css';
-
 @layer base {
   html {
     scroll-behavior: smooth;
