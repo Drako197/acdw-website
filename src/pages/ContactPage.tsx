@@ -972,6 +972,10 @@ export function ContactPage() {
                                 ]}
                                 showOutsideDays
                                 className="rdp-custom"
+                                modifiersClassNames={{
+                                  selected: 'my-selected',
+                                  today: 'my-today'
+                                }}
                                 styles={{
                                   root: { width: '100%' },
                                   months: { width: '100%' },
