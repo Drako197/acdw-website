@@ -972,6 +972,15 @@ export function ContactPage() {
                                 ]}
                                 showOutsideDays
                                 className="rdp-custom"
+                                styles={{
+                                  root: { width: '100%' },
+                                  months: { width: '100%' },
+                                  month: { width: '100%' },
+                                  caption: { width: '100%' },
+                                  table: { width: '100%' },
+                                  head: { width: '100%' },
+                                  tbody: { width: '100%' }
+                                }}
                               />
                             </div>
                           )}

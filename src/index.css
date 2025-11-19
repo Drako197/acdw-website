@@ -93,6 +93,18 @@
     max-width: none !important;
   }
   
+  /* Force months container to full width */
+  .rdp-months {
+    width: 100% !important;
+    max-width: none !important;
+  }
+  
+  .rdp-month {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+  
   /* Month Caption */
   .rdp-caption {
     @apply flex items-center justify-between mb-4;
