@@ -77,156 +77,85 @@
     font-style: italic;
   }
   
-  /* React Calendar Custom Styling - Clean Minimalist Design */
+  /* React Day Picker Custom Styling - Clean Minimalist Design */
   .calendar-popup {
     @apply absolute top-full left-0 mt-2 z-50;
-    width: 100% !important;
-    min-width: 350px !important;
+    width: 100%;
+    min-width: 350px;
   }
   
-  .react-calendar {
-    @apply w-full border border-gray-200 rounded-2xl shadow-2xl bg-white;
-    font-family: inherit !important;
-    padding: 1.25rem !important;
-    border: 1px solid #e5e7eb !important;
-    border-radius: 1rem !important;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  .rdp-custom {
+    @apply bg-white border border-gray-200 rounded-2xl shadow-2xl;
+    padding: 1.25rem;
+    font-family: inherit;
   }
   
-  /* Navigation */
-  .react-calendar__navigation {
+  /* Month Caption */
+  .rdp-caption {
     @apply flex items-center justify-between mb-4;
-    height: auto !important;
-    margin-bottom: 1rem !important;
   }
   
-  .react-calendar__navigation__label {
+  .rdp-caption_label {
     @apply text-base font-semibold text-gray-900;
-    flex-grow: 1 !important;
-    background: none !important;
-    border: none !important;
-    padding: 0.5rem !important;
-    cursor: pointer !important;
-    color: #111827 !important;
-    font-weight: 600 !important;
   }
   
-  .react-calendar__navigation__label:hover {
-    @apply bg-transparent;
-    background: transparent !important;
+  /* Navigation Buttons */
+  .rdp-nav {
+    @apply flex gap-1;
   }
   
-  .react-calendar__navigation__arrow {
-    @apply text-gray-400 hover:text-gray-600;
-    background: none !important;
-    border: none !important;
-    font-size: 1.25rem !important;
-    width: 2.5rem !important;
-    height: 2.5rem !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    transition: color 0.15s ease !important;
-    color: #9ca3af !important;
+  .rdp-nav_button {
+    @apply w-10 h-10 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100;
+    transition: all 0.15s ease;
   }
   
-  /* Month View */
-  .react-calendar__month-view__weekdays {
-    @apply text-center font-medium text-gray-500;
-    font-size: 0.75rem !important;
-    margin-bottom: 0.5rem !important;
-    text-align: center !important;
+  /* Table */
+  .rdp-table {
+    width: 100%;
   }
   
-  .react-calendar__month-view__weekdays__weekday {
-    padding: 0.625rem 0.25rem !important;
-    color: #6b7280 !important;
-    font-weight: 500 !important;
+  /* Head (Day Names) */
+  .rdp-head_cell {
+    @apply text-center text-xs font-medium text-gray-500;
+    padding: 0.625rem 0.25rem;
   }
   
-  .react-calendar__month-view__weekdays abbr {
-    text-decoration: none !important;
-    font-weight: 500 !important;
+  /* Day Cells */
+  .rdp-cell {
+    @apply text-center;
+    padding: 0.125rem;
   }
   
-  /* Day Tiles */
-  .react-calendar__tile {
-    color: #111827 !important;
-    border-radius: 9999px !important;
-    aspect-ratio: 1 !important;
-    max-width: 100% !important;
-    background: none !important;
-    border: none !important;
-    padding: 0 !important;
-    font-size: 0.875rem !important;
-    transition: all 0.2s ease !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    font-weight: 400 !important;
-    height: 2.75rem !important;
-    margin: 0.125rem !important;
+  .rdp-day {
+    @apply w-11 h-11 rounded-full text-sm font-normal text-gray-900 hover:bg-gray-100;
+    transition: all 0.15s ease;
   }
   
-  .react-calendar__tile:enabled:hover:not(.react-calendar__tile--active):not(.react-calendar__tile--now) {
-    background-color: #f9fafb !important;
+  /* Today */
+  .rdp-day_today:not(.rdp-day_selected) {
+    @apply text-blue-600 font-normal;
+    background: transparent;
   }
   
-  .react-calendar__tile:enabled:focus {
-    outline: none !important;
+  /* Selected Date */
+  .rdp-day_selected {
+    @apply bg-gray-900 text-white font-medium hover:bg-gray-800;
   }
   
-  /* Today's Date - Blue Text with NO background */
-  .react-calendar__tile--now {
-    color: #3b82f6 !important;
-    background: transparent !important;
-    font-weight: 400 !important;
-  }
-  
-  .react-calendar__tile--now:not(.react-calendar__tile--active):enabled:hover {
-    background-color: #f9fafb !important;
-    color: #3b82f6 !important;
-  }
-  
-  /* Selected Date - Dark Gray/Black Circle with White Text */
-  .react-calendar__tile--active,
-  .react-calendar__tile--active:enabled:hover,
-  .react-calendar__tile--active:enabled:focus {
-    background-color: #1f2937 !important;
-    color: #ffffff !important;
-    font-weight: 500 !important;
-  }
-  
-  /* Neighbor Month Dates - Very Light Gray */
-  .react-calendar__month-view__days__day--neighboringMonth {
-    color: #d1d5db !important;
-    opacity: 0.5 !important;
+  /* Outside Month (Neighbor Dates) */
+  .rdp-day_outside {
+    @apply text-gray-300;
+    opacity: 0.5;
   }
   
   /* Disabled Dates */
-  .react-calendar__tile:disabled {
-    color: #d1d5db !important;
-    cursor: not-allowed !important;
-    background: transparent !important;
-    opacity: 0.4 !important;
+  .rdp-day_disabled {
+    @apply text-gray-300 cursor-not-allowed;
+    opacity: 0.4;
   }
   
-  .react-calendar__tile:disabled:hover {
-    background: transparent !important;
-  }
-  
-  /* Weekend Dates - Should NOT be red */
-  .react-calendar__month-view__days__day--weekend {
-    color: inherit !important;
-  }
-  
-  /* Month Container */
-  .react-calendar__month-view__days {
-    display: grid !important;
-    grid-template-columns: repeat(7, 1fr) !important;
-    gap: 0 !important;
+  .rdp-day_disabled:hover {
+    background: transparent;
   }
   
   .card {

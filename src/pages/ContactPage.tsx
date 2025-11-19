@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { IMaskInput } from 'react-imask'
-import Calendar from 'react-calendar'
+import { DayPicker } from 'react-day-picker'
 import { 
   EnvelopeIcon, 
   PhoneIcon, 
@@ -267,12 +267,12 @@ export function ContactPage() {
     }))
   }
 
-  const handleDateChange = (value: Date | Date[] | null) => {
-    if (value && !Array.isArray(value)) {
+  const handleDateChange = (date: Date | undefined) => {
+    if (date) {
       // Format date as YYYY-MM-DD for form submission (without timezone issues)
-      const year = value.getFullYear()
-      const month = String(value.getMonth() + 1).padStart(2, '0')
-      const day = String(value.getDate()).padStart(2, '0')
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
       const formattedDate = `${year}-${month}-${day}`
       
       const event = {
@@ -289,14 +289,8 @@ export function ContactPage() {
         })
       }
       
-      // Close calendar after a short delay to prevent reopening
+      // Close calendar after selection
       setTimeout(() => setShowCalendar(false), 100)
-    } else {
-      // Clear date if null
-      const event = {
-        target: { name: 'preferredDate', value: '', type: 'text' }
-      } as React.ChangeEvent<HTMLInputElement>
-      handleInputChange(event)
     }
   }
   
@@ -959,11 +953,13 @@ export function ContactPage() {
                           />
                           {showCalendar && (
                             <div className="calendar-popup">
-                              <Calendar
-                                onChange={handleDateChange}
-                                value={formData.preferredDate ? new Date(formData.preferredDate) : null}
-                                minDate={new Date()}
-                                className="custom-calendar"
+                              <DayPicker
+                                mode="single"
+                                selected={formData.preferredDate ? new Date(formData.preferredDate) : undefined}
+                                onSelect={handleDateChange}
+                                disabled={{ before: new Date() }}
+                                showOutsideDays
+                                className="rdp-custom"
                               />
                             </div>
                           )}
