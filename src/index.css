@@ -201,22 +201,30 @@
   }
   
   /* Today - Light Gray Background */
-  .rdp-day_today:not(.rdp-day_selected) {
+  .rdp-day_today:not(.rdp-day_selected),
+  button.rdp-day_today:not(.rdp-day_selected) {
     color: #111827 !important;
     font-weight: 400 !important;
     background-color: #f3f4f6 !important;
+    border: none !important;
   }
   
   /* Selected Date - Solid Blue Circle with White Text */
-  .rdp-day_selected {
+  .rdp-day_selected,
+  button.rdp-day_selected,
+  .rdp-day.rdp-day_selected {
     background-color: #2563eb !important;
     color: #ffffff !important;
     font-weight: 500 !important;
     border: none !important;
+    outline: none !important;
   }
   
-  .rdp-day_selected:hover {
+  .rdp-day_selected:hover,
+  button.rdp-day_selected:hover,
+  .rdp-day.rdp-day_selected:hover {
     background-color: #1d4ed8 !important;
+    color: #ffffff !important;
   }
   
   /* Current Month Dates - Black Text */
