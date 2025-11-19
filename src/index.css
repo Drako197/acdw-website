@@ -90,19 +90,39 @@
     padding: 1.25rem !important;
     font-family: inherit;
     width: 100% !important;
+    min-width: 100% !important;
+    max-width: none !important;
+  }
+  
+  /* Force root container to full width */
+  .rdp-root {
+    width: 100% !important;
+    min-width: 100% !important;
     max-width: none !important;
   }
   
   /* Force months container to full width */
   .rdp-months {
     width: 100% !important;
+    min-width: 100% !important;
     max-width: none !important;
   }
   
   .rdp-month {
     width: 100% !important;
+    min-width: 100% !important;
     max-width: none !important;
     margin: 0 !important;
+  }
+  
+  /* Target the specific class combination */
+  .calendar-popup .rdp-root,
+  .calendar-popup .rdp-custom,
+  .calendar-popup .rdp-months,
+  .calendar-popup .rdp-month {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
   }
   
   /* Month Caption */
