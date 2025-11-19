@@ -206,6 +206,10 @@
     font-weight: 400 !important;
     background-color: #f3f4f6 !important;
     border: none !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   
   /* Custom Selected Date styling - Solid Blue Circle with White Text */
@@ -215,6 +219,10 @@
     font-weight: 500 !important;
     border: none !important;
     outline: none !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   
   .my-selected:hover {
