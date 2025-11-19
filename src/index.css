@@ -80,136 +80,153 @@
   /* React Calendar Custom Styling - Clean Minimalist Design */
   .calendar-popup {
     @apply absolute top-full left-0 mt-2 z-50;
-    width: 100%;
-    min-width: 350px;
+    width: 100% !important;
+    min-width: 350px !important;
   }
   
   .react-calendar {
     @apply w-full border border-gray-200 rounded-2xl shadow-2xl bg-white;
-    font-family: inherit;
-    padding: 1.25rem;
+    font-family: inherit !important;
+    padding: 1.25rem !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
   }
   
   /* Navigation */
   .react-calendar__navigation {
     @apply flex items-center justify-between mb-4;
-    height: auto;
+    height: auto !important;
+    margin-bottom: 1rem !important;
   }
   
   .react-calendar__navigation__label {
     @apply text-base font-semibold text-gray-900;
     flex-grow: 1 !important;
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
+    background: none !important;
+    border: none !important;
+    padding: 0.5rem !important;
+    cursor: pointer !important;
+    color: #111827 !important;
+    font-weight: 600 !important;
   }
   
   .react-calendar__navigation__label:hover {
     @apply bg-transparent;
+    background: transparent !important;
   }
   
   .react-calendar__navigation__arrow {
     @apply text-gray-400 hover:text-gray-600;
-    background: none;
-    border: none;
-    font-size: 1.25rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: color 0.15s ease;
+    background: none !important;
+    border: none !important;
+    font-size: 1.25rem !important;
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: color 0.15s ease !important;
+    color: #9ca3af !important;
   }
   
   /* Month View */
   .react-calendar__month-view__weekdays {
     @apply text-center font-medium text-gray-500;
-    font-size: 0.75rem;
-    margin-bottom: 0.5rem;
+    font-size: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
+    text-align: center !important;
   }
   
   .react-calendar__month-view__weekdays__weekday {
-    padding: 0.625rem 0.25rem;
+    padding: 0.625rem 0.25rem !important;
+    color: #6b7280 !important;
+    font-weight: 500 !important;
   }
   
   .react-calendar__month-view__weekdays abbr {
-    text-decoration: none;
-    font-weight: 500;
+    text-decoration: none !important;
+    font-weight: 500 !important;
   }
   
   /* Day Tiles */
   .react-calendar__tile {
-    @apply text-gray-900 rounded-full;
-    aspect-ratio: 1;
-    max-width: 100%;
-    background: none;
-    border: none;
-    padding: 0;
-    font-size: 0.875rem;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-weight: 400;
-    height: 2.75rem;
-    margin: 0.125rem;
+    color: #111827 !important;
+    border-radius: 9999px !important;
+    aspect-ratio: 1 !important;
+    max-width: 100% !important;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    font-size: 0.875rem !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    font-weight: 400 !important;
+    height: 2.75rem !important;
+    margin: 0.125rem !important;
   }
   
-  .react-calendar__tile:enabled:hover:not(.react-calendar__tile--active) {
-    @apply bg-gray-50;
+  .react-calendar__tile:enabled:hover:not(.react-calendar__tile--active):not(.react-calendar__tile--now) {
+    background-color: #f9fafb !important;
   }
   
   .react-calendar__tile:enabled:focus {
-    outline: none;
+    outline: none !important;
   }
   
-  /* Today's Date - Blue Text */
-  .react-calendar__tile--now:not(.react-calendar__tile--active) {
-    @apply text-blue-600 font-normal;
-    background: none !important;
+  /* Today's Date - Blue Text with NO background */
+  .react-calendar__tile--now {
+    color: #3b82f6 !important;
+    background: transparent !important;
+    font-weight: 400 !important;
   }
   
   .react-calendar__tile--now:not(.react-calendar__tile--active):enabled:hover {
-    @apply bg-gray-50 text-blue-600;
+    background-color: #f9fafb !important;
+    color: #3b82f6 !important;
   }
   
-  /* Selected Date - Dark Circle with White Text */
-  .react-calendar__tile--active {
-    @apply bg-gray-900 text-white font-medium;
-    background-color: #1f2937 !important;
-  }
-  
+  /* Selected Date - Dark Gray/Black Circle with White Text */
+  .react-calendar__tile--active,
   .react-calendar__tile--active:enabled:hover,
   .react-calendar__tile--active:enabled:focus {
-    @apply bg-gray-800 text-white;
-    background-color: #111827 !important;
+    background-color: #1f2937 !important;
+    color: #ffffff !important;
+    font-weight: 500 !important;
   }
   
   /* Neighbor Month Dates - Very Light Gray */
   .react-calendar__month-view__days__day--neighboringMonth {
-    @apply text-gray-300;
-    opacity: 0.5;
+    color: #d1d5db !important;
+    opacity: 0.5 !important;
   }
   
   /* Disabled Dates */
   .react-calendar__tile:disabled {
-    @apply text-gray-300 cursor-not-allowed;
-    background: none;
-    opacity: 0.4;
+    color: #d1d5db !important;
+    cursor: not-allowed !important;
+    background: transparent !important;
+    opacity: 0.4 !important;
   }
   
   .react-calendar__tile:disabled:hover {
-    background: none !important;
+    background: transparent !important;
+  }
+  
+  /* Weekend Dates - Should NOT be red */
+  .react-calendar__month-view__days__day--weekend {
+    color: inherit !important;
   }
   
   /* Month Container */
   .react-calendar__month-view__days {
     display: grid !important;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0;
+    grid-template-columns: repeat(7, 1fr) !important;
+    gap: 0 !important;
   }
   
   .card {
