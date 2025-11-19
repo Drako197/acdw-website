@@ -115,11 +115,19 @@
     margin: 0 !important;
   }
   
+  /* Target the month grid - this is what constrains the width */
+  .rdp-month_grid {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+  }
+  
   /* Target the specific class combination */
   .calendar-popup .rdp-root,
   .calendar-popup .rdp-custom,
   .calendar-popup .rdp-months,
-  .calendar-popup .rdp-month {
+  .calendar-popup .rdp-month,
+  .calendar-popup .rdp-month_grid {
     width: 100% !important;
     min-width: 100% !important;
     max-width: 100% !important;
