@@ -269,8 +269,12 @@ export function ContactPage() {
 
   const handleDateChange = (value: Date | Date[] | null) => {
     if (value && !Array.isArray(value)) {
-      // Format date as YYYY-MM-DD for form submission
-      const formattedDate = value.toISOString().split('T')[0]
+      // Format date as YYYY-MM-DD for form submission (without timezone issues)
+      const year = value.getFullYear()
+      const month = String(value.getMonth() + 1).padStart(2, '0')
+      const day = String(value.getDate()).padStart(2, '0')
+      const formattedDate = `${year}-${month}-${day}`
+      
       const event = {
         target: { name: 'preferredDate', value: formattedDate, type: 'text' }
       } as React.ChangeEvent<HTMLInputElement>
@@ -285,8 +289,8 @@ export function ContactPage() {
         })
       }
       
-      // Close calendar after selection
-      setShowCalendar(false)
+      // Close calendar after a short delay to prevent reopening
+      setTimeout(() => setShowCalendar(false), 100)
     } else {
       // Clear date if null
       const event = {
@@ -311,15 +315,24 @@ export function ContactPage() {
 
   // Close calendar when clicking outside
   useEffect(() => {
+    if (!showCalendar) return
+    
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement
-      if (showCalendar && !target.closest('.calendar-popup') && !target.closest('#preferredDate')) {
+      if (!target.closest('.calendar-popup') && !target.closest('#preferredDate')) {
         setShowCalendar(false)
       }
     }
     
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    // Add slight delay before attaching listener to avoid immediate trigger
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('mousedown', handleClickOutside)
+    }, 100)
+    
+    return () => {
+      clearTimeout(timeoutId)
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
   }, [showCalendar])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -936,8 +949,10 @@ export function ContactPage() {
                             id="preferredDate"
                             name="preferredDate"
                             value={formData.preferredDate ? formatDisplayDate(formData.preferredDate) : ''}
-                            onClick={() => setShowCalendar(!showCalendar)}
-                            onFocus={() => setShowCalendar(true)}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setShowCalendar(true)
+                            }}
                             readOnly
                             placeholder="Select a date"
                             className={`input cursor-pointer ${fieldErrors.preferredDate ? 'input-error' : ''}`}
