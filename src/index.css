@@ -93,6 +93,17 @@
   /* Month Caption */
   .rdp-caption {
     @apply flex items-center justify-between mb-4;
+    width: 100%;
+  }
+  
+  .rdp-head,
+  .rdp-thead {
+    width: 100%;
+  }
+  
+  .rdp-head_row {
+    width: 100%;
+    display: table-row;
   }
   
   .rdp-caption_label {
@@ -113,23 +124,36 @@
   .rdp-table {
     width: 100%;
     table-layout: fixed;
+    border-collapse: collapse;
+  }
+  
+  .rdp-tbody,
+  .rdp-row {
+    width: 100%;
   }
   
   /* Head (Day Names) */
   .rdp-head_cell {
     @apply text-center text-xs font-medium text-gray-500;
     padding: 0.625rem 0.25rem;
+    width: 14.285%; /* 100% / 7 days */
   }
   
   /* Day Cells */
   .rdp-cell {
     @apply text-center;
-    padding: 0.125rem;
+    padding: 0.25rem;
+    width: 14.285%; /* 100% / 7 days */
   }
   
   .rdp-day {
-    @apply w-11 h-11 rounded-full text-sm font-normal text-gray-900 hover:bg-gray-100;
+    @apply rounded-full text-sm font-normal text-gray-900 hover:bg-gray-100;
     transition: all 0.15s ease;
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   /* Today */
