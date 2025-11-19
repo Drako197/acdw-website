@@ -126,6 +126,19 @@ export function ContactPage() {
     const newType = getFormTypeFromURL()
     setActiveFormType(newType)
   }, [location.search])
+  
+  // Close calendar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      if (showCalendar && !target.closest('.calendar-popup') && !target.closest('#preferredDate')) {
+        setShowCalendar(false)
+      }
+    }
+    
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showCalendar])
 
   // Update URL when tab changes (without reload)
   const handleTabChange = (type: ContactFormType) => {
@@ -284,6 +297,9 @@ export function ContactPage() {
           return newErrors
         })
       }
+      
+      // Close calendar after selection
+      setShowCalendar(false)
     } else {
       // Clear date if null
       const event = {
@@ -292,12 +308,19 @@ export function ContactPage() {
       handleInputChange(event)
     }
   }
+  
+  const formatDisplayDate = (dateString: string) => {
+    if (!dateString) return ''
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+  }
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({})
+  const [showCalendar, setShowCalendar] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -904,18 +927,31 @@ export function ContactPage() {
                             <p className="field-error-message">{fieldErrors.demoType}</p>
                           )}
                         </div>
-                        <div>
-                          <label className="contact-form-label">
+                        <div className="relative">
+                          <label htmlFor="preferredDate" className="contact-form-label">
                             Preferred Date
                           </label>
-                          <div className="calendar-container">
-                            <Calendar
-                              onChange={handleDateChange}
-                              value={formData.preferredDate ? new Date(formData.preferredDate) : null}
-                              minDate={new Date()}
-                              className="custom-calendar"
-                            />
-                          </div>
+                          <input
+                            type="text"
+                            id="preferredDate"
+                            name="preferredDate"
+                            value={formData.preferredDate ? formatDisplayDate(formData.preferredDate) : ''}
+                            onClick={() => setShowCalendar(!showCalendar)}
+                            onFocus={() => setShowCalendar(true)}
+                            readOnly
+                            placeholder="Select a date"
+                            className={`input cursor-pointer ${fieldErrors.preferredDate ? 'input-error' : ''}`}
+                          />
+                          {showCalendar && (
+                            <div className="calendar-popup">
+                              <Calendar
+                                onChange={handleDateChange}
+                                value={formData.preferredDate ? new Date(formData.preferredDate) : null}
+                                minDate={new Date()}
+                                className="custom-calendar"
+                              />
+                            </div>
+                          )}
                           {fieldErrors.preferredDate && (
                             <p className="field-error-message">{fieldErrors.preferredDate}</p>
                           )}
