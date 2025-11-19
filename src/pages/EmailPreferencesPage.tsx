@@ -105,6 +105,7 @@ export function EmailPreferencesPage() {
               name="email-preferences"
               data-netlify="true"
               data-netlify-honeypot="bot-field"
+              noValidate
             >
               {/* Hidden Fields for Netlify */}
               <input type="hidden" name="form-name" value="email-preferences" />

@@ -1091,6 +1091,7 @@ export function Hero() {
                 name="core-upgrade"
                 data-netlify="true"
                 data-netlify-honeypot="bot-field"
+                noValidate
                 onSubmit={async (e) => {
                   e.preventDefault()
                   
