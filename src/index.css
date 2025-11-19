@@ -81,113 +81,81 @@
   .calendar-popup {
     @apply absolute top-full left-0 mt-2 z-50;
     width: 100%;
-    min-width: 360px;
+    min-width: 350px;
   }
   
   .rdp-custom {
-    @apply bg-white border border-gray-200 rounded-xl shadow-lg;
-    padding: 1.5rem;
+    @apply bg-white border border-gray-200 rounded-2xl shadow-2xl;
+    padding: 1.25rem;
     font-family: inherit;
   }
   
   /* Month Caption */
   .rdp-caption {
-    @apply flex items-center justify-center mb-4 relative;
+    @apply flex items-center justify-between mb-4;
   }
   
   .rdp-caption_label {
     @apply text-base font-semibold text-gray-900;
-    flex: 1;
-    text-align: center;
   }
   
   /* Navigation Buttons */
   .rdp-nav {
-    @apply absolute inset-x-0 flex justify-between;
-    pointer-events: none;
+    @apply flex gap-1;
   }
   
   .rdp-nav_button {
-    @apply w-8 h-8 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-700;
-    transition: color 0.15s ease;
-    pointer-events: auto;
-    background: transparent;
-  }
-  
-  .rdp-nav_button:hover {
-    background: transparent;
-  }
-  
-  .rdp-nav_button svg {
-    @apply w-5 h-5;
+    @apply w-10 h-10 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100;
+    transition: all 0.15s ease;
   }
   
   /* Table */
   .rdp-table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
   }
   
   /* Head (Day Names) */
   .rdp-head_cell {
     @apply text-center text-xs font-medium text-gray-500;
-    padding: 0.5rem 0.25rem;
-    width: 14.28%;
+    padding: 0.625rem 0.25rem;
   }
   
   /* Day Cells */
   .rdp-cell {
     @apply text-center;
-    padding: 2px;
+    padding: 0.125rem;
   }
   
   .rdp-day {
-    @apply w-full aspect-square flex items-center justify-center rounded-full text-sm font-normal text-gray-900;
-    transition: background-color 0.15s ease;
-    min-height: 40px;
+    @apply w-11 h-11 rounded-full text-sm font-normal text-gray-900 hover:bg-gray-100;
+    transition: all 0.15s ease;
   }
   
-  .rdp-day:hover:not(.rdp-day_selected):not(.rdp-day_disabled) {
-    @apply bg-gray-50;
-  }
-  
-  /* Today - Blue Text */
+  /* Today */
   .rdp-day_today:not(.rdp-day_selected) {
     @apply text-blue-600 font-normal;
     background: transparent;
   }
   
-  .rdp-day_today:not(.rdp-day_selected):hover {
-    @apply bg-gray-50 text-blue-600;
-  }
-  
-  /* Selected Date - Dark Circle */
+  /* Selected Date */
   .rdp-day_selected {
-    @apply bg-gray-900 text-white font-medium;
-  }
-  
-  .rdp-day_selected:hover {
-    @apply bg-gray-800;
+    @apply bg-gray-900 text-white font-medium hover:bg-gray-800;
   }
   
   /* Outside Month (Neighbor Dates) */
   .rdp-day_outside {
     @apply text-gray-300;
+    opacity: 0.5;
   }
   
   /* Disabled Dates */
   .rdp-day_disabled {
     @apply text-gray-300 cursor-not-allowed;
+    opacity: 0.4;
   }
   
   .rdp-day_disabled:hover {
     background: transparent;
-  }
-  
-  /* Remove focus outline */
-  .rdp-day:focus {
-    outline: none;
   }
   
   .card {

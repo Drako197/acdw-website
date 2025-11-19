@@ -296,8 +296,17 @@ export function ContactPage() {
   
   const formatDisplayDate = (dateString: string) => {
     if (!dateString) return ''
-    const date = new Date(dateString)
+    // Parse YYYY-MM-DD as local date to avoid timezone issues
+    const [year, month, day] = dateString.split('-').map(Number)
+    const date = new Date(year, month - 1, day)
     return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+  }
+  
+  const stringToDate = (dateString: string): Date | undefined => {
+    if (!dateString) return undefined
+    // Parse YYYY-MM-DD as local date to avoid timezone issues
+    const [year, month, day] = dateString.split('-').map(Number)
+    return new Date(year, month - 1, day)
   }
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -955,7 +964,7 @@ export function ContactPage() {
                             <div className="calendar-popup">
                               <DayPicker
                                 mode="single"
-                                selected={formData.preferredDate ? new Date(formData.preferredDate) : undefined}
+                                selected={stringToDate(formData.preferredDate)}
                                 onSelect={handleDateChange}
                                 disabled={{ before: new Date() }}
                                 showOutsideDays
