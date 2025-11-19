@@ -179,12 +179,31 @@ export function ContactPage() {
     // Add form-name for Netlify
     netlifyData.append('form-name', formName)
     
+    // Check if we're in development mode
+    const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost'
+    
     try {
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(netlifyData as any).toString()
-      })
+      let response: Response
+      
+      if (isDevelopment) {
+        // In development, simulate a successful submission
+        console.log('📝 [DEV MODE] Form submission simulated:', {
+          formName,
+          formType: activeFormType,
+          data: Object.fromEntries(netlifyData)
+        })
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        // Create a mock successful response
+        response = new Response(null, { status: 200, statusText: 'OK' })
+      } else {
+        // In production, submit to Netlify
+        response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(netlifyData as any).toString()
+        })
+      }
       
       if (response.ok) {
         setSubmitSuccess(true)
@@ -217,6 +236,7 @@ export function ContactPage() {
         setSubmitError('Something went wrong. Please try again or email us directly.')
       }
     } catch (error) {
+      console.error('Form submission error:', error)
       setSubmitError('Network error. Please check your connection and try again.')
     } finally {
       setIsSubmitting(false)

@@ -39,12 +39,31 @@ export function EmailPreferencesPage() {
     const netlifyData = new FormData(form)
     netlifyData.append('form-name', 'email-preferences')
     
+    // Check if we're in development mode
+    const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost'
+    
     try {
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(netlifyData as any).toString()
-      })
+      let response: Response
+      
+      if (isDevelopment) {
+        // In development, simulate a successful submission
+        console.log('📝 [DEV MODE] Email preferences update simulated:', {
+          email,
+          preferences,
+          data: Object.fromEntries(netlifyData)
+        })
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        // Create a mock successful response
+        response = new Response(null, { status: 200, statusText: 'OK' })
+      } else {
+        // In production, submit to Netlify
+        response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(netlifyData as any).toString()
+        })
+      }
       
       if (response.ok) {
         setSubmitSuccess(true)
@@ -53,6 +72,7 @@ export function EmailPreferencesPage() {
         setSubmitError('Something went wrong. Please try again.')
       }
     } catch (error) {
+      console.error('Form submission error:', error)
       setSubmitError('Network error. Please try again.')
     } finally {
       setIsSubmitting(false)

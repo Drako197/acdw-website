@@ -27,12 +27,31 @@ export function UnsubscribePage() {
     const netlifyData = new FormData(form)
     netlifyData.append('form-name', 'unsubscribe')
     
+    // Check if we're in development mode
+    const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost'
+    
     try {
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(netlifyData as any).toString()
-      })
+      let response: Response
+      
+      if (isDevelopment) {
+        // In development, simulate a successful submission
+        console.log('📝 [DEV MODE] Unsubscribe request simulated:', {
+          email,
+          reason,
+          data: Object.fromEntries(netlifyData)
+        })
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        // Create a mock successful response
+        response = new Response(null, { status: 200, statusText: 'OK' })
+      } else {
+        // In production, submit to Netlify
+        response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(netlifyData as any).toString()
+        })
+      }
       
       if (response.ok) {
         setSubmitSuccess(true)
@@ -40,6 +59,7 @@ export function UnsubscribePage() {
         setSubmitError('Something went wrong. Please try again or email us at support@acdrainwiz.com')
       }
     } catch (error) {
+      console.error('Form submission error:', error)
       setSubmitError('Network error. Please try again.')
     } finally {
       setIsSubmitting(false)

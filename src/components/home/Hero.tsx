@@ -1098,11 +1098,28 @@ export function Hero() {
                   const netlifyData = new FormData(form)
                   netlifyData.append('form-name', 'core-upgrade')
                   
+                  // Check if we're in development mode
+                  const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost'
+                  
                   try {
-                    const response = await fetch('/', {
-                      method: 'POST',
-                      body: netlifyData
-                    })
+                    let response: Response
+                    
+                    if (isDevelopment) {
+                      // In development, simulate a successful submission
+                      console.log('📝 [DEV MODE] Core upgrade request simulated:', {
+                        data: Object.fromEntries(netlifyData)
+                      })
+                      // Simulate network delay
+                      await new Promise(resolve => setTimeout(resolve, 1000))
+                      // Create a mock successful response
+                      response = new Response(null, { status: 200, statusText: 'OK' })
+                    } else {
+                      // In production, submit to Netlify
+                      response = await fetch('/', {
+                        method: 'POST',
+                        body: netlifyData
+                      })
+                    }
                     
                     if (response.ok) {
                       alert('Thank you! Your upgrade request has been submitted. We\'ll contact you within 24 hours.')
@@ -1111,6 +1128,7 @@ export function Hero() {
                       alert('Something went wrong. Please try again or email us directly at support@acdrainwiz.com')
                     }
                   } catch (error) {
+                    console.error('Form submission error:', error)
                     alert('Network error. Please try again or email us at support@acdrainwiz.com')
                   }
                 }}
