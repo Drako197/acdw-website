@@ -4,19 +4,39 @@ import { ArrowRightIcon, CheckIcon, EnvelopeIcon } from '@heroicons/react/24/out
 
 export function PromoPage() {
   const navigate = useNavigate()
+  const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setSubmitError('')
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    // Prepare form data for Netlify
+    const form = e.target as HTMLFormElement
+    const netlifyData = new FormData(form)
+    netlifyData.append('form-name', 'promo-signup')
     
-    setIsSubmitted(true)
-    setIsSubmitting(false)
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(netlifyData as any).toString()
+      })
+      
+      if (response.ok) {
+        setIsSubmitted(true)
+      } else {
+        setSubmitError('Something went wrong. Please try again.')
+      }
+    } catch (error) {
+      setSubmitError('Network error. Please check your connection.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (isSubmitted) {
@@ -27,7 +47,7 @@ export function PromoPage() {
             <div className="promo-success-icon">
               <CheckIcon className="h-16 w-16 text-green-500" />
             </div>
-            <h1 className="promo-success-title">Check Your Email!</h1>
+            <h1 className="promo-success-title">Check Your Email{firstName ? `, ${firstName}` : ''}!</h1>
             <p className="promo-success-message">
               We've sent your discount code to <strong>{email}</strong>
             </p>
@@ -87,7 +107,40 @@ export function PromoPage() {
               </p>
             </div>
             
-            <form onSubmit={handleSubmit} className="promo-registration-form">
+            <form 
+              onSubmit={handleSubmit} 
+              className="promo-registration-form"
+              name="promo-signup"
+              data-netlify="true"
+              data-netlify-honeypot="bot-field"
+            >
+              {/* Hidden Fields for Netlify */}
+              <input type="hidden" name="form-name" value="promo-signup" />
+              <input type="hidden" name="form-type" value="promo" />
+              
+              {/* Honeypot field for spam protection */}
+              <div style={{ display: 'none' }}>
+                <label>
+                  Don't fill this out if you're human: <input name="bot-field" />
+                </label>
+              </div>
+              
+              <div className="promo-form-group">
+                <label htmlFor="promo-firstName" className="promo-form-label">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="promo-firstName"
+                  name="firstName"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="promo-form-input"
+                  placeholder="John"
+                  required
+                />
+              </div>
+              
               <div className="promo-form-group">
                 <label htmlFor="promo-email" className="promo-form-label">
                   Email Address
@@ -95,6 +148,7 @@ export function PromoPage() {
                 <input
                   type="email"
                   id="promo-email"
+                  name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="promo-form-input"
@@ -106,16 +160,23 @@ export function PromoPage() {
               <div className="promo-form-group">
                 <label className="promo-form-checkbox-label">
                   <input 
-                    type="checkbox" 
+                    type="checkbox"
+                    name="consent"
                     className="promo-form-checkbox"
                     required
                   />
                   <span>
-                    I agree to receive marketing emails from AC Drain Wiz. 
-                    You can unsubscribe at any time.
+                    I agree to the <button type="button" onClick={() => navigate('/privacy-policy')} className="text-primary-600 hover:text-primary-700 underline">Privacy Policy</button> and consent to receive marketing emails from AC Drain Wiz. You can <button type="button" onClick={() => navigate('/email-preferences')} className="text-primary-600 hover:text-primary-700 underline">unsubscribe</button> at any time.
                   </span>
                 </label>
               </div>
+              
+              {/* Error Message */}
+              {submitError && (
+                <div className="rounded-md bg-red-50 p-4 mb-4">
+                  <div className="text-sm text-red-700">{submitError}</div>
+                </div>
+              )}
               
               <button 
                 type="submit" 

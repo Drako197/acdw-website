@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import InputMask from 'react-input-mask'
 import { 
   EnvelopeIcon, 
   PhoneIcon, 
@@ -22,6 +23,8 @@ interface FormData {
   phone: string
   customerType: string
   message: string
+  referralSource: string
+  consent: boolean
   // Support-specific
   product?: string
   issueType?: string
@@ -34,7 +37,6 @@ interface FormData {
   location?: string
   preferredContact?: string
   // Demo-specific
-  organization?: string
   demoType?: string
   preferredDate?: string
   preferredTime?: string
@@ -112,7 +114,9 @@ export function ContactPage() {
     company: '',
     phone: '',
     customerType: '',
-    message: ''
+    message: '',
+    referralSource: '',
+    consent: false
   })
 
   // Update form type when URL changes
@@ -136,52 +140,87 @@ export function ContactPage() {
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
+    const { name, value, type } = e.target
     
     // Enforce character limit for message field
     if (name === 'message' && value.length > MESSAGE_MAX_LENGTH) {
       return
     }
     
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
+    // Handle checkbox inputs
+    if (type === 'checkbox') {
+      const checked = (e.target as HTMLInputElement).checked
+      setFormData(prev => ({
+        ...prev,
+        [name]: checked
+      }))
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }))
+    }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [submitError, setSubmitError] = useState('')
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission here
-    const submissionData = {
-      formType: activeFormType,
-      ...formData
+    setIsSubmitting(true)
+    setSubmitError('')
+    
+    // Prepare form data for Netlify
+    const form = e.target as HTMLFormElement
+    const formName = `contact-${activeFormType}`
+    const netlifyData = new FormData(form)
+    
+    // Add form-name for Netlify
+    netlifyData.append('form-name', formName)
+    
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(netlifyData as any).toString()
+      })
+      
+      if (response.ok) {
+        setSubmitSuccess(true)
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          phone: '',
+          customerType: '',
+          message: '',
+          referralSource: '',
+          consent: false,
+          product: '',
+          issueType: '',
+          priority: '',
+          role: '',
+          annualVolume: '',
+          interest: '',
+          location: '',
+          preferredContact: '',
+          demoType: '',
+          preferredDate: '',
+          preferredTime: ''
+        })
+        
+        // Reset success message after 5 seconds
+        setTimeout(() => setSubmitSuccess(false), 5000)
+      } else {
+        setSubmitError('Something went wrong. Please try again or email us directly.')
+      }
+    } catch (error) {
+      setSubmitError('Network error. Please check your connection and try again.')
+    } finally {
+      setIsSubmitting(false)
     }
-    console.log('Form submitted:', submissionData)
-    
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      company: '',
-      phone: '',
-      customerType: '',
-      message: '',
-      product: '',
-      issueType: '',
-      priority: '',
-      role: '',
-      annualVolume: '',
-      interest: '',
-      location: '',
-      preferredContact: '',
-      organization: '',
-      demoType: '',
-      preferredDate: '',
-      preferredTime: ''
-    })
-    
-    // Show success message (you can add a toast notification here)
-    alert('Thank you for your message! We\'ll get back to you soon.')
   }
 
   const activeConfig = formTypeConfig[activeFormType]
@@ -219,7 +258,7 @@ export function ContactPage() {
                 )
               })}
             </div>
-          </div>
+                  </div>
 
           <div className="contact-layout-grid">
             {/* Form Section */}
@@ -232,50 +271,68 @@ export function ContactPage() {
                   <div className="contact-form-title-section">
                     <h2 className="contact-form-title">{activeConfig.title}</h2>
                     <p className="contact-form-description">{activeConfig.description}</p>
-                  </div>
-                </div>
+            </div>
+          </div>
 
-                <form onSubmit={handleSubmit} className="contact-form-field">
+                <form 
+                  onSubmit={handleSubmit} 
+                  className="contact-form-field"
+                  name={`contact-${activeFormType}`}
+                  data-netlify="true"
+                  data-netlify-honeypot="bot-field"
+                >
+                  {/* Hidden Fields for Netlify */}
+                  <input type="hidden" name="form-name" value={`contact-${activeFormType}`} />
+                  <input type="hidden" name="form-type" value={activeFormType} />
+                  
+                  {/* Honeypot field for spam protection (hidden from users) */}
+                  <div style={{ display: 'none' }}>
+                    <label>
+                      Don't fill this out if you're human: <input name="bot-field" />
+                    </label>
+                  </div>
+                  
                   {/* Common Fields */}
                   <div className="contact-form-grid">
-                    <div>
+                <div>
                       <label htmlFor="name" className="contact-form-label">
-                        Full Name *
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                        className="input"
-                        placeholder="Your full name"
-                      />
-                    </div>
-                    <div>
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    className="input"
+                    placeholder="Your full name"
+                  />
+                </div>
+                <div>
                       <label htmlFor="email" className="contact-form-label">
-                        Email Address *
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        className="input"
-                        placeholder="your.email@example.com"
-                      />
-                    </div>
-                  </div>
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    className="input"
+                    placeholder="your.email@example.com"
+                  />
+                </div>
+              </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="phone" className="contact-form-label">
                         Phone Number
                       </label>
-                      <input
+                      <InputMask
+                        mask="(999) 999-9999"
                         type="tel"
                         id="phone"
                         name="phone"
@@ -285,45 +342,73 @@ export function ContactPage() {
                         placeholder="(555) 123-4567"
                       />
                     </div>
+                    {activeFormType !== 'installer' && (
+                      <div>
+                        <label htmlFor="company" className="contact-form-label">
+                          Company {activeFormType === 'sales' || activeFormType === 'demo' ? '*' : ''}
+                        </label>
+                        <input
+                          type="text"
+                          id="company"
+                          name="company"
+                          value={formData.company}
+                          onChange={handleInputChange}
+                          required={activeFormType === 'sales' || activeFormType === 'demo'}
+                          className="input"
+                          placeholder="Your company name"
+                        />
+                      </div>
+                    )}
+              </div>
+
+                  {/* How did you hear about us - for general, sales, and demo */}
+                  {(activeFormType === 'general' || activeFormType === 'sales' || activeFormType === 'demo') && (
                     <div>
-                      <label htmlFor="company" className="contact-form-label">
-                        Company {activeFormType === 'sales' || activeFormType === 'demo' ? '*' : ''}
+                      <label htmlFor="referralSource" className="contact-form-label">
+                        How did you hear about us?
                       </label>
-                      <input
-                        type="text"
-                        id="company"
-                        name="company"
-                        value={formData.company}
+                      <select
+                        id="referralSource"
+                        name="referralSource"
+                        value={formData.referralSource}
                         onChange={handleInputChange}
-                        required={activeFormType === 'sales' || activeFormType === 'demo'}
                         className="input"
-                        placeholder="Your company name"
-                      />
+                      >
+                        <option value="">Select an option</option>
+                        <option value="search-engine">Search Engine (Google, Bing, etc.)</option>
+                        <option value="social-media">Social Media</option>
+                        <option value="hvac-contractor">Referred by HVAC Contractor</option>
+                        <option value="friend-family">Friend or Family</option>
+                        <option value="trade-show">Trade Show or Event</option>
+                        <option value="online-ad">Online Advertisement</option>
+                        <option value="article-blog">Article or Blog Post</option>
+                        <option value="other">Other</option>
+                      </select>
                     </div>
-                  </div>
+                  )}
 
                   {/* Form Type Specific Fields */}
                   {activeFormType === 'general' && (
                     <>
-                      <div>
+              <div>
                         <label htmlFor="customerType" className="contact-form-label">
-                          Customer Type
-                        </label>
-                        <select
-                          id="customerType"
-                          name="customerType"
-                          value={formData.customerType}
-                          onChange={handleInputChange}
-                          className="input"
-                        >
-                          <option value="">Select your customer type</option>
-                          <option value="homeowner">Homeowner</option>
-                          <option value="hvac-contractor">HVAC Contractor</option>
+                  Customer Type
+                </label>
+                <select
+                  id="customerType"
+                  name="customerType"
+                  value={formData.customerType}
+                  onChange={handleInputChange}
+                  className="input"
+                >
+                  <option value="">Select your customer type</option>
+                  <option value="homeowner">Homeowner</option>
+                  <option value="hvac-contractor">HVAC Contractor</option>
                           <option value="property-manager">Property Manager</option>
-                          <option value="city-official">City/Code Official</option>
-                          <option value="other">Other</option>
-                        </select>
-                      </div>
+                  <option value="city-official">City/Code Official</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
                     </>
                   )}
 
@@ -457,60 +542,43 @@ export function ContactPage() {
 
                   {activeFormType === 'installer' && (
                     <>
-                      <div className="contact-form-grid">
-                        <div>
-                          <label htmlFor="location" className="contact-form-label">
-                            Location (ZIP or City) *
-                          </label>
-                          <input
-                            type="text"
-                            id="location"
-                            name="location"
-                            value={formData.location || ''}
-                            onChange={handleInputChange}
-                            required
-                            className="input"
-                            placeholder="ZIP code or city name"
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="preferredContact" className="contact-form-label">
-                            Preferred Contact Method
-                          </label>
-                          <select
-                            id="preferredContact"
-                            name="preferredContact"
-                            value={formData.preferredContact || ''}
-                            onChange={handleInputChange}
-                            className="input"
-                          >
-                            <option value="">Select method</option>
-                            <option value="email">Email</option>
-                            <option value="phone">Phone</option>
-                            <option value="either">Either</option>
-                          </select>
-                        </div>
+                      <div>
+                        <label htmlFor="location" className="contact-form-label">
+                          Location (ZIP or City) *
+                        </label>
+                        <input
+                          type="text"
+                          id="location"
+                          name="location"
+                          value={formData.location || ''}
+                          onChange={handleInputChange}
+                          required
+                          className="input"
+                          placeholder="ZIP code or city name"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="preferredContact" className="contact-form-label">
+                          Preferred Contact Method
+                        </label>
+                        <select
+                          id="preferredContact"
+                          name="preferredContact"
+                          value={formData.preferredContact || ''}
+                          onChange={handleInputChange}
+                          className="input"
+                        >
+                          <option value="">Select method</option>
+                          <option value="email">Email</option>
+                          <option value="phone">Phone</option>
+                          <option value="either">Either</option>
+                        </select>
                       </div>
                     </>
                   )}
 
                   {activeFormType === 'demo' && (
                     <>
-                      <div>
-                        <label htmlFor="organization" className="contact-form-label">
-                          Organization *
-                        </label>
-                        <input
-                          type="text"
-                          id="organization"
-                          name="organization"
-                          value={formData.organization || ''}
-                          onChange={handleInputChange}
-                          required
-                          className="input"
-                          placeholder="Your organization name"
-                        />
-                      </div>
                       <div className="contact-form-grid">
                         <div>
                           <label htmlFor="demoType" className="contact-form-label">
@@ -566,19 +634,19 @@ export function ContactPage() {
                   )}
 
                   {/* Message Field */}
-                  <div>
+              <div>
                     <label htmlFor="message" className="contact-form-label">
-                      Message *
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      required
+                  Message *
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  required
                       rows={3}
                       maxLength={MESSAGE_MAX_LENGTH}
-                      className="input"
+                  className="input"
                       placeholder={
                         activeFormType === 'support' ? 'Describe your issue or question...' :
                         activeFormType === 'sales' ? 'Tell us about your needs and how we can help...' :
@@ -596,13 +664,47 @@ export function ContactPage() {
                         {formData.message.length} / {MESSAGE_MAX_LENGTH} characters
                       </span>
                     </div>
+              </div>
+
+                  {/* Privacy Consent */}
+                  <div className="mt-6">
+                    <label className="flex items-start">
+                      <input
+                        type="checkbox"
+                        name="consent"
+                        checked={formData.consent}
+                        onChange={handleInputChange}
+                        required
+                        className="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                      />
+                      <span className="ml-2 text-sm text-gray-600">
+                        I agree to the <button type="button" onClick={() => navigate('/privacy-policy')} className="text-primary-600 hover:text-primary-700 underline">Privacy Policy</button> and consent to AC Drain Wiz contacting me via email or phone regarding my inquiry. *
+                      </span>
+                    </label>
                   </div>
+
+                  {/* Success Message */}
+                  {submitSuccess && (
+                    <div className="rounded-md bg-green-50 p-4">
+                      <div className="text-sm text-green-800">
+                        <strong>Thank you!</strong> Your message has been sent successfully. We'll get back to you within 24 hours.
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Error Message */}
+                  {submitError && (
+                    <div className="rounded-md bg-red-50 p-4">
+                      <div className="text-sm text-red-700">{submitError}</div>
+                    </div>
+                  )}
 
                   <button
                     type="submit"
-                    className="contact-form-submit-button"
+                    disabled={isSubmitting}
+                    className="contact-form-submit-button disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {activeConfig.buttonText}
+                    {isSubmitting ? 'Sending...' : activeConfig.buttonText}
                   </button>
                 </form>
               </div>
