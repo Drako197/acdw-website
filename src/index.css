@@ -203,7 +203,7 @@
   /* Custom Today styling - Light Gray Background */
   .my-today:not(.my-selected) {
     color: #111827 !important;
-    font-weight: 400 !important;
+    font-weight: 600 !important;
     background-color: #f3f4f6 !important;
     border: none !important;
     border-radius: 50% !important;
@@ -262,6 +262,12 @@
   /* Current Month Dates - Black Text */
   .rdp-day:not(.rdp-day_outside):not(.rdp-day_selected):not(.rdp-day_today) {
     color: #111827 !important;
+  }
+  
+  /* Hover Effect - Light Gray Background (same as today) */
+  .rdp-day:not(.rdp-day_selected):not(.rdp-day_disabled):hover {
+    background-color: #f3f4f6 !important;
+    border-radius: 50% !important;
   }
   
   /* Outside Month (Neighbor Dates) - Very Light Gray */
