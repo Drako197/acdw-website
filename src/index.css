@@ -80,30 +80,33 @@
   /* React Day Picker Custom Styling - Clean Minimalist Design */
   .calendar-popup {
     @apply absolute top-full left-0 mt-2 z-50;
-    width: 100%;
-    min-width: 320px;
+    width: 100% !important;
+    min-width: 320px !important;
+    max-width: none !important;
   }
   
   .rdp-custom {
-    @apply bg-white border border-gray-200 rounded-2xl shadow-2xl w-full;
-    padding: 1.25rem;
+    @apply bg-white border border-gray-200 rounded-2xl shadow-2xl;
+    padding: 1.25rem !important;
     font-family: inherit;
+    width: 100% !important;
+    max-width: none !important;
   }
   
   /* Month Caption */
   .rdp-caption {
     @apply flex items-center justify-between mb-4;
-    width: 100%;
+    width: 100% !important;
   }
   
   .rdp-head,
   .rdp-thead {
-    width: 100%;
+    width: 100% !important;
   }
   
   .rdp-head_row {
-    width: 100%;
-    display: table-row;
+    width: 100% !important;
+    display: table-row !important;
   }
   
   .rdp-caption_label {
@@ -122,38 +125,39 @@
   
   /* Table */
   .rdp-table {
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
   }
   
   .rdp-tbody,
   .rdp-row {
-    width: 100%;
+    width: 100% !important;
   }
   
   /* Head (Day Names) */
   .rdp-head_cell {
     @apply text-center text-xs font-medium text-gray-500;
-    padding: 0.625rem 0.25rem;
-    width: 14.285%; /* 100% / 7 days */
+    padding: 0.625rem 0.25rem !important;
+    width: 14.285% !important; /* 100% / 7 days */
   }
   
   /* Day Cells */
   .rdp-cell {
     @apply text-center;
-    padding: 0.25rem;
-    width: 14.285%; /* 100% / 7 days */
+    padding: 0.25rem !important;
+    width: 14.285% !important; /* 100% / 7 days */
   }
   
   .rdp-day {
     @apply rounded-full text-sm font-normal text-gray-900 hover:bg-gray-100;
     transition: all 0.15s ease;
-    width: 100%;
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100% !important;
+    aspect-ratio: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    max-width: none !important;
   }
   
   /* Today */
