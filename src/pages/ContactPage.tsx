@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { IMaskInput } from 'react-imask'
 import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
 import { 
   EnvelopeIcon, 
   PhoneIcon, 
