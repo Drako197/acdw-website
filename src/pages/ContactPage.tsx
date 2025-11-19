@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import InputMask from 'react-input-mask'
+import { IMaskInput } from 'react-imask'
 import { 
   EnvelopeIcon, 
   PhoneIcon, 
@@ -331,15 +331,21 @@ export function ContactPage() {
                       <label htmlFor="phone" className="contact-form-label">
                         Phone Number
                       </label>
-                      <InputMask
-                        mask="(999) 999-9999"
+                      <IMaskInput
+                        mask="(000) 000-0000"
                         type="tel"
                         id="phone"
                         name="phone"
                         value={formData.phone}
-                        onChange={handleInputChange}
+                        onAccept={(value) => {
+                          const event = {
+                            target: { name: 'phone', value, type: 'tel' }
+                          } as React.ChangeEvent<HTMLInputElement>
+                          handleInputChange(event)
+                        }}
                         className="input"
                         placeholder="(555) 123-4567"
+                        unmask={false}
                       />
                     </div>
                     {activeFormType !== 'installer' && (

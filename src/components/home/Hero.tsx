@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import InputMask from 'react-input-mask'
+import { IMaskInput } from 'react-imask'
 import { ArrowRightIcon, ChevronDownIcon, ChevronUpIcon, GiftIcon } from '@heroicons/react/24/outline'
 import { useAuth } from '../../contexts/AuthContext'
 import { VideoModal } from './VideoModal'
@@ -1151,14 +1151,15 @@ export function Hero() {
                 
                 <div className="upgrade-form-group">
                   <label className="upgrade-form-label" htmlFor="upgrade-phone">Phone Number *</label>
-                  <InputMask
-                    mask="(999) 999-9999"
+                  <IMaskInput
+                    mask="(000) 000-0000"
                     type="tel" 
                     id="upgrade-phone" 
                     name="phone"
                     className="upgrade-form-input" 
                     required 
                     placeholder="(555) 123-4567"
+                    unmask={false}
                   />
                 </div>
                 
