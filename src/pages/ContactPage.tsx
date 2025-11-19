@@ -930,6 +930,13 @@ export function ContactPage() {
                             showPopperArrow={false}
                             popperClassName="react-datepicker-popper"
                             calendarClassName="!font-sans"
+                            withPortal={false}
+                            shouldCloseOnSelect={true}
+                            openToDate={new Date()}
+                            fixedHeight
+                            strictParsing={false}
+                            readOnly={false}
+                            disabled={false}
                           />
                           {fieldErrors.preferredDate && (
                             <p className="field-error-message">{fieldErrors.preferredDate}</p>
