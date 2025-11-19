@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { IMaskInput } from 'react-imask'
-import DatePicker from 'react-datepicker'
+import Calendar from 'react-calendar'
 import { 
   EnvelopeIcon, 
   PhoneIcon, 
@@ -267,10 +267,10 @@ export function ContactPage() {
     }))
   }
 
-  const handleDateChange = (date: Date | null) => {
-    if (date) {
+  const handleDateChange = (value: Date | Date[] | null) => {
+    if (value && !Array.isArray(value)) {
       // Format date as YYYY-MM-DD for form submission
-      const formattedDate = date.toISOString().split('T')[0]
+      const formattedDate = value.toISOString().split('T')[0]
       const event = {
         target: { name: 'preferredDate', value: formattedDate, type: 'text' }
       } as React.ChangeEvent<HTMLInputElement>
@@ -905,39 +905,17 @@ export function ContactPage() {
                           )}
                         </div>
                         <div>
-                          <label htmlFor="preferredDate" className="contact-form-label">
+                          <label className="contact-form-label">
                             Preferred Date
                           </label>
-                          <DatePicker
-                            id="preferredDate"
-                            selected={formData.preferredDate ? new Date(formData.preferredDate) : null}
-                            onChange={handleDateChange}
-                            onBlur={() => {
-                              setTouchedFields(prev => ({ ...prev, preferredDate: true }))
-                              if (!formData.preferredDate) {
-                                const error = validateField('preferredDate', '')
-                                setFieldErrors(prev => ({
-                                  ...prev,
-                                  preferredDate: error
-                                }))
-                              }
-                            }}
-                            minDate={new Date()}
-                            dateFormat="MMMM d, yyyy"
-                            placeholderText="Select a date"
-                            className={`input w-full ${fieldErrors.preferredDate ? 'input-error' : ''}`}
-                            wrapperClassName="w-full"
-                            showPopperArrow={false}
-                            popperClassName="react-datepicker-popper"
-                            calendarClassName="!font-sans"
-                            withPortal={false}
-                            shouldCloseOnSelect={true}
-                            openToDate={new Date()}
-                            fixedHeight
-                            strictParsing={false}
-                            readOnly={false}
-                            disabled={false}
-                          />
+                          <div className="calendar-container">
+                            <Calendar
+                              onChange={handleDateChange}
+                              value={formData.preferredDate ? new Date(formData.preferredDate) : null}
+                              minDate={new Date()}
+                              className="custom-calendar"
+                            />
+                          </div>
                           {fieldErrors.preferredDate && (
                             <p className="field-error-message">{fieldErrors.preferredDate}</p>
                           )}

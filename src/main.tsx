@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import 'react-datepicker/dist/react-datepicker.css'
+import 'react-calendar/dist/Calendar.css'
 import './index.css'
 import App from './App.tsx'
 
