@@ -139,6 +139,75 @@ export function ContactPage() {
     navigate(`/contact${urlType ? `?type=${urlType}` : ''}`, { replace: true })
   }
 
+  // Validation function
+  const validateField = (name: string, value: string | boolean): string => {
+    switch (name) {
+      case 'name':
+        if (!value || (typeof value === 'string' && value.trim().length === 0)) {
+          return 'Please enter your name'
+        }
+        break
+      case 'email':
+        if (!value || (typeof value === 'string' && value.trim().length === 0)) {
+          return 'Please enter your email address'
+        } else if (typeof value === 'string' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          return 'Please enter a valid email address'
+        }
+        break
+      case 'phone':
+        if (typeof value === 'string' && value.length > 0 && value.replace(/\D/g, '').length < 10) {
+          return 'Please enter a valid phone number'
+        }
+        break
+      case 'company':
+        if ((activeFormType === 'sales' || activeFormType === 'demo') && (!value || (typeof value === 'string' && value.trim().length === 0))) {
+          return 'Please enter your company name'
+        }
+        break
+      case 'message':
+        if (!value || (typeof value === 'string' && value.trim().length === 0)) {
+          return 'Please enter a message'
+        }
+        break
+      case 'product':
+        if (activeFormType === 'support' && (!value || (typeof value === 'string' && value.trim().length === 0))) {
+          return 'Please select a product'
+        }
+        break
+      case 'issueType':
+        if (activeFormType === 'support' && (!value || (typeof value === 'string' && value.trim().length === 0))) {
+          return 'Please select an issue type'
+        }
+        break
+      case 'role':
+        if (activeFormType === 'sales' && (!value || (typeof value === 'string' && value.trim().length === 0))) {
+          return 'Please select your role'
+        }
+        break
+      case 'interest':
+        if (activeFormType === 'sales' && (!value || (typeof value === 'string' && value.trim().length === 0))) {
+          return 'Please select an interest type'
+        }
+        break
+      case 'location':
+        if (activeFormType === 'installer' && (!value || (typeof value === 'string' && value.trim().length === 0))) {
+          return 'Please enter your location'
+        }
+        break
+      case 'demoType':
+        if (activeFormType === 'demo' && (!value || (typeof value === 'string' && value.trim().length === 0))) {
+          return 'Please select a demo type'
+        }
+        break
+      case 'consent':
+        if (!value) {
+          return 'Please accept the privacy policy to continue'
+        }
+        break
+    }
+    return ''
+  }
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
     
@@ -154,22 +223,91 @@ export function ContactPage() {
         ...prev,
         [name]: checked
       }))
+      // Validate checkbox
+      if (touchedFields[name]) {
+        const error = validateField(name, checked)
+        setFieldErrors(prev => ({
+          ...prev,
+          [name]: error
+        }))
+      }
     } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
       }))
+      // Clear error when user starts typing
+      if (fieldErrors[name]) {
+        setFieldErrors(prev => {
+          const newErrors = { ...prev }
+          delete newErrors[name]
+          return newErrors
+        })
+      }
     }
+  }
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target
+    setTouchedFields(prev => ({ ...prev, [name]: true }))
+    
+    // Validate on blur
+    const fieldValue = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+    const error = validateField(name, fieldValue)
+    setFieldErrors(prev => ({
+      ...prev,
+      [name]: error
+    }))
   }
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({})
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitError('')
+    
+    // Validate all fields
+    const errors: Record<string, string> = {}
+    const fieldsToValidate = ['name', 'email', 'message', 'consent']
+    
+    // Add form-specific required fields
+    if (activeFormType === 'sales' || activeFormType === 'demo') {
+      fieldsToValidate.push('company')
+    }
+    if (activeFormType === 'support') {
+      fieldsToValidate.push('product', 'issueType')
+    }
+    if (activeFormType === 'sales') {
+      fieldsToValidate.push('role', 'interest')
+    }
+    if (activeFormType === 'installer') {
+      fieldsToValidate.push('location')
+    }
+    if (activeFormType === 'demo') {
+      fieldsToValidate.push('demoType')
+    }
+    
+    // Validate each field
+    fieldsToValidate.forEach(fieldName => {
+      const value = formData[fieldName as keyof FormData]
+      const error = validateField(fieldName, value as string | boolean)
+      if (error) {
+        errors[fieldName] = error
+        setTouchedFields(prev => ({ ...prev, [fieldName]: true }))
+      }
+    })
+    
+    // If there are validation errors, stop submission
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
+      setIsSubmitting(false)
+      return
+    }
     
     // Prepare form data for Netlify
     const form = e.target as HTMLFormElement
@@ -222,6 +360,9 @@ export function ContactPage() {
         preferredDate: '',
         preferredTime: ''
       })
+      // Reset errors
+      setFieldErrors({})
+      setTouchedFields({})
       
       // Reset success message after 5 seconds
       setTimeout(() => setSubmitSuccess(false), 5000)
@@ -261,6 +402,9 @@ export function ContactPage() {
           preferredDate: '',
           preferredTime: ''
         })
+        // Reset errors
+        setFieldErrors({})
+        setTouchedFields({})
         
         // Reset success message after 5 seconds
         setTimeout(() => setSubmitSuccess(false), 5000)
@@ -356,10 +500,14 @@ export function ContactPage() {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
+                    onBlur={handleBlur}
                     required
-                    className="input"
+                    className={`input ${fieldErrors.name ? 'input-error' : ''}`}
                     placeholder="Your full name"
                   />
+                  {fieldErrors.name && (
+                    <p className="field-error-message">{fieldErrors.name}</p>
+                  )}
                 </div>
                 <div>
                       <label htmlFor="email" className="contact-form-label">
@@ -371,15 +519,19 @@ export function ContactPage() {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
+                    onBlur={handleBlur}
                     required
-                    className="input"
+                    className={`input ${fieldErrors.email ? 'input-error' : ''}`}
                     placeholder="your.email@example.com"
                   />
+                  {fieldErrors.email && (
+                    <p className="field-error-message">{fieldErrors.email}</p>
+                  )}
                 </div>
               </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
                       <label htmlFor="phone" className="contact-form-label">
                         Phone Number
                       </label>
@@ -395,42 +547,55 @@ export function ContactPage() {
                           } as React.ChangeEvent<HTMLInputElement>
                           handleInputChange(event)
                         }}
-                        className="input"
+                        onBlur={() => {
+                          const event = {
+                            target: { name: 'phone', value: formData.phone, type: 'tel' }
+                          } as React.FocusEvent<HTMLInputElement>
+                          handleBlur(event)
+                        }}
+                        className={`input ${fieldErrors.phone ? 'input-error' : ''}`}
                         placeholder="(555) 123-4567"
                         unmask={false}
                       />
+                      {fieldErrors.phone && (
+                        <p className="field-error-message">{fieldErrors.phone}</p>
+                      )}
                     </div>
                     {activeFormType !== 'installer' && (
                       <div>
                         <label htmlFor="company" className="contact-form-label">
                           Company {activeFormType === 'sales' || activeFormType === 'demo' ? '*' : ''}
-                        </label>
-                        <input
-                          type="text"
-                          id="company"
-                          name="company"
-                          value={formData.company}
-                          onChange={handleInputChange}
+                  </label>
+                  <input
+                    type="text"
+                    id="company"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleInputChange}
+                          onBlur={handleBlur}
                           required={activeFormType === 'sales' || activeFormType === 'demo'}
-                          className="input"
-                          placeholder="Your company name"
-                        />
+                          className={`input ${fieldErrors.company ? 'input-error' : ''}`}
+                    placeholder="Your company name"
+                  />
+                        {fieldErrors.company && (
+                          <p className="field-error-message">{fieldErrors.company}</p>
+                        )}
                       </div>
                     )}
-              </div>
+                </div>
 
                   {/* How did you hear about us - for general, sales, and demo */}
                   {(activeFormType === 'general' || activeFormType === 'sales' || activeFormType === 'demo') && (
-                    <div>
+                <div>
                       <label htmlFor="referralSource" className="contact-form-label">
                         How did you hear about us?
-                      </label>
+                  </label>
                       <select
                         id="referralSource"
                         name="referralSource"
                         value={formData.referralSource}
-                        onChange={handleInputChange}
-                        className="input"
+                    onChange={handleInputChange}
+                    className="input"
                       >
                         <option value="">Select an option</option>
                         <option value="search-engine">Search Engine (Google, Bing, etc.)</option>
@@ -442,7 +607,7 @@ export function ContactPage() {
                         <option value="article-blog">Article or Blog Post</option>
                         <option value="other">Other</option>
                       </select>
-                    </div>
+                </div>
                   )}
 
                   {/* Form Type Specific Fields */}
@@ -482,8 +647,9 @@ export function ContactPage() {
                             name="product"
                             value={formData.product || ''}
                             onChange={handleInputChange}
+                            onBlur={handleBlur}
                             required
-                            className="input"
+                            className={`input ${fieldErrors.product ? 'input-error' : ''}`}
                           >
                             <option value="">Select a product</option>
                             <option value="mini">AC Drain Wiz Mini</option>
@@ -492,6 +658,9 @@ export function ContactPage() {
                             <option value="core-1.0">Core 1.0</option>
                             <option value="other">Other</option>
                           </select>
+                          {fieldErrors.product && (
+                            <p className="field-error-message">{fieldErrors.product}</p>
+                          )}
                         </div>
                         <div>
                           <label htmlFor="issueType" className="contact-form-label">
@@ -502,8 +671,9 @@ export function ContactPage() {
                             name="issueType"
                             value={formData.issueType || ''}
                             onChange={handleInputChange}
+                            onBlur={handleBlur}
                             required
-                            className="input"
+                            className={`input ${fieldErrors.issueType ? 'input-error' : ''}`}
                           >
                             <option value="">Select issue type</option>
                             <option value="installation">Installation Help</option>
@@ -512,6 +682,9 @@ export function ContactPage() {
                             <option value="parts">Replacement Parts</option>
                             <option value="other">Other</option>
                           </select>
+                          {fieldErrors.issueType && (
+                            <p className="field-error-message">{fieldErrors.issueType}</p>
+                          )}
                         </div>
                       </div>
                       <div>
@@ -545,8 +718,9 @@ export function ContactPage() {
                             name="role"
                             value={formData.role || ''}
                             onChange={handleInputChange}
+                            onBlur={handleBlur}
                             required
-                            className="input"
+                            className={`input ${fieldErrors.role ? 'input-error' : ''}`}
                           >
                             <option value="">Select your role</option>
                             <option value="hvac-contractor">HVAC Contractor</option>
@@ -555,6 +729,9 @@ export function ContactPage() {
                             <option value="purchasing-manager">Purchasing Manager</option>
                             <option value="other">Other</option>
                           </select>
+                          {fieldErrors.role && (
+                            <p className="field-error-message">{fieldErrors.role}</p>
+                          )}
                         </div>
                         <div>
                           <label htmlFor="annualVolume" className="contact-form-label">
@@ -584,8 +761,9 @@ export function ContactPage() {
                           name="interest"
                           value={formData.interest || ''}
                           onChange={handleInputChange}
+                          onBlur={handleBlur}
                           required
-                          className="input"
+                          className={`input ${fieldErrors.interest ? 'input-error' : ''}`}
                         >
                           <option value="">Select interest type</option>
                           <option value="bulk-pricing">Bulk Pricing</option>
@@ -594,6 +772,9 @@ export function ContactPage() {
                           <option value="custom-solution">Custom Solution</option>
                           <option value="other">Other</option>
                         </select>
+                        {fieldErrors.interest && (
+                          <p className="field-error-message">{fieldErrors.interest}</p>
+                        )}
                       </div>
                     </>
                   )}
@@ -610,10 +791,14 @@ export function ContactPage() {
                           name="location"
                           value={formData.location || ''}
                           onChange={handleInputChange}
+                          onBlur={handleBlur}
                           required
-                          className="input"
+                          className={`input ${fieldErrors.location ? 'input-error' : ''}`}
                           placeholder="ZIP code or city name"
                         />
+                        {fieldErrors.location && (
+                          <p className="field-error-message">{fieldErrors.location}</p>
+                        )}
                       </div>
                       <div>
                         <label htmlFor="preferredContact" className="contact-form-label">
@@ -647,8 +832,9 @@ export function ContactPage() {
                             name="demoType"
                             value={formData.demoType || ''}
                             onChange={handleInputChange}
+                            onBlur={handleBlur}
                             required
-                            className="input"
+                            className={`input ${fieldErrors.demoType ? 'input-error' : ''}`}
                           >
                             <option value="">Select demo type</option>
                             <option value="in-person">In-Person Demo</option>
@@ -656,6 +842,9 @@ export function ContactPage() {
                             <option value="product-showcase">Product Showcase</option>
                             <option value="compliance-review">Compliance Review</option>
                           </select>
+                          {fieldErrors.demoType && (
+                            <p className="field-error-message">{fieldErrors.demoType}</p>
+                          )}
                         </div>
                         <div>
                           <label htmlFor="preferredDate" className="contact-form-label">
@@ -701,10 +890,11 @@ export function ContactPage() {
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
+                  onBlur={handleBlur}
                   required
                       rows={3}
                       maxLength={MESSAGE_MAX_LENGTH}
-                  className="input"
+                  className={`input ${fieldErrors.message ? 'input-error' : ''}`}
                       placeholder={
                         activeFormType === 'support' ? 'Describe your issue or question...' :
                         activeFormType === 'sales' ? 'Tell us about your needs and how we can help...' :
@@ -713,6 +903,9 @@ export function ContactPage() {
                         'Tell us about your needs, questions, or how we can help...'
                       }
                     />
+                    {fieldErrors.message && (
+                      <p className="field-error-message">{fieldErrors.message}</p>
+                    )}
                     <div className="contact-form-char-count">
                       <span className={`contact-form-char-count-text ${
                         formData.message.length > MESSAGE_MAX_LENGTH * 0.9 
@@ -732,13 +925,17 @@ export function ContactPage() {
                         name="consent"
                         checked={formData.consent}
                         onChange={handleInputChange}
+                        onBlur={handleBlur}
                         required
-                        className="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                        className={`mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded ${fieldErrors.consent ? 'border-red-500' : ''}`}
                       />
                       <span className="ml-2 text-sm text-gray-600">
                         I agree to the <button type="button" onClick={() => navigate('/privacy-policy')} className="text-primary-600 hover:text-primary-700 underline">Privacy Policy</button> and consent to AC Drain Wiz contacting me via email or phone regarding my inquiry. *
                       </span>
                     </label>
+                    {fieldErrors.consent && (
+                      <p className="field-error-message ml-6">{fieldErrors.consent}</p>
+                    )}
                   </div>
 
                   {/* Success Message */}
@@ -757,14 +954,14 @@ export function ContactPage() {
                     </div>
                   )}
 
-                  <button
-                    type="submit"
+              <button
+                type="submit"
                     disabled={isSubmitting}
                     className="contact-form-submit-button disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
+              >
                     {isSubmitting ? 'Sending...' : activeConfig.buttonText}
-                  </button>
-                </form>
+              </button>
+            </form>
               </div>
             </div>
 
