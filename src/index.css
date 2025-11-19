@@ -200,31 +200,44 @@
     max-width: none !important;
   }
   
-  /* Today */
+  /* Today - Blue Text */
   .rdp-day_today:not(.rdp-day_selected) {
-    @apply text-blue-600 font-normal;
-    background: transparent;
+    color: #3b82f6 !important;
+    font-weight: 400 !important;
+    background: transparent !important;
   }
   
-  /* Selected Date */
+  /* Selected Date - Black Circle */
   .rdp-day_selected {
-    @apply bg-gray-900 text-white font-medium hover:bg-gray-800;
+    background-color: #1f2937 !important;
+    color: #ffffff !important;
+    font-weight: 500 !important;
   }
   
-  /* Outside Month (Neighbor Dates) */
+  .rdp-day_selected:hover {
+    background-color: #111827 !important;
+  }
+  
+  /* Current Month Dates - Black Text */
+  .rdp-day:not(.rdp-day_outside):not(.rdp-day_selected):not(.rdp-day_today) {
+    color: #111827 !important;
+  }
+  
+  /* Outside Month (Neighbor Dates) - Very Light Gray */
   .rdp-day_outside {
-    @apply text-gray-300;
-    opacity: 0.5;
+    color: #d1d5db !important;
+    opacity: 0.5 !important;
   }
   
   /* Disabled Dates */
   .rdp-day_disabled {
-    @apply text-gray-300 cursor-not-allowed;
-    opacity: 0.4;
+    color: #d1d5db !important;
+    cursor: not-allowed !important;
+    opacity: 0.4 !important;
   }
   
   .rdp-day_disabled:hover {
-    background: transparent;
+    background: transparent !important;
   }
   
   .card {
