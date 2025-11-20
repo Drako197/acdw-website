@@ -18,7 +18,8 @@ type ContactFormType = 'general' | 'support' | 'sales' | 'installer' | 'demo'
 const MESSAGE_MAX_LENGTH = 2000
 
 interface FormData {
-  name: string
+  firstName: string
+  lastName: string
   email: string
   company: string
   phone: string
@@ -111,7 +112,8 @@ export function ContactPage() {
 
   const [activeFormType, setActiveFormType] = useState<ContactFormType>(getFormTypeFromURL())
   const [formData, setFormData] = useState<FormData>({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     company: '',
     phone: '',
@@ -144,9 +146,14 @@ export function ContactPage() {
   // Validation function
   const validateField = (name: string, value: string | boolean): string => {
     switch (name) {
-      case 'name':
+      case 'firstName':
         if (!value || (typeof value === 'string' && value.trim().length === 0)) {
-          return 'Please enter your name'
+          return 'Please enter your first name'
+        }
+        break
+      case 'lastName':
+        if (!value || (typeof value === 'string' && value.trim().length === 0)) {
+          return 'Please enter your last name'
         }
         break
       case 'email':
@@ -345,7 +352,7 @@ export function ContactPage() {
     
     // Validate all fields
     const errors: Record<string, string> = {}
-    const fieldsToValidate = ['name', 'email', 'message', 'consent']
+    const fieldsToValidate = ['firstName', 'lastName', 'email', 'message', 'consent']
     
     // Add form-specific required fields
     if (activeFormType === 'sales' || activeFormType === 'demo') {
@@ -387,7 +394,8 @@ export function ContactPage() {
     // Build form data object manually from state to ensure all fields are included
     const submissionData: Record<string, string> = {
       'form-name': formName,
-      name: formData.name,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
       email: formData.email,
       company: formData.company || '',
       phone: formData.phone || '',
@@ -434,7 +442,8 @@ export function ContactPage() {
       setSubmitSuccess(true)
       // Reset form
       setFormData({
-        name: '',
+        firstName: '',
+        lastName: '',
         email: '',
         company: '',
         phone: '',
@@ -477,7 +486,8 @@ export function ContactPage() {
         setSubmitSuccess(true)
         // Reset form
         setFormData({
-          name: '',
+          firstName: '',
+          lastName: '',
           email: '',
           company: '',
           phone: '',
@@ -588,22 +598,42 @@ export function ContactPage() {
                   {/* Common Fields */}
                   <div className="contact-form-grid">
                 <div>
-                      <label htmlFor="name" className="contact-form-label">
-                    Full Name *
+                      <label htmlFor="firstName" className="contact-form-label">
+                    First Name *
                   </label>
                   <input
                     type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
                     onChange={handleInputChange}
                     onBlur={handleBlur}
                     required
-                    className={`input ${fieldErrors.name ? 'input-error' : ''}`}
-                    placeholder="Your full name"
+                    className={`input ${fieldErrors.firstName ? 'input-error' : ''}`}
+                    placeholder="First name"
                   />
-                  {fieldErrors.name && (
-                    <p className="field-error-message">{fieldErrors.name}</p>
+                  {fieldErrors.firstName && (
+                    <p className="field-error-message">{fieldErrors.firstName}</p>
+                  )}
+                </div>
+
+                <div className="contact-form-field">
+                  <label htmlFor="lastName" className="contact-form-label">
+                    Last Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    onBlur={handleBlur}
+                    required
+                    className={`input ${fieldErrors.lastName ? 'input-error' : ''}`}
+                    placeholder="Last name"
+                  />
+                  {fieldErrors.lastName && (
+                    <p className="field-error-message">{fieldErrors.lastName}</p>
                   )}
                 </div>
                 <div>

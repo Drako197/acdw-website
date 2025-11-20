@@ -1101,7 +1101,8 @@ export function Hero() {
                   // Build submission data object
                   const submissionData: Record<string, string> = {
                     'form-name': 'core-upgrade',
-                    name: formData.get('name') as string || '',
+                    firstName: formData.get('firstName') as string || '',
+                    lastName: formData.get('lastName') as string || '',
                     email: formData.get('email') as string || '',
                     phone: formData.get('phone') as string || '',
                     photo: formData.get('photo') as string || '',
@@ -1160,14 +1161,26 @@ export function Hero() {
                   </label>
                 </div>
                 <div className="upgrade-form-group">
-                  <label className="upgrade-form-label" htmlFor="upgrade-name">Full Name *</label>
+                  <label className="upgrade-form-label" htmlFor="upgrade-firstName">First Name *</label>
                   <input 
                     type="text" 
-                    id="upgrade-name" 
-                    name="name"
+                    id="upgrade-firstName" 
+                    name="firstName"
                     className="upgrade-form-input" 
                     required 
-                    placeholder="John Smith"
+                    placeholder="John"
+                  />
+                </div>
+
+                <div className="upgrade-form-group">
+                  <label className="upgrade-form-label" htmlFor="upgrade-lastName">Last Name *</label>
+                  <input 
+                    type="text" 
+                    id="upgrade-lastName" 
+                    name="lastName"
+                    className="upgrade-form-input" 
+                    required 
+                    placeholder="Smith"
                   />
                 </div>
                 

@@ -5,6 +5,7 @@ import { ArrowRightIcon, CheckIcon, EnvelopeIcon } from '@heroicons/react/24/out
 export function PromoPage() {
   const navigate = useNavigate()
   const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -23,6 +24,7 @@ export function PromoPage() {
     const submissionData: Record<string, string> = {
       'form-name': 'promo-signup',
       firstName: firstName,
+      lastName: lastName,
       email: email,
       consent: formData.get('consent') ? 'yes' : 'no'
     }
@@ -165,6 +167,22 @@ export function PromoPage() {
                   onChange={(e) => setFirstName(e.target.value)}
                   className="promo-form-input"
                   placeholder="John"
+                  required
+                />
+              </div>
+
+              <div className="promo-form-group">
+                <label htmlFor="promo-lastName" className="promo-form-label">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="promo-lastName"
+                  name="lastName"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className="promo-form-input"
+                  placeholder="Smith"
                   required
                 />
               </div>
