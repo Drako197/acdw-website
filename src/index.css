@@ -4905,7 +4905,7 @@
 }
 
 .contact-form-grid {
-  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6 items-start;
 }
 
 .contact-form-field {

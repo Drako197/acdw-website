@@ -597,46 +597,48 @@ export function ContactPage() {
                   
                   {/* Common Fields */}
                   <div className="contact-form-grid">
-                <div>
+                    <div className="contact-form-field">
                       <label htmlFor="firstName" className="contact-form-label">
-                    First Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                    required
-                    className={`input ${fieldErrors.firstName ? 'input-error' : ''}`}
-                    placeholder="First name"
-                  />
-                  {fieldErrors.firstName && (
-                    <p className="field-error-message">{fieldErrors.firstName}</p>
-                  )}
-                </div>
+                        First Name *
+                      </label>
+                      <input
+                        type="text"
+                        id="firstName"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        onBlur={handleBlur}
+                        required
+                        className={`input ${fieldErrors.firstName ? 'input-error' : ''}`}
+                        placeholder="First name"
+                      />
+                      {fieldErrors.firstName && (
+                        <p className="field-error-message">{fieldErrors.firstName}</p>
+                      )}
+                    </div>
 
-                <div className="contact-form-field">
-                  <label htmlFor="lastName" className="contact-form-label">
-                    Last Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                    required
-                    className={`input ${fieldErrors.lastName ? 'input-error' : ''}`}
-                    placeholder="Last name"
-                  />
-                  {fieldErrors.lastName && (
-                    <p className="field-error-message">{fieldErrors.lastName}</p>
-                  )}
-                </div>
-                <div>
+                    <div className="contact-form-field">
+                      <label htmlFor="lastName" className="contact-form-label">
+                        Last Name *
+                      </label>
+                      <input
+                        type="text"
+                        id="lastName"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        onBlur={handleBlur}
+                        required
+                        className={`input ${fieldErrors.lastName ? 'input-error' : ''}`}
+                        placeholder="Last name"
+                      />
+                      {fieldErrors.lastName && (
+                        <p className="field-error-message">{fieldErrors.lastName}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="contact-form-field">
                       <label htmlFor="email" className="contact-form-label">
                     Email Address *
                   </label>
@@ -655,7 +657,6 @@ export function ContactPage() {
                     <p className="field-error-message">{fieldErrors.email}</p>
                   )}
                 </div>
-              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
