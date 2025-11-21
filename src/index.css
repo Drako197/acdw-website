@@ -2318,6 +2318,23 @@
     @apply text-gray-600 text-base leading-relaxed;
   }
 
+  .upgrade-process-steps {
+    @apply bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6;
+  }
+
+  .upgrade-process-steps-title {
+    @apply text-lg font-semibold text-gray-900 mb-3;
+  }
+
+  .upgrade-process-steps-list {
+    @apply list-decimal list-inside space-y-2 text-gray-700;
+    padding-left: 1rem;
+  }
+
+  .upgrade-process-steps-list li {
+    @apply pl-2;
+  }
+
   .upgrade-modal-form {
     @apply space-y-5;
   }

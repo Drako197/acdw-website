@@ -1040,7 +1040,7 @@ export function Hero() {
                 </div>
                 <h4 className="heritage-upgrade-title">Free Upgrade to AC Drain Wiz Mini</h4>
                 <p className="heritage-upgrade-description">
-                  Thank you for being an early adopter! As a Core 1.0 customer, you're eligible for a <strong>FREE upgrade to the new Mini</strong>. Simply share a photo of your installed Core 1.0 unit, and we'll ship you a brand new Mini at no cost—you just pay $10.99 shipping.
+                  Thank you for being an early adopter! As a Core 1.0 customer, you're eligible for a <strong>FREE upgrade to the new Mini</strong>. Submit your request below with a photo of your installed Core 1.0 unit as proof of purchase. We'll review your submission and email you a secure payment link for $10.99 shipping. Once payment is received, we'll ship your new Mini within 7-10 business days.
                 </p>
                 <button 
                   onClick={() => setIsUpgradeModalOpen(true)}
@@ -1080,10 +1080,22 @@ export function Hero() {
             
             <div className="upgrade-modal-content">
               <div className="upgrade-modal-header">
-                <h3 className="upgrade-modal-title">Free Upgrade to AC Drain Wiz Mini</h3>
+                <h3 className="upgrade-modal-title">Request Your Free Core 1.0 to Mini Upgrade</h3>
                 <p className="upgrade-modal-subtitle">
-                  Complete the form below to claim your free upgrade. We'll review your submission and ship your new Mini within 2-3 business days.
+                  This is a registration form, not a payment form. Submit your information and photo below. We'll review your submission and email you a secure payment link for $10.99 shipping. Your Mini will ship within 7-10 business days after payment is received.
                 </p>
+              </div>
+
+              {/* Process Steps */}
+              <div className="upgrade-process-steps">
+                <h4 className="upgrade-process-steps-title">How It Works:</h4>
+                <ol className="upgrade-process-steps-list">
+                  <li>Submit this form with your Core 1.0 photo</li>
+                  <li>We'll review and verify your submission</li>
+                  <li>You'll receive an email with a secure payment link ($10.99 shipping)</li>
+                  <li>Complete payment via the secure link</li>
+                  <li>Your Mini ships within 7-10 business days</li>
+                </ol>
               </div>
               
               <form 
@@ -1139,7 +1151,7 @@ export function Hero() {
                     }
                     
                     if (response.ok) {
-                      alert('Thank you! Your upgrade request has been submitted. We\'ll contact you within 24 hours.')
+                      alert('Thank you! Your upgrade request has been submitted. We\'ll review your submission and email you within 24-48 hours with a secure payment link for $10.99 shipping. Please check your email (and spam folder) for next steps.')
                       setIsUpgradeModalOpen(false)
                     } else {
                       alert('Something went wrong. Please try again or email us directly at support@acdrainwiz.com')
@@ -1211,9 +1223,9 @@ export function Hero() {
                 </div>
                 
                 <div className="upgrade-form-group">
-                  <label className="upgrade-form-label" htmlFor="upgrade-photo">Photo of Installed Core 1.0 *</label>
+                  <label className="upgrade-form-label" htmlFor="upgrade-photo">Photo of Installed Core 1.0 (Proof of Purchase) *</label>
                   <p className="upgrade-form-helper">
-                    Please upload a clear photo showing your Core 1.0 unit installed on your AC drain line.
+                    Please upload a clear photo showing your Core 1.0 unit installed on your AC drain line. This photo serves as proof of purchase and is required to process your upgrade request.
                   </p>
                   <input 
                     type="file" 
@@ -1346,7 +1358,7 @@ export function Hero() {
                       className="upgrade-form-checkbox" 
                       required 
                     />
-                    <span>I understand that I will be charged $10.99 for shipping and handling. My new Mini will ship within 2-3 business days of approval.</span>
+                    <span>I understand that after my submission is reviewed and approved, I will receive an email with a secure payment link for $10.99 shipping. My new Mini will ship within 7-10 business days after I complete the payment.</span>
                   </label>
                 </div>
                 
@@ -1355,7 +1367,7 @@ export function Hero() {
                     Cancel
                   </button>
                   <button type="submit" className="upgrade-form-submit">
-                    Submit Upgrade Request
+                    Submit Request (No Payment Required)
                   </button>
                 </div>
               </form>
