@@ -2130,11 +2130,11 @@
     @apply bg-black;
   }
 
-  /* Top Hero Section - 60vh with Background Image */
+  /* Top Hero Section - 100vh with Background Image */
   .heritage-hero-section {
     position: relative;
-    height: 60vh;
-    min-height: 400px;
+    height: 100vh;
+    min-height: 600px;
     background-image: url('/images/acdw-core-showcase-background.png');
     background-size: cover;
     background-position: center;
@@ -2156,7 +2156,21 @@
   }
 
   .heritage-hero-content {
-    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10;
+    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .heritage-hero-top {
+    @apply text-center;
+  }
+
+  .heritage-hero-bottom {
+    @apply text-center;
   }
 
   .heritage-hero-title {
@@ -2165,7 +2179,7 @@
   }
 
   .heritage-hero-subtitle {
-    @apply text-lg md:text-xl text-white/90 mb-6;
+    @apply text-lg md:text-xl text-white/90;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
 

@@ -1017,12 +1017,19 @@ export function Hero() {
         {/* Top Section - Full Width Hero with Background Image */}
         <div className="heritage-hero-section">
           <div className="heritage-hero-content">
-            <h2 className="heritage-hero-title">Where It Started</h2>
-            <p className="heritage-hero-subtitle">Our foundation that led to the Mini</p>
-            <h3 className="heritage-hero-product-title">AC Drain Wiz Core 1.0</h3>
-            <p className="heritage-hero-description">
-              The proven foundation solution that started it all. Our Core 1.0 system pioneered the AC drain line maintenance category, establishing the clear PVC design and maintenance access principles that evolved into our flagship Mini. While Core 1.0 is now deprecated in favor of the more compact and versatile Mini, it remains a testament to our commitment to innovation and reliability.
-            </p>
+            {/* Top Section - Header */}
+            <div className="heritage-hero-top">
+              <h2 className="heritage-hero-title">Where It Started</h2>
+              <p className="heritage-hero-subtitle">Our foundation that led to the Mini</p>
+            </div>
+            
+            {/* Bottom Section - Product Info */}
+            <div className="heritage-hero-bottom">
+              <h3 className="heritage-hero-product-title">AC Drain Wiz Core 1.0</h3>
+              <p className="heritage-hero-description">
+                The proven foundation solution that started it all. Our Core 1.0 system pioneered the AC drain line maintenance category, establishing the clear PVC design and maintenance access principles that evolved into our flagship Mini. While Core 1.0 is now deprecated in favor of the more compact and versatile Mini, it remains a testament to our commitment to innovation and reliability.
+              </p>
+            </div>
           </div>
         </div>
 
