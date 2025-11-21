@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IMaskInput } from 'react-imask'
-import { ArrowRightIcon, ChevronDownIcon, ChevronUpIcon, GiftIcon } from '@heroicons/react/24/outline'
+import { ArrowRightIcon, ChevronDownIcon, ChevronUpIcon, GiftIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { useAuth } from '../../contexts/AuthContext'
 import { VideoModal } from './VideoModal'
 import { CustomerTypeSelector } from './CustomerTypeSelector'
@@ -1059,10 +1059,9 @@ export function Hero() {
             <div className="heritage-support-column">
               <h3 className="heritage-support-title">Core 1.0 Support</h3>
               <p className="heritage-support-subtitle">Full support continues for your Core 1.0 system</p>
-              <div className="heritage-support-icon">
-                <svg className="heritage-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+              <div className="heritage-support-badge">
+                <CheckIcon className="heritage-support-badge-icon" />
+                Fully Supported
               </div>
               <p className="heritage-support-description">
                 <strong>Need support?</strong> Your Core 1.0 system continues to be fully supported. If you need replacement parts or have questions, please contact our support team.
