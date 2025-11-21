@@ -15,6 +15,7 @@ export function Hero() {
   const [photoFileError, setPhotoFileError] = useState<string>('')
   const [toastMessage, setToastMessage] = useState<string>('')
   const [toastType, setToastType] = useState<'success' | 'error'>('success')
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   
   // Check if user is a contractor
   const isContractor = isAuthenticated && user?.role === 'HVAC_PROFESSIONAL'
@@ -1101,11 +1102,13 @@ export function Hero() {
         <div className="upgrade-modal-overlay" onClick={() => {
           setIsUpgradeModalOpen(false)
           setPhotoFileError('')
+          setFieldErrors({})
         }}>
           <div className="upgrade-modal-container" onClick={(e) => e.stopPropagation()}>
             <button className="upgrade-modal-close" onClick={() => {
               setIsUpgradeModalOpen(false)
               setPhotoFileError('')
+              setFieldErrors({})
             }}>
               ×
             </button>
@@ -1137,24 +1140,98 @@ export function Hero() {
                 onSubmit={async (e) => {
                   e.preventDefault()
                   
-                  // Check file size before submission
                   const form = e.target as HTMLFormElement
+                  const formData = new FormData(form)
+                  const errors: Record<string, string> = {}
+                  
+                  // Validate required fields
+                  const firstName = formData.get('firstName') as string
+                  const lastName = formData.get('lastName') as string
+                  const email = formData.get('email') as string
+                  const phone = formData.get('phone') as string
+                  const street = formData.get('street') as string
+                  const city = formData.get('city') as string
+                  const state = formData.get('state') as string
+                  const zip = formData.get('zip') as string
+                  const consent = formData.get('consent')
                   const photoInput = form.querySelector('#upgrade-photo') as HTMLInputElement
-                  if (photoInput?.files && photoInput.files[0]) {
+                  
+                  // Validate firstName
+                  if (!firstName || firstName.trim().length === 0) {
+                    errors.firstName = 'First name is required'
+                  }
+                  
+                  // Validate lastName
+                  if (!lastName || lastName.trim().length === 0) {
+                    errors.lastName = 'Last name is required'
+                  }
+                  
+                  // Validate email
+                  if (!email || email.trim().length === 0) {
+                    errors.email = 'Email address is required'
+                  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    errors.email = 'Please enter a valid email address'
+                  }
+                  
+                  // Validate phone
+                  if (!phone || phone.trim().length === 0) {
+                    errors.phone = 'Phone number is required'
+                  } else if (phone.replace(/\D/g, '').length < 10) {
+                    errors.phone = 'Please enter a valid phone number'
+                  }
+                  
+                  // Validate photo
+                  if (!photoInput?.files || !photoInput.files[0]) {
+                    errors.photo = 'Photo is required'
+                  } else {
                     const fileSize = photoInput.files[0].size
                     const maxSize = 5 * 1024 * 1024 // 5MB in bytes
                     if (fileSize > maxSize) {
-                      setPhotoFileError('File size must be 5MB or less. Please compress your image and try again.')
-                      return
+                      errors.photo = 'File size must be 5MB or less. Please compress your image and try again.'
+                      setPhotoFileError(errors.photo)
                     }
                   }
                   
-                  // Don't submit if there's a file error
-                  if (photoFileError) {
+                  // Validate street
+                  if (!street || street.trim().length === 0) {
+                    errors.street = 'Street address is required'
+                  }
+                  
+                  // Validate city
+                  if (!city || city.trim().length === 0) {
+                    errors.city = 'City is required'
+                  }
+                  
+                  // Validate state
+                  if (!state || state.trim().length === 0) {
+                    errors.state = 'State is required'
+                  }
+                  
+                  // Validate zip
+                  if (!zip || zip.trim().length === 0) {
+                    errors.zip = 'ZIP code is required'
+                  } else if (!/^\d{5}$/.test(zip)) {
+                    errors.zip = 'ZIP code must be 5 digits'
+                  }
+                  
+                  // Validate consent
+                  if (!consent) {
+                    errors.consent = 'You must acknowledge the terms to continue'
+                  }
+                  
+                  // If there are validation errors, stop submission
+                  if (Object.keys(errors).length > 0) {
+                    setFieldErrors(errors)
+                    if (errors.photo) {
+                      setPhotoFileError(errors.photo)
+                    }
+                    showToast('Please fill in all required fields correctly.', 'error')
                     return
                   }
                   
-                  const formData = new FormData(form)
+                  // Clear any previous errors
+                  setFieldErrors({})
+                  setPhotoFileError('')
                   
                   // Build submission data object
                   const submissionData: Record<string, string> = {
@@ -1200,6 +1277,7 @@ export function Hero() {
                       showToast('Thank you! Your upgrade request has been submitted. We\'ll review your submission and email you within 24-48 hours with a secure payment link for $10.99 shipping. Please check your email (and spam folder) for next steps.', 'success')
                       setIsUpgradeModalOpen(false)
                       setPhotoFileError('')
+                      setFieldErrors({})
                     } else {
                       showToast('Something went wrong. Please try again or email us directly at support@acdrainwiz.com', 'error')
                     }
@@ -1225,10 +1303,22 @@ export function Hero() {
                     type="text" 
                     id="upgrade-firstName" 
                     name="firstName"
-                    className="upgrade-form-input" 
+                    className={`upgrade-form-input ${fieldErrors.firstName ? 'upgrade-form-input-error' : ''}`}
                     required 
                     placeholder="John"
+                    onChange={() => {
+                      if (fieldErrors.firstName) {
+                        setFieldErrors(prev => {
+                          const newErrors = { ...prev }
+                          delete newErrors.firstName
+                          return newErrors
+                        })
+                      }
+                    }}
                   />
+                  {fieldErrors.firstName && (
+                    <p className="upgrade-form-field-error">{fieldErrors.firstName}</p>
+                  )}
                 </div>
 
                 <div className="upgrade-form-group">
@@ -1237,10 +1327,22 @@ export function Hero() {
                     type="text" 
                     id="upgrade-lastName" 
                     name="lastName"
-                    className="upgrade-form-input" 
+                    className={`upgrade-form-input ${fieldErrors.lastName ? 'upgrade-form-input-error' : ''}`}
                     required 
                     placeholder="Smith"
+                    onChange={() => {
+                      if (fieldErrors.lastName) {
+                        setFieldErrors(prev => {
+                          const newErrors = { ...prev }
+                          delete newErrors.lastName
+                          return newErrors
+                        })
+                      }
+                    }}
                   />
+                  {fieldErrors.lastName && (
+                    <p className="upgrade-form-field-error">{fieldErrors.lastName}</p>
+                  )}
                 </div>
                 
                 <div className="upgrade-form-group">
@@ -1249,10 +1351,22 @@ export function Hero() {
                     type="email" 
                     id="upgrade-email" 
                     name="email"
-                    className="upgrade-form-input" 
+                    className={`upgrade-form-input ${fieldErrors.email ? 'upgrade-form-input-error' : ''}`}
                     required 
                     placeholder="john@example.com"
+                    onChange={() => {
+                      if (fieldErrors.email) {
+                        setFieldErrors(prev => {
+                          const newErrors = { ...prev }
+                          delete newErrors.email
+                          return newErrors
+                        })
+                      }
+                    }}
                   />
+                  {fieldErrors.email && (
+                    <p className="upgrade-form-field-error">{fieldErrors.email}</p>
+                  )}
                 </div>
                 
                 <div className="upgrade-form-group">
@@ -1262,11 +1376,23 @@ export function Hero() {
                     type="tel" 
                     id="upgrade-phone" 
                     name="phone"
-                    className="upgrade-form-input" 
+                    className={`upgrade-form-input ${fieldErrors.phone ? 'upgrade-form-input-error' : ''}`}
                     required 
                     placeholder="(555) 123-4567"
                     unmask={false}
+                    onAccept={() => {
+                      if (fieldErrors.phone) {
+                        setFieldErrors(prev => {
+                          const newErrors = { ...prev }
+                          delete newErrors.phone
+                          return newErrors
+                        })
+                      }
+                    }}
                   />
+                  {fieldErrors.phone && (
+                    <p className="upgrade-form-field-error">{fieldErrors.phone}</p>
+                  )}
                 </div>
                 
                 <div className="upgrade-form-group">
@@ -1278,7 +1404,7 @@ export function Hero() {
                     type="file" 
                     id="upgrade-photo" 
                     name="photo"
-                    className={`upgrade-form-file ${photoFileError ? 'upgrade-form-file-error' : ''}`}
+                    className={`upgrade-form-file ${photoFileError || fieldErrors.photo ? 'upgrade-form-file-error' : ''}`}
                     accept="image/*"
                     required
                     onChange={(e) => {
@@ -1287,17 +1413,28 @@ export function Hero() {
                         const maxSize = 5 * 1024 * 1024 // 5MB in bytes
                         if (file.size > maxSize) {
                           setPhotoFileError('File size must be 5MB or less. Please compress your image and try again.')
+                          setFieldErrors(prev => ({ ...prev, photo: 'File size must be 5MB or less. Please compress your image and try again.' }))
                           e.target.value = '' // Clear the file input
                         } else {
                           setPhotoFileError('')
+                          setFieldErrors(prev => {
+                            const newErrors = { ...prev }
+                            delete newErrors.photo
+                            return newErrors
+                          })
                         }
                       } else {
                         setPhotoFileError('')
+                        setFieldErrors(prev => {
+                          const newErrors = { ...prev }
+                          delete newErrors.photo
+                          return newErrors
+                        })
                       }
                     }}
                   />
-                  {photoFileError && (
-                    <p className="upgrade-form-error-message">{photoFileError}</p>
+                  {(photoFileError || fieldErrors.photo) && (
+                    <p className="upgrade-form-error-message">{photoFileError || fieldErrors.photo}</p>
                   )}
                 </div>
                 
@@ -1307,10 +1444,22 @@ export function Hero() {
                     type="text" 
                     id="upgrade-street" 
                     name="street"
-                    className="upgrade-form-input" 
+                    className={`upgrade-form-input ${fieldErrors.street ? 'upgrade-form-input-error' : ''}`}
                     required 
                     placeholder="123 Main Street"
+                    onChange={() => {
+                      if (fieldErrors.street) {
+                        setFieldErrors(prev => {
+                          const newErrors = { ...prev }
+                          delete newErrors.street
+                          return newErrors
+                        })
+                      }
+                    }}
                   />
+                  {fieldErrors.street && (
+                    <p className="upgrade-form-field-error">{fieldErrors.street}</p>
+                  )}
                 </div>
                 
                 <div className="upgrade-form-group">
@@ -1331,10 +1480,22 @@ export function Hero() {
                       type="text" 
                       id="upgrade-city" 
                       name="city"
-                      className="upgrade-form-input" 
+                      className={`upgrade-form-input ${fieldErrors.city ? 'upgrade-form-input-error' : ''}`}
                       required 
                       placeholder="Miami"
+                      onChange={() => {
+                        if (fieldErrors.city) {
+                          setFieldErrors(prev => {
+                            const newErrors = { ...prev }
+                            delete newErrors.city
+                            return newErrors
+                          })
+                        }
+                      }}
                     />
+                    {fieldErrors.city && (
+                      <p className="upgrade-form-field-error">{fieldErrors.city}</p>
+                    )}
                   </div>
                   
                   <div className="upgrade-form-group">
@@ -1342,8 +1503,17 @@ export function Hero() {
                     <select 
                       id="upgrade-state" 
                       name="state"
-                      className="upgrade-form-input" 
+                      className={`upgrade-form-input ${fieldErrors.state ? 'upgrade-form-input-error' : ''}`}
                       required
+                      onChange={() => {
+                        if (fieldErrors.state) {
+                          setFieldErrors(prev => {
+                            const newErrors = { ...prev }
+                            delete newErrors.state
+                            return newErrors
+                          })
+                        }
+                      }}
                     >
                       <option value="">Select state</option>
                       <option value="AL">Alabama</option>
@@ -1397,6 +1567,9 @@ export function Hero() {
                       <option value="WI">Wisconsin</option>
                       <option value="WY">Wyoming</option>
                     </select>
+                    {fieldErrors.state && (
+                      <p className="upgrade-form-field-error">{fieldErrors.state}</p>
+                    )}
                   </div>
                 </div>
                 
@@ -1406,30 +1579,55 @@ export function Hero() {
                     type="text" 
                     id="upgrade-zip" 
                     name="zip"
-                    className="upgrade-form-input" 
+                    className={`upgrade-form-input ${fieldErrors.zip ? 'upgrade-form-input-error' : ''}`}
                     required 
                     pattern="[0-9]{5}"
                     placeholder="12345"
                     maxLength={5}
+                    onChange={() => {
+                      if (fieldErrors.zip) {
+                        setFieldErrors(prev => {
+                          const newErrors = { ...prev }
+                          delete newErrors.zip
+                          return newErrors
+                        })
+                      }
+                    }}
                   />
+                  {fieldErrors.zip && (
+                    <p className="upgrade-form-field-error">{fieldErrors.zip}</p>
+                  )}
                 </div>
                 
                 <div className="upgrade-form-acknowledgment">
-                  <label className="upgrade-form-checkbox-label">
+                  <label className={`upgrade-form-checkbox-label ${fieldErrors.consent ? 'upgrade-form-checkbox-label-error' : ''}`}>
                     <input 
                       type="checkbox" 
                       name="consent"
-                      className="upgrade-form-checkbox" 
+                      className={`upgrade-form-checkbox ${fieldErrors.consent ? 'upgrade-form-checkbox-error' : ''}`}
                       required 
+                      onChange={() => {
+                        if (fieldErrors.consent) {
+                          setFieldErrors(prev => {
+                            const newErrors = { ...prev }
+                            delete newErrors.consent
+                            return newErrors
+                          })
+                        }
+                      }}
                     />
                     <span>I understand that after my submission is reviewed and approved, I will receive an email with a secure payment link for $10.99 shipping. My new Mini will ship within 7-10 business days after I complete the payment.</span>
                   </label>
+                  {fieldErrors.consent && (
+                    <p className="upgrade-form-field-error">{fieldErrors.consent}</p>
+                  )}
                 </div>
                 
                 <div className="upgrade-form-actions">
                   <button type="button" onClick={() => {
                     setIsUpgradeModalOpen(false)
                     setPhotoFileError('')
+                    setFieldErrors({})
                   }} className="upgrade-form-cancel">
                     Cancel
                   </button>
