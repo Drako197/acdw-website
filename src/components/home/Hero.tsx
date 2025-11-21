@@ -13,6 +13,8 @@ export function Hero() {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false)
   const [photoFileError, setPhotoFileError] = useState<string>('')
+  const [toastMessage, setToastMessage] = useState<string>('')
+  const [toastType, setToastType] = useState<'success' | 'error'>('success')
   
   // Check if user is a contractor
   const isContractor = isAuthenticated && user?.role === 'HVAC_PROFESSIONAL'
@@ -24,6 +26,16 @@ export function Hero() {
     } else {
       navigate('/products?product=sensor')
     }
+  }
+
+  // Toast notification function
+  const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+    setToastMessage(message)
+    setToastType(type)
+    // Auto-dismiss after 5 seconds
+    setTimeout(() => {
+      setToastMessage('')
+    }, 5000)
   }
   
   // Refs for sections that should change background on scroll
@@ -1185,15 +1197,15 @@ export function Hero() {
                     }
                     
                     if (response.ok) {
-                      alert('Thank you! Your upgrade request has been submitted. We\'ll review your submission and email you within 24-48 hours with a secure payment link for $10.99 shipping. Please check your email (and spam folder) for next steps.')
+                      showToast('Thank you! Your upgrade request has been submitted. We\'ll review your submission and email you within 24-48 hours with a secure payment link for $10.99 shipping. Please check your email (and spam folder) for next steps.', 'success')
                       setIsUpgradeModalOpen(false)
                       setPhotoFileError('')
                     } else {
-                      alert('Something went wrong. Please try again or email us directly at support@acdrainwiz.com')
+                      showToast('Something went wrong. Please try again or email us directly at support@acdrainwiz.com', 'error')
                     }
                   } catch (error) {
                     console.error('Form submission error:', error)
-                    alert('Network error. Please try again or email us at support@acdrainwiz.com')
+                    showToast('Network error. Please try again or email us at support@acdrainwiz.com', 'error')
                   }
                 }}
               >
@@ -1428,6 +1440,31 @@ export function Hero() {
               </form>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className={`toast-notification toast-${toastType}`}>
+          <div className="toast-content">
+            {toastType === 'success' ? (
+              <svg className="toast-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            ) : (
+              <svg className="toast-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            )}
+            <p className="toast-message">{toastMessage}</p>
+          </div>
+          <button 
+            className="toast-close"
+            onClick={() => setToastMessage('')}
+            aria-label="Close notification"
+          >
+            ×
+          </button>
         </div>
       )}
     </>

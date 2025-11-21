@@ -249,7 +249,7 @@ export function ContactPage() {
     setFormData(prev => ({
       ...prev,
       [name]: value
-      }))
+    }))
       // Clear error when user starts typing
       if (fieldErrors[name]) {
         setFieldErrors(prev => {
@@ -484,14 +484,14 @@ export function ContactPage() {
       
       if (response.ok) {
         setSubmitSuccess(true)
-        // Reset form
-        setFormData({
+    // Reset form
+    setFormData({
           firstName: '',
           lastName: '',
-          email: '',
-          company: '',
-          phone: '',
-          customerType: '',
+      email: '',
+      company: '',
+      phone: '',
+      customerType: '',
           message: '',
           referralSource: '',
           consent: false,
@@ -620,23 +620,23 @@ export function ContactPage() {
                     <div className="contact-form-field">
                       <label htmlFor="lastName" className="contact-form-label">
                         Last Name *
-                      </label>
-                      <input
-                        type="text"
+                  </label>
+                  <input
+                    type="text"
                         id="lastName"
                         name="lastName"
                         value={formData.lastName}
-                        onChange={handleInputChange}
+                    onChange={handleInputChange}
                         onBlur={handleBlur}
-                        required
+                    required
                         className={`input ${fieldErrors.lastName ? 'input-error' : ''}`}
                         placeholder="Last name"
-                      />
+                  />
                       {fieldErrors.lastName && (
                         <p className="field-error-message">{fieldErrors.lastName}</p>
                       )}
                     </div>
-                  </div>
+                </div>
 
                   <div className="contact-form-field">
                       <label htmlFor="email" className="contact-form-label">
@@ -656,7 +656,7 @@ export function ContactPage() {
                   {fieldErrors.email && (
                     <p className="field-error-message">{fieldErrors.email}</p>
                   )}
-                </div>
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
