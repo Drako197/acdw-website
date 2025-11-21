@@ -12,6 +12,7 @@ export function Hero() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false)
+  const [photoFileError, setPhotoFileError] = useState<string>('')
   
   // Check if user is a contractor
   const isContractor = isAuthenticated && user?.role === 'HVAC_PROFESSIONAL'
@@ -1085,9 +1086,15 @@ export function Hero() {
       
       {/* Core 1.0 Upgrade Modal */}
       {isUpgradeModalOpen && (
-        <div className="upgrade-modal-overlay" onClick={() => setIsUpgradeModalOpen(false)}>
+        <div className="upgrade-modal-overlay" onClick={() => {
+          setIsUpgradeModalOpen(false)
+          setPhotoFileError('')
+        }}>
           <div className="upgrade-modal-container" onClick={(e) => e.stopPropagation()}>
-            <button className="upgrade-modal-close" onClick={() => setIsUpgradeModalOpen(false)}>
+            <button className="upgrade-modal-close" onClick={() => {
+              setIsUpgradeModalOpen(false)
+              setPhotoFileError('')
+            }}>
               ×
             </button>
             
@@ -1118,7 +1125,23 @@ export function Hero() {
                 onSubmit={async (e) => {
                   e.preventDefault()
                   
+                  // Check file size before submission
                   const form = e.target as HTMLFormElement
+                  const photoInput = form.querySelector('#upgrade-photo') as HTMLInputElement
+                  if (photoInput?.files && photoInput.files[0]) {
+                    const fileSize = photoInput.files[0].size
+                    const maxSize = 5 * 1024 * 1024 // 5MB in bytes
+                    if (fileSize > maxSize) {
+                      setPhotoFileError('File size must be 5MB or less. Please compress your image and try again.')
+                      return
+                    }
+                  }
+                  
+                  // Don't submit if there's a file error
+                  if (photoFileError) {
+                    return
+                  }
+                  
                   const formData = new FormData(form)
                   
                   // Build submission data object
@@ -1164,6 +1187,7 @@ export function Hero() {
                     if (response.ok) {
                       alert('Thank you! Your upgrade request has been submitted. We\'ll review your submission and email you within 24-48 hours with a secure payment link for $10.99 shipping. Please check your email (and spam folder) for next steps.')
                       setIsUpgradeModalOpen(false)
+                      setPhotoFileError('')
                     } else {
                       alert('Something went wrong. Please try again or email us directly at support@acdrainwiz.com')
                     }
@@ -1236,16 +1260,33 @@ export function Hero() {
                 <div className="upgrade-form-group">
                   <label className="upgrade-form-label" htmlFor="upgrade-photo">Photo of Installed Core 1.0 (Proof of Purchase) *</label>
                   <p className="upgrade-form-helper">
-                    Please upload a clear photo showing your Core 1.0 unit installed on your AC drain line. This photo serves as proof of purchase and is required to process your upgrade request.
+                    Please upload a clear photo showing your Core 1.0 unit installed on your AC drain line. This photo serves as proof of purchase and is required to process your upgrade request. Maximum file size: 5MB.
                   </p>
                   <input 
                     type="file" 
                     id="upgrade-photo" 
                     name="photo"
-                    className="upgrade-form-file" 
+                    className={`upgrade-form-file ${photoFileError ? 'upgrade-form-file-error' : ''}`}
                     accept="image/*"
-                    required 
+                    required
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) {
+                        const maxSize = 5 * 1024 * 1024 // 5MB in bytes
+                        if (file.size > maxSize) {
+                          setPhotoFileError('File size must be 5MB or less. Please compress your image and try again.')
+                          e.target.value = '' // Clear the file input
+                        } else {
+                          setPhotoFileError('')
+                        }
+                      } else {
+                        setPhotoFileError('')
+                      }
+                    }}
                   />
+                  {photoFileError && (
+                    <p className="upgrade-form-error-message">{photoFileError}</p>
+                  )}
                 </div>
                 
                 <div className="upgrade-form-group">
@@ -1374,7 +1415,10 @@ export function Hero() {
                 </div>
                 
                 <div className="upgrade-form-actions">
-                  <button type="button" onClick={() => setIsUpgradeModalOpen(false)} className="upgrade-form-cancel">
+                  <button type="button" onClick={() => {
+                    setIsUpgradeModalOpen(false)
+                    setPhotoFileError('')
+                  }} className="upgrade-form-cancel">
                     Cancel
                   </button>
                   <button type="submit" className="upgrade-form-submit">

@@ -2402,6 +2402,14 @@
     @apply hover:file:bg-blue-100 cursor-pointer;
   }
 
+  .upgrade-form-file-error {
+    @apply border-red-500 bg-red-50;
+  }
+
+  .upgrade-form-error-message {
+    @apply text-red-600 text-sm italic mt-2;
+  }
+
   .upgrade-form-acknowledgment {
     @apply bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded;
   }
