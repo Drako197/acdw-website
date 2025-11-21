@@ -1014,48 +1014,53 @@ export function Hero() {
 
       {/* Heritage Section - Core 1.0 Historical Reference */}
       <div ref={heritageRef} className="heritage-section-container">
-        <div className="heritage-section-content">
-          <div className="heritage-section-header">
-            <h2 className="heritage-section-title">Where It Started</h2>
-            <p className="heritage-section-subtitle">Our foundation that led to the Mini</p>
+        {/* Top Section - Full Width Hero with Background Image */}
+        <div className="heritage-hero-section">
+          <div className="heritage-hero-content">
+            <h2 className="heritage-hero-title">Where It Started</h2>
+            <p className="heritage-hero-subtitle">Our foundation that led to the Mini</p>
+            <h3 className="heritage-hero-product-title">AC Drain Wiz Core 1.0</h3>
+            <p className="heritage-hero-description">
+              The proven foundation solution that started it all. Our Core 1.0 system pioneered the AC drain line maintenance category, establishing the clear PVC design and maintenance access principles that evolved into our flagship Mini. While Core 1.0 is now deprecated in favor of the more compact and versatile Mini, it remains a testament to our commitment to innovation and reliability.
+            </p>
           </div>
-          
-          <div className="heritage-section-card">
-            <div className="heritage-section-text">
-              <div className="heritage-section-icon">
+        </div>
+
+        {/* Bottom Section - Two Column Layout */}
+        <div className="heritage-bottom-section">
+          <div className="heritage-bottom-container">
+            {/* Left Column - Upgrade Offer */}
+            <div className="heritage-upgrade-column">
+              <div className="heritage-upgrade-badge">
+                <GiftIcon className="heritage-upgrade-badge-icon" />
+                Exclusive Loyalty Offer
+              </div>
+              <h4 className="heritage-upgrade-title">Free Upgrade to AC Drain Wiz Mini</h4>
+              <p className="heritage-upgrade-description">
+                Thank you for being an early adopter! As a Core 1.0 customer, you're eligible for a <strong>FREE upgrade to the new Mini</strong>. Submit your request below with a photo of your installed Core 1.0 unit as proof of purchase. We'll review your submission and email you a secure payment link for $10.99 shipping. Once payment is received, we'll ship your new Mini within 7-10 business days.
+              </p>
+              <button 
+                onClick={() => setIsUpgradeModalOpen(true)}
+                className="heritage-upgrade-cta"
+              >
+                Claim Your Free Upgrade
+              </button>
+            </div>
+
+            {/* Right Column - Support Information */}
+            <div className="heritage-support-column">
+              <div className="heritage-support-icon">
                 <svg className="heritage-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="heritage-section-card-title">AC Drain Wiz Core 1.0</h3>
-              <p className="heritage-section-card-description">
-                The proven foundation solution that started it all. Our Core 1.0 system pioneered the AC drain line maintenance category, establishing the clear PVC design and maintenance access principles that evolved into our flagship Mini. While Core 1.0 is now deprecated in favor of the more compact and versatile Mini, it remains a testament to our commitment to innovation and reliability.
-              </p>
-              
-              {/* Exclusive Upgrade Offer */}
-              <div className="heritage-upgrade-offer">
-                <div className="heritage-upgrade-badge">
-                  <GiftIcon className="heritage-upgrade-badge-icon" />
-                  Exclusive Loyalty Offer
-                </div>
-                <h4 className="heritage-upgrade-title">Free Upgrade to AC Drain Wiz Mini</h4>
-                <p className="heritage-upgrade-description">
-                  Thank you for being an early adopter! As a Core 1.0 customer, you're eligible for a <strong>FREE upgrade to the new Mini</strong>. Submit your request below with a photo of your installed Core 1.0 unit as proof of purchase. We'll review your submission and email you a secure payment link for $10.99 shipping. Once payment is received, we'll ship your new Mini within 7-10 business days.
-                </p>
-                <button 
-                  onClick={() => setIsUpgradeModalOpen(true)}
-                  className="heritage-upgrade-cta"
-                >
-                  Claim Your Free Upgrade
-                </button>
-              </div>
-              
-              <p className="heritage-section-card-note">
+              <h4 className="heritage-support-title">Core 1.0 Support</h4>
+              <p className="heritage-support-description">
                 <strong>Need support?</strong> Your Core 1.0 system continues to be fully supported. If you need replacement parts or have questions, please contact our support team.
               </p>
               <button 
                 onClick={() => navigate('/support#product-support')}
-                className="heritage-section-cta-secondary"
+                className="heritage-support-cta"
               >
                 Contact Support for Core 1.0
               </button>

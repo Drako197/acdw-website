@@ -2121,78 +2121,96 @@
 
   /* Heritage Section Styles */
   .heritage-section-container {
-    @apply px-4 sm:px-6 lg:px-8;
-    background-image: url('/images/acdw-core-showcase-background.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
+    @apply w-full;
     transition: background-color 0.7s ease-in-out;
     will-change: background-color;
-  }
-
-  /* Overlay gradient for text readability */
-  .heritage-section-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.3) 100%);
-    z-index: 1;
   }
 
   .heritage-section-container.section-active {
     @apply bg-black;
   }
 
-  /* Text colors need to change when background is black */
-  .heritage-section-container.section-active .heritage-section-title,
-  .heritage-section-container.section-active .heritage-section-subtitle,
-  .heritage-section-container.section-active .heritage-section-card-title,
-  .heritage-section-container.section-active .heritage-section-card-description {
-    @apply text-white;
+  /* Top Hero Section - 60vh with Background Image */
+  .heritage-hero-section {
+    position: relative;
+    height: 60vh;
+    min-height: 400px;
+    background-image: url('/images/acdw-core-showcase-background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  /* Keep note text black even when section is active */
-  .heritage-section-container.section-active .heritage-section-card-note,
-  .heritage-section-container.section-active .heritage-section-card-note strong {
-    @apply text-black;
+  .heritage-hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 100%);
+    z-index: 1;
   }
 
-  .heritage-section-content {
-    @apply max-w-4xl mx-auto relative z-10 py-24 md:py-32;
+  .heritage-hero-content {
+    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10;
   }
 
-  .heritage-section-container.section-active .heritage-section-content {
+  .heritage-hero-title {
+    @apply text-4xl md:text-5xl font-bold text-white mb-2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .heritage-hero-subtitle {
+    @apply text-lg md:text-xl text-white/90 mb-6;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  .heritage-hero-product-title {
+    @apply text-3xl md:text-4xl font-bold text-white mb-4;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .heritage-hero-description {
+    @apply text-white text-base md:text-lg leading-relaxed max-w-3xl mx-auto;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Bottom Section - Two Column Layout with Dark Gradient */
+  .heritage-bottom-section {
     @apply w-full;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.95) 100%);
+    padding: 4rem 0;
   }
 
-  .heritage-section-header {
-    @apply text-center mb-8;
+  .heritage-bottom-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
   }
 
-  .heritage-section-title {
-    @apply text-4xl font-bold text-white mb-2;
+  @media (max-width: 768px) {
+    .heritage-bottom-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
   }
 
-  .heritage-section-subtitle {
-    @apply text-lg text-white/90;
+  /* Left Column - Upgrade Offer */
+  .heritage-upgrade-column {
+    @apply flex flex-col;
   }
 
-  .heritage-section-card {
-    @apply bg-white/30 backdrop-blur-md rounded-xl p-8 shadow-lg border border-white/20;
+  /* Right Column - Support Information */
+  .heritage-support-column {
+    @apply flex flex-col;
   }
 
-  .heritage-section-text {
-    @apply flex-1;
-  }
-
-  .heritage-section-icon {
+  .heritage-support-icon {
     @apply mb-4;
   }
 
@@ -2200,47 +2218,29 @@
     @apply w-12 h-12 text-white;
   }
 
-  .heritage-section-card-title {
+  .heritage-support-title {
     @apply text-2xl font-bold text-white mb-4;
   }
 
-  .heritage-section-card-description {
-    @apply text-white leading-relaxed mb-4;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  .heritage-support-description {
+    @apply text-white leading-relaxed mb-6;
   }
 
-  .heritage-section-card-note {
-    @apply text-sm text-black bg-white/20 backdrop-blur-sm p-4 rounded-lg mb-4 leading-relaxed border border-white/30;
+  .heritage-support-description strong {
+    @apply text-orange-400 font-semibold;
   }
 
-  .heritage-section-card-note strong {
-    @apply text-black;
-  }
-
-  .heritage-section-cta {
-    @apply px-6 py-2 text-sm font-semibold;
-    background: rgba(255, 255, 255, 0.9);
-    color: #0077C5;
-    border: 2px solid rgba(255, 255, 255, 0.9);
-    border-radius: 0.5rem;
-    transition: all 0.2s;
-  }
-
-  .heritage-section-cta:hover {
-    background: rgba(255, 255, 255, 1);
-    border-color: rgba(255, 255, 255, 1);
-  }
-
-  .heritage-section-cta-secondary {
-    @apply px-6 py-2 text-sm font-semibold;
+  .heritage-support-cta {
+    @apply px-6 py-3 text-base font-semibold;
     background: transparent;
     color: rgba(255, 255, 255, 0.9);
     border: 2px solid rgba(255, 255, 255, 0.5);
     border-radius: 0.5rem;
     transition: all 0.2s;
+    align-self: flex-start;
   }
 
-  .heritage-section-cta-secondary:hover {
+  .heritage-support-cta:hover {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.8);
   }
