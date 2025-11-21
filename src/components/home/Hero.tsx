@@ -1157,7 +1157,7 @@ export function Hero() {
                     city: formData.get('city') as string || '',
                     state: formData.get('state') as string || '',
                     zip: formData.get('zip') as string || '',
-                    acknowledge: formData.get('acknowledge') ? 'yes' : 'no'
+                    consent: formData.get('consent') ? 'yes' : 'no'
                   }
                   
                   // Check if we're in development mode
@@ -1406,7 +1406,7 @@ export function Hero() {
                   <label className="upgrade-form-checkbox-label">
                     <input 
                       type="checkbox" 
-                      name="acknowledge"
+                      name="consent"
                       className="upgrade-form-checkbox" 
                       required 
                     />
