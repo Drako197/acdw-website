@@ -2432,7 +2432,8 @@
 
   /* Toast Notification */
   .toast-notification {
-    @apply fixed top-4 right-4 z-50 max-w-md;
+    @apply fixed top-4 right-4 max-w-md;
+    z-index: 9999;
     display: flex;
     align-items: flex-start;
     gap: 1rem;
@@ -2556,6 +2557,56 @@
   }
 
   .upgrade-form-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Upgrade Form Success State */
+  .upgrade-form-success {
+    @apply text-center py-8 px-4;
+  }
+
+  .upgrade-form-success-icon {
+    @apply mx-auto mb-6 w-20 h-20 rounded-full bg-green-100 flex items-center justify-center;
+  }
+
+  .upgrade-form-success-icon svg {
+    @apply w-12 h-12 text-green-600;
+  }
+
+  .upgrade-form-success-title {
+    @apply text-2xl font-bold text-gray-900 mb-4;
+  }
+
+  .upgrade-form-success-message {
+    @apply text-base text-gray-700 mb-8 leading-relaxed;
+  }
+
+  .upgrade-form-success-next-steps {
+    @apply bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 text-left;
+  }
+
+  .upgrade-form-success-next-steps-title {
+    @apply text-lg font-semibold text-gray-900 mb-4;
+  }
+
+  .upgrade-form-success-next-steps-list {
+    @apply space-y-3 text-sm text-gray-700;
+    list-style: decimal;
+    padding-left: 1.5rem;
+  }
+
+  .upgrade-form-success-next-steps-list li {
+    @apply leading-relaxed;
+  }
+
+  .upgrade-form-success-close {
+    @apply px-8 py-3 text-base font-semibold text-white bg-orange-600 rounded-lg;
+    @apply hover:bg-orange-700 transition-all;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .upgrade-form-success-close:hover {
     transform: translateY(-1px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   }

@@ -16,6 +16,7 @@ export function Hero() {
   const [toastMessage, setToastMessage] = useState<string>('')
   const [toastType, setToastType] = useState<'success' | 'error'>('success')
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [isUpgradeFormSubmitted, setIsUpgradeFormSubmitted] = useState(false)
   
   // Check if user is a contractor
   const isContractor = isAuthenticated && user?.role === 'HVAC_PROFESSIONAL'
@@ -1103,35 +1104,73 @@ export function Hero() {
           setIsUpgradeModalOpen(false)
           setPhotoFileError('')
           setFieldErrors({})
+          setIsUpgradeFormSubmitted(false)
         }}>
           <div className="upgrade-modal-container" onClick={(e) => e.stopPropagation()}>
             <button className="upgrade-modal-close" onClick={() => {
               setIsUpgradeModalOpen(false)
               setPhotoFileError('')
               setFieldErrors({})
+              setIsUpgradeFormSubmitted(false)
             }}>
               ×
             </button>
             
             <div className="upgrade-modal-content">
-              <div className="upgrade-modal-header">
-                <h3 className="upgrade-modal-title">Request Your Free Core 1.0 to Mini Upgrade</h3>
-                <p className="upgrade-modal-subtitle">
-                  This is a registration form, not a payment form. Submit your information and photo below to get started.
-                </p>
-              </div>
+              {isUpgradeFormSubmitted ? (
+                /* Success Message */
+                <div className="upgrade-form-success">
+                  <div className="upgrade-form-success-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="upgrade-form-success-title">Request Submitted Successfully!</h3>
+                  <p className="upgrade-form-success-message">
+                    Thank you! Your upgrade request has been submitted. We'll review your submission and email you within 24-48 hours with a secure payment link for $10.99 shipping.
+                  </p>
+                  <div className="upgrade-form-success-next-steps">
+                    <p className="upgrade-form-success-next-steps-title">What's Next?</p>
+                    <ol className="upgrade-form-success-next-steps-list">
+                      <li>Check your email (including spam folder) for our response</li>
+                      <li>Click the secure payment link in the email</li>
+                      <li>Complete the $10.99 shipping payment</li>
+                      <li>Your new Mini will ship within 7-10 business days</li>
+                    </ol>
+                  </div>
+                  <button 
+                    type="button" 
+                    onClick={() => {
+                      setIsUpgradeModalOpen(false)
+                      setPhotoFileError('')
+                      setFieldErrors({})
+                      setIsUpgradeFormSubmitted(false)
+                    }} 
+                    className="upgrade-form-success-close"
+                  >
+                    Close
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="upgrade-modal-header">
+                    <h3 className="upgrade-modal-title">Request Your Free Core 1.0 to Mini Upgrade</h3>
+                    <p className="upgrade-modal-subtitle">
+                      This is a registration form, not a payment form. Submit your information and photo below to get started.
+                    </p>
+                  </div>
 
-              {/* Process Steps */}
-              <div className="upgrade-process-steps">
-                <h4 className="upgrade-process-steps-title">How It Works:</h4>
-                <ol className="upgrade-process-steps-list">
-                  <li>Submit this form with your Core 1.0 photo</li>
-                  <li>We'll review and email you a secure payment link ($10.99 shipping)</li>
-                  <li>Complete payment and your Mini ships within 7-10 business days</li>
-                </ol>
-              </div>
-              
-              <form 
+                  {/* Process Steps */}
+                  <div className="upgrade-process-steps">
+                    <h4 className="upgrade-process-steps-title">How It Works:</h4>
+                    <ol className="upgrade-process-steps-list">
+                      <li>Submit this form with your Core 1.0 photo</li>
+                      <li>We'll review and email you a secure payment link ($10.99 shipping)</li>
+                      <li>Complete payment and your Mini ships within 7-10 business days</li>
+                    </ol>
+                  </div>
+                  
+                  <form 
                 className="upgrade-modal-form" 
                 name="core-upgrade"
                 data-netlify="true"
@@ -1274,8 +1313,7 @@ export function Hero() {
                     }
                     
                     if (response.ok) {
-                      showToast('Thank you! Your upgrade request has been submitted. We\'ll review your submission and email you within 24-48 hours with a secure payment link for $10.99 shipping. Please check your email (and spam folder) for next steps.', 'success')
-                      setIsUpgradeModalOpen(false)
+                      setIsUpgradeFormSubmitted(true)
                       setPhotoFileError('')
                       setFieldErrors({})
                     } else {
@@ -1628,6 +1666,7 @@ export function Hero() {
                     setIsUpgradeModalOpen(false)
                     setPhotoFileError('')
                     setFieldErrors({})
+                    setIsUpgradeFormSubmitted(false)
                   }} className="upgrade-form-cancel">
                     Cancel
                   </button>
@@ -1636,6 +1675,8 @@ export function Hero() {
                   </button>
                 </div>
               </form>
+                </>
+              )}
             </div>
           </div>
         </div>
