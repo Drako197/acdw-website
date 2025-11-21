@@ -2183,14 +2183,15 @@
   .heritage-bottom-section {
     @apply w-full;
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.95) 100%);
-    padding: 4rem 0;
+    padding: 5rem 0;
+    margin-top: 2rem;
   }
 
   .heritage-bottom-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+    gap: 2rem;
   }
 
   @media (max-width: 768px) {
@@ -2203,27 +2204,81 @@
   /* Left Column - Upgrade Offer */
   .heritage-upgrade-column {
     @apply flex flex-col;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    backdrop-filter: blur(10px);
   }
 
   /* Right Column - Support Information */
   .heritage-support-column {
     @apply flex flex-col;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    backdrop-filter: blur(10px);
   }
 
   .heritage-support-icon {
-    @apply mb-4;
+    @apply mb-6 mt-2;
   }
 
   .heritage-icon {
     @apply w-12 h-12 text-white;
   }
 
+  /* Upgrade Column Typography */
+  .heritage-upgrade-title {
+    @apply text-3xl font-bold text-white mb-3;
+  }
+
+  .heritage-upgrade-subtitle {
+    @apply text-base text-white/70 mb-6;
+  }
+
+  .heritage-upgrade-badge {
+    @apply inline-flex items-center gap-2 text-sm font-bold text-white bg-orange-600 px-3 py-1.5 rounded-full mb-6 w-fit;
+  }
+
+  .heritage-upgrade-badge-icon {
+    @apply w-5 h-5;
+  }
+
+  .heritage-upgrade-description {
+    @apply text-white text-base leading-relaxed mb-8;
+  }
+
+  .heritage-upgrade-description strong {
+    @apply text-orange-200 font-bold;
+  }
+
+  .heritage-upgrade-cta {
+    @apply px-8 py-3 text-base font-bold bg-orange-600 text-white rounded-lg;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    align-self: flex-start;
+    margin-top: auto;
+  }
+
+  .heritage-upgrade-cta:hover {
+    @apply bg-orange-700;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Support Column Typography */
   .heritage-support-title {
-    @apply text-2xl font-bold text-white mb-4;
+    @apply text-3xl font-bold text-white mb-3;
+  }
+
+  .heritage-support-subtitle {
+    @apply text-base text-white/70 mb-6;
   }
 
   .heritage-support-description {
-    @apply text-white leading-relaxed mb-6;
+    @apply text-white leading-relaxed mb-8;
   }
 
   .heritage-support-description strong {
@@ -2238,6 +2293,7 @@
     border-radius: 0.5rem;
     transition: all 0.2s;
     align-self: flex-start;
+    margin-top: auto;
   }
 
   .heritage-support-cta:hover {
@@ -2245,43 +2301,6 @@
     border-color: rgba(255, 255, 255, 0.8);
   }
 
-  /* Heritage Upgrade Offer */
-  .heritage-upgrade-offer {
-    @apply bg-gradient-to-r from-orange-500/20 to-orange-600/20 backdrop-blur-sm rounded-xl p-6 my-6;
-    border: 2px solid rgba(255, 165, 0, 0.3);
-  }
-
-  .heritage-upgrade-badge {
-    @apply inline-flex items-center gap-2 text-sm font-bold text-white bg-orange-600 px-3 py-1 rounded-full mb-3;
-  }
-
-  .heritage-upgrade-badge-icon {
-    @apply w-5 h-5;
-  }
-
-  .heritage-upgrade-title {
-    @apply text-2xl font-bold text-white mb-3;
-  }
-
-  .heritage-upgrade-description {
-    @apply text-white text-base leading-relaxed mb-4;
-  }
-
-  .heritage-upgrade-description strong {
-    @apply text-orange-200 font-bold;
-  }
-
-  .heritage-upgrade-cta {
-    @apply px-8 py-3 text-base font-bold bg-orange-600 text-white rounded-lg;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  }
-
-  .heritage-upgrade-cta:hover {
-    @apply bg-orange-700;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-  }
 
   /* Upgrade Modal */
   .upgrade-modal-overlay {

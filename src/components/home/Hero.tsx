@@ -1031,11 +1031,12 @@ export function Hero() {
           <div className="heritage-bottom-container">
             {/* Left Column - Upgrade Offer */}
             <div className="heritage-upgrade-column">
+              <h3 className="heritage-upgrade-title">Free Upgrade to AC Drain Wiz Mini</h3>
+              <p className="heritage-upgrade-subtitle">Exclusive loyalty offer for Core 1.0 customers</p>
               <div className="heritage-upgrade-badge">
                 <GiftIcon className="heritage-upgrade-badge-icon" />
                 Exclusive Loyalty Offer
               </div>
-              <h4 className="heritage-upgrade-title">Free Upgrade to AC Drain Wiz Mini</h4>
               <p className="heritage-upgrade-description">
                 Thank you for being an early adopter! As a Core 1.0 customer, you're eligible for a <strong>FREE upgrade to the new Mini</strong>. Submit your request below with a photo of your installed Core 1.0 unit as proof of purchase. We'll review your submission and email you a secure payment link for $10.99 shipping. Once payment is received, we'll ship your new Mini within 7-10 business days.
               </p>
@@ -1049,12 +1050,13 @@ export function Hero() {
 
             {/* Right Column - Support Information */}
             <div className="heritage-support-column">
+              <h3 className="heritage-support-title">Core 1.0 Support</h3>
+              <p className="heritage-support-subtitle">Full support continues for your Core 1.0 system</p>
               <div className="heritage-support-icon">
                 <svg className="heritage-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h4 className="heritage-support-title">Core 1.0 Support</h4>
               <p className="heritage-support-description">
                 <strong>Need support?</strong> Your Core 1.0 system continues to be fully supported. If you need replacement parts or have questions, please contact our support team.
               </p>
