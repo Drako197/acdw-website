@@ -1175,6 +1175,7 @@ export function Hero() {
                 name="core-upgrade"
                 data-netlify="true"
                 data-netlify-honeypot="bot-field"
+                encType="multipart/form-data"
                 noValidate
                 onSubmit={async (e) => {
                   e.preventDefault()
@@ -1272,20 +1273,23 @@ export function Hero() {
                   setFieldErrors({})
                   setPhotoFileError('')
                   
-                  // Build submission data object
-                  const submissionData: Record<string, string> = {
-                    'form-name': 'core-upgrade',
-                    firstName: formData.get('firstName') as string || '',
-                    lastName: formData.get('lastName') as string || '',
-                    email: formData.get('email') as string || '',
-                    phone: formData.get('phone') as string || '',
-                    photo: formData.get('photo') as string || '',
-                    street: formData.get('street') as string || '',
-                    unit: formData.get('unit') as string || '',
-                    city: formData.get('city') as string || '',
-                    state: formData.get('state') as string || '',
-                    zip: formData.get('zip') as string || '',
-                    consent: formData.get('consent') ? 'yes' : 'no'
+                  // Build FormData for file upload support
+                  const netlifyFormData = new FormData()
+                  netlifyFormData.append('form-name', 'core-upgrade')
+                  netlifyFormData.append('firstName', formData.get('firstName') as string || '')
+                  netlifyFormData.append('lastName', formData.get('lastName') as string || '')
+                  netlifyFormData.append('email', formData.get('email') as string || '')
+                  netlifyFormData.append('phone', formData.get('phone') as string || '')
+                  netlifyFormData.append('street', formData.get('street') as string || '')
+                  netlifyFormData.append('unit', formData.get('unit') as string || '')
+                  netlifyFormData.append('city', formData.get('city') as string || '')
+                  netlifyFormData.append('state', formData.get('state') as string || '')
+                  netlifyFormData.append('zip', formData.get('zip') as string || '')
+                  netlifyFormData.append('consent', formData.get('consent') ? 'yes' : 'no')
+                  
+                  // Add the photo file if it exists
+                  if (photoInput?.files && photoInput.files[0]) {
+                    netlifyFormData.append('photo', photoInput.files[0])
                   }
                   
                   // Check if we're in development mode
@@ -1297,18 +1301,28 @@ export function Hero() {
                     if (isDevelopment) {
                       // In development, simulate a successful submission
                       console.log('📝 [DEV MODE] Core upgrade request simulated:', {
-                        data: submissionData
+                        formName: 'core-upgrade',
+                        firstName: formData.get('firstName'),
+                        lastName: formData.get('lastName'),
+                        email: formData.get('email'),
+                        phone: formData.get('phone'),
+                        photo: photoInput?.files?.[0]?.name || 'No file',
+                        street: formData.get('street'),
+                        city: formData.get('city'),
+                        state: formData.get('state'),
+                        zip: formData.get('zip'),
+                        consent: formData.get('consent') ? 'yes' : 'no'
                       })
                       // Simulate network delay
                       await new Promise(resolve => setTimeout(resolve, 1000))
                       // Create a mock successful response
                       response = new Response(null, { status: 200, statusText: 'OK' })
                     } else {
-                      // In production, submit to Netlify
+                      // In production, submit to Netlify with FormData (supports file uploads)
                       response = await fetch('/', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams(submissionData).toString()
+                        body: netlifyFormData
+                        // Don't set Content-Type header - browser will set it automatically with boundary for multipart/form-data
                       })
                     }
                     
