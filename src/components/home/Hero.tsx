@@ -1095,7 +1095,7 @@ export function Hero() {
               <div className="upgrade-modal-header">
                 <h3 className="upgrade-modal-title">Request Your Free Core 1.0 to Mini Upgrade</h3>
                 <p className="upgrade-modal-subtitle">
-                  This is a registration form, not a payment form. Submit your information and photo below. We'll review your submission and email you a secure payment link for $10.99 shipping. Your Mini will ship within 7-10 business days after payment is received.
+                  This is a registration form, not a payment form. Submit your information and photo below to get started.
                 </p>
               </div>
 
@@ -1104,10 +1104,8 @@ export function Hero() {
                 <h4 className="upgrade-process-steps-title">How It Works:</h4>
                 <ol className="upgrade-process-steps-list">
                   <li>Submit this form with your Core 1.0 photo</li>
-                  <li>We'll review and verify your submission</li>
-                  <li>You'll receive an email with a secure payment link ($10.99 shipping)</li>
-                  <li>Complete payment via the secure link</li>
-                  <li>Your Mini ships within 7-10 business days</li>
+                  <li>We'll review and email you a secure payment link ($10.99 shipping)</li>
+                  <li>Complete payment and your Mini ships within 7-10 business days</li>
                 </ol>
               </div>
               
