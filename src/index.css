@@ -5657,15 +5657,21 @@
 }
 
 .email-preferences-button {
-  @apply flex-1;
+  @apply flex-1 px-6 py-3 text-base font-semibold rounded-lg transition-all;
 }
 
 .email-preferences-button-primary {
-  @apply btn-primary disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 disabled:opacity-50 disabled:cursor-not-allowed;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.email-preferences-button-primary:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
 }
 
 .email-preferences-button-secondary {
-  @apply btn-secondary;
+  @apply bg-gray-100 text-gray-700 hover:bg-gray-200 active:bg-gray-300 border border-gray-300;
 }
 
 /* Privacy Notice */
@@ -5757,7 +5763,7 @@
 }
 
 .unsubscribe-success-actions {
-  @apply space-y-4;
+  @apply space-y-4 flex flex-col sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4;
 }
 
 /* Form Container */
@@ -5812,19 +5818,32 @@
 
 /* Buttons */
 .unsubscribe-button {
-  @apply transition-all;
+  @apply px-6 py-3 text-base font-semibold rounded-lg transition-all;
 }
 
 .unsubscribe-button-primary {
-  @apply btn-primary;
+  @apply bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.unsubscribe-button-primary:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
 }
 
 .unsubscribe-button-secondary {
-  @apply btn-secondary;
+  @apply bg-gray-100 text-gray-700 hover:bg-gray-200 active:bg-gray-300 border border-gray-300;
 }
 
 .unsubscribe-button-submit {
-  @apply w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply w-full bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply px-6 py-3 text-base font-semibold rounded-lg transition-all;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.unsubscribe-button-submit:hover:not(:disabled) {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
 }
 
 .unsubscribe-form-note {
