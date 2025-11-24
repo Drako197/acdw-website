@@ -49,7 +49,9 @@ export function UnsubscribePage() {
         response = new Response(null, { status: 200, statusText: 'OK' })
       } else {
         // In production, submit to Netlify
-        response = await fetch('/', {
+        // Ensure we're submitting to the correct endpoint
+        const submitUrl = window.location.origin + '/'
+        response = await fetch(submitUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: new URLSearchParams(submissionData).toString()
@@ -71,32 +73,31 @@ export function UnsubscribePage() {
 
   if (submitSuccess) {
     return (
-      <div className="unsubscribe-page">
-        <div className="container py-16">
-          <div className="max-w-2xl mx-auto">
-            <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-              <div className="flex justify-center mb-6">
-                <CheckCircleIcon className="h-16 w-16 text-green-500" />
+      <div className="unsubscribe-container">
+        <div className="unsubscribe-wrapper">
+          <div className="unsubscribe-content">
+            <div className="unsubscribe-success-card">
+              <div className="unsubscribe-success-icon-wrapper">
+                <CheckCircleIcon className="unsubscribe-success-icon" />
               </div>
-              <h1 className="heading-1 mb-4">You've Been Unsubscribed</h1>
-              <p className="text-large text-gray-600 mb-6">
+              <h1 className="unsubscribe-success-title">You've Been Unsubscribed</h1>
+              <p className="unsubscribe-success-message">
                 You will no longer receive marketing emails from AC Drain Wiz.
               </p>
-              <p className="text-gray-600 mb-8">
+              <p className="unsubscribe-success-note">
                 We're sorry to see you go! You'll still receive important emails about your orders and account.
               </p>
               
-              <div className="space-y-4">
+              <div className="unsubscribe-success-actions">
                 <button
                   onClick={() => navigate('/email-preferences')}
-                  className="btn-primary w-full sm:w-auto"
+                  className="unsubscribe-button unsubscribe-button-primary"
                 >
                   Manage Email Preferences
                 </button>
-                <br />
                 <button
                   onClick={() => navigate('/')}
-                  className="btn-secondary w-full sm:w-auto"
+                  className="unsubscribe-button unsubscribe-button-secondary"
                 >
                   Return to Home
                 </button>
@@ -109,38 +110,38 @@ export function UnsubscribePage() {
   }
 
   return (
-    <div className="unsubscribe-page">
-      <div className="container py-16">
-        <div className="max-w-2xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <div className="flex justify-center mb-6">
-              <EnvelopeIcon className="h-16 w-16 text-gray-400" />
+    <div className="unsubscribe-container">
+      <div className="unsubscribe-wrapper">
+        <div className="unsubscribe-content">
+          {/* Header Section */}
+          <div className="unsubscribe-header">
+            <div className="unsubscribe-icon-wrapper">
+              <EnvelopeIcon className="unsubscribe-icon" />
             </div>
-            <h1 className="heading-1 mb-4">Unsubscribe from Our Emails</h1>
-            <p className="text-large text-gray-600">
+            <h1 className="unsubscribe-title">Unsubscribe from Our Emails</h1>
+            <p className="unsubscribe-subtitle">
               We're sorry to see you go. Let us know why you're leaving.
             </p>
           </div>
 
-          {/* Alternative Option */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-            <h3 className="font-semibold text-gray-900 mb-2">
+          {/* Alternative Option Card */}
+          <div className="unsubscribe-alternative-card">
+            <h3 className="unsubscribe-alternative-title">
               Don't want to unsubscribe from everything?
             </h3>
-            <p className="text-gray-700 text-sm mb-4">
+            <p className="unsubscribe-alternative-description">
               You can manage your email preferences and choose which types of emails you want to receive.
             </p>
             <button
               onClick={() => navigate('/email-preferences')}
-              className="btn-secondary"
+              className="unsubscribe-button unsubscribe-button-secondary"
             >
               Manage Preferences Instead
             </button>
           </div>
 
           {/* Unsubscribe Form */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="unsubscribe-form-container">
             <form 
               onSubmit={handleSubmit}
               name="unsubscribe"
@@ -159,34 +160,34 @@ export function UnsubscribePage() {
                 </label>
               </div>
 
-              {/* Email Input */}
-              <div className="mb-6">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              {/* Email Input Field */}
+              <div className="unsubscribe-email-field">
+                <label htmlFor="unsubscribe-email" className="unsubscribe-email-label">
                   Email Address *
                 </label>
                 <input
                   type="email"
-                  id="email"
+                  id="unsubscribe-email"
                   name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="input"
+                  className="unsubscribe-email-input"
                   placeholder="your.email@example.com"
                 />
               </div>
 
-              {/* Reason */}
-              <div className="mb-6">
-                <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-2">
+              {/* Unsubscribe Reason Field */}
+              <div className="unsubscribe-reason-field">
+                <label htmlFor="unsubscribe-reason" className="unsubscribe-reason-label">
                   Why are you unsubscribing? (Optional)
                 </label>
                 <select
-                  id="reason"
+                  id="unsubscribe-reason"
                   name="reason"
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  className="input"
+                  className="unsubscribe-reason-select"
                 >
                   <option value="">Select a reason</option>
                   <option value="too-many-emails">Too many emails</option>
@@ -198,34 +199,30 @@ export function UnsubscribePage() {
                 </select>
               </div>
 
-              {/* Additional Feedback */}
-              <div className="mb-6">
-                <label htmlFor="feedback" className="block text-sm font-medium text-gray-700 mb-2">
+              {/* Feedback Field */}
+              <div className="unsubscribe-feedback-field">
+                <label htmlFor="unsubscribe-feedback" className="unsubscribe-feedback-label">
                   Additional Feedback (Optional)
                 </label>
                 <textarea
-                  id="feedback"
+                  id="unsubscribe-feedback"
                   name="feedback"
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
                   rows={4}
-                  className="input"
+                  className="unsubscribe-feedback-textarea"
                   placeholder="Help us improve by sharing your thoughts..."
                 />
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="unsubscribe-feedback-help">
                   Your feedback helps us serve our customers better
                 </p>
               </div>
 
               {/* Error Message */}
               {submitError && (
-                <div className="rounded-md bg-red-50 p-4 mb-6">
-                  <div className="flex">
-                    <XCircleIcon className="h-5 w-5 text-red-400" />
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-red-800">{submitError}</p>
-                    </div>
-                  </div>
+                <div className="unsubscribe-message unsubscribe-message-error">
+                  <XCircleIcon className="unsubscribe-message-icon" />
+                  <p className="unsubscribe-message-text">{submitError}</p>
                 </div>
               )}
 
@@ -233,21 +230,21 @@ export function UnsubscribePage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                className="unsubscribe-button unsubscribe-button-submit"
               >
                 {isSubmitting ? 'Unsubscribing...' : 'Unsubscribe from All Marketing Emails'}
               </button>
 
-              <p className="text-xs text-gray-500 text-center mt-4">
+              <p className="unsubscribe-form-note">
                 You'll still receive important emails about your orders and account
               </p>
             </form>
           </div>
 
-          {/* Contact Support */}
-          <div className="mt-8 text-center">
-            <p className="text-sm text-gray-600">
-              Having trouble? <button onClick={() => navigate('/contact')} className="text-primary-600 hover:text-primary-700 underline">Contact Support</button>
+          {/* Support Link */}
+          <div className="unsubscribe-support">
+            <p className="unsubscribe-support-text">
+              Having trouble? <button onClick={() => navigate('/contact')} className="unsubscribe-support-link">Contact Support</button>
             </p>
           </div>
         </div>

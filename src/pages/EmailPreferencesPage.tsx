@@ -64,7 +64,9 @@ export function EmailPreferencesPage() {
         response = new Response(null, { status: 200, statusText: 'OK' })
       } else {
         // In production, submit to Netlify
-        response = await fetch('/', {
+        // Ensure we're submitting to the correct endpoint
+        const submitUrl = window.location.origin + '/'
+        response = await fetch(submitUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: new URLSearchParams(submissionData).toString()
@@ -90,22 +92,22 @@ export function EmailPreferencesPage() {
   }
 
   return (
-    <div className="email-preferences-page">
-      <div className="container py-16">
-        <div className="max-w-2xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <div className="flex justify-center mb-6">
-              <EnvelopeIcon className="h-16 w-16 text-primary-600" />
+    <div className="email-preferences-container">
+      <div className="email-preferences-wrapper">
+        <div className="email-preferences-content">
+          {/* Header Section */}
+          <div className="email-preferences-header">
+            <div className="email-preferences-icon-wrapper">
+              <EnvelopeIcon className="email-preferences-icon" />
             </div>
-            <h1 className="heading-1 mb-4">Email Preferences</h1>
-            <p className="text-large text-gray-600">
+            <h1 className="email-preferences-title">Email Preferences</h1>
+            <p className="email-preferences-subtitle">
               Manage what emails you receive from AC Drain Wiz
             </p>
           </div>
 
-          {/* Form */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
+          {/* Form Section */}
+          <div className="email-preferences-form-container">
             <form 
               onSubmit={handleSubmit}
               name="email-preferences"
@@ -124,108 +126,108 @@ export function EmailPreferencesPage() {
                 </label>
               </div>
 
-              {/* Email Input */}
-              <div className="mb-8">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              {/* Email Input Field */}
+              <div className="email-preferences-email-field">
+                <label htmlFor="email-preferences-email" className="email-preferences-email-label">
                   Email Address *
                 </label>
                 <input
                   type="email"
-                  id="email"
+                  id="email-preferences-email"
                   name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="input"
+                  className="email-preferences-email-input"
                   placeholder="your.email@example.com"
                 />
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="email-preferences-email-help">
                   Enter the email address you used to sign up
                 </p>
               </div>
 
-              {/* Preferences */}
-              <div className="mb-8">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Select Your Preferences</h2>
-                <p className="text-sm text-gray-600 mb-6">
+              {/* Preferences Selection Section */}
+              <div className="email-preferences-selection-section">
+                <h2 className="email-preferences-selection-title">Select Your Preferences</h2>
+                <p className="email-preferences-selection-description">
                   Choose which types of emails you'd like to receive from us
                 </p>
 
-                <div className="space-y-4">
-                  {/* Product Updates */}
-                  <label className="flex items-start p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                <div className="email-preferences-options-list">
+                  {/* Product Updates Option */}
+                  <label className="email-preferences-option email-preferences-option-selectable">
                     <input
                       type="checkbox"
                       name="productUpdates"
                       checked={preferences.productUpdates}
                       onChange={() => handlePreferenceChange('productUpdates')}
-                      className="mt-1 h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                      className="email-preferences-option-checkbox"
                     />
-                    <div className="ml-3">
-                      <div className="font-medium text-gray-900">Product Updates</div>
-                      <div className="text-sm text-gray-600">New product launches and feature announcements</div>
+                    <div className="email-preferences-option-content">
+                      <div className="email-preferences-option-title">Product Updates</div>
+                      <div className="email-preferences-option-description">New product launches and feature announcements</div>
                     </div>
                   </label>
 
-                  {/* Promotions */}
-                  <label className="flex items-start p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                  {/* Promotions Option */}
+                  <label className="email-preferences-option email-preferences-option-selectable">
                     <input
                       type="checkbox"
                       name="promotions"
                       checked={preferences.promotions}
                       onChange={() => handlePreferenceChange('promotions')}
-                      className="mt-1 h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                      className="email-preferences-option-checkbox"
                     />
-                    <div className="ml-3">
-                      <div className="font-medium text-gray-900">Promotions & Special Offers</div>
-                      <div className="text-sm text-gray-600">Exclusive discounts and promotional campaigns</div>
+                    <div className="email-preferences-option-content">
+                      <div className="email-preferences-option-title">Promotions & Special Offers</div>
+                      <div className="email-preferences-option-description">Exclusive discounts and promotional campaigns</div>
                     </div>
                   </label>
 
-                  {/* Newsletter */}
-                  <label className="flex items-start p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                  {/* Newsletter Option */}
+                  <label className="email-preferences-option email-preferences-option-selectable">
                     <input
                       type="checkbox"
                       name="newsletter"
                       checked={preferences.newsletter}
                       onChange={() => handlePreferenceChange('newsletter')}
-                      className="mt-1 h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                      className="email-preferences-option-checkbox"
                     />
-                    <div className="ml-3">
-                      <div className="font-medium text-gray-900">Newsletter</div>
-                      <div className="text-sm text-gray-600">Maintenance tips, industry news, and expert advice</div>
+                    <div className="email-preferences-option-content">
+                      <div className="email-preferences-option-title">Newsletter</div>
+                      <div className="email-preferences-option-description">Maintenance tips, industry news, and expert advice</div>
                     </div>
                   </label>
 
-                  {/* Order Updates */}
-                  <label className="flex items-start p-4 border border-primary-200 bg-primary-50 rounded-lg">
+                  {/* Order Updates Option (Required) */}
+                  <label className="email-preferences-option email-preferences-option-required">
                     <input
                       type="checkbox"
                       name="orderUpdates"
                       checked={preferences.orderUpdates}
                       onChange={() => handlePreferenceChange('orderUpdates')}
                       disabled
-                      className="mt-1 h-5 w-5 text-primary-600 border-gray-300 rounded opacity-50"
+                      className="email-preferences-option-checkbox email-preferences-option-checkbox-disabled"
                     />
-                    <div className="ml-3">
-                      <div className="font-medium text-gray-900">Order Updates</div>
-                      <div className="text-sm text-gray-600">Order confirmations, shipping updates, and receipts (required)</div>
+                    <div className="email-preferences-option-content">
+                      <div className="email-preferences-option-title">Order Updates</div>
+                      <div className="email-preferences-option-description">Order confirmations, shipping updates, and receipts (required)</div>
                     </div>
                   </label>
 
-                  {/* Support Emails */}
-                  <label className="flex items-start p-4 border border-primary-200 bg-primary-50 rounded-lg">
+                  {/* Support Emails Option (Required) */}
+                  <label className="email-preferences-option email-preferences-option-required">
                     <input
                       type="checkbox"
                       name="supportEmails"
                       checked={preferences.supportEmails}
                       onChange={() => handlePreferenceChange('supportEmails')}
                       disabled
-                      className="mt-1 h-5 w-5 text-primary-600 border-gray-300 rounded opacity-50"
+                      className="email-preferences-option-checkbox email-preferences-option-checkbox-disabled"
                     />
-                    <div className="ml-3">
-                      <div className="font-medium text-gray-900">Support Communications</div>
-                      <div className="text-sm text-gray-600">Responses to your support requests and account updates (required)</div>
+                    <div className="email-preferences-option-content">
+                      <div className="email-preferences-option-title">Support Communications</div>
+                      <div className="email-preferences-option-description">Responses to your support requests and account updates (required)</div>
                     </div>
                   </label>
                 </div>
@@ -233,43 +235,35 @@ export function EmailPreferencesPage() {
 
               {/* Success Message */}
               {submitSuccess && (
-                <div className="rounded-md bg-green-50 p-4 mb-6">
-                  <div className="flex">
-                    <CheckCircleIcon className="h-5 w-5 text-green-400" />
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-green-800">
-                        Your preferences have been updated successfully!
-                      </p>
-                    </div>
-                  </div>
+                <div className="email-preferences-message email-preferences-message-success">
+                  <CheckCircleIcon className="email-preferences-message-icon" />
+                  <p className="email-preferences-message-text">
+                    Your preferences have been updated successfully!
+                  </p>
                 </div>
               )}
 
               {/* Error Message */}
               {submitError && (
-                <div className="rounded-md bg-red-50 p-4 mb-6">
-                  <div className="flex">
-                    <XCircleIcon className="h-5 w-5 text-red-400" />
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-red-800">{submitError}</p>
-                    </div>
-                  </div>
+                <div className="email-preferences-message email-preferences-message-error">
+                  <XCircleIcon className="email-preferences-message-icon" />
+                  <p className="email-preferences-message-text">{submitError}</p>
                 </div>
               )}
 
-              {/* Submit Button */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              {/* Action Buttons */}
+              <div className="email-preferences-actions">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="email-preferences-button email-preferences-button-primary"
                 >
                   {isSubmitting ? 'Saving...' : 'Save Preferences'}
                 </button>
                 <button
                   type="button"
                   onClick={handleUnsubscribeAll}
-                  className="flex-1 btn-secondary"
+                  className="email-preferences-button email-preferences-button-secondary"
                 >
                   Unsubscribe from All
                 </button>
@@ -277,11 +271,11 @@ export function EmailPreferencesPage() {
             </form>
           </div>
 
-          {/* Privacy Note */}
-          <div className="mt-8 text-center">
-            <p className="text-sm text-gray-600">
+          {/* Privacy Notice */}
+          <div className="email-preferences-privacy">
+            <p className="email-preferences-privacy-text">
               Your privacy is important to us. View our{' '}
-              <button onClick={() => navigate('/privacy-policy')} className="text-primary-600 hover:text-primary-700 underline">
+              <button onClick={() => navigate('/privacy-policy')} className="email-preferences-privacy-link">
                 Privacy Policy
               </button>
               {' '}to learn more about how we handle your data.

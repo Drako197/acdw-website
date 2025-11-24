@@ -5506,3 +5506,341 @@
   @apply btn btn-lg border-2 border-white text-white hover:bg-white hover:text-blue-700 font-semibold px-8;
 }
 
+/* ========================================
+   Email Preferences Page Styles
+   ======================================== */
+
+.email-preferences-container {
+  @apply min-h-screen bg-gray-50;
+}
+
+.email-preferences-wrapper {
+  @apply container py-16;
+}
+
+.email-preferences-content {
+  @apply max-w-2xl mx-auto;
+}
+
+/* Header Section */
+.email-preferences-header {
+  @apply text-center mb-12;
+}
+
+.email-preferences-icon-wrapper {
+  @apply flex justify-center mb-6;
+}
+
+.email-preferences-icon {
+  @apply h-16 w-16 text-primary-600;
+}
+
+.email-preferences-title {
+  @apply heading-1 mb-4;
+}
+
+.email-preferences-subtitle {
+  @apply text-large text-gray-600;
+}
+
+/* Form Container */
+.email-preferences-form-container {
+  @apply bg-white rounded-lg shadow-lg p-8;
+}
+
+/* Email Field */
+.email-preferences-email-field {
+  @apply mb-8;
+}
+
+.email-preferences-email-label {
+  @apply block text-sm font-medium text-gray-700 mb-2;
+}
+
+.email-preferences-email-input {
+  @apply input;
+}
+
+.email-preferences-email-help {
+  @apply text-sm text-gray-500 mt-1;
+}
+
+/* Preferences Selection */
+.email-preferences-selection-section {
+  @apply mb-8;
+}
+
+.email-preferences-selection-title {
+  @apply text-lg font-semibold text-gray-900 mb-4;
+}
+
+.email-preferences-selection-description {
+  @apply text-sm text-gray-600 mb-6;
+}
+
+.email-preferences-options-list {
+  @apply space-y-4;
+}
+
+.email-preferences-option {
+  @apply flex items-start p-4 border rounded-lg cursor-pointer transition-colors;
+}
+
+.email-preferences-option-selectable {
+  @apply border-gray-200 hover:bg-gray-50;
+}
+
+.email-preferences-option-required {
+  @apply border-primary-200 bg-primary-50;
+}
+
+.email-preferences-option-checkbox {
+  @apply mt-1 h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded;
+}
+
+.email-preferences-option-checkbox-disabled {
+  @apply opacity-50;
+}
+
+.email-preferences-option-content {
+  @apply ml-3;
+}
+
+.email-preferences-option-title {
+  @apply font-medium text-gray-900;
+}
+
+.email-preferences-option-description {
+  @apply text-sm text-gray-600;
+}
+
+/* Messages */
+.email-preferences-message {
+  @apply rounded-md p-4 mb-6 flex;
+}
+
+.email-preferences-message-success {
+  @apply bg-green-50;
+}
+
+.email-preferences-message-error {
+  @apply bg-red-50;
+}
+
+.email-preferences-message-icon {
+  @apply h-5 w-5 flex-shrink-0;
+}
+
+.email-preferences-message-success .email-preferences-message-icon {
+  @apply text-green-400;
+}
+
+.email-preferences-message-error .email-preferences-message-icon {
+  @apply text-red-400;
+}
+
+.email-preferences-message-text {
+  @apply text-sm font-medium ml-3;
+}
+
+.email-preferences-message-success .email-preferences-message-text {
+  @apply text-green-800;
+}
+
+.email-preferences-message-error .email-preferences-message-text {
+  @apply text-red-800;
+}
+
+/* Buttons */
+.email-preferences-actions {
+  @apply flex flex-col sm:flex-row gap-4;
+}
+
+.email-preferences-button {
+  @apply flex-1;
+}
+
+.email-preferences-button-primary {
+  @apply btn-primary disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.email-preferences-button-secondary {
+  @apply btn-secondary;
+}
+
+/* Privacy Notice */
+.email-preferences-privacy {
+  @apply mt-8 text-center;
+}
+
+.email-preferences-privacy-text {
+  @apply text-sm text-gray-600;
+}
+
+.email-preferences-privacy-link {
+  @apply text-primary-600 hover:text-primary-700 underline;
+}
+
+/* ========================================
+   Unsubscribe Page Styles
+   ======================================== */
+
+.unsubscribe-container {
+  @apply min-h-screen bg-gray-50;
+}
+
+.unsubscribe-wrapper {
+  @apply container py-16;
+}
+
+.unsubscribe-content {
+  @apply max-w-2xl mx-auto;
+}
+
+/* Header Section */
+.unsubscribe-header {
+  @apply text-center mb-12;
+}
+
+.unsubscribe-icon-wrapper {
+  @apply flex justify-center mb-6;
+}
+
+.unsubscribe-icon {
+  @apply h-16 w-16 text-gray-400;
+}
+
+.unsubscribe-title {
+  @apply heading-1 mb-4;
+}
+
+.unsubscribe-subtitle {
+  @apply text-large text-gray-600;
+}
+
+/* Alternative Card */
+.unsubscribe-alternative-card {
+  @apply bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8;
+}
+
+.unsubscribe-alternative-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.unsubscribe-alternative-description {
+  @apply text-gray-700 text-sm mb-4;
+}
+
+/* Success Card */
+.unsubscribe-success-card {
+  @apply bg-white rounded-lg shadow-lg p-8 text-center;
+}
+
+.unsubscribe-success-icon-wrapper {
+  @apply flex justify-center mb-6;
+}
+
+.unsubscribe-success-icon {
+  @apply h-16 w-16 text-green-500;
+}
+
+.unsubscribe-success-title {
+  @apply heading-1 mb-4;
+}
+
+.unsubscribe-success-message {
+  @apply text-large text-gray-600 mb-6;
+}
+
+.unsubscribe-success-note {
+  @apply text-gray-600 mb-8;
+}
+
+.unsubscribe-success-actions {
+  @apply space-y-4;
+}
+
+/* Form Container */
+.unsubscribe-form-container {
+  @apply bg-white rounded-lg shadow-lg p-8;
+}
+
+/* Form Fields */
+.unsubscribe-email-field,
+.unsubscribe-reason-field,
+.unsubscribe-feedback-field {
+  @apply mb-6;
+}
+
+.unsubscribe-email-label,
+.unsubscribe-reason-label,
+.unsubscribe-feedback-label {
+  @apply block text-sm font-medium text-gray-700 mb-2;
+}
+
+.unsubscribe-email-input,
+.unsubscribe-reason-select,
+.unsubscribe-feedback-textarea {
+  @apply input;
+}
+
+.unsubscribe-feedback-textarea {
+  @apply input;
+  resize: vertical;
+}
+
+.unsubscribe-feedback-help {
+  @apply text-sm text-gray-500 mt-1;
+}
+
+/* Messages */
+.unsubscribe-message {
+  @apply rounded-md p-4 mb-6 flex;
+}
+
+.unsubscribe-message-error {
+  @apply bg-red-50;
+}
+
+.unsubscribe-message-icon {
+  @apply h-5 w-5 flex-shrink-0 text-red-400;
+}
+
+.unsubscribe-message-text {
+  @apply text-sm font-medium text-red-800 ml-3;
+}
+
+/* Buttons */
+.unsubscribe-button {
+  @apply transition-all;
+}
+
+.unsubscribe-button-primary {
+  @apply btn-primary;
+}
+
+.unsubscribe-button-secondary {
+  @apply btn-secondary;
+}
+
+.unsubscribe-button-submit {
+  @apply w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.unsubscribe-form-note {
+  @apply text-xs text-gray-500 text-center mt-4;
+}
+
+/* Support Link */
+.unsubscribe-support {
+  @apply mt-8 text-center;
+}
+
+.unsubscribe-support-text {
+  @apply text-sm text-gray-600;
+}
+
+.unsubscribe-support-link {
+  @apply text-primary-600 hover:text-primary-700 underline;
+}
+
