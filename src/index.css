@@ -5854,6 +5854,16 @@
   transform: translateY(-1px);
 }
 
+.unsubscribe-button-destructive {
+  @apply bg-red-600 text-white hover:bg-red-700 active:bg-red-800 disabled:opacity-50 disabled:cursor-not-allowed;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.unsubscribe-button-destructive:hover:not(:disabled) {
+  box-shadow: 0 4px 6px rgba(220, 38, 38, 0.3);
+  transform: translateY(-1px);
+}
+
 .unsubscribe-form-note {
   @apply text-xs text-gray-500 text-center mt-4;
 }

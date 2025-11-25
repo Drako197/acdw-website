@@ -306,7 +306,7 @@ export function UnsubscribePage() {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="unsubscribe-button unsubscribe-button-primary"
+                        className="unsubscribe-button unsubscribe-button-destructive"
                       >
                         {isSubmitting ? 'Unsubscribing...' : 'Yes, Unsubscribe Me'}
                       </button>
