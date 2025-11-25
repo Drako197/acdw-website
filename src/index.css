@@ -5795,6 +5795,14 @@
   resize: vertical;
 }
 
+.unsubscribe-email-prefilled-input {
+  @apply bg-green-50 border-green-300;
+}
+
+.unsubscribe-email-prefilled {
+  @apply text-sm text-green-600 mt-2 flex items-center gap-1;
+}
+
 .unsubscribe-feedback-help {
   @apply text-sm text-gray-500 mt-1;
 }
@@ -5861,5 +5869,38 @@
 
 .unsubscribe-support-link {
   @apply text-primary-600 hover:text-primary-700 underline;
+}
+
+/* Confirmation Step */
+.unsubscribe-confirmation {
+  @apply mt-6 p-6 bg-yellow-50 border-2 border-yellow-200 rounded-lg;
+}
+
+.unsubscribe-confirmation-content {
+  @apply space-y-4;
+}
+
+.unsubscribe-confirmation-title {
+  @apply text-xl font-bold text-gray-900 mb-2;
+}
+
+.unsubscribe-confirmation-message {
+  @apply text-base text-gray-700;
+}
+
+.unsubscribe-confirmation-note {
+  @apply text-sm text-gray-600 mt-4;
+}
+
+.unsubscribe-confirmation-list {
+  @apply list-disc list-inside text-sm text-gray-700 ml-4 space-y-1;
+}
+
+.unsubscribe-confirmation-question {
+  @apply text-base font-semibold text-gray-900 mt-4;
+}
+
+.unsubscribe-confirmation-actions {
+  @apply flex flex-col sm:flex-row gap-4 mt-6;
 }
 

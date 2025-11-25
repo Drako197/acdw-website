@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { EnvelopeIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 
@@ -11,16 +11,61 @@ export function UnsubscribePage() {
   const emailParam = searchParams.get('email') || ''
   
   const [email, setEmail] = useState(emailParam)
+  
+  // Update email when URL parameter changes
+  useEffect(() => {
+    if (emailParam) {
+      setEmail(emailParam)
+    }
+  }, [emailParam])
   const [reason, setReason] = useState('')
   const [feedback, setFeedback] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState('')
+  const [showConfirmation, setShowConfirmation] = useState(false)
+
+  const handleConfirmUnsubscribe = () => {
+    // Rate limiting: prevent more than 3 submissions per 5 minutes
+    const lastSubmission = localStorage.getItem('unsubscribe_last_submission')
+    const attempts = parseInt(localStorage.getItem('unsubscribe_attempts') || '0')
+    const now = Date.now()
+    
+    if (lastSubmission) {
+      const timeSinceLastSubmission = now - parseInt(lastSubmission)
+      // Reset attempts after 5 minutes
+      if (timeSinceLastSubmission > 5 * 60 * 1000) {
+        localStorage.setItem('unsubscribe_attempts', '0')
+      } else if (attempts >= 3) {
+        setSubmitError('Too many unsubscribe attempts. Please wait a few minutes and try again, or contact support.')
+        return
+      }
+    }
+    
+    // Show confirmation step
+    setShowConfirmation(true)
+  }
+
+  const handleCancelUnsubscribe = () => {
+    setShowConfirmation(false)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Final validation before submitting
+    if (!email || !email.includes('@')) {
+      setSubmitError('Please enter a valid email address.')
+      return
+    }
+    
     setIsSubmitting(true)
     setSubmitError('')
+    
+    // Track submission attempt
+    const attempts = parseInt(localStorage.getItem('unsubscribe_attempts') || '0')
+    localStorage.setItem('unsubscribe_attempts', String(attempts + 1))
+    localStorage.setItem('unsubscribe_last_submission', String(Date.now()))
     
     // Build submission data object
     const submissionData: Record<string, string> = {
@@ -172,9 +217,14 @@ export function UnsubscribePage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="unsubscribe-email-input"
+                  className={`unsubscribe-email-input ${emailParam ? 'unsubscribe-email-prefilled-input' : ''}`}
                   placeholder="your.email@example.com"
                 />
+                {emailParam && (
+                  <p className="unsubscribe-email-prefilled">
+                    ✓ Email pre-filled from your preferences. You can edit it if needed.
+                  </p>
+                )}
               </div>
 
               {/* Unsubscribe Reason Field */}
@@ -226,18 +276,61 @@ export function UnsubscribePage() {
                 </div>
               )}
 
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="unsubscribe-button unsubscribe-button-submit"
-              >
-                {isSubmitting ? 'Unsubscribing...' : 'Unsubscribe from All Marketing Emails'}
-              </button>
+              {/* Confirmation Step */}
+              {showConfirmation && (
+                <div className="unsubscribe-confirmation">
+                  <div className="unsubscribe-confirmation-content">
+                    <h3 className="unsubscribe-confirmation-title">Are You Sure?</h3>
+                    <p className="unsubscribe-confirmation-message">
+                      You're about to unsubscribe <strong>{email}</strong> from all marketing emails.
+                    </p>
+                    <p className="unsubscribe-confirmation-note">
+                      You'll still receive important emails about your orders and account, but you won't receive:
+                    </p>
+                    <ul className="unsubscribe-confirmation-list">
+                      <li>Product updates and announcements</li>
+                      <li>Promotions and special offers</li>
+                      <li>Newsletters and industry news</li>
+                    </ul>
+                    <p className="unsubscribe-confirmation-question">
+                      Are you sure you want to continue?
+                    </p>
+                    <div className="unsubscribe-confirmation-actions">
+                      <button
+                        type="button"
+                        onClick={handleCancelUnsubscribe}
+                        className="unsubscribe-button unsubscribe-button-secondary"
+                      >
+                        Cancel - Keep My Preferences
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="unsubscribe-button unsubscribe-button-primary"
+                      >
+                        {isSubmitting ? 'Unsubscribing...' : 'Yes, Unsubscribe Me'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
-              <p className="unsubscribe-form-note">
-                You'll still receive important emails about your orders and account
-              </p>
+              {/* Submit Button (only show if not in confirmation) */}
+              {!showConfirmation && (
+                <>
+                  <button
+                    type="button"
+                    onClick={handleConfirmUnsubscribe}
+                    disabled={!email || !email.includes('@')}
+                    className="unsubscribe-button unsubscribe-button-submit"
+                  >
+                    Unsubscribe from All Marketing Emails
+                  </button>
+                  <p className="unsubscribe-form-note">
+                    You'll still receive important emails about your orders and account
+                  </p>
+                </>
+              )}
             </form>
           </div>
 
