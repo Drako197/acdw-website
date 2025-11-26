@@ -7280,7 +7280,8 @@
 }
 
 .checkout-success-order-info {
-  @apply bg-gray-50 rounded-lg p-4 mb-8;
+  @apply bg-gray-50 rounded-lg p-4 mb-8 overflow-hidden;
+  max-width: 100%;
 }
 
 .checkout-success-order-label {
@@ -7288,7 +7289,10 @@
 }
 
 .checkout-success-order-id {
-  @apply text-base font-mono text-gray-900;
+  @apply text-base font-mono text-gray-900 break-all;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .checkout-success-next-steps {
