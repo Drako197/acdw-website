@@ -68,11 +68,12 @@ exports.handler = async (event, context) => {
     console.log('Retrieved session:', {
       id: session.id,
       hasShipping: !!session.shipping_details,
-      hasLineItems: !!session.line_items,
+      hasLineItems: !!lineItems?.data?.length,
       amountTotal: session.amount_total,
       amountSubtotal: session.amount_subtotal,
       shippingCost: session.shipping_cost,
       totalDetails: session.total_details,
+      shippingCostAmount: session.shipping_cost?.amount_total,
     })
 
     // Extract relevant information safely
@@ -86,12 +87,14 @@ exports.handler = async (event, context) => {
       tax: session.total_details?.breakdown?.taxes?.[0]?.amount 
         ? session.total_details.breakdown.taxes[0].amount / 100
         : (session.total_details?.amount_tax ? session.total_details.amount_tax / 100 : null),
-      // Shipping cost from shipping_cost or calculated from total
+      // Shipping cost from shipping_cost.amount_total or calculated from breakdown
       shipping: session.shipping_cost?.amount_total 
         ? session.shipping_cost.amount_total / 100
-        : (session.amount_total && session.amount_subtotal
-          ? (session.amount_total - session.amount_subtotal - (session.total_details?.amount_tax || 0)) / 100
-          : null),
+        : (session.total_details?.breakdown?.shipping?.amount_total
+          ? session.total_details.breakdown.shipping.amount_total / 100
+          : (session.amount_total && session.amount_subtotal
+            ? Math.max(0, (session.amount_total - session.amount_subtotal - (session.total_details?.amount_tax || 0)) / 100)
+            : null)),
       shippingDetails: session.shipping_details
         ? {
             name: session.shipping_details.name || '',
