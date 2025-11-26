@@ -9,17 +9,14 @@ import App from './App.tsx'
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 if (!clerkPubKey) {
-  console.warn('VITE_CLERK_PUBLISHABLE_KEY is not set. Authentication will not work.')
+  console.error('VITE_CLERK_PUBLISHABLE_KEY is not set. Authentication will not work.')
+  // Still render with ClerkProvider to prevent errors, but auth won't work
 }
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {clerkPubKey ? (
-      <ClerkProvider publishableKey={clerkPubKey}>
-        <App />
-      </ClerkProvider>
-    ) : (
+    <ClerkProvider publishableKey={clerkPubKey || 'pk_test_placeholder'}>
       <App />
-    )}
+    </ClerkProvider>
   </StrictMode>,
 )
