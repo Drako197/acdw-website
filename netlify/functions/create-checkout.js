@@ -94,8 +94,6 @@ exports.handler = async (event, context) => {
       
       // Shipping rate options - zone-based pricing
       // Note: Stripe will show all options; customer selects based on their address
-      // For automatic zone-based selection, you'd need to create shipping rates in Stripe Dashboard
-      // with country restrictions, or use a webhook to update shipping after address is known
       shipping_options: [
         {
           shipping_rate_data: {
@@ -146,9 +144,13 @@ exports.handler = async (event, context) => {
       },
       
       // Enable automatic tax calculation (requires shipping address)
-      automatic_tax: {
-        enabled: true,
-      },
+      // Note: Stripe Tax must be enabled in your Stripe Dashboard
+      // Set STRIPE_TAX_ENABLED=false in Netlify to disable if not ready
+      ...(process.env.STRIPE_TAX_ENABLED !== 'false' && {
+        automatic_tax: {
+          enabled: true,
+        },
+      }),
     })
 
     return {
@@ -160,11 +162,42 @@ exports.handler = async (event, context) => {
       }),
     }
   } catch (error) {
-    console.error('Error creating checkout session:', error)
+    console.error('Error creating checkout session:', {
+      message: error.message,
+      type: error.type,
+      code: error.code,
+      statusCode: error.statusCode,
+      raw: error.raw,
+    })
+    
+    // Provide more helpful error messages
+    let errorMessage = 'Failed to create checkout session'
+    let errorDetails = null
+    
+    if (error.type === 'StripeInvalidRequestError') {
+      if (error.code === 'parameter_invalid_empty') {
+        errorMessage = 'Invalid checkout configuration. Please check shipping options.'
+        errorDetails = error.message
+      } else if (error.message?.includes('automatic_tax')) {
+        errorMessage = 'Stripe Tax is not enabled in your Stripe account. Please enable it in Stripe Dashboard → Tax settings, or disable automatic tax in the code.'
+        errorDetails = 'To enable: Go to Stripe Dashboard → Settings → Tax, and enable Stripe Tax'
+      } else {
+        errorMessage = `Stripe error: ${error.message}`
+        errorDetails = error.code
+      }
+    } else if (error.message) {
+      errorMessage = error.message
+    }
+    
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Failed to create checkout session' }),
+      body: JSON.stringify({ 
+        error: errorMessage,
+        details: process.env.NODE_ENV === 'development' ? errorDetails : undefined,
+        type: error.type,
+        code: error.code,
+      }),
     }
   }
 }
