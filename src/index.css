@@ -7299,6 +7299,34 @@
   @apply text-lg font-semibold text-gray-900;
 }
 
+.checkout-success-order-breakdown {
+  @apply space-y-2 pt-2 border-t border-gray-200;
+}
+
+.checkout-success-order-breakdown-row {
+  @apply flex justify-between items-center text-sm;
+}
+
+.checkout-success-order-breakdown-label {
+  @apply text-gray-600;
+}
+
+.checkout-success-order-breakdown-value {
+  @apply text-gray-900 font-medium;
+}
+
+.checkout-success-order-breakdown-total {
+  @apply pt-2 border-t border-gray-300;
+}
+
+.checkout-success-order-breakdown-total .checkout-success-order-breakdown-label {
+  @apply text-base font-semibold text-gray-900;
+}
+
+.checkout-success-order-breakdown-total .checkout-success-order-breakdown-value {
+  @apply text-base font-semibold;
+}
+
 .checkout-success-shipping-info {
   @apply bg-blue-50 rounded-lg p-4 mb-8 text-left;
 }

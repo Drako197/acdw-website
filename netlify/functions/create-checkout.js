@@ -146,8 +146,9 @@ exports.handler = async (event, context) => {
       },
       
       // Enable automatic tax calculation (requires shipping address)
-      // Will enable after shipping is tested
-      // automatic_tax: { enabled: true },
+      automatic_tax: {
+        enabled: true,
+      },
     })
 
     return {
