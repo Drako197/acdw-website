@@ -38,11 +38,12 @@ exports.handler = async (event, context) => {
     }
 
     // Retrieve checkout session from Stripe
+    // Note: shipping_details is included by default, cannot be expanded
     // Note: line_items must be retrieved separately using listLineItems
     let session
     try {
       session = await stripe.checkout.sessions.retrieve(sessionId, {
-        expand: ['shipping_details', 'customer'],
+        expand: ['customer'], // shipping_details is already included, cannot be expanded
       })
     } catch (retrieveError) {
       console.error('Error retrieving session from Stripe:', {
