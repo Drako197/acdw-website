@@ -37,25 +37,13 @@ exports.handler = async (event, context) => {
       }
     }
 
-    // Retrieve checkout session from Stripe with necessary expansions
-    // Note: line_items needs to be expanded with nested properties
+    // Retrieve checkout session from Stripe
+    // Note: line_items must be retrieved separately using listLineItems
     let session
     try {
       session = await stripe.checkout.sessions.retrieve(sessionId, {
-        expand: [
-          'line_items.data.price.product',
-          'shipping_details',
-          'customer',
-        ],
+        expand: ['shipping_details', 'customer'],
       })
-      
-      // If line_items wasn't expanded, retrieve it separately
-      if (!session.line_items || !session.line_items.data) {
-        const lineItems = await stripe.checkout.sessions.listLineItems(sessionId, {
-          expand: ['data.price.product'],
-        })
-        session.line_items = lineItems
-      }
     } catch (retrieveError) {
       console.error('Error retrieving session from Stripe:', {
         message: retrieveError.message,
@@ -64,6 +52,17 @@ exports.handler = async (event, context) => {
         stack: retrieveError.stack,
       })
       throw new Error(`Failed to retrieve session: ${retrieveError.message}`)
+    }
+    
+    // Retrieve line items separately (more reliable than expanding in retrieve)
+    let lineItems = null
+    try {
+      lineItems = await stripe.checkout.sessions.listLineItems(sessionId, {
+        expand: ['data.price.product'],
+      })
+    } catch (lineItemsError) {
+      console.warn('Error retrieving line items (non-fatal):', lineItemsError.message)
+      // Continue without line items - not critical for display
     }
     
     console.log('Retrieved session:', {
@@ -106,7 +105,7 @@ exports.handler = async (event, context) => {
             },
           }
         : null,
-      lineItems: session.line_items?.data?.map((item) => ({
+      lineItems: lineItems?.data?.map((item) => ({
         description: item.description || item.price?.product?.name || 'Product',
         quantity: item.quantity || 1,
         amount: item.amount_total ? item.amount_total / 100 : 0,
