@@ -22,9 +22,8 @@ interface AuthContextType extends AuthState {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  // ClerkProvider should always be present (see main.tsx)
-  // These hooks will work as long as ClerkProvider wraps this component
+// AuthProvider that uses Clerk (only when ClerkProvider is present)
+function AuthProviderWithClerk({ children }: { children: ReactNode }) {
   const { user: clerkUser, isLoaded: userLoaded } = useUser()
   const { signOut } = useClerkAuth()
 
@@ -44,14 +43,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const isLoading = !userLoaded
 
   const login = async (_credentials: LoginCredentials) => {
-    // Clerk handles login via their SignIn component
-    // This is a placeholder - actual login happens in SignInPage
     throw new Error('Use Clerk SignIn component for login')
   }
 
   const signup = async (_data: SignupData) => {
-    // Clerk handles signup via their SignUp component
-    // This is a placeholder - actual signup happens in SignUpPage
     throw new Error('Use Clerk SignUp component for signup')
   }
 
@@ -61,7 +56,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const refreshToken = async () => {
     // Clerk handles token refresh automatically
-    // No action needed
   }
 
   const hasRole = (role: User['role']): boolean => {
@@ -90,6 +84,70 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   )
+}
+
+// AuthProvider without Clerk (fallback when ClerkProvider is not present)
+function AuthProviderWithoutClerk({ children }: { children: ReactNode }) {
+  const user: User | null = null
+  const isAuthenticated = false
+  const isLoading = false
+
+  const login = async (_credentials: LoginCredentials) => {
+    throw new Error('Authentication is not configured. Please set VITE_CLERK_PUBLISHABLE_KEY')
+  }
+
+  const signup = async (_data: SignupData) => {
+    throw new Error('Authentication is not configured. Please set VITE_CLERK_PUBLISHABLE_KEY')
+  }
+
+  const logout = async () => {
+    // No-op when Clerk is not available
+  }
+
+  const refreshToken = async () => {
+    // No-op when Clerk is not available
+  }
+
+  const hasRole = (_role: User['role']): boolean => {
+    return false
+  }
+
+  const hasAnyRole = (_roles: User['role'][]): boolean => {
+    return false
+  }
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        isLoading,
+        error: null,
+        login,
+        signup,
+        logout,
+        refreshToken,
+        hasRole,
+        hasAnyRole,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+// Main AuthProvider that conditionally uses Clerk based on environment
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+  
+  // Only use Clerk hooks if ClerkProvider is present (checked in main.tsx)
+  // If clerkPubKey exists, ClerkProvider wraps App, so we can use Clerk hooks
+  if (clerkPubKey) {
+    return <AuthProviderWithClerk>{children}</AuthProviderWithClerk>
+  }
+  
+  // Fallback when Clerk is not configured
+  return <AuthProviderWithoutClerk>{children}</AuthProviderWithoutClerk>
 }
 
 export function useAuth() {
