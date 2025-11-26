@@ -20,6 +20,7 @@ import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage'
 import { EmailPreferencesPage } from './pages/EmailPreferencesPage'
 import { UnsubscribePage } from './pages/UnsubscribePage'
 import { HVACProCatalogPage } from './pages/HVACProCatalogPage'
+import { PropertyManagerCatalogPage } from './pages/PropertyManagerCatalogPage'
 import { UnauthorizedPage } from './pages/UnauthorizedPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { CheckoutSuccessPage } from './pages/CheckoutSuccessPage'
@@ -52,6 +53,7 @@ function App() {
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/dashboard/profile" element={<ProfilePage />} />
               <Route path="/business/pro/catalog" element={<HVACProCatalogPage />} />
+              <Route path="/business/property-manager/catalog" element={<PropertyManagerCatalogPage />} />
               <Route path="/unauthorized" element={<UnauthorizedPage />} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="/email-preferences" element={<EmailPreferencesPage />} />
