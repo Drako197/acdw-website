@@ -6,12 +6,24 @@
 
 export type UserRole = 'homeowner' | 'hvac_pro' | 'property_manager'
 
+export interface VerificationData {
+  status?: 'pending_verification' | 'verified' | 'rejected' | 'needs_review'
+  submittedAt?: string
+  reviewedAt?: string
+  // HVAC Pro specific
+  state?: string
+  licenseNumber?: string
+  // Property Manager specific
+  businessTaxId?: string
+}
+
 export interface User {
   id: string
   email: string
   role: UserRole
   company?: string
   name?: string
+  verification?: VerificationData
 }
 
 export interface AuthState {

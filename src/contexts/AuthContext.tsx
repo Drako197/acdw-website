@@ -36,6 +36,8 @@ function AuthProviderWithClerk({ children }: { children: ReactNode }) {
         role: (clerkUser.unsafeMetadata?.role || clerkUser.publicMetadata?.role || 'homeowner') as User['role'],
         company: (clerkUser.unsafeMetadata?.company || clerkUser.publicMetadata?.company) as string | undefined,
         name: clerkUser.fullName || undefined,
+        // Read verification data from unsafeMetadata
+        verification: clerkUser.unsafeMetadata?.verification as User['verification'] | undefined,
       }
     : null
 
