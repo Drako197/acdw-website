@@ -23,9 +23,6 @@ export function SignInForm() {
   const { signIn, setActive } = useSignIn()
   const navigate = useNavigate()
   const location = useLocation()
-  
-  // Use saved location or default to dashboard (DashboardPage handles role-based redirects)
-  const from = location.state?.from?.pathname || '/dashboard'
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
