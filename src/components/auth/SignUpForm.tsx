@@ -11,9 +11,14 @@ import {
   BuildingOfficeIcon,
   LockClosedIcon,
   CheckBadgeIcon,
-  ShieldCheckIcon
+  ShieldCheckIcon,
+  IdentificationIcon,
+  DocumentTextIcon
 } from '@heroicons/react/24/outline'
 import type { UserRole } from '../../types/auth'
+import { US_STATES } from '../../config/usStates'
+import { validateLicenseFormat } from '../../config/licenseFormats'
+import { validateEIN } from '../../utils/verification'
 
 interface FieldError {
   [key: string]: string
@@ -42,6 +47,12 @@ export function SignUpForm() {
     confirmPassword: '',
     role: (roleParam || 'hvac_pro') as UserRole,
     company: '',
+    // HVAC Pro verification fields
+    state: '',
+    licenseNumber: '',
+    epaCertNumber: '',
+    // Property Manager verification fields
+    businessTaxId: '',
     acceptTerms: false
   })
   
@@ -168,6 +179,44 @@ export function SignUpForm() {
           delete errors.company
         }
         break
+
+      case 'state':
+        if (formData.role === 'hvac_pro' && !value) {
+          errors.state = 'State is required for license verification'
+        } else {
+          delete errors.state
+        }
+        break
+
+      case 'licenseNumber':
+        if (formData.role === 'hvac_pro') {
+          if (!value.trim()) {
+            errors.licenseNumber = 'License number is required'
+          } else if (formData.state) {
+            const validation = validateLicenseFormat(formData.state, value)
+            if (!validation.valid) {
+              errors.licenseNumber = validation.error || 'Invalid license number format'
+            } else {
+              delete errors.licenseNumber
+            }
+          }
+        } else {
+          delete errors.licenseNumber
+        }
+        break
+
+      case 'businessTaxId':
+        if (formData.role === 'property_manager') {
+          const validation = validateEIN(value)
+          if (!validation.valid) {
+            errors.businessTaxId = validation.error || 'Invalid Business Tax ID format'
+          } else {
+            delete errors.businessTaxId
+          }
+        } else {
+          delete errors.businessTaxId
+        }
+        break
     }
 
     setFieldErrors(errors)
@@ -177,14 +226,30 @@ export function SignUpForm() {
     const { name, value, type } = e.target
     const checked = (e.target as HTMLInputElement).checked
 
+    let processedValue: string | boolean = type === 'checkbox' ? checked : value
+
+    // Auto-format EIN as user types
+    if (name === 'businessTaxId' && type !== 'checkbox') {
+      let cleaned = value.replace(/\D/g, '')
+      if (cleaned.length > 2) {
+        cleaned = cleaned.slice(0, 2) + '-' + cleaned.slice(2, 9)
+      }
+      processedValue = cleaned
+    }
+
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: processedValue
     })
 
     // Real-time validation
     if (type !== 'checkbox') {
-      validateField(name, value)
+      validateField(name, processedValue as string)
+    }
+
+    // Re-validate license number when state changes
+    if (name === 'state' && formData.licenseNumber) {
+      validateField('licenseNumber', formData.licenseNumber)
     }
   }
 
@@ -200,6 +265,34 @@ export function SignUpForm() {
     if ((formData.role === 'hvac_pro' || formData.role === 'property_manager') && !formData.company.trim()) {
       errors.company = 'Company name is required'
     }
+    
+    // HVAC Pro verification requirements
+    if (formData.role === 'hvac_pro') {
+      if (!formData.state) {
+        errors.state = 'State is required'
+      }
+      if (!formData.licenseNumber.trim()) {
+        errors.licenseNumber = 'License number is required'
+      } else if (formData.state) {
+        const licenseValidation = validateLicenseFormat(formData.state, formData.licenseNumber)
+        if (!licenseValidation.valid) {
+          errors.licenseNumber = licenseValidation.error || 'Invalid license number format'
+        }
+      }
+    }
+    
+    // Property Manager verification requirements
+    if (formData.role === 'property_manager') {
+      if (!formData.businessTaxId.trim()) {
+        errors.businessTaxId = 'Business Tax ID (EIN) is required'
+      } else {
+        const einValidation = validateEIN(formData.businessTaxId)
+        if (!einValidation.valid) {
+          errors.businessTaxId = einValidation.error || 'Invalid Business Tax ID format'
+        }
+      }
+    }
+    
     if (!formData.acceptTerms) {
       errors.acceptTerms = 'You must accept the terms and conditions'
     }
@@ -228,11 +321,28 @@ export function SignUpForm() {
         lastName: formData.name.split(' ').slice(1).join(' ') || '',
       })
 
-      // Set public metadata (role and company)
+      // Prepare verification data
+      const verificationData: any = {
+        status: 'pending_verification',
+        submittedAt: new Date().toISOString(),
+      }
+
+      if (formData.role === 'hvac_pro') {
+        verificationData.state = formData.state
+        verificationData.licenseNumber = formData.licenseNumber.trim()
+        if (formData.epaCertNumber.trim()) {
+          verificationData.epaCertNumber = formData.epaCertNumber.trim()
+        }
+      } else if (formData.role === 'property_manager') {
+        verificationData.businessTaxId = formData.businessTaxId.trim().replace(/\s/g, '')
+      }
+
+      // Set public metadata (role, company, and verification data)
       await signUp.update({
         unsafeMetadata: {
           role: formData.role,
           company: formData.company || undefined,
+          verification: verificationData,
         },
       })
 
@@ -462,6 +572,148 @@ export function SignUpForm() {
                     {fieldErrors.company && (
                       <p className="field-error-message">{fieldErrors.company}</p>
                     )}
+                  </div>
+                )}
+
+                {/* Professional Verification Section */}
+                {formData.role === 'hvac_pro' && (
+                  <div className="signup-form-verification-section">
+                    <div className="signup-form-verification-header">
+                      <ShieldCheckIcon className="signup-form-verification-icon" />
+                      <div>
+                        <h3 className="signup-form-verification-title">Professional Verification</h3>
+                        <p className="signup-form-verification-description">
+                          We verify your professional credentials to ensure you receive contractor pricing.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* State */}
+                    <div className="signup-form-field">
+                      <label htmlFor="state" className="signup-form-field-label">
+                        <div className="signup-form-label-content">
+                          <IdentificationIcon className="signup-form-label-icon" />
+                          State <span className="text-red-500">*</span>
+                        </div>
+                      </label>
+                      <select
+                        id="state"
+                        name="state"
+                        required
+                        className={`signup-form-select ${
+                          fieldErrors.state ? 'input-error' : ''
+                        }`}
+                        value={formData.state}
+                        onChange={handleChange}
+                        onBlur={(e) => validateField('state', e.target.value)}
+                      >
+                        <option value="">Select your state</option>
+                        {US_STATES.map((state) => (
+                          <option key={state.code} value={state.code}>
+                            {state.name}
+                          </option>
+                        ))}
+                      </select>
+                      {fieldErrors.state && (
+                        <p className="field-error-message">{fieldErrors.state}</p>
+                      )}
+                    </div>
+
+                    {/* License Number */}
+                    <div className="signup-form-field">
+                      <label htmlFor="licenseNumber" className="signup-form-field-label">
+                        <div className="signup-form-label-content">
+                          <DocumentTextIcon className="signup-form-label-icon" />
+                          HVAC License Number <span className="text-red-500">*</span>
+                        </div>
+                      </label>
+                      <input
+                        id="licenseNumber"
+                        name="licenseNumber"
+                        type="text"
+                        required
+                        className={`signup-form-input ${
+                          fieldErrors.licenseNumber ? 'input-error' : ''
+                        }`}
+                        placeholder={formData.state ? `Enter your ${US_STATES.find(s => s.code === formData.state)?.name || formData.state} license number` : 'Enter your license number'}
+                        value={formData.licenseNumber}
+                        onChange={handleChange}
+                        onBlur={(e) => validateField('licenseNumber', e.target.value)}
+                      />
+                      {fieldErrors.licenseNumber && (
+                        <p className="field-error-message">{fieldErrors.licenseNumber}</p>
+                      )}
+                      <p className="signup-form-field-help">
+                        Your license number helps us verify your professional status and ensure you receive contractor pricing.
+                      </p>
+                    </div>
+
+                    {/* EPA Certification (Optional) */}
+                    <div className="signup-form-field">
+                      <label htmlFor="epaCertNumber" className="signup-form-field-label">
+                        <div className="signup-form-label-content">
+                          <CheckBadgeIcon className="signup-form-label-icon" />
+                          EPA Certification Number <span className="text-gray-500 text-sm">(Optional)</span>
+                        </div>
+                      </label>
+                      <input
+                        id="epaCertNumber"
+                        name="epaCertNumber"
+                        type="text"
+                        className="signup-form-input"
+                        placeholder="Enter your EPA certification number"
+                        value={formData.epaCertNumber}
+                        onChange={handleChange}
+                      />
+                      <p className="signup-form-field-help">
+                        If you have an EPA certification for refrigerant handling, you can add it here.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Property Manager Verification Section */}
+                {formData.role === 'property_manager' && (
+                  <div className="signup-form-verification-section">
+                    <div className="signup-form-verification-header">
+                      <ShieldCheckIcon className="signup-form-verification-icon" />
+                      <div>
+                        <h3 className="signup-form-verification-title">Business Verification</h3>
+                        <p className="signup-form-verification-description">
+                          We verify your business credentials to ensure you receive property manager pricing.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Business Tax ID (EIN) */}
+                    <div className="signup-form-field">
+                      <label htmlFor="businessTaxId" className="signup-form-field-label">
+                        <div className="signup-form-label-content">
+                          <IdentificationIcon className="signup-form-label-icon" />
+                          Business Tax ID (EIN) <span className="text-red-500">*</span>
+                        </div>
+                      </label>
+                      <input
+                        id="businessTaxId"
+                        name="businessTaxId"
+                        type="text"
+                        required
+                        className={`signup-form-input ${
+                          fieldErrors.businessTaxId ? 'input-error' : ''
+                        }`}
+                        placeholder="XX-XXXXXXX"
+                        value={formData.businessTaxId}
+                        onChange={handleChange}
+                        onBlur={(e) => validateField('businessTaxId', e.target.value)}
+                        maxLength={10}
+                      />
+                      {fieldErrors.businessTaxId && (
+                        <p className="field-error-message">{fieldErrors.businessTaxId}</p>
+                      )}
+                      <p className="signup-form-field-help">
+                        Your Employer Identification Number (EIN) helps us verify your business status. Format: XX-XXXXXXX
+                      </p>
+                    </div>
                   </div>
                 )}
 
