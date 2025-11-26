@@ -326,7 +326,7 @@ function DashboardContent() {
 
           {/* HVAC Pro - My Products Section */}
           {user?.role === 'hvac_pro' && (
-            <div className="dashboard-card">
+            <div className="dashboard-card dashboard-card-my-products">
               <h2 className="dashboard-card-title">My Products</h2>
               {HAS_PRODUCTS ? (
                 /* Post-Purchase State - Products Purchased */
