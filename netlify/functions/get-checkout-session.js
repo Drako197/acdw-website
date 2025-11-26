@@ -37,9 +37,23 @@ exports.handler = async (event, context) => {
       }
     }
 
-    // Retrieve checkout session from Stripe
+    // Retrieve checkout session from Stripe with all necessary expansions
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ['line_items', 'shipping_details', 'customer'],
+      expand: [
+        'line_items',
+        'line_items.data.price.product',
+        'shipping_details',
+        'customer',
+        'total_details.breakdown',
+      ],
+    })
+    
+    console.log('Retrieved session:', {
+      id: session.id,
+      hasShipping: !!session.shipping_details,
+      shippingDetails: session.shipping_details,
+      amountTotal: session.amount_total,
+      totalDetails: session.total_details,
     })
 
     // Extract relevant information
@@ -48,16 +62,19 @@ exports.handler = async (event, context) => {
       amountTotal: session.amount_total / 100, // Convert from cents
       currency: session.currency,
       paymentStatus: session.payment_status,
-      shipping: session.shipping_details
+      subtotal: session.amount_subtotal ? session.amount_subtotal / 100 : null,
+      tax: session.total_details?.amount_tax ? session.total_details.amount_tax / 100 : null,
+      shipping: session.shipping_cost?.amount_total ? session.shipping_cost.amount_total / 100 : null,
+      shippingDetails: session.shipping_details
         ? {
             name: session.shipping_details.name,
             address: {
-              line1: session.shipping_details.address?.line1,
-              line2: session.shipping_details.address?.line2,
-              city: session.shipping_details.address?.city,
-              state: session.shipping_details.address?.state,
-              postal_code: session.shipping_details.address?.postal_code,
-              country: session.shipping_details.address?.country,
+              line1: session.shipping_details.address?.line1 || '',
+              line2: session.shipping_details.address?.line2 || '',
+              city: session.shipping_details.address?.city || '',
+              state: session.shipping_details.address?.state || '',
+              postal_code: session.shipping_details.address?.postal_code || '',
+              country: session.shipping_details.address?.country || '',
             },
           }
         : null,
@@ -68,6 +85,13 @@ exports.handler = async (event, context) => {
       })),
       metadata: session.metadata,
     }
+    
+    console.log('Extracted order details:', {
+      hasShipping: !!orderDetails.shippingDetails,
+      shippingAddress: orderDetails.shippingDetails?.address,
+      tax: orderDetails.tax,
+      shipping: orderDetails.shipping,
+    })
 
     return {
       statusCode: 200,

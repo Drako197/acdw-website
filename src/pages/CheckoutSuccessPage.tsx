@@ -9,6 +9,42 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { CheckCircleIcon, ArrowRightIcon, DocumentTextIcon, TruckIcon } from '@heroicons/react/24/outline'
 import { useAuth } from '../contexts/AuthContext'
 
+// Function to save shipping address to user profile
+async function saveShippingAddressToProfile(
+  shippingDetails: { name: string; address: ShippingAddress },
+  userId: string
+) {
+  try {
+    const response = await fetch('/.netlify/functions/save-shipping-address', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId,
+        shippingAddress: {
+          name: shippingDetails.name,
+          line1: shippingDetails.address.line1,
+          line2: shippingDetails.address.line2 || '',
+          city: shippingDetails.address.city,
+          state: shippingDetails.address.state,
+          postalCode: shippingDetails.address.postal_code,
+          country: shippingDetails.address.country,
+        },
+      }),
+    })
+    
+    if (!response.ok) {
+      console.warn('Failed to save shipping address to profile:', await response.json())
+    } else {
+      console.log('Shipping address saved to profile')
+    }
+  } catch (error) {
+    console.warn('Error saving shipping address to profile:', error)
+    // Don't show error to user - this is a background operation
+  }
+}
+
 interface ShippingAddress {
   line1: string
   line2?: string
@@ -23,7 +59,10 @@ interface OrderDetails {
   amountTotal: number
   currency: string
   paymentStatus: string
-  shipping: {
+  subtotal: number | null
+  tax: number | null
+  shipping: number | null
+  shippingDetails: {
     name: string
     address: ShippingAddress
   } | null
@@ -49,12 +88,24 @@ export function CheckoutSuccessPage() {
       
       // Fetch order details from Stripe
       fetch(`/.netlify/functions/get-checkout-session?session_id=${sessionIdParam}`)
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+          }
+          return res.json()
+        })
         .then((data) => {
           if (data.error) {
             console.error('Error fetching order details:', data.error)
+            console.error('Full error response:', data)
           } else {
+            console.log('Order details fetched:', data)
             setOrderDetails(data)
+            
+            // Save shipping address to user profile if available
+            if (data.shippingDetails && user?.id) {
+              saveShippingAddressToProfile(data.shippingDetails, user.id)
+            }
           }
         })
         .catch((error) => {
@@ -104,36 +155,67 @@ export function CheckoutSuccessPage() {
               <p className="checkout-success-order-label">Order ID:</p>
               <p className="checkout-success-order-id">{sessionId}</p>
               {orderDetails && (
-                <>
-                  <p className="checkout-success-order-label" style={{ marginTop: '1rem' }}>
-                    Total Amount:
-                  </p>
-                  <p className="checkout-success-order-amount">
-                    ${orderDetails.amountTotal.toFixed(2)} {orderDetails.currency.toUpperCase()}
-                  </p>
-                </>
+                <div className="checkout-success-order-breakdown" style={{ marginTop: '1rem' }}>
+                  {orderDetails.subtotal !== null && (
+                    <>
+                      <div className="checkout-success-order-breakdown-row">
+                        <span className="checkout-success-order-breakdown-label">Subtotal:</span>
+                        <span className="checkout-success-order-breakdown-value">
+                          ${orderDetails.subtotal.toFixed(2)}
+                        </span>
+                      </div>
+                      {orderDetails.shipping !== null && (
+                        <div className="checkout-success-order-breakdown-row">
+                          <span className="checkout-success-order-breakdown-label">Shipping:</span>
+                          <span className="checkout-success-order-breakdown-value">
+                            ${orderDetails.shipping.toFixed(2)}
+                          </span>
+                        </div>
+                      )}
+                      {orderDetails.tax !== null && orderDetails.tax > 0 && (
+                        <div className="checkout-success-order-breakdown-row">
+                          <span className="checkout-success-order-breakdown-label">Tax:</span>
+                          <span className="checkout-success-order-breakdown-value">
+                            ${orderDetails.tax.toFixed(2)}
+                          </span>
+                        </div>
+                      )}
+                      <div className="checkout-success-order-breakdown-row checkout-success-order-breakdown-total">
+                        <span className="checkout-success-order-breakdown-label">Total:</span>
+                        <span className="checkout-success-order-breakdown-value checkout-success-order-amount">
+                          ${orderDetails.amountTotal.toFixed(2)} {orderDetails.currency.toUpperCase()}
+                        </span>
+                      </div>
+                    </>
+                  )}
+                  {orderDetails.subtotal === null && (
+                    <p className="checkout-success-order-amount" style={{ marginTop: '0.5rem' }}>
+                      ${orderDetails.amountTotal.toFixed(2)} {orderDetails.currency.toUpperCase()}
+                    </p>
+                  )}
+                </div>
               )}
             </div>
           )}
 
           {/* Shipping Address */}
-          {orderDetails?.shipping && (
+          {orderDetails?.shippingDetails && (
             <div className="checkout-success-shipping-info">
               <h3 className="checkout-success-shipping-title">
                 <TruckIcon className="checkout-success-shipping-icon" />
                 Shipping Address
               </h3>
               <div className="checkout-success-shipping-address">
-                <p className="checkout-success-shipping-name">{orderDetails.shipping.name}</p>
-                <p>{orderDetails.shipping.address.line1}</p>
-                {orderDetails.shipping.address.line2 && (
-                  <p>{orderDetails.shipping.address.line2}</p>
+                <p className="checkout-success-shipping-name">{orderDetails.shippingDetails.name}</p>
+                <p>{orderDetails.shippingDetails.address.line1}</p>
+                {orderDetails.shippingDetails.address.line2 && (
+                  <p>{orderDetails.shippingDetails.address.line2}</p>
                 )}
                 <p>
-                  {orderDetails.shipping.address.city}, {orderDetails.shipping.address.state}{' '}
-                  {orderDetails.shipping.address.postal_code}
+                  {orderDetails.shippingDetails.address.city}, {orderDetails.shippingDetails.address.state}{' '}
+                  {orderDetails.shippingDetails.address.postal_code}
                 </p>
-                <p>{orderDetails.shipping.address.country}</p>
+                <p>{orderDetails.shippingDetails.address.country}</p>
               </div>
             </div>
           )}
