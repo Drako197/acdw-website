@@ -574,11 +574,11 @@ export function SignUpForm() {
                 {/* Professional Verification Section */}
                 {formData.role === 'hvac_pro' && (
                   <div className="signup-form-verification-section">
-                    <div className="signup-form-verification-header">
-                      <ShieldCheckIcon className="signup-form-verification-icon" />
+                    <div className="signup-form-professional-verification-header">
+                      <ShieldCheckIcon className="signup-form-professional-verification-icon" />
                       <div>
-                        <h3 className="signup-form-verification-title">Professional Verification</h3>
-                        <p className="signup-form-verification-description">
+                        <h3 className="signup-form-professional-verification-title">Professional Verification</h3>
+                        <p className="signup-form-professional-verification-description">
                           We verify your professional credentials to ensure you receive contractor pricing.
                         </p>
                       </div>
@@ -649,11 +649,11 @@ export function SignUpForm() {
                 {/* Property Manager Verification Section */}
                 {formData.role === 'property_manager' && (
                   <div className="signup-form-verification-section">
-                    <div className="signup-form-verification-header">
-                      <ShieldCheckIcon className="signup-form-verification-icon" />
+                    <div className="signup-form-professional-verification-header">
+                      <ShieldCheckIcon className="signup-form-professional-verification-icon" />
                       <div>
-                        <h3 className="signup-form-verification-title">Business Verification</h3>
-                        <p className="signup-form-verification-description">
+                        <h3 className="signup-form-professional-verification-title">Business Verification</h3>
+                        <p className="signup-form-professional-verification-description">
                           We verify your business credentials to ensure you receive property manager pricing.
                         </p>
                       </div>
