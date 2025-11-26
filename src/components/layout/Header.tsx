@@ -8,7 +8,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { useAuth } from '../../contexts/AuthContext'
 
-const navigation = [
+const baseNavigation = [
   { name: 'Products', href: '/products' },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },
@@ -21,10 +21,21 @@ export function Header() {
   const { user, logout, isAuthenticated } = useAuth()
   const location = useLocation()
 
+  // Build navigation array with Dashboard first when authenticated
+  const navigation = isAuthenticated
+    ? [
+        { name: 'Dashboard', href: '/dashboard' },
+        ...baseNavigation,
+      ]
+    : baseNavigation
+
   // Check if a navigation item is active
   const isActive = (href: string) => {
     if (href === '/') {
       return location.pathname === '/'
+    }
+    if (href === '/dashboard') {
+      return location.pathname.startsWith('/dashboard') || location.pathname.startsWith('/business/pro')
     }
     return location.pathname.startsWith(href)
   }
@@ -70,14 +81,6 @@ export function Header() {
                 </Link>
               )
             ))}
-            {isAuthenticated && (
-              <Link
-                to="/dashboard"
-                className={`header-nav-link ${isActive('/dashboard') || location.pathname.startsWith('/business/pro') ? 'active' : ''}`}
-              >
-                Dashboard
-              </Link>
-            )}
           </div>
 
           {/* Right side actions */}
@@ -217,15 +220,6 @@ export function Header() {
                       </Link>
                     )
                   ))}
-                  {isAuthenticated && (
-                    <Link
-                      to="/dashboard"
-                      className={`header-mobile-nav-item ${isActive('/dashboard') || location.pathname.startsWith('/business/pro') ? 'active' : ''}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Dashboard
-                    </Link>
-                  )}
                 </nav>
                 
                 {/* Auth section at bottom */}
