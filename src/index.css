@@ -1437,8 +1437,19 @@
     @apply bg-white shadow rounded-lg p-6;
   }
 
+  /* Add spacing between stacked dashboard cards (for homeowner dashboard) */
+  /* Only apply when cards are direct children of main content, not in a grid */
+  .dashboard-main-content > .dashboard-card + .dashboard-card {
+    @apply mt-6;
+  }
+
+  /* Remove margin for cards in a grid (HVAC Pro dashboard) */
+  .dashboard-cards-grid .dashboard-card {
+    @apply mt-0;
+  }
+
   .dashboard-card-title {
-    @apply text-lg font-semibold text-gray-900;
+    @apply text-lg font-semibold text-gray-900 mb-4 mt-0;
   }
 
   .dashboard-card-header {
