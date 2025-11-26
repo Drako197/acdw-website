@@ -10,7 +10,6 @@ import {
   EnvelopeIcon,
   BuildingOfficeIcon,
   LockClosedIcon,
-  CheckBadgeIcon,
   ShieldCheckIcon,
   IdentificationIcon,
   DocumentTextIcon
@@ -50,7 +49,6 @@ export function SignUpForm() {
     // HVAC Pro verification fields
     state: '',
     licenseNumber: '',
-    epaCertNumber: '',
     // Property Manager verification fields
     businessTaxId: '',
     acceptTerms: false
@@ -330,9 +328,6 @@ export function SignUpForm() {
       if (formData.role === 'hvac_pro') {
         verificationData.state = formData.state
         verificationData.licenseNumber = formData.licenseNumber.trim()
-        if (formData.epaCertNumber.trim()) {
-          verificationData.epaCertNumber = formData.epaCertNumber.trim()
-        }
       } else if (formData.role === 'property_manager') {
         verificationData.businessTaxId = formData.businessTaxId.trim().replace(/\s/g, '')
       }
@@ -645,28 +640,6 @@ export function SignUpForm() {
                       )}
                       <p className="signup-form-field-help">
                         Your license number helps us verify your professional status and ensure you receive contractor pricing.
-                      </p>
-                    </div>
-
-                    {/* EPA Certification (Optional) */}
-                    <div className="signup-form-field">
-                      <label htmlFor="epaCertNumber" className="signup-form-field-label">
-                        <div className="signup-form-label-content">
-                          <CheckBadgeIcon className="signup-form-label-icon" />
-                          EPA Certification Number <span className="text-gray-500 text-sm">(Optional)</span>
-                        </div>
-                      </label>
-                      <input
-                        id="epaCertNumber"
-                        name="epaCertNumber"
-                        type="text"
-                        className="signup-form-input"
-                        placeholder="Enter your EPA certification number"
-                        value={formData.epaCertNumber}
-                        onChange={handleChange}
-                      />
-                      <p className="signup-form-field-help">
-                        If you have an EPA certification for refrigerant handling, you can add it here.
                       </p>
                     </div>
                   </div>
