@@ -145,12 +145,12 @@ exports.handler = async (event, context) => {
       
       // Enable automatic tax calculation (requires shipping address)
       // Note: Stripe Tax must be enabled in your Stripe Dashboard
-      // Set STRIPE_TAX_ENABLED=false in Netlify to disable if not ready
-      ...(process.env.STRIPE_TAX_ENABLED !== 'false' && {
-        automatic_tax: {
-          enabled: true,
-        },
-      }),
+      // Temporarily disabled - enable by setting STRIPE_TAX_ENABLED=true in Netlify
+      // ...(process.env.STRIPE_TAX_ENABLED === 'true' && {
+      //   automatic_tax: {
+      //     enabled: true,
+      //   },
+      // }),
     })
 
     return {

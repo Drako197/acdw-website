@@ -92,7 +92,13 @@ export function StripeCheckout({ product, quantity, onError }: StripeCheckoutPro
           error: errorData,
           request: { priceId, quantity, product }
         })
-        throw new Error(errorData.error || `Failed to create checkout session (${checkoutResponse.status})`)
+        
+        // Show detailed error to user
+        const errorMessage = errorData.details 
+          ? `${errorData.error}\n\nDetails: ${errorData.details}`
+          : errorData.error || `Failed to create checkout session (${checkoutResponse.status})`
+        
+        throw new Error(errorMessage)
       }
 
       const checkoutData = await checkoutResponse.json()
