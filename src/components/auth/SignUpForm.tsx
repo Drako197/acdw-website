@@ -10,6 +10,7 @@ import {
   EnvelopeIcon,
   BuildingOfficeIcon,
   LockClosedIcon,
+  CheckBadgeIcon,
   ShieldCheckIcon,
   IdentificationIcon,
   DocumentTextIcon
