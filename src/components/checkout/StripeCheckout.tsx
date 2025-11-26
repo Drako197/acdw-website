@@ -47,11 +47,22 @@ export function StripeCheckout({ product, quantity, onError }: StripeCheckoutPro
       })
 
       if (!priceResponse.ok) {
-        const error = await priceResponse.json()
-        throw new Error(error.error || 'Failed to get price')
+        const errorData = await priceResponse.json()
+        console.error('Price ID lookup failed:', {
+          status: priceResponse.status,
+          error: errorData,
+          request: { product, quantity, role: user.role }
+        })
+        throw new Error(errorData.error || `Failed to get price (${priceResponse.status})`)
       }
 
-      const { priceId, requiresContact } = await priceResponse.json()
+      const priceData = await priceResponse.json()
+      const { priceId, requiresContact } = priceData
+
+      if (!priceId) {
+        console.error('No Price ID returned:', priceData)
+        throw new Error('No price ID received from server')
+      }
 
       if (requiresContact) {
         onError?.('For quantities over 500, please contact sales')
@@ -75,11 +86,22 @@ export function StripeCheckout({ product, quantity, onError }: StripeCheckoutPro
       })
 
       if (!checkoutResponse.ok) {
-        const error = await checkoutResponse.json()
-        throw new Error(error.error || 'Failed to create checkout session')
+        const errorData = await checkoutResponse.json()
+        console.error('Checkout session creation failed:', {
+          status: checkoutResponse.status,
+          error: errorData,
+          request: { priceId, quantity, product }
+        })
+        throw new Error(errorData.error || `Failed to create checkout session (${checkoutResponse.status})`)
       }
 
-      const { url } = await checkoutResponse.json()
+      const checkoutData = await checkoutResponse.json()
+      const { url } = checkoutData
+
+      if (!url) {
+        console.error('No checkout URL returned:', checkoutData)
+        throw new Error('No checkout URL received from server')
+      }
 
       // Step 3: Redirect to Stripe Checkout
       if (url) {

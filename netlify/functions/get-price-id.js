@@ -165,11 +165,23 @@ exports.handler = async (event, context) => {
     const priceId = PRICE_IDS[priceIdKey]
 
     if (!priceId) {
-      console.error(`Price ID not found for: ${priceIdKey}`)
+      console.error(`Price ID not found for: ${priceIdKey}`, {
+        product,
+        role,
+        tier,
+        quantity: qty,
+        availableKeys: Object.keys(PRICE_IDS)
+      })
       return {
         statusCode: 500,
         headers,
-        body: JSON.stringify({ error: 'Price configuration error' }),
+        body: JSON.stringify({ 
+          error: `Price configuration error: ${priceIdKey} not found in environment variables`,
+          priceIdKey,
+          product,
+          role,
+          tier
+        }),
       }
     }
 
@@ -191,11 +203,34 @@ exports.handler = async (event, context) => {
         }),
       }
     } catch (stripeError) {
-      console.error('Stripe error:', stripeError)
+      console.error('Stripe price verification error:', {
+        priceId,
+        priceIdKey,
+        errorType: stripeError.type,
+        errorMessage: stripeError.message,
+        errorCode: stripeError.code,
+        stripeKeyPrefix: process.env.STRIPE_SECRET_KEY?.substring(0, 7) // Show if it's sk_test_ or sk_live_
+      })
+      
+      // Provide more helpful error messages
+      let errorMessage = 'Stripe price verification failed'
+      if (stripeError.type === 'StripeInvalidRequestError') {
+        if (stripeError.code === 'resource_missing') {
+          errorMessage = `Price ID not found in Stripe: ${priceId}. Please verify the Price ID exists in your Stripe account.`
+        } else if (stripeError.message?.includes('No such price')) {
+          errorMessage = `Price ID does not exist: ${priceId}. Make sure you're using test mode Price IDs with test mode secret key.`
+        } else {
+          errorMessage = `Stripe error: ${stripeError.message}`
+        }
+      }
+      
       return {
         statusCode: 500,
         headers,
-        body: JSON.stringify({ error: 'Stripe price verification failed' }),
+        body: JSON.stringify({ 
+          error: errorMessage,
+          details: process.env.NODE_ENV === 'development' ? stripeError.message : undefined
+        }),
       }
     }
   } catch (error) {
