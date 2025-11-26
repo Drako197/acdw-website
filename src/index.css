@@ -7295,6 +7295,30 @@
   max-width: 100%;
 }
 
+.checkout-success-order-amount {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.checkout-success-shipping-info {
+  @apply bg-blue-50 rounded-lg p-4 mb-8 text-left;
+}
+
+.checkout-success-shipping-title {
+  @apply flex items-center gap-2 text-lg font-semibold text-gray-900 mb-3;
+}
+
+.checkout-success-shipping-icon {
+  @apply h-5 w-5 text-blue-600;
+}
+
+.checkout-success-shipping-address {
+  @apply space-y-1 text-gray-700;
+}
+
+.checkout-success-shipping-name {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
 .checkout-success-next-steps {
   @apply text-left mb-8;
 }
