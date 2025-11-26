@@ -17,6 +17,8 @@ import {
 import { useAuth } from '../contexts/AuthContext'
 import { ProtectedRoute } from '../components/auth/ProtectedRoute'
 import { getCatalogRoute } from '../utils/auth'
+import { maskLicenseNumber, maskEIN } from '../utils/verification'
+import { US_STATES } from '../config/usStates'
 
 function DashboardContent() {
   const { user, logout } = useAuth()
@@ -310,6 +312,68 @@ function DashboardContent() {
                     <span className="dashboard-account-label">Role:</span>
                     <span className="dashboard-account-value">{user?.role.replace('_', ' ')}</span>
                   </div>
+                  
+                  {/* HVAC Pro Verification Info */}
+                  {user?.role === 'hvac_pro' && user?.verification && (
+                    <>
+                      {user.verification.state && (
+                        <div className="dashboard-account-item">
+                          <span className="dashboard-account-label">License State:</span>
+                          <span className="dashboard-account-value">
+                            {US_STATES.find(s => s.code === user.verification?.state)?.name || user.verification.state}
+                          </span>
+                        </div>
+                      )}
+                      {user.verification.licenseNumber && (
+                        <div className="dashboard-account-item">
+                          <span className="dashboard-account-label">License Number:</span>
+                          <span className="dashboard-account-value">
+                            {maskLicenseNumber(user.verification.licenseNumber)}
+                          </span>
+                        </div>
+                      )}
+                      {user.verification.status && (
+                        <div className="dashboard-account-item">
+                          <span className="dashboard-account-label">Verification Status:</span>
+                          <span className={`dashboard-account-value ${
+                            user.verification.status === 'verified' ? 'text-green-600' :
+                            user.verification.status === 'pending_verification' ? 'text-yellow-600' :
+                            user.verification.status === 'rejected' ? 'text-red-600' :
+                            'text-gray-600'
+                          }`}>
+                            {user.verification.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
+                  {/* Property Manager Verification Info */}
+                  {user?.role === 'property_manager' && user?.verification && (
+                    <>
+                      {user.verification.businessTaxId && (
+                        <div className="dashboard-account-item">
+                          <span className="dashboard-account-label">Business Tax ID (EIN):</span>
+                          <span className="dashboard-account-value">
+                            {maskEIN(user.verification.businessTaxId)}
+                          </span>
+                        </div>
+                      )}
+                      {user.verification.status && (
+                        <div className="dashboard-account-item">
+                          <span className="dashboard-account-label">Verification Status:</span>
+                          <span className={`dashboard-account-value ${
+                            user.verification.status === 'verified' ? 'text-green-600' :
+                            user.verification.status === 'pending_verification' ? 'text-yellow-600' :
+                            user.verification.status === 'rejected' ? 'text-red-600' :
+                            'text-gray-600'
+                          }`}>
+                            {user.verification.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
 
