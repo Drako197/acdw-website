@@ -1702,6 +1702,10 @@
   }
 
   /* HVAC Pro Products Styles */
+  .dashboard-card-my-products {
+    @apply mt-6;
+  }
+
   .dashboard-pro-products-list {
     @apply space-y-4;
   }
