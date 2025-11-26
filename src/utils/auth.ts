@@ -14,8 +14,7 @@ export function getRoleBasedRedirect(role: UserRole | undefined): string {
     case 'hvac_pro':
       return '/business/pro/catalog'
     case 'property_manager':
-      // Property Manager catalog page not yet created, route to demo request
-      return '/contact?type=demo-request'
+      return '/business/property-manager/catalog'
     case 'homeowner':
     default:
       return '/dashboard'

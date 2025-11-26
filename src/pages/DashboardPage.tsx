@@ -324,6 +324,118 @@ function DashboardContent() {
             </div>
           )}
 
+          {/* Property Manager - My Products Section */}
+          {user?.role === 'property_manager' && (
+            <div className="dashboard-card dashboard-card-my-products">
+              <h2 className="dashboard-card-title">My Products</h2>
+              {HAS_PRODUCTS ? (
+                /* Post-Purchase State - Products Purchased */
+                <div className="dashboard-pro-products-list">
+                  <div className="dashboard-pro-product-item">
+                    <div className="dashboard-pro-product-header">
+                      <div className="dashboard-pro-product-info">
+                        <h3 className="dashboard-pro-product-name">AC Drain Wiz Mini</h3>
+                        <div className="dashboard-pro-product-details">
+                          <span className="dashboard-pro-product-detail">
+                            <ShieldCheckIcon className="dashboard-pro-product-detail-icon" />
+                            Quantity: <strong>50 units</strong>
+                          </span>
+                          <span className="dashboard-pro-product-detail">
+                            <ClockIcon className="dashboard-pro-product-detail-icon" />
+                            Last Order: <strong>Jan 15, 2025</strong>
+                          </span>
+                        </div>
+                      </div>
+                      <div className="dashboard-pro-product-actions">
+                        <button
+                          onClick={() => navigate('/business/property-manager/catalog')}
+                          className="dashboard-pro-product-button-primary"
+                        >
+                          Reorder
+                        </button>
+                      </div>
+                    </div>
+                    <div className="dashboard-pro-product-footer">
+                      <button
+                        onClick={() => navigate('/contact?type=support')}
+                        className="dashboard-pro-product-link"
+                      >
+                        Get Support
+                      </button>
+                      <span className="dashboard-pro-product-separator">•</span>
+                      <button
+                        onClick={() => navigate('/support')}
+                        className="dashboard-pro-product-link"
+                      >
+                        View Documentation
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="dashboard-pro-product-item">
+                    <div className="dashboard-pro-product-header">
+                      <div className="dashboard-pro-product-info">
+                        <h3 className="dashboard-pro-product-name">AC Drain Wiz Sensor</h3>
+                        <div className="dashboard-pro-product-details">
+                          <span className="dashboard-pro-product-detail">
+                            <ShieldCheckIcon className="dashboard-pro-product-detail-icon" />
+                            Quantity: <strong>25 units</strong>
+                          </span>
+                          <span className="dashboard-pro-product-detail">
+                            <ClockIcon className="dashboard-pro-product-detail-icon" />
+                            Last Order: <strong>Jan 10, 2025</strong>
+                          </span>
+                        </div>
+                      </div>
+                      <div className="dashboard-pro-product-actions">
+                        <button
+                          onClick={() => navigate('/business/property-manager/catalog')}
+                          className="dashboard-pro-product-button-primary"
+                        >
+                          Reorder
+                        </button>
+                      </div>
+                    </div>
+                    <div className="dashboard-pro-product-footer">
+                      <button
+                        onClick={() => navigate('/contact?type=support')}
+                        className="dashboard-pro-product-link"
+                      >
+                        Get Support
+                      </button>
+                      <span className="dashboard-pro-product-separator">•</span>
+                      <button
+                        onClick={() => navigate('/support')}
+                        className="dashboard-pro-product-link"
+                      >
+                        View Documentation
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                /* Pre-Purchase State - No Products Yet */
+                <div className="dashboard-pro-products-empty">
+                  <div className="dashboard-pro-products-empty-icon-wrapper">
+                    <CubeIcon className="dashboard-pro-products-empty-icon" />
+                  </div>
+                  <h3 className="dashboard-pro-products-empty-title">No products purchased yet</h3>
+                  <p className="dashboard-pro-products-empty-description">
+                    Start building your inventory with AC Drain Wiz products. Access property manager pricing, 
+                    volume discounts, and bulk ordering options.
+                  </p>
+                  <button
+                    onClick={() => navigate('/business/property-manager/catalog')}
+                    className="dashboard-pro-products-empty-cta"
+                  >
+                    <ShoppingCartIcon className="dashboard-pro-products-empty-cta-icon" />
+                    View Products & Pricing
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* HVAC Pro - My Products Section */}
           {user?.role === 'hvac_pro' && (
             <div className="dashboard-card dashboard-card-my-products">
