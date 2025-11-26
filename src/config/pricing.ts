@@ -1,0 +1,173 @@
+/**
+ * Pricing Configuration
+ * 
+ * SECURITY NOTE: These are base prices for display only.
+ * Actual prices are validated server-side via Stripe Price IDs.
+ * Never trust client-side price calculations.
+ */
+
+export type UserRole = 'homeowner' | 'hvac_pro' | 'property_manager'
+export type ProductType = 'mini' | 'sensor' | 'bundle'
+export type PricingTier = 'tier_1' | 'tier_2' | 'tier_3' | 'msrp'
+
+export interface PricingTierRange {
+  min: number
+  max: number
+  label: string
+}
+
+export interface ProductPricing {
+  msrp: number
+  hvac_pro: {
+    tier_1: number
+    tier_2: number
+    tier_3: number
+  }
+  property_manager: {
+    tier_1: number
+    tier_2: number
+    tier_3: number
+  }
+}
+
+// Base MSRP Prices
+export const MSRP_PRICES = {
+  mini: 99.99,
+  sensor: 69.99,
+  bundle: 179.99,
+} as const
+
+// HVAC Pro Pricing (per product, per tier)
+export const HVAC_PRO_PRICING: Record<ProductType, ProductPricing['hvac_pro']> = {
+  mini: {
+    tier_1: 71.67,
+    tier_2: 65.00,
+    tier_3: 58.00,
+  },
+  sensor: {
+    tier_1: 50.17,
+    tier_2: 45.50,
+    tier_3: 40.60,
+  },
+  bundle: {
+    tier_1: 129.01,
+    tier_2: 117.01,
+    tier_3: 104.41,
+  },
+}
+
+// Property Manager Pricing (10% lower than HVAC Pro)
+export const PROPERTY_MANAGER_PRICING: Record<ProductType, ProductPricing['property_manager']> = {
+  mini: {
+    tier_1: 64.50,  // 10% off $71.67
+    tier_2: 58.50,  // 10% off $65.00
+    tier_3: 52.20,  // 10% off $58.00
+  },
+  sensor: {
+    tier_1: 45.15,  // 10% off $50.17
+    tier_2: 40.95,  // 10% off $45.50
+    tier_3: 36.54,  // 10% off $40.60
+  },
+  bundle: {
+    tier_1: 116.11, // 10% off $129.01
+    tier_2: 105.31, // 10% off $117.01
+    tier_3: 93.97,  // 10% off $104.41
+  },
+}
+
+// Quantity Tier Ranges
+export const TIER_RANGES: Record<PricingTier, PricingTierRange> = {
+  msrp: { min: 1, max: 1, label: 'MSRP' },
+  tier_1: { min: 1, max: 20, label: 'Tier 1 (1-20 units)' },
+  tier_2: { min: 21, max: 100, label: 'Tier 2 (21-100 units)' },
+  tier_3: { min: 101, max: 500, label: 'Tier 3 (101-500 units)' },
+}
+
+// Maximum quantity for automated checkout
+export const MAX_AUTOMATED_QUANTITY = 500
+
+/**
+ * Calculate pricing tier based on quantity
+ * @param quantity - Number of units
+ * @returns Pricing tier or 'contact_sales' if quantity exceeds max
+ */
+export function calculateTier(quantity: number): PricingTier | 'contact_sales' {
+  if (quantity >= 1 && quantity <= 20) return 'tier_1'
+  if (quantity >= 21 && quantity <= 100) return 'tier_2'
+  if (quantity >= 101 && quantity <= 500) return 'tier_3'
+  return 'contact_sales'
+}
+
+/**
+ * Get price for a product based on role and tier
+ * NOTE: This is for display only. Actual prices come from Stripe Price IDs.
+ * @param product - Product type
+ * @param role - User role
+ * @param tier - Pricing tier
+ * @returns Price in dollars
+ */
+export function getDisplayPrice(
+  product: ProductType,
+  role: UserRole,
+  tier: PricingTier
+): number {
+  if (role === 'homeowner' || tier === 'msrp') {
+    return MSRP_PRICES[product]
+  }
+
+  if (role === 'hvac_pro') {
+    return HVAC_PRO_PRICING[product][tier]
+  }
+
+  if (role === 'property_manager') {
+    return PROPERTY_MANAGER_PRICING[product][tier]
+  }
+
+  return MSRP_PRICES[product] // Fallback
+}
+
+/**
+ * Get all prices for a product across all tiers (for display tables)
+ */
+export function getProductPricingTable(
+  product: ProductType,
+  role: UserRole
+): Array<{ tier: PricingTier; quantity: string; price: number }> {
+  if (role === 'homeowner') {
+    return [
+      {
+        tier: 'msrp',
+        quantity: '1',
+        price: MSRP_PRICES[product],
+      },
+    ]
+  }
+
+  const pricing = role === 'hvac_pro' ? HVAC_PRO_PRICING : PROPERTY_MANAGER_PRICING
+
+  return [
+    {
+      tier: 'tier_1',
+      quantity: '1-20',
+      price: pricing[product].tier_1,
+    },
+    {
+      tier: 'tier_2',
+      quantity: '21-100',
+      price: pricing[product].tier_2,
+    },
+    {
+      tier: 'tier_3',
+      quantity: '101-500',
+      price: pricing[product].tier_3,
+    },
+  ]
+}
+
+/**
+ * Validate quantity is within allowed range
+ */
+export function isValidQuantity(quantity: number): boolean {
+  return quantity >= 1 && quantity <= MAX_AUTOMATED_QUANTITY
+}
+

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { 
   Bars3Icon, 
   XMarkIcon, 
@@ -19,6 +19,15 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const { user, logout, isAuthenticated } = useAuth()
+  const location = useLocation()
+
+  // Check if a navigation item is active
+  const isActive = (href: string) => {
+    if (href === '/') {
+      return location.pathname === '/'
+    }
+    return location.pathname.startsWith(href)
+  }
 
   return (
     <header className="header-main-container">
@@ -26,7 +35,10 @@ export function Header() {
         <div className="header-content-layout">
           {/* Logo */}
           <div className="header-logo-section">
-            <Link to="/" className="header-logo-link">
+            <Link 
+              to={isAuthenticated ? "/dashboard" : "/"} 
+              className="header-logo-link"
+            >
               <img 
                 src="/images/ac-drain-wiz-logo.png" 
                 alt="AC Drain Wiz Logo" 
@@ -52,12 +64,20 @@ export function Header() {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className="header-nav-link"
+                  className={`header-nav-link ${isActive(item.href) ? 'active' : ''}`}
                 >
                   {item.name}
                 </Link>
               )
             ))}
+            {isAuthenticated && (
+              <Link
+                to="/dashboard"
+                className={`header-nav-link ${isActive('/dashboard') || location.pathname.startsWith('/business/pro') ? 'active' : ''}`}
+              >
+                Dashboard
+              </Link>
+            )}
           </div>
 
           {/* Right side actions */}
@@ -86,6 +106,13 @@ export function Header() {
                       onClick={() => setUserMenuOpen(false)}
                     >
                       Dashboard
+                    </Link>
+                    <Link
+                      to="/dashboard/profile"
+                      className="header-user-dropdown-item"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      Edit Profile
                     </Link>
                     <button
                       onClick={() => {
@@ -144,7 +171,11 @@ export function Header() {
             <div className="header-mobile-menu-panel">
               {/* Header with logo and close button */}
               <div className="header-mobile-menu-header">
-                <Link to="/" className="header-mobile-menu-logo" onClick={() => setMobileMenuOpen(false)}>
+                <Link 
+                  to={isAuthenticated ? "/dashboard" : "/"} 
+                  className="header-mobile-menu-logo" 
+                  onClick={() => setMobileMenuOpen(false)}
+                >
                   <img 
                     src="/images/ac-drain-wiz-logo.png" 
                     alt="AC Drain Wiz Logo" 
@@ -179,13 +210,22 @@ export function Header() {
                       <Link
                         key={item.name}
                         to={item.href}
-                        className="header-mobile-nav-item"
+                        className={`header-mobile-nav-item ${isActive(item.href) ? 'active' : ''}`}
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         {item.name}
                       </Link>
                     )
                   ))}
+                  {isAuthenticated && (
+                    <Link
+                      to="/dashboard"
+                      className={`header-mobile-nav-item ${isActive('/dashboard') || location.pathname.startsWith('/business/pro') ? 'active' : ''}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                  )}
                 </nav>
                 
                 {/* Auth section at bottom */}
@@ -198,6 +238,13 @@ export function Header() {
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         Dashboard
+                      </Link>
+                      <Link
+                        to="/dashboard/profile"
+                        className="header-mobile-auth-button-secondary"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Edit Profile
                       </Link>
                       <button
                         onClick={() => {

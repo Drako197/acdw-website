@@ -76,6 +76,20 @@
     margin-top: 0.25rem;
     font-style: italic;
   }
+
+  /* Hide browser's default HTML5 validation popup */
+  input:invalid,
+  textarea:invalid,
+  select:invalid {
+    box-shadow: none;
+  }
+
+  /* Prevent browser validation tooltip from showing */
+  input:invalid:not(:focus):not(:placeholder-shown),
+  textarea:invalid:not(:focus):not(:placeholder-shown),
+  select:invalid:not(:focus):not(:placeholder-shown) {
+    box-shadow: none;
+  }
   
   /* React Day Picker Custom Styling - Clean Minimalist Design */
   .calendar-popup {
@@ -995,7 +1009,11 @@
   }
 
   .header-nav-link {
-    @apply text-sm font-medium text-gray-700 hover:text-primary-600;
+    @apply text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors;
+  }
+
+  .header-nav-link.active {
+    @apply text-primary-600 font-semibold border-b-2 border-primary-600;
   }
 
   .header-actions-section {
@@ -1147,11 +1165,17 @@
       border-bottom: 1px solid #f3f4f6;
     }
 
-    .header-mobile-nav-item:hover,
-    .header-mobile-nav-item:active {
+    .header-mobile-nav-item:hover {
       background-color: #f9fafb;
       color: #111827;
-  }
+    }
+
+    .header-mobile-nav-item.active {
+      background-color: #fff7ed;
+      color: #f97316;
+      font-weight: 600;
+      border-left: 3px solid #f97316;
+    }
 
   .header-mobile-auth-section {
       padding: 1.5rem;
@@ -1370,11 +1394,11 @@
   }
 
   .dashboard-content-wrapper {
-    @apply container mx-auto px-4 py-16;
+    @apply container mx-auto px-6 py-16;
   }
 
   .dashboard-main-content {
-    @apply max-w-4xl mx-auto;
+    @apply max-w-6xl mx-auto;
   }
 
   .dashboard-header-card {
@@ -1398,11 +1422,15 @@
   }
 
   .dashboard-signout-button {
-    @apply btn btn-outline;
+    @apply px-4 py-2 text-sm font-semibold text-gray-700 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-all transform hover:scale-[1.02];
+  }
+
+  .dashboard-quick-actions-card {
+    @apply bg-white shadow rounded-lg p-6 mb-6 w-full;
   }
 
   .dashboard-cards-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+    @apply grid grid-cols-1 md:grid-cols-2 gap-6;
   }
 
   .dashboard-card {
@@ -1410,19 +1438,51 @@
   }
 
   .dashboard-card-title {
-    @apply text-lg font-semibold text-gray-900 mb-4;
+    @apply text-lg font-semibold text-gray-900;
+  }
+
+  .dashboard-card-header {
+    @apply flex items-center justify-between mb-4;
+  }
+
+  .dashboard-edit-profile-link {
+    @apply text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors;
   }
 
   .dashboard-quick-actions {
-    @apply space-y-3;
+    @apply flex flex-col sm:flex-row gap-4;
   }
 
   .dashboard-action-button-primary {
-    @apply w-full btn btn-primary;
+    @apply flex-1 flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold text-white rounded-lg shadow-md transition-all transform hover:scale-[1.02] hover:shadow-lg;
+    background-color: #2563eb;
+  }
+  .dashboard-action-button-primary:hover {
+    background-color: #1d4ed8;
+  }
+  .dashboard-action-button-primary:active {
+    background-color: #1e40af;
   }
 
-  .dashboard-action-button-outline {
-    @apply w-full btn btn-outline;
+  .dashboard-action-button-secondary {
+    @apply flex-1 flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold bg-white border-2 rounded-lg transition-all transform hover:scale-[1.02] hover:shadow-md;
+    border-color: #2563eb;
+    color: #2563eb;
+  }
+  .dashboard-action-button-secondary:hover {
+    background-color: #eff6ff;
+    border-color: #1d4ed8;
+  }
+  .dashboard-action-button-secondary:active {
+    background-color: #dbeafe;
+  }
+
+  .dashboard-action-button-icon {
+    @apply h-5 w-5;
+  }
+
+  .dashboard-action-button-arrow {
+    @apply h-4 w-4 ml-auto;
   }
 
   .dashboard-account-info {
@@ -1454,27 +1514,317 @@
   }
 
   .dashboard-professional-features {
-    @apply mt-6 bg-white shadow rounded-lg p-6;
+    @apply mt-8 bg-white shadow-lg rounded-lg p-8;
   }
 
   .dashboard-professional-title {
-    @apply text-lg font-semibold text-gray-900 mb-4;
+    @apply text-2xl font-bold text-gray-900 mb-6;
   }
 
   .dashboard-professional-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+    @apply grid grid-cols-1 md:grid-cols-2 gap-6;
   }
 
   .dashboard-professional-feature {
-    @apply border rounded-lg p-4;
+    @apply bg-gray-50 border-2 border-gray-200 rounded-lg p-6 transition-all transform hover:scale-[1.02];
+  }
+  .dashboard-professional-feature:hover {
+    border-color: #2563eb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .dashboard-professional-feature-icon-wrapper {
+    @apply w-12 h-12 rounded-lg flex items-center justify-center mb-4;
+    background-color: #eff6ff;
+  }
+
+  .dashboard-professional-feature-icon {
+    @apply h-6 w-6;
+    color: #2563eb;
   }
 
   .dashboard-professional-feature-title {
-    @apply font-medium text-gray-900 mb-2;
+    @apply text-lg font-bold text-gray-900 mb-2;
   }
 
   .dashboard-professional-feature-description {
+    @apply text-sm text-gray-600 mb-4;
+  }
+
+  .dashboard-professional-feature-link {
+    @apply flex items-center gap-2 text-sm font-semibold transition-colors;
+    color: #2563eb;
+  }
+  .dashboard-professional-feature-link:hover {
+    color: #1d4ed8;
+  }
+
+  .dashboard-professional-feature-link-icon {
+    @apply h-4 w-4;
+  }
+
+  /* Homeowner Dashboard Styles */
+  .dashboard-homeowner-product {
+    @apply space-y-4;
+  }
+
+  .dashboard-homeowner-product-header {
+    @apply flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4 border-b border-gray-200;
+  }
+
+  .dashboard-homeowner-product-info {
+    @apply flex-1;
+  }
+
+  .dashboard-homeowner-product-name {
+    @apply text-xl font-bold text-gray-900 mb-3;
+  }
+
+  .dashboard-homeowner-product-details {
+    @apply flex flex-wrap gap-4;
+  }
+
+  .dashboard-homeowner-product-detail {
+    @apply flex items-center gap-2 text-sm text-gray-600;
+  }
+
+  .dashboard-homeowner-product-detail-icon {
+    @apply h-4 w-4 text-blue-600;
+  }
+
+  .dashboard-homeowner-product-actions {
+    @apply flex gap-3;
+  }
+
+  .dashboard-homeowner-product-button-primary {
+    @apply px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors text-sm;
+  }
+
+  .dashboard-homeowner-product-button-secondary {
+    @apply px-4 py-2 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors text-sm;
+  }
+
+  .dashboard-homeowner-product-footer {
+    @apply flex items-center gap-2 text-sm;
+  }
+
+  .dashboard-homeowner-product-link {
+    @apply text-blue-600 hover:text-blue-700 font-medium transition-colors;
+  }
+
+  .dashboard-homeowner-product-separator {
+    @apply text-gray-400;
+  }
+
+  /* Order History Styles */
+  .dashboard-order-history {
+    @apply space-y-4;
+  }
+
+  .dashboard-order-item {
+    @apply border border-gray-200 rounded-lg p-4;
+  }
+
+  .dashboard-order-header {
+    @apply flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3;
+  }
+
+  .dashboard-order-info {
+    @apply flex flex-col sm:flex-row sm:items-center gap-2;
+  }
+
+  .dashboard-order-number {
+    @apply font-semibold text-gray-900;
+  }
+
+  .dashboard-order-date {
     @apply text-sm text-gray-600;
+  }
+
+  .dashboard-order-status {
+    @apply flex items-center gap-2 text-sm font-medium text-green-700;
+  }
+
+  .dashboard-order-status-icon {
+    @apply h-4 w-4;
+  }
+
+  .dashboard-order-details {
+    @apply flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2;
+  }
+
+  .dashboard-order-product {
+    @apply text-sm text-gray-700;
+  }
+
+  .dashboard-order-actions {
+    @apply flex items-center gap-2 text-sm;
+  }
+
+  .dashboard-order-action-link {
+    @apply text-blue-600 hover:text-blue-700 font-medium transition-colors;
+  }
+
+  .dashboard-order-separator {
+    @apply text-gray-400;
+  }
+
+  .dashboard-order-empty-message {
+    @apply text-sm text-gray-600 text-center py-4;
+  }
+
+  .dashboard-order-empty-state {
+    @apply text-center py-12 px-4;
+  }
+
+  .dashboard-order-empty-icon-wrapper {
+    @apply flex justify-center mb-4;
+  }
+
+  .dashboard-order-empty-icon {
+    @apply h-16 w-16 text-gray-300;
+  }
+
+  .dashboard-order-empty-title {
+    @apply text-xl font-semibold text-gray-900 mb-2;
+  }
+
+  .dashboard-order-empty-description {
+    @apply text-sm text-gray-600 mb-6 max-w-md mx-auto;
+  }
+
+  .dashboard-order-empty-cta {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors;
+  }
+
+  .dashboard-order-empty-cta-icon {
+    @apply h-5 w-5;
+  }
+
+  /* HVAC Pro Products Styles */
+  .dashboard-pro-products-list {
+    @apply space-y-4;
+  }
+
+  .dashboard-pro-product-item {
+    @apply border border-gray-200 rounded-lg p-4;
+  }
+
+  .dashboard-pro-product-header {
+    @apply flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4 border-b border-gray-200;
+  }
+
+  .dashboard-pro-product-info {
+    @apply flex-1;
+  }
+
+  .dashboard-pro-product-name {
+    @apply text-lg font-bold text-gray-900 mb-3;
+  }
+
+  .dashboard-pro-product-details {
+    @apply flex flex-wrap gap-4;
+  }
+
+  .dashboard-pro-product-detail {
+    @apply flex items-center gap-2 text-sm text-gray-600;
+  }
+
+  .dashboard-pro-product-detail-icon {
+    @apply h-4 w-4 text-blue-600;
+  }
+
+  .dashboard-pro-product-actions {
+    @apply flex gap-3;
+  }
+
+  .dashboard-pro-product-button-primary {
+    @apply px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors text-sm;
+  }
+
+  .dashboard-pro-product-footer {
+    @apply flex items-center gap-2 text-sm pt-4;
+  }
+
+  .dashboard-pro-product-link {
+    @apply text-blue-600 hover:text-blue-700 font-medium transition-colors;
+  }
+
+  .dashboard-pro-product-separator {
+    @apply text-gray-400;
+  }
+
+  .dashboard-pro-products-empty {
+    @apply text-center py-12 px-4;
+  }
+
+  .dashboard-pro-products-empty-icon-wrapper {
+    @apply flex justify-center mb-4;
+  }
+
+  .dashboard-pro-products-empty-icon {
+    @apply h-16 w-16 text-gray-300;
+  }
+
+  .dashboard-pro-products-empty-title {
+    @apply text-xl font-semibold text-gray-900 mb-2;
+  }
+
+  .dashboard-pro-products-empty-description {
+    @apply text-sm text-gray-600 mb-6 max-w-2xl mx-auto;
+  }
+
+  .dashboard-pro-products-empty-cta {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors mb-6;
+  }
+
+  .dashboard-pro-products-empty-cta-icon {
+    @apply h-5 w-5;
+  }
+
+  .dashboard-pro-products-empty-benefits {
+    @apply flex flex-col sm:flex-row gap-4 justify-center items-start sm:items-center text-sm text-gray-600;
+  }
+
+  .dashboard-pro-products-empty-benefit {
+    @apply flex items-center gap-2;
+  }
+
+  .dashboard-pro-products-empty-benefit-icon {
+    @apply h-4 w-4 text-green-600 flex-shrink-0;
+  }
+
+  /* Resources Grid Styles */
+  .dashboard-resources-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4 mb-6;
+  }
+
+  .dashboard-resource-card {
+    @apply bg-gray-50 border-2 border-gray-200 rounded-lg p-4 text-left transition-all transform hover:scale-[1.02] hover:border-blue-300;
+  }
+
+  .dashboard-resource-icon {
+    @apply h-8 w-8 text-blue-600 mb-3;
+  }
+
+  .dashboard-resource-title {
+    @apply text-base font-semibold text-gray-900 mb-1;
+  }
+
+  .dashboard-resource-description {
+    @apply text-sm text-gray-600;
+  }
+
+  .dashboard-resources-actions {
+    @apply pt-4 border-t border-gray-200;
+  }
+
+  .dashboard-resources-support-button {
+    @apply w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors;
+  }
+
+  .dashboard-resources-support-icon {
+    @apply h-5 w-5;
   }
 
   /* How It Works Section Styles */
@@ -3855,9 +4205,38 @@
   @apply flex items-center gap-2 px-6 py-2 bg-white text-orange-600 font-semibold rounded-full hover:bg-orange-50 transition-colors text-sm;
 }
 
-.homeowner-banner-icon {
-  @apply h-4 w-4;
-}
+  .homeowner-banner-icon {
+    @apply h-4 w-4;
+  }
+
+  /* Sign-up form icon styles */
+  .signup-form-label-icon {
+    @apply h-4 w-4 text-gray-500;
+  }
+
+  .signup-form-header-icon {
+    @apply h-8 w-8 text-primary-600;
+  }
+
+  .signup-form-benefit-icon {
+    @apply h-6 w-6 text-green-300 flex-shrink-0;
+  }
+
+  .signup-form-trust-icon {
+    @apply h-5 w-5 text-green-300;
+  }
+
+  .signup-form-password-toggle-icon {
+    @apply h-5 w-5 text-gray-400 hover:text-gray-600;
+  }
+
+  .signup-form-success-icon {
+    @apply h-10 w-10 text-green-600;
+  }
+
+  .signup-form-submit-icon {
+    @apply h-5 w-5 mr-2;
+  }
 
 /* Promo Page Styles */
 .promo-page-container {
@@ -5912,5 +6291,1108 @@
 
 .unsubscribe-confirmation-actions {
   @apply flex flex-col sm:flex-row gap-4 mt-6;
+}
+
+/* HVAC Pro Catalog Page */
+.hvac-pro-catalog-container {
+  @apply min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8;
+}
+
+.hvac-pro-catalog-wrapper {
+  @apply max-w-6xl mx-auto;
+}
+
+.hvac-pro-catalog-back-link {
+  @apply mb-6;
+}
+
+.hvac-pro-catalog-back-button {
+  @apply inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700;
+  @apply hover:text-primary-600 transition-colors;
+}
+
+.hvac-pro-catalog-back-icon {
+  @apply h-4 w-4;
+}
+
+.hvac-pro-catalog-header {
+  @apply text-center mb-8;
+}
+
+.hvac-pro-catalog-title {
+  @apply text-4xl font-bold text-gray-900 mb-2;
+}
+
+.hvac-pro-catalog-subtitle {
+  @apply text-lg text-gray-600 mb-2;
+}
+
+.hvac-pro-catalog-role-badge {
+  @apply inline-block px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold;
+}
+
+.hvac-pro-product-selector {
+  @apply flex flex-wrap justify-center gap-6 mb-8;
+}
+
+.hvac-pro-product-button-wrapper {
+  @apply flex flex-col items-center;
+  @apply min-w-[200px] max-w-[280px];
+}
+
+.hvac-pro-product-button {
+  @apply w-full px-6 py-3 rounded-lg font-semibold transition-all border-2;
+  @apply bg-white text-gray-700 border-gray-300 hover:border-primary-500 hover:text-primary-600;
+  @apply mb-3;
+}
+
+.hvac-pro-product-button.active {
+  @apply bg-primary-600 text-white border-primary-600;
+}
+
+.hvac-pro-product-button-name {
+  @apply block;
+}
+
+.hvac-pro-product-pricing-info {
+  @apply text-center space-y-1;
+}
+
+.hvac-pro-product-msrp {
+  @apply flex items-center justify-center gap-2;
+}
+
+.hvac-pro-product-msrp-label {
+  @apply text-xs text-gray-500;
+}
+
+.hvac-pro-product-msrp-price {
+  @apply text-sm font-medium text-gray-400 line-through;
+}
+
+.hvac-pro-product-savings {
+  @apply flex items-center justify-center gap-1.5;
+}
+
+.hvac-pro-product-savings-amount {
+  @apply text-sm font-bold text-green-600;
+}
+
+.hvac-pro-product-savings-percent {
+  @apply text-xs font-medium text-green-600;
+}
+
+.hvac-pro-product-contractor-price {
+  @apply flex items-center justify-center gap-2 pt-1;
+}
+
+.hvac-pro-product-contractor-price-label {
+  @apply text-xs text-gray-600;
+}
+
+.hvac-pro-product-contractor-price-value {
+  @apply text-base font-bold text-primary-600;
+}
+
+.hvac-pro-pricing-section {
+  @apply bg-white rounded-lg shadow-md p-6 mb-6;
+}
+
+.hvac-pro-pricing-title {
+  @apply text-2xl font-bold text-gray-900 mb-4;
+}
+
+.hvac-pro-pricing-table {
+  @apply overflow-x-auto;
+}
+
+.hvac-pro-pricing-table-element {
+  @apply w-full;
+}
+
+.hvac-pro-pricing-table th {
+  @apply px-4 py-3 bg-gray-50 text-left text-sm font-semibold text-gray-700 border-b;
+}
+
+.hvac-pro-pricing-table td {
+  @apply px-4 py-3 text-sm text-gray-600 border-b;
+}
+
+.hvac-pro-quantity-section {
+  @apply bg-white rounded-lg shadow-md p-6 mb-6;
+}
+
+.hvac-pro-quantity-label {
+  @apply block text-sm font-semibold text-gray-700 mb-4;
+}
+
+.hvac-pro-quantity-quick-select {
+  @apply mb-6;
+}
+
+.hvac-pro-quantity-quick-select-label {
+  @apply block text-xs font-medium text-gray-600 mb-3;
+}
+
+.hvac-pro-quantity-quick-select-buttons {
+  @apply flex flex-wrap gap-2;
+}
+
+.hvac-pro-quantity-quick-select-button {
+  @apply px-4 py-2 text-sm font-semibold rounded-lg border-2 transition-all;
+  @apply bg-white text-gray-700 border-gray-300;
+  @apply hover:border-primary-500 hover:text-primary-600 hover:bg-primary-50;
+  @apply active:scale-95;
+}
+
+.hvac-pro-quantity-quick-select-button.active {
+  @apply bg-primary-600 text-white border-primary-600;
+  @apply hover:bg-primary-700 hover:border-primary-700;
+}
+
+.hvac-pro-quantity-input-wrapper {
+  @apply mt-4;
+}
+
+.hvac-pro-quantity-input-label {
+  @apply block text-xs font-medium text-gray-600 mb-2;
+}
+
+.hvac-pro-quantity-input {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
+}
+
+.hvac-pro-contact-sales {
+  @apply text-sm text-orange-600 mt-2;
+}
+
+.hvac-pro-price-display {
+  @apply bg-white rounded-lg shadow-md p-6 mb-6;
+}
+
+.hvac-pro-price-row {
+  @apply flex justify-between items-center py-2 text-base;
+}
+
+.hvac-pro-price-row.hvac-pro-price-total {
+  @apply border-t-2 border-gray-200 pt-4 mt-2 font-bold text-lg;
+}
+
+.hvac-pro-price-value {
+  @apply font-semibold text-primary-600;
+}
+
+.hvac-pro-checkout-section {
+  @apply bg-white rounded-lg shadow-md p-6;
+}
+
+.hvac-pro-checkout-button {
+  @apply w-full px-6 py-4 bg-primary-600 text-white font-semibold rounded-lg;
+  @apply hover:bg-primary-700 active:bg-primary-800;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  @apply transition-all duration-200 transform hover:scale-[1.02];
+  @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
+  @apply text-base;
+}
+
+.hvac-pro-checkout-error {
+  @apply mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm;
+}
+
+/* Sign-up Form - Human-Friendly Class Names */
+.signup-form-page-container {
+  @apply min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-12 px-4 sm:px-6 lg:px-8;
+}
+
+.signup-form-page-wrapper {
+  @apply max-w-5xl mx-auto;
+}
+
+.signup-form-card {
+  @apply bg-white rounded-2xl shadow-xl overflow-hidden;
+}
+
+.signup-form-layout {
+  @apply lg:grid lg:grid-cols-2;
+}
+
+.signup-form-section {
+  @apply p-8 lg:p-12;
+}
+
+.signup-form-header-section {
+  @apply mb-8;
+}
+
+.signup-form-title-wrapper {
+  @apply flex items-center gap-2 mb-4;
+}
+
+.signup-form-title {
+  @apply text-3xl font-bold text-gray-900;
+}
+
+.signup-form-subtitle {
+  @apply text-gray-600;
+}
+
+.signup-form {
+  @apply space-y-5;
+}
+
+.signup-form-field {
+  @apply space-y-2;
+}
+
+.signup-form-field-label {
+  @apply block text-sm font-semibold text-gray-700 mb-2;
+}
+
+.signup-form-label-content {
+  @apply flex items-center gap-2;
+}
+
+.signup-form-input {
+  @apply block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all;
+}
+
+.signup-form-select {
+  @apply block w-full px-4 py-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all;
+}
+
+.signup-form-password-wrapper {
+  @apply relative;
+}
+
+.signup-form-password-input {
+  @apply pr-12;
+}
+
+.signup-form-password-toggle-button {
+  @apply absolute inset-y-0 right-0 pr-3 flex items-center;
+}
+
+.signup-form-password-match {
+  @apply border-green-300;
+}
+
+.signup-form-password-match-message {
+  @apply mt-1 text-sm text-green-600 flex items-center gap-1;
+}
+
+.signup-form-password-match-icon {
+  @apply text-green-600;
+}
+
+.signup-form-password-strength {
+  @apply mt-2;
+}
+
+.signup-form-password-strength-bar-wrapper {
+  @apply flex items-center gap-2 mb-1;
+}
+
+.signup-form-password-strength-bar {
+  @apply flex-1 bg-gray-200 rounded-full h-2;
+}
+
+.signup-form-password-strength-bar-fill {
+  @apply h-2 rounded-full transition-all;
+}
+
+.signup-form-password-strength-label {
+  @apply text-xs font-medium;
+}
+
+.signup-form-password-strength-weak {
+  @apply text-red-600;
+}
+
+.signup-form-password-strength-medium {
+  @apply text-yellow-600;
+}
+
+.signup-form-password-strength-strong {
+  @apply text-green-600;
+}
+
+.signup-form-checkbox-wrapper {
+  @apply flex items-start;
+}
+
+.signup-form-checkbox {
+  @apply mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded;
+}
+
+.signup-form-checkbox-label {
+  @apply ml-3 text-sm text-gray-700;
+}
+
+.signup-form-checkbox-error {
+  @apply ml-6;
+}
+
+.signup-form-link {
+  @apply text-primary-600 hover:text-primary-700 font-medium;
+}
+
+.signup-form-submit-error {
+  @apply rounded-lg bg-red-50 border border-red-200 p-4;
+}
+
+.signup-form-submit-error-message {
+  @apply text-sm text-red-700 flex items-center gap-2;
+}
+
+.signup-form-submit-error-icon {
+  @apply h-5 w-5;
+}
+
+.signup-form-submit-button {
+  @apply w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-semibold text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02];
+}
+
+.signup-form-submit-loading {
+  @apply flex items-center;
+}
+
+.signup-form-submit-spinner {
+  @apply animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2;
+}
+
+.signup-form-signin-link {
+  @apply text-center;
+}
+
+.signup-form-signin-link-text {
+  @apply text-sm text-gray-600;
+}
+
+.signup-form-signin-link-button {
+  @apply font-semibold text-primary-600 hover:text-primary-700;
+}
+
+.signup-form-benefits-section {
+  @apply bg-gradient-to-br from-primary-600 to-indigo-700 p-8 lg:p-12 text-white;
+}
+
+.signup-form-benefits-content {
+  @apply h-full flex flex-col justify-center;
+}
+
+.signup-form-benefits-header {
+  @apply mb-8;
+}
+
+.signup-form-benefits-title {
+  @apply text-2xl font-bold mb-2;
+}
+
+.signup-form-benefits-description {
+  @apply text-primary-100;
+}
+
+.signup-form-benefits-list {
+  @apply space-y-4 mb-8;
+}
+
+.signup-form-benefits-item {
+  @apply flex items-start gap-3;
+}
+
+.signup-form-benefits-item-text {
+  @apply text-primary-50;
+}
+
+.signup-form-trust-section {
+  @apply mt-auto pt-8 border-t border-primary-400;
+}
+
+.signup-form-trust-list {
+  @apply space-y-3;
+}
+
+.signup-form-trust-item {
+  @apply flex items-center gap-2;
+}
+
+.signup-form-trust-text {
+  @apply text-sm text-primary-100;
+}
+
+/* Sign-up Form - Verification Screen */
+.signup-form-verification-container {
+  @apply min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-16 px-4 sm:px-6 lg:px-8;
+}
+
+.signup-form-verification-card {
+  @apply max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6;
+}
+
+.signup-form-verification-header {
+  @apply text-center;
+}
+
+.signup-form-verification-icon-wrapper {
+  @apply mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4;
+}
+
+.signup-form-verification-title {
+  @apply text-3xl font-bold text-gray-900;
+}
+
+.signup-form-verification-subtitle {
+  @apply mt-2 text-sm text-gray-600;
+}
+
+.signup-form-verification-email {
+  @apply mt-1 text-sm font-semibold text-primary-600;
+}
+
+.signup-form-verification-form {
+  @apply space-y-6;
+}
+
+.signup-form-verification-field {
+  @apply space-y-2;
+}
+
+.signup-form-verification-label {
+  @apply block text-sm font-medium text-gray-700 mb-2;
+}
+
+.signup-form-verification-input {
+  @apply block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm;
+}
+
+.signup-form-verification-submit-button {
+  @apply w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all;
+}
+
+/* Sign-in Form - Human-Friendly Class Names */
+.signin-form-page-container {
+  @apply min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-12 px-4 sm:px-6 lg:px-8;
+}
+
+.signin-form-page-wrapper {
+  @apply max-w-5xl mx-auto;
+}
+
+.signin-form-card {
+  @apply bg-white rounded-2xl shadow-xl overflow-hidden;
+}
+
+.signin-form-layout {
+  @apply lg:grid lg:grid-cols-2;
+}
+
+.signin-form-section {
+  @apply p-8 lg:p-12;
+}
+
+.signin-form-header-section {
+  @apply mb-8;
+}
+
+.signin-form-title-wrapper {
+  @apply flex items-center gap-2 mb-4;
+}
+
+.signin-form-header-icon {
+  @apply h-8 w-8 text-primary-600;
+}
+
+.signin-form-title {
+  @apply text-3xl font-bold text-gray-900;
+}
+
+.signin-form-subtitle {
+  @apply text-gray-600;
+}
+
+.signin-form {
+  @apply space-y-5;
+}
+
+.signin-form-field {
+  @apply space-y-2;
+}
+
+.signin-form-field-label {
+  @apply block text-sm font-semibold text-gray-700 mb-2;
+}
+
+.signin-form-label-content {
+  @apply flex items-center gap-2;
+}
+
+.signin-form-label-icon {
+  @apply h-4 w-4 text-gray-500;
+}
+
+.signin-form-input {
+  @apply block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all;
+}
+
+.signin-form-password-wrapper {
+  @apply relative;
+}
+
+.signin-form-password-input {
+  @apply pr-12;
+}
+
+.signin-form-password-toggle-button {
+  @apply absolute inset-y-0 right-0 pr-3 flex items-center;
+}
+
+.signin-form-password-toggle-icon {
+  @apply h-5 w-5 text-gray-400 hover:text-gray-600;
+}
+
+.signin-form-error {
+  @apply rounded-lg bg-red-50 border border-red-200 p-4;
+}
+
+.signin-form-error-message {
+  @apply text-sm text-red-700 flex items-center gap-2;
+}
+
+.signin-form-error-icon {
+  @apply h-5 w-5;
+}
+
+.signin-form-submit-button {
+  @apply w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-semibold text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02];
+}
+
+.signin-form-submit-loading {
+  @apply flex items-center;
+}
+
+.signin-form-submit-spinner {
+  @apply animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2;
+}
+
+.signin-form-submit-icon {
+  @apply h-5 w-5 mr-2;
+}
+
+.signin-form-signup-link {
+  @apply text-center;
+}
+
+.signin-form-signup-link-text {
+  @apply text-sm text-gray-600;
+}
+
+.signin-form-signup-link-button {
+  @apply font-semibold text-primary-600 hover:text-primary-700;
+}
+
+.signin-form-benefits-section {
+  @apply bg-gradient-to-br from-primary-600 to-indigo-700 p-8 lg:p-12 text-white;
+}
+
+.signin-form-benefits-content {
+  @apply h-full flex flex-col justify-center;
+}
+
+.signin-form-benefits-header {
+  @apply mb-8;
+}
+
+.signin-form-benefits-title {
+  @apply text-2xl font-bold mb-2;
+}
+
+.signin-form-benefits-description {
+  @apply text-primary-100;
+}
+
+.signin-form-benefits-list {
+  @apply space-y-4 mb-8;
+}
+
+.signin-form-benefits-item {
+  @apply flex items-start gap-3;
+}
+
+.signin-form-benefit-icon {
+  @apply h-6 w-6 text-green-300 flex-shrink-0 mt-0.5;
+}
+
+.signin-form-benefits-item-text {
+  @apply text-primary-50;
+}
+
+.signin-form-cta-section {
+  @apply mt-auto;
+}
+
+.signin-form-cta-button {
+  @apply w-full flex items-center justify-center gap-2 py-3 px-4 bg-white text-primary-600 rounded-lg font-semibold hover:bg-primary-50 transition-all transform hover:scale-[1.02];
+}
+
+.signin-form-cta-icon {
+  @apply h-5 w-5;
+}
+
+.signin-form-trust-section {
+  @apply mt-8 pt-8 border-t border-primary-400;
+}
+
+.signin-form-trust-list {
+  @apply space-y-3;
+}
+
+.signin-form-trust-item {
+  @apply flex items-center gap-2;
+}
+
+.signin-form-trust-icon {
+  @apply h-5 w-5 text-green-300;
+}
+
+.signin-form-trust-text {
+  @apply text-sm text-primary-100;
+}
+
+/* Unauthorized Page Styles */
+.unauthorized-page-container {
+  @apply min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50 py-12 px-4 sm:px-6 lg:px-8;
+}
+
+.unauthorized-page-wrapper {
+  @apply max-w-2xl mx-auto;
+}
+
+.unauthorized-page-content {
+  @apply bg-white rounded-2xl shadow-xl p-8 lg:p-12 text-center;
+}
+
+.unauthorized-page-icon-wrapper {
+  @apply flex justify-center mb-6;
+}
+
+.unauthorized-page-icon {
+  @apply h-20 w-20 text-red-500;
+}
+
+.unauthorized-page-title {
+  @apply text-3xl font-bold text-gray-900 mb-4;
+}
+
+.unauthorized-page-message {
+  @apply space-y-3 mb-8;
+}
+
+.unauthorized-page-text {
+  @apply text-lg text-gray-700;
+}
+
+.unauthorized-page-role-info {
+  @apply text-base text-gray-600;
+}
+
+.unauthorized-page-help-text {
+  @apply text-sm text-gray-500 italic;
+}
+
+.unauthorized-page-actions {
+  @apply flex flex-col sm:flex-row gap-4 justify-center items-center;
+}
+
+.unauthorized-page-button-primary {
+  @apply inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-semibold text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all;
+}
+
+.unauthorized-page-button-secondary {
+  @apply inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-lg shadow-sm text-base font-semibold text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all;
+}
+
+.unauthorized-page-button-link {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 focus:outline-none transition-colors;
+}
+
+.unauthorized-page-button-icon {
+  @apply h-5 w-5 mr-2;
+}
+
+/* Profile Page Styles */
+.profile-page-container {
+  @apply min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8;
+}
+
+.profile-page-wrapper {
+  @apply max-w-4xl mx-auto;
+}
+
+.profile-page-content {
+  @apply bg-white rounded-lg shadow-lg p-6 lg:p-8;
+}
+
+.profile-page-header {
+  @apply mb-8;
+}
+
+.profile-page-back-button {
+  @apply inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 mb-4 transition-colors;
+}
+
+.profile-page-back-icon {
+  @apply h-4 w-4;
+}
+
+.profile-page-title {
+  @apply text-3xl font-bold text-gray-900 mb-2;
+}
+
+.profile-page-subtitle {
+  @apply text-gray-600;
+}
+
+.profile-page-message {
+  @apply flex items-center gap-2 p-4 rounded-lg mb-6;
+}
+
+.profile-page-message-success {
+  @apply bg-green-50 text-green-800 border border-green-200;
+}
+
+.profile-page-message-error {
+  @apply bg-red-50 text-red-800 border border-red-200;
+}
+
+.profile-page-message-icon {
+  @apply h-5 w-5 flex-shrink-0;
+}
+
+.profile-page-form {
+  @apply space-y-8;
+}
+
+.profile-page-form-layout {
+  @apply grid grid-cols-1 lg:grid-cols-3 gap-8;
+}
+
+.profile-page-form-column {
+  @apply space-y-6 flex flex-col;
+}
+
+.profile-page-form-column-secondary {
+  @apply lg:sticky lg:top-6 lg:self-start;
+}
+
+.profile-page-form-column-primary {
+  @apply lg:col-span-2;
+}
+
+.profile-page-form-column-secondary {
+  @apply lg:col-span-1;
+}
+
+.profile-page-section {
+  @apply space-y-6 pb-6 bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.profile-page-section-sidebar {
+  @apply bg-white border border-gray-200;
+}
+
+.profile-page-section-title {
+  @apply text-lg font-semibold text-gray-900 mb-4;
+}
+
+.profile-page-form-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.profile-page-form-field {
+  @apply space-y-2;
+}
+
+.profile-page-form-label {
+  @apply flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2;
+}
+
+.profile-page-form-label-icon {
+  @apply h-4 w-4 text-gray-500;
+}
+
+.profile-page-form-input {
+  @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all;
+}
+
+.profile-page-form-input-disabled {
+  @apply bg-gray-50 text-gray-500 cursor-not-allowed;
+}
+
+.profile-page-form-readonly {
+  @apply w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700;
+}
+
+.profile-page-form-help {
+  @apply text-xs text-gray-500 mt-1;
+}
+
+.profile-page-actions {
+  @apply flex flex-col sm:flex-row gap-4 justify-end pt-6 border-t border-gray-200;
+}
+
+.profile-page-actions-mobile {
+  @apply lg:hidden;
+}
+
+.profile-page-actions-desktop {
+  @apply hidden lg:flex;
+}
+
+.profile-page-button-primary {
+  @apply px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.profile-page-button-secondary {
+  @apply px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all;
+}
+
+.profile-page-button-small {
+  @apply px-4 py-2 text-sm;
+}
+
+.profile-page-section-header {
+  @apply flex items-center justify-between mb-4;
+}
+
+.profile-page-section-subtitle {
+  @apply text-sm text-gray-600 mt-1;
+}
+
+.profile-page-password-form {
+  @apply space-y-4 pt-4 border-t border-gray-200;
+}
+
+.profile-page-form-password-wrapper {
+  @apply relative;
+}
+
+.profile-page-form-password-toggle {
+  @apply absolute inset-y-0 right-0 pr-3 flex items-center;
+}
+
+.profile-page-form-password-toggle-icon {
+  @apply h-5 w-5 text-gray-400 hover:text-gray-600;
+}
+
+.profile-page-password-actions {
+  @apply flex gap-4 justify-end pt-4;
+}
+
+.profile-page-security-summary {
+  @apply space-y-4;
+}
+
+.profile-page-security-description {
+  @apply text-sm text-gray-600;
+}
+
+.profile-page-incentive-banner {
+  @apply bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-6 mb-6;
+}
+
+.profile-page-incentive-content {
+  @apply flex gap-4;
+}
+
+.profile-page-incentive-icon-wrapper {
+  @apply flex-shrink-0;
+}
+
+.profile-page-incentive-icon {
+  @apply h-8 w-8 text-blue-600;
+}
+
+.profile-page-incentive-text {
+  @apply flex-1;
+}
+
+.profile-page-incentive-title {
+  @apply text-lg font-semibold text-gray-900 mb-2;
+}
+
+.profile-page-incentive-description {
+  @apply text-sm text-gray-700 mb-4;
+}
+
+.profile-page-incentive-benefits {
+  @apply flex flex-wrap gap-4;
+}
+
+.profile-page-incentive-benefit {
+  @apply flex items-center gap-2 text-sm text-gray-700;
+}
+
+.profile-page-incentive-benefit-icon {
+  @apply h-4 w-4 text-blue-600;
+}
+
+.profile-page-form-label-badge {
+  @apply ml-2 px-2 py-0.5 text-xs font-semibold rounded-full;
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.profile-page-form-help-icon {
+  @apply h-3 w-3 inline mr-1 text-blue-600;
+}
+
+/* Checkout Success Page */
+.checkout-success-page {
+  @apply min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4;
+}
+
+.checkout-success-container {
+  @apply max-w-2xl mx-auto;
+}
+
+.checkout-success-content {
+  @apply bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center;
+}
+
+.checkout-success-icon-wrapper {
+  @apply flex justify-center mb-6;
+}
+
+.checkout-success-icon {
+  @apply h-20 w-20 text-green-500;
+}
+
+.checkout-success-title {
+  @apply text-3xl md:text-4xl font-bold text-gray-900 mb-4;
+}
+
+.checkout-success-message {
+  @apply text-lg text-gray-600 mb-8;
+}
+
+.checkout-success-order-info {
+  @apply bg-gray-50 rounded-lg p-4 mb-8;
+}
+
+.checkout-success-order-label {
+  @apply text-sm font-medium text-gray-500 mb-1;
+}
+
+.checkout-success-order-id {
+  @apply text-base font-mono text-gray-900;
+}
+
+.checkout-success-next-steps {
+  @apply text-left mb-8;
+}
+
+.checkout-success-next-steps-title {
+  @apply text-xl font-semibold text-gray-900 mb-4;
+}
+
+.checkout-success-next-steps-list {
+  @apply space-y-3;
+}
+
+.checkout-success-next-steps-list li {
+  @apply flex items-start gap-3 text-gray-700;
+}
+
+.checkout-success-step-icon {
+  @apply h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0;
+}
+
+.checkout-success-actions {
+  @apply flex flex-col sm:flex-row gap-4 justify-center;
+}
+
+.checkout-success-button {
+  @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-colors;
+}
+
+.checkout-success-button-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800;
+}
+
+.checkout-success-button-secondary {
+  @apply bg-gray-100 text-gray-700 hover:bg-gray-200 active:bg-gray-300;
+}
+
+.checkout-success-button-icon {
+  @apply h-5 w-5 ml-2;
+}
+
+/* Checkout Cancel Page */
+.checkout-cancel-page {
+  @apply min-h-screen bg-gradient-to-br from-gray-50 to-slate-50 py-12 px-4;
+}
+
+.checkout-cancel-container {
+  @apply max-w-2xl mx-auto;
+}
+
+.checkout-cancel-content {
+  @apply bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center;
+}
+
+.checkout-cancel-icon-wrapper {
+  @apply flex justify-center mb-6;
+}
+
+.checkout-cancel-icon {
+  @apply h-20 w-20 text-orange-500;
+}
+
+.checkout-cancel-title {
+  @apply text-3xl md:text-4xl font-bold text-gray-900 mb-4;
+}
+
+.checkout-cancel-message {
+  @apply text-lg text-gray-600 mb-2;
+}
+
+.checkout-cancel-submessage {
+  @apply text-base text-gray-500 mb-8;
+}
+
+.checkout-cancel-help {
+  @apply bg-blue-50 rounded-lg p-6 mb-8 text-left;
+}
+
+.checkout-cancel-help-title {
+  @apply text-xl font-semibold text-gray-900 mb-2;
+}
+
+.checkout-cancel-help-text {
+  @apply text-gray-700;
+}
+
+.checkout-cancel-actions {
+  @apply flex flex-col sm:flex-row gap-4 justify-center;
+}
+
+.checkout-cancel-button {
+  @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-colors;
+}
+
+.checkout-cancel-button-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800;
+}
+
+.checkout-cancel-button-secondary {
+  @apply bg-gray-100 text-gray-700 hover:bg-gray-200 active:bg-gray-300;
+}
+
+.checkout-cancel-button-tertiary {
+  @apply bg-transparent text-gray-600 hover:text-gray-900 border border-gray-300 hover:border-gray-400;
+}
+
+.checkout-cancel-button-icon {
+  @apply h-5 w-5 mr-2;
 }
 

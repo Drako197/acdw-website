@@ -1,12 +1,34 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../../contexts/AuthContext'
-import type { UserRole } from '../../types'
+import { useSignUp } from '@clerk/clerk-react'
+import { 
+  EyeIcon, 
+  EyeSlashIcon, 
+  CheckCircleIcon,
+  XCircleIcon,
+  UserIcon,
+  EnvelopeIcon,
+  BuildingOfficeIcon,
+  LockClosedIcon,
+  CheckBadgeIcon,
+  ShieldCheckIcon
+} from '@heroicons/react/24/outline'
+import type { UserRole } from '../../types/auth'
+
+interface FieldError {
+  [key: string]: string
+}
+
+interface PasswordStrength {
+  score: number
+  feedback: string
+  color: string
+}
 
 export function SignUpForm() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { register } = useAuth()
+  const { signUp, setActive } = useSignUp()
   
   // Get role and redirect from URL parameters
   const searchParams = new URLSearchParams(location.search)
@@ -18,208 +40,642 @@ export function SignUpForm() {
     email: '',
     password: '',
     confirmPassword: '',
-    role: (roleParam || 'HVAC_PROFESSIONAL') as UserRole,
-    company: ''
+    role: (roleParam || 'hvac_pro') as UserRole,
+    company: '',
+    acceptTerms: false
   })
-  const [error, setError] = useState('')
+  
+  const [fieldErrors, setFieldErrors] = useState<FieldError>({})
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [pendingVerification, setPendingVerification] = useState(false)
+  const [verificationCode, setVerificationCode] = useState('')
+  const [passwordStrength, setPasswordStrength] = useState<PasswordStrength>({ score: 0, feedback: '', color: '' })
+
+  // Role descriptions and benefits
+  const roleInfo: Record<UserRole, { title: string; description: string; benefits: string[] }> = {
+    homeowner: {
+      title: 'Homeowner',
+      description: 'Perfect for homeowners looking to protect their AC system',
+      benefits: [
+        'MSRP pricing on AC Drain Wiz Mini',
+        'Easy 5-minute installation',
+        'Protect your home from water damage',
+        '24/7 monitoring and alerts'
+      ]
+    },
+    hvac_pro: {
+      title: 'HVAC Professional',
+      description: 'Exclusive contractor pricing and professional resources',
+      benefits: [
+        'Tiered pricing with volume discounts',
+        'Bulk ordering savings',
+        'Priority technical support',
+        'Marketing materials and co-branding',
+        'Access to professional catalog'
+      ]
+    },
+    property_manager: {
+      description: 'Special pricing for property management companies',
+      title: 'Property Manager',
+      benefits: [
+        'Best-in-class pricing for property managers',
+        'Volume discounts for large orders',
+        'Centralized dashboard for multiple properties',
+        'Dedicated account management',
+        'Custom pricing quotes available'
+      ]
+    }
+  }
+
+  // Calculate password strength
+  useEffect(() => {
+    if (formData.password.length === 0) {
+      setPasswordStrength({ score: 0, feedback: '', color: '' })
+      return
+    }
+
+    let score = 0
+    let feedback = ''
+
+    if (formData.password.length >= 8) score++
+    else feedback = 'At least 8 characters'
+
+    if (/[a-z]/.test(formData.password) && /[A-Z]/.test(formData.password)) score++
+    else if (feedback === '') feedback = 'Mix of uppercase and lowercase'
+
+    if (/\d/.test(formData.password)) score++
+    else if (feedback === '') feedback = 'Include numbers'
+
+    if (/[^a-zA-Z0-9]/.test(formData.password)) score++
+    else if (feedback === '') feedback = 'Include special characters'
+
+    const strengthLabels = ['Weak', 'Fair', 'Good', 'Strong', 'Very Strong']
+    const colors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-green-500', 'bg-green-600']
+    
+    setPasswordStrength({
+      score,
+      feedback: feedback || strengthLabels[score - 1] || '',
+      color: colors[score - 1] || 'bg-gray-300'
+    })
+  }, [formData.password])
+
+  // Real-time field validation
+  const validateField = (name: string, value: string) => {
+    const errors: FieldError = { ...fieldErrors }
+
+    switch (name) {
+      case 'name':
+        if (value.trim().length < 2) {
+          errors.name = 'Name must be at least 2 characters'
+        } else if (!/^[a-zA-Z\s'-]+$/.test(value)) {
+          errors.name = 'Name can only contain letters, spaces, hyphens, and apostrophes'
+        } else {
+          delete errors.name
+        }
+        break
+
+      case 'email':
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(value)) {
+          errors.email = 'Please enter a valid email address'
+        } else {
+          delete errors.email
+        }
+        break
+
+      case 'password':
+        if (value.length < 8) {
+          errors.password = 'Password must be at least 8 characters'
+        } else {
+          delete errors.password
+        }
+        break
+
+      case 'confirmPassword':
+        if (value !== formData.password) {
+          errors.confirmPassword = 'Passwords do not match'
+        } else {
+          delete errors.confirmPassword
+        }
+        break
+
+      case 'company':
+        if ((formData.role === 'hvac_pro' || formData.role === 'property_manager') && value.trim().length < 2) {
+          errors.company = 'Company name is required'
+        } else {
+          delete errors.company
+        }
+        break
+    }
+
+    setFieldErrors(errors)
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target
+    const checked = (e.target as HTMLInputElement).checked
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: type === 'checkbox' ? checked : value
     })
+
+    // Real-time validation
+    if (type !== 'checkbox') {
+      validateField(name, value)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
-
-    // Validation
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match')
-      return
+    
+    // Validate all fields
+    const errors: FieldError = {}
+    if (!formData.name.trim()) errors.name = 'Name is required'
+    if (!formData.email.trim()) errors.email = 'Email is required'
+    if (!formData.password) errors.password = 'Password is required'
+    if (!formData.confirmPassword) errors.confirmPassword = 'Please confirm your password'
+    if ((formData.role === 'hvac_pro' || formData.role === 'property_manager') && !formData.company.trim()) {
+      errors.company = 'Company name is required'
+    }
+    if (!formData.acceptTerms) {
+      errors.acceptTerms = 'You must accept the terms and conditions'
     }
 
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters')
+    if (formData.password !== formData.confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match'
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
       return
     }
 
     setIsLoading(true)
 
     try {
-      const success = await register({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        role: formData.role,
-        company: formData.company || undefined
-      })
-      
-      if (success) {
-        // Redirect to specified URL or default to dashboard
-        navigate(redirectParam)
-      } else {
-        setError('Registration failed. Please try again.')
+      if (!signUp) {
+        throw new Error('Sign up not available')
       }
-    } catch (err) {
-      setError('An error occurred. Please try again.')
+
+      // Create user account
+      await signUp.create({
+        emailAddress: formData.email,
+        password: formData.password,
+        firstName: formData.name.split(' ')[0],
+        lastName: formData.name.split(' ').slice(1).join(' ') || '',
+      })
+
+      // Set public metadata (role and company)
+      await signUp.update({
+        unsafeMetadata: {
+          role: formData.role,
+          company: formData.company || undefined,
+        },
+      })
+
+      // Send verification email
+      await signUp.prepareEmailAddressVerification({ strategy: 'email_code' })
+      
+      setPendingVerification(true)
+    } catch (err: any) {
+      setFieldErrors({ 
+        submit: err.errors?.[0]?.message || 'Registration failed. Please try again.' 
+      })
     } finally {
       setIsLoading(false)
     }
   }
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Create your contractor account to access exclusive pricing
-          </p>
-        </div>
-        
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Full Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                placeholder="John Smith"
-                value={formData.name}
-                onChange={handleChange}
-              />
-            </div>
+  const handleVerification = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setFieldErrors({})
+    setIsLoading(true)
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email Address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                placeholder="john@company.com"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
+    try {
+      if (!signUp) {
+        throw new Error('Sign up not available')
+      }
 
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                Account Type
-              </label>
-              <select
-                id="role"
-                name="role"
-                required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                value={formData.role}
-                onChange={handleChange}
-              >
-                <option value="HVAC_PROFESSIONAL">HVAC Professional</option>
-                <option value="PROPERTY_MANAGER">Property Manager</option>
-                <option value="CITY_OFFICIAL">City and Code Official</option>
-              </select>
-            </div>
+      const result = await signUp.attemptEmailAddressVerification({
+        code: verificationCode,
+      })
 
-            <div>
-              <label htmlFor="company" className="block text-sm font-medium text-gray-700">
-                Company
-              </label>
-              <input
-                id="company"
-                name="company"
-                type="text"
-                required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                placeholder="ABC HVAC Services"
-                value={formData.company}
-                onChange={handleChange}
-              />
-            </div>
+      if (result.status === 'complete') {
+        await setActive({ session: result.createdSessionId })
+        navigate(redirectParam)
+      } else {
+        setFieldErrors({ code: 'Verification incomplete. Please try again.' })
+      }
+    } catch (err: any) {
+      setFieldErrors({ 
+        code: err.errors?.[0]?.message || 'Invalid verification code' 
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                placeholder="Minimum 6 characters"
-                value={formData.password}
-                onChange={handleChange}
-              />
+  if (pendingVerification) {
+    return (
+      <div className="signup-form-verification-container">
+        <div className="signup-form-verification-card">
+          <div className="signup-form-verification-header">
+            <div className="signup-form-verification-icon-wrapper">
+              <CheckCircleIcon className="signup-form-success-icon" />
             </div>
-
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                placeholder="Confirm your password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-              />
-            </div>
+            <h2 className="signup-form-verification-title">
+              Verify your email
+            </h2>
+            <p className="signup-form-verification-subtitle">
+              We sent a verification code to
+            </p>
+            <p className="signup-form-verification-email">
+              {formData.email}
+            </p>
           </div>
-
-          {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <div className="text-sm text-red-700">{error}</div>
+          
+          <form className="signup-form-verification-form" onSubmit={handleVerification} noValidate>
+            <div className="signup-form-verification-field">
+              <label htmlFor="code" className="signup-form-verification-label">
+                Verification Code
+              </label>
+              <input
+                id="code"
+                name="code"
+                type="text"
+                required
+                maxLength={6}
+                className={`signup-form-verification-input ${
+                  fieldErrors.code ? 'input-error' : ''
+                }`}
+                placeholder="Enter 6-digit code"
+                value={verificationCode}
+                onChange={(e) => {
+                  setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))
+                  setFieldErrors({})
+                }}
+              />
+              {fieldErrors.code && (
+                <p className="field-error-message">{fieldErrors.code}</p>
+              )}
             </div>
-          )}
 
-          <div>
             <button
               type="submit"
-              disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isLoading || verificationCode.length !== 6}
+              className="signup-form-verification-submit-button"
             >
               {isLoading ? (
                 <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Creating account...
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Verifying...
                 </div>
               ) : (
-                'Create Account'
+                'Verify Email'
               )}
             </button>
-          </div>
+          </form>
+        </div>
+      </div>
+    )
+  }
 
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              Already have an account?{' '}
-              <button
-                type="button"
-                onClick={() => navigate('/auth/signin')}
-                className="font-medium text-primary-600 hover:text-primary-500"
-              >
-                Sign in here
-              </button>
-            </p>
+  const currentRoleInfo = roleInfo[formData.role]
+
+  return (
+    <div className="signup-form-page-container">
+      <div className="signup-form-page-wrapper">
+        <div className="signup-form-card">
+          <div className="signup-form-layout">
+            {/* Left Side - Form */}
+            <div className="signup-form-section">
+              <div className="signup-form-header-section">
+                <div className="signup-form-title-wrapper">
+                  <ShieldCheckIcon className="signup-form-header-icon" />
+                  <h1 className="signup-form-title">
+                    Create Your Account
+                  </h1>
+                </div>
+                <p className="signup-form-subtitle">
+                  Join thousands of professionals protecting properties with AC Drain Wiz
+                </p>
+              </div>
+              
+              <form className="signup-form" onSubmit={handleSubmit} noValidate>
+                {/* Full Name */}
+                <div className="signup-form-field">
+                  <label htmlFor="name" className="signup-form-field-label">
+                    <div className="signup-form-label-content">
+                      <UserIcon className="signup-form-label-icon" />
+                      Full Name
+                    </div>
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    className={`signup-form-input ${
+                      fieldErrors.name ? 'input-error' : ''
+                    }`}
+                    placeholder="John Smith"
+                    value={formData.name}
+                    onChange={handleChange}
+                    onBlur={(e) => validateField('name', e.target.value)}
+                  />
+                  {fieldErrors.name && (
+                    <p className="field-error-message">{fieldErrors.name}</p>
+                  )}
+                </div>
+
+                {/* Email */}
+                <div className="signup-form-field">
+                  <label htmlFor="email" className="signup-form-field-label">
+                    <div className="signup-form-label-content">
+                      <EnvelopeIcon className="signup-form-label-icon" />
+                      Email Address
+                    </div>
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    className={`signup-form-input ${
+                      fieldErrors.email ? 'input-error' : ''
+                    }`}
+                    placeholder="john@company.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    onBlur={(e) => validateField('email', e.target.value)}
+                  />
+                  {fieldErrors.email && (
+                    <p className="field-error-message">{fieldErrors.email}</p>
+                  )}
+                </div>
+
+                {/* Account Type */}
+                <div className="signup-form-field">
+                  <label htmlFor="role" className="signup-form-field-label">
+                    Account Type
+                  </label>
+                  <select
+                    id="role"
+                    name="role"
+                    required
+                    className="signup-form-select"
+                    value={formData.role}
+                    onChange={handleChange}
+                  >
+                    <option value="hvac_pro">HVAC Professional</option>
+                    <option value="property_manager">Property Manager</option>
+                    <option value="homeowner">Homeowner</option>
+                  </select>
+                </div>
+
+                {/* Company (conditional) */}
+                {(formData.role === 'hvac_pro' || formData.role === 'property_manager') && (
+                  <div className="signup-form-field">
+                    <label htmlFor="company" className="signup-form-field-label">
+                      <div className="signup-form-label-content">
+                        <BuildingOfficeIcon className="signup-form-label-icon" />
+                        Company Name
+                      </div>
+                    </label>
+                    <input
+                      id="company"
+                      name="company"
+                      type="text"
+                      required
+                      className={`signup-form-input ${
+                        fieldErrors.company ? 'input-error' : ''
+                      }`}
+                      placeholder="ABC HVAC Services"
+                      value={formData.company}
+                      onChange={handleChange}
+                      onBlur={(e) => validateField('company', e.target.value)}
+                    />
+                    {fieldErrors.company && (
+                      <p className="field-error-message">{fieldErrors.company}</p>
+                    )}
+                  </div>
+                )}
+
+                {/* Password */}
+                <div className="signup-form-field">
+                  <label htmlFor="password" className="signup-form-field-label">
+                    <div className="signup-form-label-content">
+                      <LockClosedIcon className="signup-form-label-icon" />
+                      Password
+                    </div>
+                  </label>
+                  <div className="signup-form-password-wrapper">
+                    <input
+                      id="password"
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      required
+                      className={`signup-form-input signup-form-password-input ${
+                        fieldErrors.password ? 'input-error' : ''
+                      }`}
+                      placeholder="Minimum 8 characters"
+                      value={formData.password}
+                      onChange={handleChange}
+                      onBlur={(e) => validateField('password', e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="signup-form-password-toggle-button"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeSlashIcon className="signup-form-password-toggle-icon" />
+                      ) : (
+                        <EyeIcon className="signup-form-password-toggle-icon" />
+                      )}
+                    </button>
+                  </div>
+                  {formData.password && (
+                    <div className="signup-form-password-strength">
+                      <div className="signup-form-password-strength-bar-wrapper">
+                        <div className="signup-form-password-strength-bar">
+                          <div
+                            className={`signup-form-password-strength-bar-fill ${passwordStrength.color}`}
+                            style={{ width: `${(passwordStrength.score / 4) * 100}%` }}
+                          />
+                        </div>
+                        <span className={`signup-form-password-strength-label ${
+                          passwordStrength.score >= 3 ? 'signup-form-password-strength-strong' : 
+                          passwordStrength.score >= 2 ? 'signup-form-password-strength-medium' : 
+                          'signup-form-password-strength-weak'
+                        }`}>
+                          {passwordStrength.score > 0 ? passwordStrength.feedback : ''}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  {fieldErrors.password && (
+                    <p className="field-error-message">{fieldErrors.password}</p>
+                  )}
+                </div>
+
+                {/* Confirm Password */}
+                <div className="signup-form-field">
+                  <label htmlFor="confirmPassword" className="signup-form-field-label">
+                    Confirm Password
+                  </label>
+                  <div className="signup-form-password-wrapper">
+                    <input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      required
+                      className={`signup-form-input signup-form-password-input ${
+                        fieldErrors.confirmPassword ? 'input-error' : 
+                        formData.confirmPassword && formData.confirmPassword === formData.password ? 'signup-form-password-match' : ''
+                      }`}
+                      placeholder="Confirm your password"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      onBlur={(e) => validateField('confirmPassword', e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="signup-form-password-toggle-button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? (
+                        <EyeSlashIcon className="signup-form-password-toggle-icon" />
+                      ) : (
+                        <EyeIcon className="signup-form-password-toggle-icon" />
+                      )}
+                    </button>
+                  </div>
+                  {formData.confirmPassword && formData.confirmPassword === formData.password && !fieldErrors.confirmPassword && (
+                    <p className="signup-form-password-match-message">
+                      <CheckCircleIcon className="signup-form-label-icon signup-form-password-match-icon" />
+                      Passwords match
+                    </p>
+                  )}
+                  {fieldErrors.confirmPassword && (
+                    <p className="field-error-message">{fieldErrors.confirmPassword}</p>
+                  )}
+                </div>
+
+                {/* Terms and Conditions */}
+                <div className="signup-form-field">
+                  <div className="signup-form-checkbox-wrapper">
+                    <input
+                      id="acceptTerms"
+                      name="acceptTerms"
+                      type="checkbox"
+                      className="signup-form-checkbox"
+                      checked={formData.acceptTerms}
+                      onChange={handleChange}
+                    />
+                    <label htmlFor="acceptTerms" className="signup-form-checkbox-label">
+                      I agree to the{' '}
+                      <a href="/privacy-policy" target="_blank" className="signup-form-link">
+                        Terms and Conditions
+                      </a>
+                      {' '}and{' '}
+                      <a href="/privacy-policy" target="_blank" className="signup-form-link">
+                        Privacy Policy
+                      </a>
+                    </label>
+                  </div>
+                  {fieldErrors.acceptTerms && (
+                    <p className="field-error-message signup-form-checkbox-error">{fieldErrors.acceptTerms}</p>
+                  )}
+                </div>
+
+                {/* Submit Error */}
+                {fieldErrors.submit && (
+                  <div className="signup-form-submit-error">
+                    <p className="signup-form-submit-error-message">
+                      <XCircleIcon className="signup-form-submit-error-icon" />
+                      {fieldErrors.submit}
+                    </p>
+                  </div>
+                )}
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="signup-form-submit-button"
+                >
+                  {isLoading ? (
+                    <div className="signup-form-submit-loading">
+                      <div className="signup-form-submit-spinner"></div>
+                      Creating account...
+                    </div>
+                  ) : (
+                    <>
+                      <CheckBadgeIcon className="signup-form-submit-icon" />
+                      Create Account
+                    </>
+                  )}
+                </button>
+
+                {/* Sign In Link */}
+                <div className="signup-form-signin-link">
+                  <p className="signup-form-signin-link-text">
+                    Already have an account?{' '}
+                    <button
+                      type="button"
+                      onClick={() => navigate('/auth/signin')}
+                      className="signup-form-signin-link-button"
+                    >
+                      Sign in here
+                    </button>
+                  </p>
+                </div>
+              </form>
+            </div>
+
+            {/* Right Side - Benefits */}
+            <div className="signup-form-benefits-section">
+              <div className="signup-form-benefits-content">
+                <div className="signup-form-benefits-header">
+                  <h2 className="signup-form-benefits-title">{currentRoleInfo.title} Benefits</h2>
+                  <p className="signup-form-benefits-description">{currentRoleInfo.description}</p>
+                </div>
+                
+                <ul className="signup-form-benefits-list">
+                  {currentRoleInfo.benefits.map((benefit, index) => (
+                    <li key={index} className="signup-form-benefits-item">
+                      <CheckCircleIcon className="signup-form-benefit-icon" />
+                      <span className="signup-form-benefits-item-text">{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Trust Indicators */}
+                <div className="signup-form-trust-section">
+                  <div className="signup-form-trust-list">
+                    <div className="signup-form-trust-item">
+                      <ShieldCheckIcon className="signup-form-trust-icon" />
+                      <span className="signup-form-trust-text">Secure & Encrypted</span>
+                    </div>
+                    <div className="signup-form-trust-item">
+                      <CheckBadgeIcon className="signup-form-trust-icon" />
+                      <span className="signup-form-trust-text">Trusted by 1000+ Professionals</span>
+                    </div>
+                    <div className="signup-form-trust-item">
+                      <LockClosedIcon className="signup-form-trust-icon" />
+                      <span className="signup-form-trust-text">Your data is protected</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   )
