@@ -37,37 +37,65 @@ exports.handler = async (event, context) => {
       }
     }
 
-    // Retrieve checkout session from Stripe with all necessary expansions
-    const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: [
-        'line_items',
-        'line_items.data.price.product',
-        'shipping_details',
-        'customer',
-        'total_details.breakdown',
-      ],
-    })
+    // Retrieve checkout session from Stripe with necessary expansions
+    // Note: line_items needs to be expanded with nested properties
+    let session
+    try {
+      session = await stripe.checkout.sessions.retrieve(sessionId, {
+        expand: [
+          'line_items.data.price.product',
+          'shipping_details',
+          'customer',
+        ],
+      })
+      
+      // If line_items wasn't expanded, retrieve it separately
+      if (!session.line_items || !session.line_items.data) {
+        const lineItems = await stripe.checkout.sessions.listLineItems(sessionId, {
+          expand: ['data.price.product'],
+        })
+        session.line_items = lineItems
+      }
+    } catch (retrieveError) {
+      console.error('Error retrieving session from Stripe:', {
+        message: retrieveError.message,
+        type: retrieveError.type,
+        code: retrieveError.code,
+        stack: retrieveError.stack,
+      })
+      throw new Error(`Failed to retrieve session: ${retrieveError.message}`)
+    }
     
     console.log('Retrieved session:', {
       id: session.id,
       hasShipping: !!session.shipping_details,
-      shippingDetails: session.shipping_details,
+      hasLineItems: !!session.line_items,
       amountTotal: session.amount_total,
+      amountSubtotal: session.amount_subtotal,
+      shippingCost: session.shipping_cost,
       totalDetails: session.total_details,
     })
 
-    // Extract relevant information
+    // Extract relevant information safely
     const orderDetails = {
       sessionId: session.id,
-      amountTotal: session.amount_total / 100, // Convert from cents
-      currency: session.currency,
-      paymentStatus: session.payment_status,
+      amountTotal: session.amount_total ? session.amount_total / 100 : 0,
+      currency: session.currency || 'usd',
+      paymentStatus: session.payment_status || 'unknown',
       subtotal: session.amount_subtotal ? session.amount_subtotal / 100 : null,
-      tax: session.total_details?.amount_tax ? session.total_details.amount_tax / 100 : null,
-      shipping: session.shipping_cost?.amount_total ? session.shipping_cost.amount_total / 100 : null,
+      // Tax might be in total_details.breakdown.taxes or total_details.amount_tax
+      tax: session.total_details?.breakdown?.taxes?.[0]?.amount 
+        ? session.total_details.breakdown.taxes[0].amount / 100
+        : (session.total_details?.amount_tax ? session.total_details.amount_tax / 100 : null),
+      // Shipping cost from shipping_cost or calculated from total
+      shipping: session.shipping_cost?.amount_total 
+        ? session.shipping_cost.amount_total / 100
+        : (session.amount_total && session.amount_subtotal
+          ? (session.amount_total - session.amount_subtotal - (session.total_details?.amount_tax || 0)) / 100
+          : null),
       shippingDetails: session.shipping_details
         ? {
-            name: session.shipping_details.name,
+            name: session.shipping_details.name || '',
             address: {
               line1: session.shipping_details.address?.line1 || '',
               line2: session.shipping_details.address?.line2 || '',
@@ -78,12 +106,12 @@ exports.handler = async (event, context) => {
             },
           }
         : null,
-      lineItems: session.line_items?.data.map((item) => ({
-        description: item.description,
-        quantity: item.quantity,
-        amount: item.amount_total / 100, // Convert from cents
-      })),
-      metadata: session.metadata,
+      lineItems: session.line_items?.data?.map((item) => ({
+        description: item.description || item.price?.product?.name || 'Product',
+        quantity: item.quantity || 1,
+        amount: item.amount_total ? item.amount_total / 100 : 0,
+      })) || [],
+      metadata: session.metadata || {},
     }
     
     console.log('Extracted order details:', {
@@ -91,6 +119,8 @@ exports.handler = async (event, context) => {
       shippingAddress: orderDetails.shippingDetails?.address,
       tax: orderDetails.tax,
       shipping: orderDetails.shipping,
+      subtotal: orderDetails.subtotal,
+      total: orderDetails.amountTotal,
     })
 
     return {
@@ -99,11 +129,22 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(orderDetails),
     }
   } catch (error) {
-    console.error('Error retrieving checkout session:', error)
+    console.error('Error retrieving checkout session:', {
+      message: error.message,
+      type: error.type,
+      code: error.code,
+      stack: error.stack,
+    })
+    
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Failed to retrieve checkout session' }),
+      body: JSON.stringify({ 
+        error: 'Failed to retrieve checkout session',
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+        type: error.type,
+        code: error.code,
+      }),
     }
   }
 }
