@@ -9,14 +9,18 @@ import App from './App.tsx'
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 if (!clerkPubKey) {
-  console.error('VITE_CLERK_PUBLISHABLE_KEY is not set. Authentication will not work.')
-  // Still render with ClerkProvider to prevent errors, but auth won't work
+  console.warn('VITE_CLERK_PUBLISHABLE_KEY is not set. Authentication will not work.')
+  console.warn('Please set VITE_CLERK_PUBLISHABLE_KEY in Netlify environment variables.')
 }
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ClerkProvider publishableKey={clerkPubKey || 'pk_test_placeholder'}>
+    {clerkPubKey ? (
+      <ClerkProvider publishableKey={clerkPubKey}>
+        <App />
+      </ClerkProvider>
+    ) : (
       <App />
-    </ClerkProvider>
+    )}
   </StrictMode>,
 )
