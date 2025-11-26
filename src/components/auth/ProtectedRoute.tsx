@@ -1,58 +1,89 @@
-import type { ReactNode } from 'react'
+/**
+ * Protected Route Component
+ * 
+ * Secures routes based on authentication and role requirements.
+ * 
+ * SECURITY: Always validates role server-side. This is just UI protection.
+ */
+
 import { Navigate, useLocation } from 'react-router-dom'
+import type { ReactNode } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
-import type { UserRole } from '../../types'
+import type { UserRole } from '../../types/auth'
 
 interface ProtectedRouteProps {
   children: ReactNode
-  requiredRole?: UserRole
-  fallbackPath?: string
+  requiredRole?: UserRole | UserRole[]
+  requireAuth?: boolean
+  fallback?: string
 }
 
-export function ProtectedRoute({ 
-  children, 
-  requiredRole, 
-  fallbackPath = '/auth/signin' 
+export function ProtectedRoute({
+  children,
+  requiredRole,
+  requireAuth = true,
+  fallback = '/login',
 }: ProtectedRouteProps) {
-  const { user, loading } = useAuth()
+  const { isAuthenticated, user, isLoading } = useAuth()
   const location = useLocation()
 
-  if (loading) {
+  // Show loading state while checking auth
+  if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
-      </div>
-    )
-  }
-
-  if (!user) {
-    // Redirect to sign-in page with return URL
-    return <Navigate to={fallbackPath} state={{ from: location }} replace />
-  }
-
-  if (requiredRole && user.role !== requiredRole) {
-    // User doesn't have required role
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6 text-center">
-          <div className="text-red-600 mb-4">
-            <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-            </svg>
-          </div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Access Denied</h2>
-          <p className="text-gray-600 mb-4">
-            You don't have permission to access this page. This area is restricted to {requiredRole.replace('_', ' ').toLowerCase()}s.
-          </p>
-          <button
-            onClick={() => window.history.back()}
-            className="btn btn-primary"
-          >
-            Go Back
-          </button>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
         </div>
       </div>
     )
+  }
+
+  // Require authentication
+  if (requireAuth && !isAuthenticated) {
+    // Save the attempted location for redirect after login
+    return <Navigate to={fallback} state={{ from: location }} replace />
+  }
+
+  // Require specific role(s)
+  if (requiredRole && user) {
+    const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole]
+    if (!roles.includes(user.role)) {
+      // User doesn't have required role - redirect to unauthorized page
+      return <Navigate to="/unauthorized" replace />
+    }
+  }
+
+  // User is authenticated and has required role
+  return <>{children}</>
+}
+
+/**
+ * Public Route Component
+ * Redirects authenticated users away from public pages (like login)
+ */
+export function PublicRoute({
+  children,
+  redirectTo = '/dashboard',
+}: {
+  children: ReactNode
+  redirectTo?: string
+}) {
+  const { isAuthenticated, isLoading } = useAuth()
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to={redirectTo} replace />
   }
 
   return <>{children}</>

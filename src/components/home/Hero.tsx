@@ -19,7 +19,7 @@ export function Hero() {
   const [isUpgradeFormSubmitted, setIsUpgradeFormSubmitted] = useState(false)
   
   // Check if user is a contractor
-  const isContractor = isAuthenticated && user?.role === 'HVAC_PROFESSIONAL'
+  const isContractor = isAuthenticated && user?.role === 'hvac_pro'
 
   // Handler for Sensor CTA - checks authentication before navigating
   const handleSensorCTA = () => {
@@ -999,7 +999,16 @@ export function Hero() {
               <button onClick={() => navigate('/contact?type=sales')} className="cta-band-btn-primary">
                 Schedule Sales Call
               </button>
-              <button onClick={() => navigate('/auth/signin')} className="cta-band-btn-secondary">
+              <button 
+                onClick={() => {
+                  if (isContractor) {
+                    navigate('/business/pro/catalog')
+                  } else {
+                    navigate('/auth/signin', { state: { from: { pathname: '/business/pro/catalog' } } })
+                  }
+                }} 
+                className="cta-band-btn-secondary"
+              >
                 View Contractor Portal
               </button>
             </div>

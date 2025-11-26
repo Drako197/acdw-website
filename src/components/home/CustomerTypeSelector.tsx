@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../contexts/AuthContext'
 
 // Define types locally to avoid import issues
 type CustomerType = 'homeowner' | 'hvac-professional' | 'property-manager' | 'city-official'
@@ -85,6 +86,8 @@ const icons = {
 
 export function CustomerTypeSelector() {
   const navigate = useNavigate()
+  const { isAuthenticated, user } = useAuth()
+  const isContractor = isAuthenticated && user?.role === 'hvac_pro'
 
   const handleSelect = (type: CustomerType) => {
     // Store selection in localStorage for session persistence
@@ -96,7 +99,12 @@ export function CustomerTypeSelector() {
         navigate('/homeowner')
         break
       case 'hvac-professional':
-        navigate('/auth/signin', { state: { from: { pathname: '/products', search: '?type=hvac-professional' } } })
+        // If already logged in as contractor, go to catalog; otherwise sign in first
+        if (isContractor) {
+          navigate('/business/pro/catalog')
+        } else {
+          navigate('/auth/signin', { state: { from: { pathname: '/business/pro/catalog' } } })
+        }
         break
       case 'property-manager':
         navigate('/property-manager')

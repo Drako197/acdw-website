@@ -19,6 +19,11 @@ import { DashboardPage } from './pages/DashboardPage'
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage'
 import { EmailPreferencesPage } from './pages/EmailPreferencesPage'
 import { UnsubscribePage } from './pages/UnsubscribePage'
+import { HVACProCatalogPage } from './pages/HVACProCatalogPage'
+import { UnauthorizedPage } from './pages/UnauthorizedPage'
+import { ProfilePage } from './pages/ProfilePage'
+import { CheckoutSuccessPage } from './pages/CheckoutSuccessPage'
+import { CheckoutCancelPage } from './pages/CheckoutCancelPage'
 
 function App() {
   return (
@@ -42,10 +47,17 @@ function App() {
                     <Route path="/compliance" element={<CompliancePage />} />
                     <Route path="/auth/signin" element={<SignInPage />} />
               <Route path="/auth/signup" element={<SignUpPage />} />
+              <Route path="/login" element={<SignInPage />} />
+              <Route path="/signup" element={<SignUpPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/dashboard/profile" element={<ProfilePage />} />
+              <Route path="/business/pro/catalog" element={<HVACProCatalogPage />} />
+              <Route path="/unauthorized" element={<UnauthorizedPage />} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="/email-preferences" element={<EmailPreferencesPage />} />
               <Route path="/unsubscribe" element={<UnsubscribePage />} />
+              <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
+              <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
             </Routes>
           </main>
           <Footer />

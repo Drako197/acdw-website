@@ -1,0 +1,210 @@
+/**
+ * Get Stripe Price ID
+ * 
+ * SECURITY: Server-side price validation
+ * Never trust client-side price calculations
+ * 
+ * Validates user role, calculates tier, and returns correct Stripe Price ID
+ */
+
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+
+// Price ID mapping (set these in Stripe and update here)
+const PRICE_IDS = {
+  // Homeowner - MSRP
+  mini_homeowner: process.env.STRIPE_PRICE_MINI_HOMEOWNER,
+  sensor_homeowner: process.env.STRIPE_PRICE_SENSOR_HOMEOWNER,
+  bundle_homeowner: process.env.STRIPE_PRICE_BUNDLE_HOMEOWNER,
+  
+  // HVAC Pro - Tier 1
+  mini_hvac_t1: process.env.STRIPE_PRICE_MINI_HVAC_T1,
+  sensor_hvac_t1: process.env.STRIPE_PRICE_SENSOR_HVAC_T1,
+  bundle_hvac_t1: process.env.STRIPE_PRICE_BUNDLE_HVAC_T1,
+  
+  // HVAC Pro - Tier 2
+  mini_hvac_t2: process.env.STRIPE_PRICE_MINI_HVAC_T2,
+  sensor_hvac_t2: process.env.STRIPE_PRICE_SENSOR_HVAC_T2,
+  bundle_hvac_t2: process.env.STRIPE_PRICE_BUNDLE_HVAC_T2,
+  
+  // HVAC Pro - Tier 3
+  mini_hvac_t3: process.env.STRIPE_PRICE_MINI_HVAC_T3,
+  sensor_hvac_t3: process.env.STRIPE_PRICE_SENSOR_HVAC_T3,
+  bundle_hvac_t3: process.env.STRIPE_PRICE_BUNDLE_HVAC_T3,
+  
+  // Property Manager - Tier 1
+  mini_pm_t1: process.env.STRIPE_PRICE_MINI_PM_T1,
+  sensor_pm_t1: process.env.STRIPE_PRICE_SENSOR_PM_T1,
+  bundle_pm_t1: process.env.STRIPE_PRICE_BUNDLE_PM_T1,
+  
+  // Property Manager - Tier 2
+  mini_pm_t2: process.env.STRIPE_PRICE_MINI_PM_T2,
+  sensor_pm_t2: process.env.STRIPE_PRICE_SENSOR_PM_T2,
+  bundle_pm_t2: process.env.STRIPE_PRICE_BUNDLE_PM_T2,
+  
+  // Property Manager - Tier 3
+  mini_pm_t3: process.env.STRIPE_PRICE_MINI_PM_T3,
+  sensor_pm_t3: process.env.STRIPE_PRICE_SENSOR_PM_T3,
+  bundle_pm_t3: process.env.STRIPE_PRICE_BUNDLE_PM_T3,
+}
+
+/**
+ * Calculate tier based on quantity
+ */
+function calculateTier(quantity) {
+  if (quantity >= 1 && quantity <= 20) return 'tier_1'
+  if (quantity >= 21 && quantity <= 100) return 'tier_2'
+  if (quantity >= 101 && quantity <= 500) return 'tier_3'
+  return null // > 500 requires contact sales
+}
+
+/**
+ * Get Price ID key based on product, role, and tier
+ */
+function getPriceIdKey(product, role, tier) {
+  if (role === 'homeowner') {
+    return `${product}_homeowner`
+  }
+  
+  const rolePrefix = role === 'hvac_pro' ? 'hvac' : 'pm'
+  const tierSuffix = tier === 'tier_1' ? 't1' : tier === 'tier_2' ? 't2' : 't3'
+  
+  return `${product}_${rolePrefix}_${tierSuffix}`
+}
+
+exports.handler = async (event, context) => {
+  // Security headers
+  const headers = {
+    'Content-Type': 'application/json',
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'X-XSS-Protection': '1; mode=block',
+  }
+
+  // Only allow POST requests
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ error: 'Method not allowed' }),
+    }
+  }
+
+  try {
+    // Parse request body
+    const { product, quantity, role } = JSON.parse(event.body)
+
+    // Validate inputs
+    if (!product || !quantity || !role) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Missing required fields' }),
+      }
+    }
+
+    // Validate product type
+    const validProducts = ['mini', 'sensor', 'bundle']
+    if (!validProducts.includes(product)) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Invalid product' }),
+      }
+    }
+
+    // Validate role
+    const validRoles = ['homeowner', 'hvac_pro', 'property_manager']
+    if (!validRoles.includes(role)) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Invalid role' }),
+      }
+    }
+
+    // Validate quantity
+    const qty = parseInt(quantity)
+    if (isNaN(qty) || qty < 1) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Invalid quantity' }),
+      }
+    }
+
+    // Check if quantity exceeds automated limit
+    if (qty > 500) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ 
+          error: 'Quantity exceeds automated limit',
+          requiresContact: true,
+        }),
+      }
+    }
+
+    // Calculate tier
+    let tier = 'msrp'
+    if (role !== 'homeowner') {
+      tier = calculateTier(qty)
+      if (!tier) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ 
+            error: 'Quantity requires contact sales',
+            requiresContact: true,
+          }),
+        }
+      }
+    }
+
+    // Get Price ID
+    const priceIdKey = getPriceIdKey(product, role, tier)
+    const priceId = PRICE_IDS[priceIdKey]
+
+    if (!priceId) {
+      console.error(`Price ID not found for: ${priceIdKey}`)
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ error: 'Price configuration error' }),
+      }
+    }
+
+    // Verify Price ID exists in Stripe
+    try {
+      const price = await stripe.prices.retrieve(priceId)
+      
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          priceId,
+          product,
+          quantity: qty,
+          role,
+          tier,
+          unitPrice: price.unit_amount / 100, // Convert from cents
+          currency: price.currency,
+        }),
+      }
+    } catch (stripeError) {
+      console.error('Stripe error:', stripeError)
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ error: 'Stripe price verification failed' }),
+      }
+    }
+  } catch (error) {
+    console.error('Error:', error)
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error: 'Internal server error' }),
+    }
+  }
+}
+

@@ -1,7 +1,17 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../../contexts/AuthContext'
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
+import { useSignIn } from '@clerk/clerk-react'
+import { 
+  EyeIcon, 
+  EyeSlashIcon,
+  EnvelopeIcon,
+  LockClosedIcon,
+  ShieldCheckIcon,
+  CheckCircleIcon,
+  ArrowRightIcon,
+  CheckBadgeIcon,
+  XCircleIcon
+} from '@heroicons/react/24/outline'
 
 export function SignInForm() {
   const [email, setEmail] = useState('')
@@ -10,10 +20,11 @@ export function SignInForm() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   
-  const { login } = useAuth()
+  const { signIn, setActive } = useSignIn()
   const navigate = useNavigate()
   const location = useLocation()
   
+  // Use saved location or default to dashboard (DashboardPage handles role-based redirects)
   const from = location.state?.from?.pathname || '/dashboard'
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,140 +33,208 @@ export function SignInForm() {
     setIsLoading(true)
 
     try {
-      const success = await login(email, password)
-      if (success) {
-        navigate(from, { replace: true })
-      } else {
-        setError('Invalid email or password')
+      if (!signIn) {
+        throw new Error('Sign in not available')
       }
-    } catch (err) {
-      setError('An error occurred. Please try again.')
+
+      const result = await signIn.create({
+        identifier: email,
+        password,
+      })
+
+      if (result.status === 'complete') {
+        await setActive({ session: result.createdSessionId })
+        // Redirect - DashboardPage will handle role-based redirects if needed
+        // If there's a saved path, use it; otherwise go to dashboard
+        const savedPath = location.state?.from?.pathname
+        navigate(savedPath || '/dashboard', { replace: true })
+      } else {
+        setError('Sign in incomplete. Please try again.')
+      }
+    } catch (err: any) {
+      setError(err.errors?.[0]?.message || 'Invalid email or password')
     } finally {
       setIsLoading(false)
     }
   }
 
+  const benefits = [
+    'Exclusive Contractor Pricing – Save on Mini, Sensor, and bundle purchases',
+    'Bulk Ordering & Volume Discounts – Special pricing for larger orders',
+    'Priority Support – Direct access to technical resources and expert assistance',
+    'Contractor Partner Program – Access to marketing materials and co-branding opportunities'
+  ]
+
   return (
-    <div className="signin-page-container">
-      <div className="signin-form-wrapper">
-        <div className="signin-form-header">
-          <h2 className="signin-form-title">
-            Sign in to your contractor account
-          </h2>
-          <p className="signin-form-subtitle">
-            Access exclusive contractor pricing and professional resources
-          </p>
-        </div>
-        
-        <form className="signin-form" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email Address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                placeholder="john@company.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <div className="mt-1 relative">
-              <input
-                id="password"
-                name="password"
-                  type={showPassword ? 'text' : 'password'}
-                autoComplete="current-password"
-                required
-                  className="appearance-none relative block w-full px-3 pr-10 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+    <div className="signin-form-page-container">
+      <div className="signin-form-page-wrapper">
+        <div className="signin-form-card">
+          <div className="signin-form-layout">
+            {/* Left Side - Form */}
+            <div className="signin-form-section">
+              <div className="signin-form-header-section">
+                <div className="signin-form-title-wrapper">
+                  <ShieldCheckIcon className="signin-form-header-icon" />
+                  <h1 className="signin-form-title">
+                    Sign In
+                  </h1>
+                </div>
+                <p className="signin-form-subtitle">
+                  Access your contractor account and exclusive pricing
+                </p>
+              </div>
+              
+              <form className="signin-form" onSubmit={handleSubmit} noValidate>
+                {/* Email */}
+                <div className="signin-form-field">
+                  <label htmlFor="email" className="signin-form-field-label">
+                    <div className="signin-form-label-content">
+                      <EnvelopeIcon className="signin-form-label-icon" />
+                      Email Address
+                    </div>
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    className="signin-form-input"
+                    placeholder="john@company.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+
+                {/* Password */}
+                <div className="signin-form-field">
+                  <label htmlFor="password" className="signin-form-field-label">
+                    <div className="signin-form-label-content">
+                      <LockClosedIcon className="signin-form-label-icon" />
+                      Password
+                    </div>
+                  </label>
+                  <div className="signin-form-password-wrapper">
+                    <input
+                      id="password"
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      autoComplete="current-password"
+                      required
+                      className="signin-form-input signin-form-password-input"
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="signin-form-password-toggle-button"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeSlashIcon className="signin-form-password-toggle-icon" />
+                      ) : (
+                        <EyeIcon className="signin-form-password-toggle-icon" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Error Message */}
+                {error && (
+                  <div className="signin-form-error">
+                    <p className="signin-form-error-message">
+                      <XCircleIcon className="signin-form-error-icon" />
+                      {error}
+                    </p>
+                  </div>
+                )}
+
+                {/* Submit Button */}
                 <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none z-10"
-                  onClick={() => setShowPassword(!showPassword)}
+                  type="submit"
+                  disabled={isLoading}
+                  className="signin-form-submit-button"
                 >
-                  {showPassword ? (
-                    <EyeSlashIcon className="h-5 w-5" />
+                  {isLoading ? (
+                    <div className="signin-form-submit-loading">
+                      <div className="signin-form-submit-spinner"></div>
+                      Signing in...
+                    </div>
                   ) : (
-                    <EyeIcon className="h-5 w-5" />
+                    <>
+                      <CheckBadgeIcon className="signin-form-submit-icon" />
+                      Sign In
+                    </>
                   )}
                 </button>
+
+                {/* Sign Up Link */}
+                <div className="signin-form-signup-link">
+                  <p className="signin-form-signup-link-text">
+                    Don't have an account?{' '}
+                    <button
+                      type="button"
+                      onClick={() => navigate('/auth/signup')}
+                      className="signin-form-signup-link-button"
+                    >
+                      Create one here
+                    </button>
+                  </p>
+                </div>
+              </form>
+            </div>
+
+            {/* Right Side - Benefits */}
+            <div className="signin-form-benefits-section">
+              <div className="signin-form-benefits-content">
+                <div className="signin-form-benefits-header">
+                  <h2 className="signin-form-benefits-title">Contractor Benefits</h2>
+                  <p className="signin-form-benefits-description">
+                    Access exclusive pricing and professional resources
+                  </p>
+                </div>
+                
+                <ul className="signin-form-benefits-list">
+                  {benefits.map((benefit, index) => (
+                    <li key={index} className="signin-form-benefits-item">
+                      <CheckCircleIcon className="signin-form-benefit-icon" />
+                      <span className="signin-form-benefits-item-text">{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA Button */}
+                <div className="signin-form-cta-section">
+                  <button
+                    type="button"
+                    onClick={() => navigate('/auth/signup')}
+                    className="signin-form-cta-button"
+                  >
+                    Create Your Account
+                    <ArrowRightIcon className="signin-form-cta-icon" />
+                  </button>
+                </div>
+
+                {/* Trust Indicators */}
+                <div className="signin-form-trust-section">
+                  <div className="signin-form-trust-list">
+                    <div className="signin-form-trust-item">
+                      <ShieldCheckIcon className="signin-form-trust-icon" />
+                      <span className="signin-form-trust-text">Secure & Encrypted</span>
+                    </div>
+                    <div className="signin-form-trust-item">
+                      <CheckBadgeIcon className="signin-form-trust-icon" />
+                      <span className="signin-form-trust-text">Trusted by 1000+ Professionals</span>
+                    </div>
+                    <div className="signin-form-trust-item">
+                      <LockClosedIcon className="signin-form-trust-icon" />
+                      <span className="signin-form-trust-text">Your data is protected</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-
-          {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <div className="text-sm text-red-700">{error}</div>
-            </div>
-          )}
-
-          <div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="signin-form-submit-button"
-            >
-              {isLoading ? (
-                <div className="signin-form-loading">
-                  <div className="signin-form-spinner"></div>
-                  Signing in...
-                </div>
-              ) : (
-                'Sign in'
-              )}
-            </button>
-          </div>
-        </form>
-
-        <div className="signin-benefits-section">
-          <h3 className="signin-benefits-title">Why Create a Contractor Account?</h3>
-          <ul className="signin-benefits-list">
-            <li className="signin-benefit-item">
-              <svg className="signin-benefit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span><strong>Exclusive Contractor Pricing</strong> – Save on Mini, Sensor, and bundle purchases</span>
-            </li>
-            <li className="signin-benefit-item">
-              <svg className="signin-benefit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span><strong>Bulk Ordering & Volume Discounts</strong> – Special pricing for larger orders</span>
-            </li>
-            <li className="signin-benefit-item">
-              <svg className="signin-benefit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span><strong>Priority Support</strong> – Direct access to technical resources and expert assistance</span>
-            </li>
-            <li className="signin-benefit-item">
-              <svg className="signin-benefit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span><strong>Contractor Partner Program</strong> – Access to marketing materials and co-branding opportunities</span>
-            </li>
-          </ul>
-          <div className="signin-benefits-cta">
-              <button
-                type="button"
-                onClick={() => navigate('/auth/signup')}
-              className="signin-benefits-signup-button"
-              >
-              Create Your Contractor Account
-              </button>
           </div>
         </div>
       </div>
