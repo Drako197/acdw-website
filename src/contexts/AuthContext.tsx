@@ -23,6 +23,8 @@ interface AuthContextType extends AuthState {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  // ClerkProvider should always be present (see main.tsx)
+  // These hooks will work as long as ClerkProvider wraps this component
   const { user: clerkUser, isLoaded: userLoaded } = useUser()
   const { signOut } = useClerkAuth()
 
