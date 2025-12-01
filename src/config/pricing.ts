@@ -50,9 +50,9 @@ export const HVAC_PRO_PRICING: Record<ProductType, ProductPricing['hvac_pro']> =
     tier_3: 40.60,
   },
   bundle: {
-    tier_1: 129.01,
-    tier_2: 117.01,
-    tier_3: 104.41,
+    tier_1: 129.00,
+    tier_2: 117.00,
+    tier_3: 104.00,
   },
 }
 
@@ -69,9 +69,9 @@ export const PROPERTY_MANAGER_PRICING: Record<ProductType, ProductPricing['prope
     tier_3: 36.54,  // 10% off $40.60
   },
   bundle: {
-    tier_1: 116.11, // 10% off $129.01
-    tier_2: 105.31, // 10% off $117.01
-    tier_3: 93.97,  // 10% off $104.41
+    tier_1: 116.10, // 10% off $129.00
+    tier_2: 105.30, // 10% off $117.00
+    tier_3: 93.60,  // 10% off $104.00
   },
 }
 

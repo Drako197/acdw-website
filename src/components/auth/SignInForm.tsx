@@ -169,7 +169,7 @@ export function SignInForm() {
         // Email verification successful
         if (result.createdSessionId) {
           try {
-            await setActive({ session: result.createdSessionId })
+        await setActive({ session: result.createdSessionId })
             // Small delay to ensure session is fully set (helps with Safari)
             await new Promise(resolve => setTimeout(resolve, 500))
             const savedPath = location.state?.from?.pathname
@@ -354,7 +354,7 @@ export function SignInForm() {
                 </form>
               ) : (
                 /* Password Form */
-                <form className="signin-form" onSubmit={handleSubmit} noValidate>
+              <form className="signin-form" onSubmit={handleSubmit} noValidate>
                 {/* Email */}
                 <div className="signin-form-field">
                   <label htmlFor="email" className="signin-form-field-label">
