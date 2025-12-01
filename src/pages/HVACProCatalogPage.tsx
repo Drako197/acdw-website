@@ -80,12 +80,12 @@ export function HVACProCatalogPage() {
               
               return (
                 <div key={product.id} className="hvac-pro-product-button-wrapper">
-                  <button
+            <button
                     onClick={() => setSelectedProduct(product.id)}
                     className={`hvac-pro-product-button ${isActive ? 'active' : ''}`}
-                  >
+            >
                     <span className="hvac-pro-product-button-name">{product.name}</span>
-                  </button>
+            </button>
                   <div className="hvac-pro-product-pricing-info">
                     <div className="hvac-pro-product-msrp">
                       <span className="hvac-pro-product-msrp-label">MSRP:</span>
@@ -161,18 +161,18 @@ export function HVACProCatalogPage() {
             {/* Manual Input */}
             <div className="hvac-pro-quantity-input-wrapper">
               <label className="hvac-pro-quantity-input-label">Or enter custom quantity:</label>
-              <input
-                type="number"
-                min="1"
-                max="500"
-                value={quantity}
-                onChange={(e) => {
-                  const val = parseInt(e.target.value) || 1
-                  setQuantity(Math.max(1, Math.min(500, val)))
-                  setCheckoutError(null)
-                }}
-                className="hvac-pro-quantity-input"
-              />
+            <input
+              type="number"
+              min="1"
+              max="500"
+              value={quantity}
+              onChange={(e) => {
+                const val = parseInt(e.target.value) || 1
+                setQuantity(Math.max(1, Math.min(500, val)))
+                setCheckoutError(null)
+              }}
+              className="hvac-pro-quantity-input"
+            />
             </div>
             
             {quantity > 500 && (

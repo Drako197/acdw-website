@@ -423,6 +423,10 @@
     @apply text-2xl text-white font-semibold mb-6 leading-relaxed;
   }
 
+  .hero-subtitle-mobile-break {
+    @apply block md:hidden;
+  }
+
   .hero-description-text {
     @apply text-xl text-primary-100 mb-8 leading-relaxed text-left;
     word-wrap: break-word;

@@ -186,7 +186,7 @@ export function Hero() {
             </h1>
             
             <h2 className="hero-subtitle">
-              Fast & Easy AC Drain Line Cleaning System
+              STAY COOL WHEN <br className="hero-subtitle-mobile-break" /><em>THE <strong style={{ color: 'red' }}>HEAT</strong> IS ON!</em>
             </h2>
             
             <div className="hero-cta-buttons">
