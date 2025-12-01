@@ -10,7 +10,8 @@ import {
   CheckCircleIcon,
   ArrowRightIcon,
   CheckBadgeIcon,
-  XCircleIcon
+  XCircleIcon,
+  KeyIcon
 } from '@heroicons/react/24/outline'
 
 export function SignInForm() {
@@ -19,6 +20,9 @@ export function SignInForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [needsEmailVerification, setNeedsEmailVerification] = useState(false)
+  const [verificationCode, setVerificationCode] = useState('')
+  const [isSendingCode, setIsSendingCode] = useState(false)
   
   const { signIn, setActive } = useSignIn()
   const navigate = useNavigate()
@@ -79,9 +83,28 @@ export function SignInForm() {
         // MFA or other first factor required
         setError('Additional verification required. Please check your email or use your authenticator app.')
       } else if (result.status === 'needs_second_factor') {
-        // 2FA is enabled on this account but we don't support it in the UI
-        // User needs to disable 2FA in Clerk Dashboard or use Clerk's hosted UI
-        setError('Two-factor authentication is enabled on this account. Please disable 2FA in your account settings or contact support.')
+        // Client Trust: Email verification required for new/untrusted devices
+        const emailCodeStrategy = result.supportedSecondFactors?.find(
+          (factor: any) => factor.strategy === 'email_code'
+        )
+        
+        if (emailCodeStrategy) {
+          // Prepare email code verification
+          try {
+            await signIn.prepareSecondFactor({
+              strategy: 'email_code',
+            })
+            setNeedsEmailVerification(true)
+            setError('')
+            setIsLoading(false)
+          } catch (prepareError: any) {
+            console.error('Error preparing email verification:', prepareError)
+            setError('Failed to send verification email. Please try again.')
+            setIsLoading(false)
+          }
+        } else {
+          setError('Email verification required. Please check your email for a verification code.')
+        }
       } else if (result.status === 'needs_new_password') {
         // Password reset required
         setError('Password reset required. Please check your email for reset instructions.')
@@ -115,6 +138,103 @@ export function SignInForm() {
     }
   }
 
+  const handleEmailVerification = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    setIsLoading(true)
+
+    try {
+      if (!signIn) {
+        throw new Error('Sign in not available')
+      }
+
+      if (!verificationCode.trim()) {
+        setError('Please enter the verification code')
+        setIsLoading(false)
+        return
+      }
+
+      // Attempt email code verification
+      const result = await signIn.attemptSecondFactor({
+        strategy: 'email_code',
+        code: verificationCode,
+      })
+
+      console.log('Email verification result:', {
+        status: result.status,
+        createdSessionId: result.createdSessionId,
+      })
+
+      if (result.status === 'complete') {
+        // Email verification successful
+        if (result.createdSessionId) {
+          try {
+            await setActive({ session: result.createdSessionId })
+            // Small delay to ensure session is fully set (helps with Safari)
+            await new Promise(resolve => setTimeout(resolve, 500))
+            const savedPath = location.state?.from?.pathname
+            navigate(savedPath || '/dashboard', { replace: true })
+          } catch (setActiveError: any) {
+            console.error('Error setting active session:', setActiveError)
+            if (setActiveError.message?.includes('cookie') || 
+                setActiveError.message?.includes('storage') ||
+                setActiveError.message?.includes('session')) {
+              console.log('Attempting Safari workaround: reloading page')
+              window.location.href = '/dashboard'
+            } else {
+              setError(setActiveError.message || 'Failed to activate session. Please try again.')
+            }
+          }
+        } else {
+          setError('Session ID missing. Please try again.')
+        }
+      } else {
+        setError('Invalid verification code. Please check your email and try again.')
+      }
+    } catch (err: any) {
+      console.error('Email verification error:', {
+        message: err.message,
+        errors: err.errors,
+      })
+      setError(err.errors?.[0]?.message || err.message || 'Invalid verification code. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleResendCode = async () => {
+    setError('')
+    setIsSendingCode(true)
+
+    try {
+      if (!signIn) {
+        throw new Error('Sign in not available')
+      }
+
+      await signIn.prepareSecondFactor({
+        strategy: 'email_code',
+      })
+      setError('')
+      // Show success message briefly
+      const successMsg = 'Verification code sent! Please check your email.'
+      setError(successMsg)
+      setTimeout(() => setError(''), 3000)
+    } catch (err: any) {
+      console.error('Error resending code:', err)
+      setError(err.errors?.[0]?.message || 'Failed to resend code. Please try again.')
+    } finally {
+      setIsSendingCode(false)
+    }
+  }
+
+  const handleBackToPassword = () => {
+    setNeedsEmailVerification(false)
+    setVerificationCode('')
+    setError('')
+    setPassword('')
+    // Clear form to start fresh
+  }
+
   const benefits = [
     'Exclusive Contractor Pricing – Save on Mini, Sensor, and bundle purchases',
     'Bulk Ordering & Volume Discounts – Special pricing for larger orders',
@@ -133,15 +253,108 @@ export function SignInForm() {
                 <div className="signin-form-title-wrapper">
                   <ShieldCheckIcon className="signin-form-header-icon" />
                   <h1 className="signin-form-title">
-                    Sign In
+                    {needsEmailVerification ? 'Verify Your Email' : 'Sign In'}
                   </h1>
                 </div>
                 <p className="signin-form-subtitle">
-                  Access your contractor account and exclusive pricing
+                  {needsEmailVerification 
+                    ? `We sent a verification code to ${email}. Please enter it below.`
+                    : 'Access your contractor account and exclusive pricing'}
                 </p>
               </div>
               
-              <form className="signin-form" onSubmit={handleSubmit} noValidate>
+              {needsEmailVerification ? (
+                /* Email Verification Form */
+                <form className="signin-form" onSubmit={handleEmailVerification} noValidate>
+                  <div className="signin-form-field">
+                    <label htmlFor="verificationCode" className="signin-form-field-label">
+                      <div className="signin-form-label-content">
+                        <KeyIcon className="signin-form-label-icon" />
+                        Verification Code
+                      </div>
+                    </label>
+                    <input
+                      id="verificationCode"
+                      name="verificationCode"
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="one-time-code"
+                      required
+                      maxLength={6}
+                      className="signin-form-input"
+                      placeholder="000000"
+                      value={verificationCode}
+                      onChange={(e) => {
+                        // Only allow numbers, limit to 6 digits
+                        const value = e.target.value.replace(/\D/g, '').slice(0, 6)
+                        setVerificationCode(value)
+                        setError('')
+                      }}
+                      autoFocus
+                    />
+                    <p className="signin-form-field-help">
+                      Enter the 6-digit code sent to your email
+                    </p>
+                  </div>
+
+                  {error && (
+                    <div className={`signin-form-error ${error.includes('sent!') ? 'signin-form-success' : ''}`}>
+                      <p className="signin-form-error-message">
+                        {error.includes('sent!') ? (
+                          <CheckCircleIcon className="signin-form-error-icon" />
+                        ) : (
+                          <XCircleIcon className="signin-form-error-icon" />
+                        )}
+                        {error}
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="signin-form-actions">
+                    <button
+                      type="button"
+                      onClick={handleBackToPassword}
+                      className="signin-form-back-button"
+                      disabled={isLoading}
+                    >
+                      Back
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isLoading || verificationCode.length !== 6}
+                      className="signin-form-submit-button"
+                    >
+                      {isLoading ? (
+                        <div className="signin-form-submit-loading">
+                          <div className="signin-form-submit-spinner"></div>
+                          Verifying...
+                        </div>
+                      ) : (
+                        <>
+                          <CheckBadgeIcon className="signin-form-submit-icon" />
+                          Verify
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  <div className="signin-form-resend-section">
+                    <p className="signin-form-resend-text">
+                      Didn't receive the code?{' '}
+                      <button
+                        type="button"
+                        onClick={handleResendCode}
+                        disabled={isSendingCode}
+                        className="signin-form-resend-button"
+                      >
+                        {isSendingCode ? 'Sending...' : 'Resend Code'}
+                      </button>
+                    </p>
+                  </div>
+                </form>
+              ) : (
+                /* Password Form */
+                <form className="signin-form" onSubmit={handleSubmit} noValidate>
                 {/* Email */}
                 <div className="signin-form-field">
                   <label htmlFor="email" className="signin-form-field-label">
@@ -240,6 +453,7 @@ export function SignInForm() {
                   </p>
                 </div>
               </form>
+              )}
             </div>
 
             {/* Right Side - Benefits */}
