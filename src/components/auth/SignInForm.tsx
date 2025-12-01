@@ -39,17 +39,70 @@ export function SignInForm() {
         password,
       })
 
+      // Log the result for debugging (especially useful for Safari issues)
+      console.log('Sign in result:', {
+        status: result.status,
+        createdSessionId: result.createdSessionId,
+        supportedFirstFactors: result.supportedFirstFactors,
+        supportedSecondFactors: result.supportedSecondFactors,
+      })
+
       if (result.status === 'complete') {
-        await setActive({ session: result.createdSessionId })
-        // Redirect - DashboardPage will handle role-based redirects if needed
-        // If there's a saved path, use it; otherwise go to dashboard
-        const savedPath = location.state?.from?.pathname
-        navigate(savedPath || '/dashboard', { replace: true })
+        // Session created successfully
+        if (result.createdSessionId) {
+          try {
+            await setActive({ session: result.createdSessionId })
+            // Redirect - DashboardPage will handle role-based redirects if needed
+            // If there's a saved path, use it; otherwise go to dashboard
+            const savedPath = location.state?.from?.pathname
+            navigate(savedPath || '/dashboard', { replace: true })
+          } catch (setActiveError: any) {
+            console.error('Error setting active session:', setActiveError)
+            // Safari-specific: Sometimes setActive fails due to cookie issues
+            // Try to reload the page to let Clerk handle the session
+            if (setActiveError.message?.includes('cookie') || setActiveError.message?.includes('storage')) {
+              setError('Session creation issue. Please try refreshing the page or clearing your browser cookies.')
+            } else {
+              setError(setActiveError.message || 'Failed to activate session. Please try again.')
+            }
+          }
+        } else {
+          setError('Session ID missing. Please try again.')
+        }
+      } else if (result.status === 'needs_first_factor') {
+        // MFA or other first factor required
+        setError('Additional verification required. Please check your email or use your authenticator app.')
+      } else if (result.status === 'needs_second_factor') {
+        // Second factor required
+        setError('Two-factor authentication required. Please complete the second step.')
+      } else if (result.status === 'needs_new_password') {
+        // Password reset required
+        setError('Password reset required. Please check your email for reset instructions.')
       } else {
-        setError('Sign in incomplete. Please try again.')
+        // Other statuses - provide more helpful error
+        console.warn('Unexpected sign-in status:', result.status)
+        setError(`Sign in incomplete (status: ${result.status}). Please try again or contact support if the issue persists.`)
       }
     } catch (err: any) {
-      setError(err.errors?.[0]?.message || 'Invalid email or password')
+      console.error('Sign in error:', {
+        message: err.message,
+        errors: err.errors,
+        status: err.status,
+        code: err.code,
+      })
+      
+      // Provide more specific error messages
+      if (err.errors && err.errors.length > 0) {
+        const errorMessage = err.errors[0].message
+        // Check for Safari-specific issues
+        if (errorMessage.includes('cookie') || errorMessage.includes('storage') || errorMessage.includes('session')) {
+          setError('Browser storage issue detected. Please enable cookies and try again, or use a different browser.')
+        } else {
+          setError(errorMessage)
+        }
+      } else {
+        setError(err.message || 'Invalid email or password. Please try again.')
+      }
     } finally {
       setIsLoading(false)
     }

@@ -16,7 +16,15 @@ if (!clerkPubKey) {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     {clerkPubKey ? (
-      <ClerkProvider publishableKey={clerkPubKey}>
+      <ClerkProvider 
+        publishableKey={clerkPubKey}
+        // Safari-specific configuration
+        // Ensure cookies work properly on Safari mobile
+        afterSignInUrl="/dashboard"
+        afterSignUpUrl="/dashboard"
+        signInUrl="/auth/signin"
+        signUpUrl="/auth/signup"
+      >
         <App />
       </ClerkProvider>
     ) : (
