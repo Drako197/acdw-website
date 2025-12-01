@@ -10,8 +10,7 @@ import {
   CheckCircleIcon,
   ArrowRightIcon,
   CheckBadgeIcon,
-  XCircleIcon,
-  KeyIcon
+  XCircleIcon
 } from '@heroicons/react/24/outline'
 
 export function SignInForm() {
@@ -20,9 +19,6 @@ export function SignInForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [needsSecondFactor, setNeedsSecondFactor] = useState(false)
-  const [secondFactorCode, setSecondFactorCode] = useState('')
-  const [secondFactorStrategy, setSecondFactorStrategy] = useState<'totp' | 'phone_code' | 'email_code' | 'backup_code' | null>(null)
   
   const { signIn, setActive } = useSignIn()
   const navigate = useNavigate()
@@ -56,8 +52,8 @@ export function SignInForm() {
         if (result.createdSessionId) {
           try {
             await setActive({ session: result.createdSessionId })
-            // Small delay to ensure session is fully set (helps with Safari)
-            await new Promise(resolve => setTimeout(resolve, 100))
+            // Small delay to ensure session is fully set (helps with Safari cookie/storage issues)
+            await new Promise(resolve => setTimeout(resolve, 500))
             // Redirect - DashboardPage will handle role-based redirects if needed
             // If there's a saved path, use it; otherwise go to dashboard
             const savedPath = location.state?.from?.pathname
@@ -83,14 +79,9 @@ export function SignInForm() {
         // MFA or other first factor required
         setError('Additional verification required. Please check your email or use your authenticator app.')
       } else if (result.status === 'needs_second_factor') {
-        // Second factor required - show 2FA input
-        const strategies = result.supportedSecondFactors || []
-        const preferredStrategy = strategies.find((s: any) => s.strategy === 'totp') || strategies[0]
-        const strategy = (preferredStrategy?.strategy || 'totp') as 'totp' | 'phone_code' | 'email_code' | 'backup_code'
-        setSecondFactorStrategy(strategy)
-        setNeedsSecondFactor(true)
-        setError('') // Clear any previous errors
-        setIsLoading(false) // Stop loading to show 2FA form
+        // 2FA is enabled on this account but we don't support it in the UI
+        // User needs to disable 2FA in Clerk Dashboard or use Clerk's hosted UI
+        setError('Two-factor authentication is enabled on this account. Please disable 2FA in your account settings or contact support.')
       } else if (result.status === 'needs_new_password') {
         // Password reset required
         setError('Password reset required. Please check your email for reset instructions.')
@@ -124,87 +115,6 @@ export function SignInForm() {
     }
   }
 
-  const handleSecondFactor = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setIsLoading(true)
-
-    try {
-      if (!signIn) {
-        throw new Error('Sign in not available')
-      }
-
-      if (!secondFactorCode.trim()) {
-        setError('Please enter your verification code')
-        setIsLoading(false)
-        return
-      }
-
-      // Attempt second factor verification
-      if (!secondFactorStrategy) {
-        setError('Verification method not available. Please try again.')
-        setIsLoading(false)
-        return
-      }
-
-      const result = await signIn.attemptSecondFactor({
-        strategy: secondFactorStrategy,
-        code: secondFactorCode,
-      })
-
-      console.log('Second factor result:', {
-        status: result.status,
-        createdSessionId: result.createdSessionId,
-      })
-
-      if (result.status === 'complete') {
-        // Second factor verified successfully
-        if (result.createdSessionId) {
-          try {
-            await setActive({ session: result.createdSessionId })
-            // Small delay to ensure session is fully set (helps with Safari)
-            await new Promise(resolve => setTimeout(resolve, 100))
-            // Redirect - DashboardPage will handle role-based redirects if needed
-            const savedPath = location.state?.from?.pathname
-            navigate(savedPath || '/dashboard', { replace: true })
-          } catch (setActiveError: any) {
-            console.error('Error setting active session:', setActiveError)
-            // Safari-specific: Sometimes setActive fails due to cookie issues
-            if (setActiveError.message?.includes('cookie') || 
-                setActiveError.message?.includes('storage') ||
-                setActiveError.message?.includes('session')) {
-              console.log('Attempting Safari workaround: reloading page')
-              window.location.href = '/dashboard'
-            } else {
-              setError(setActiveError.message || 'Failed to activate session. Please try again.')
-            }
-          }
-        } else {
-          setError('Session ID missing. Please try again.')
-        }
-      } else {
-        setError('Verification failed. Please check your code and try again.')
-      }
-    } catch (err: any) {
-      console.error('Second factor error:', {
-        message: err.message,
-        errors: err.errors,
-      })
-      setError(err.errors?.[0]?.message || err.message || 'Invalid verification code. Please try again.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleBackToPassword = () => {
-    setNeedsSecondFactor(false)
-    setSecondFactorCode('')
-    setSecondFactorStrategy(null)
-    setError('')
-    // Clear password field to start fresh
-    setPassword('')
-  }
-
   const benefits = [
     'Exclusive Contractor Pricing – Save on Mini, Sensor, and bundle purchases',
     'Bulk Ordering & Volume Discounts – Special pricing for larger orders',
@@ -223,90 +133,15 @@ export function SignInForm() {
                 <div className="signin-form-title-wrapper">
                   <ShieldCheckIcon className="signin-form-header-icon" />
                   <h1 className="signin-form-title">
-                    {needsSecondFactor ? 'Two-Factor Authentication' : 'Sign In'}
+                    Sign In
                   </h1>
                 </div>
                 <p className="signin-form-subtitle">
-                  {needsSecondFactor 
-                    ? 'Enter the verification code from your authenticator app'
-                    : 'Access your contractor account and exclusive pricing'}
+                  Access your contractor account and exclusive pricing
                 </p>
               </div>
               
-              {needsSecondFactor ? (
-                /* Second Factor Form */
-                <form className="signin-form" onSubmit={handleSecondFactor} noValidate>
-                  <div className="signin-form-field">
-                    <label htmlFor="secondFactorCode" className="signin-form-field-label">
-                      <div className="signin-form-label-content">
-                        <KeyIcon className="signin-form-label-icon" />
-                        Verification Code
-                      </div>
-                    </label>
-                    <input
-                      id="secondFactorCode"
-                      name="secondFactorCode"
-                      type="text"
-                      inputMode="numeric"
-                      autoComplete="one-time-code"
-                      required
-                      maxLength={6}
-                      className="signin-form-input"
-                      placeholder="000000"
-                      value={secondFactorCode}
-                      onChange={(e) => {
-                        // Only allow numbers, limit to 6 digits
-                        const value = e.target.value.replace(/\D/g, '').slice(0, 6)
-                        setSecondFactorCode(value)
-                        setError('')
-                      }}
-                      autoFocus
-                    />
-                    <p className="signin-form-field-help">
-                      Enter the 6-digit code from your authenticator app
-                    </p>
-                  </div>
-
-                  {error && (
-                    <div className="signin-form-error">
-                      <p className="signin-form-error-message">
-                        <XCircleIcon className="signin-form-error-icon" />
-                        {error}
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="signin-form-actions">
-                    <button
-                      type="button"
-                      onClick={handleBackToPassword}
-                      className="signin-form-back-button"
-                      disabled={isLoading}
-                    >
-                      Back
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={isLoading || secondFactorCode.length !== 6}
-                      className="signin-form-submit-button"
-                    >
-                      {isLoading ? (
-                        <div className="signin-form-submit-loading">
-                          <div className="signin-form-submit-spinner"></div>
-                          Verifying...
-                        </div>
-                      ) : (
-                        <>
-                          <CheckBadgeIcon className="signin-form-submit-icon" />
-                          Verify
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </form>
-              ) : (
-                /* Password Form */
-                <form className="signin-form" onSubmit={handleSubmit} noValidate>
+              <form className="signin-form" onSubmit={handleSubmit} noValidate>
                 {/* Email */}
                 <div className="signin-form-field">
                   <label htmlFor="email" className="signin-form-field-label">
@@ -405,7 +240,6 @@ export function SignInForm() {
                   </p>
                 </div>
               </form>
-              )}
             </div>
 
             {/* Right Side - Benefits */}
