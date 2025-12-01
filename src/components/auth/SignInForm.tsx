@@ -52,6 +52,8 @@ export function SignInForm() {
         if (result.createdSessionId) {
           try {
             await setActive({ session: result.createdSessionId })
+            // Small delay to ensure session is fully set (helps with Safari)
+            await new Promise(resolve => setTimeout(resolve, 100))
             // Redirect - DashboardPage will handle role-based redirects if needed
             // If there's a saved path, use it; otherwise go to dashboard
             const savedPath = location.state?.from?.pathname
@@ -60,8 +62,12 @@ export function SignInForm() {
             console.error('Error setting active session:', setActiveError)
             // Safari-specific: Sometimes setActive fails due to cookie issues
             // Try to reload the page to let Clerk handle the session
-            if (setActiveError.message?.includes('cookie') || setActiveError.message?.includes('storage')) {
-              setError('Session creation issue. Please try refreshing the page or clearing your browser cookies.')
+            if (setActiveError.message?.includes('cookie') || 
+                setActiveError.message?.includes('storage') ||
+                setActiveError.message?.includes('session')) {
+              // Safari workaround: Reload page to let Clerk handle session via cookies
+              console.log('Attempting Safari workaround: reloading page')
+              window.location.href = '/dashboard'
             } else {
               setError(setActiveError.message || 'Failed to activate session. Please try again.')
             }
