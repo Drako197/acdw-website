@@ -6902,6 +6902,23 @@
   @apply h-5 w-5;
 }
 
+.signin-form-field-help {
+  @apply mt-1 text-xs text-gray-500;
+}
+
+.signin-form-actions {
+  @apply flex items-center gap-3;
+}
+
+.signin-form-back-button {
+  @apply flex-1 flex justify-center items-center py-3 px-4 border-2 border-gray-300 rounded-lg text-base font-semibold text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all;
+}
+
+/* When 2FA form is shown, submit button should be flex-1, otherwise full width */
+.signin-form-actions .signin-form-submit-button {
+  @apply flex-1;
+}
+
 .signin-form-submit-button {
   @apply w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-semibold text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02];
 }
