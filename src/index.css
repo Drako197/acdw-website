@@ -7497,6 +7497,391 @@
   @apply text-base text-gray-500 mb-8;
 }
 
+/* ========================================
+   MINI PRODUCT PAGE - Apple-Inspired Design
+   ======================================== */
+
+.mini-product-page {
+  @apply min-h-screen bg-white;
+}
+
+/* Back Navigation */
+.mini-product-back-nav {
+  @apply sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200;
+}
+
+.mini-product-back-button {
+  @apply flex items-center gap-2 px-6 py-4 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors;
+}
+
+.mini-product-back-icon {
+  @apply h-5 w-5;
+}
+
+/* Hero Section */
+.mini-product-hero {
+  @apply py-12 md:py-20 lg:py-24;
+  background: linear-gradient(to bottom, #f9fafb 0%, #ffffff 100%);
+}
+
+.mini-product-hero-content {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply grid lg:grid-cols-2 gap-12 lg:gap-16 items-center;
+}
+
+.mini-product-hero-text {
+  @apply space-y-6;
+}
+
+.mini-product-hero-title {
+  @apply text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight;
+  letter-spacing: -0.02em;
+}
+
+.mini-product-hero-subtitle {
+  @apply text-xl md:text-2xl text-gray-600 leading-relaxed max-w-2xl;
+}
+
+.mini-product-hero-price {
+  @apply flex items-baseline gap-2 pt-4;
+}
+
+.mini-product-price-amount {
+  @apply text-4xl md:text-5xl font-bold text-primary-600;
+}
+
+.mini-product-price-label {
+  @apply text-lg text-gray-500;
+}
+
+/* Hero Image */
+.mini-product-hero-image-container {
+  @apply relative;
+}
+
+.mini-product-hero-image-wrapper {
+  @apply relative aspect-square max-w-2xl mx-auto;
+}
+
+.mini-product-hero-image {
+  @apply w-full h-full object-contain;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
+}
+
+.mini-product-image-nav {
+  @apply absolute top-1/2 -translate-y-1/2 z-10;
+  @apply w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm;
+  @apply flex items-center justify-center;
+  @apply shadow-lg border border-gray-200;
+  @apply hover:bg-white transition-all;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
+
+.mini-product-image-nav-left {
+  @apply left-4;
+}
+
+.mini-product-image-nav-right {
+  @apply right-4;
+}
+
+.mini-product-image-nav-icon {
+  @apply h-6 w-6 text-gray-700;
+}
+
+.mini-product-image-indicators {
+  @apply absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10;
+}
+
+.mini-product-image-indicator {
+  @apply w-2 h-2 rounded-full bg-gray-300 transition-all;
+  @apply hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
+
+.mini-product-image-indicator.active {
+  @apply bg-primary-600 w-6;
+}
+
+/* Features Section */
+.mini-product-features {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.mini-product-features-content {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.mini-product-section-title {
+  @apply text-3xl md:text-4xl font-bold text-gray-900 text-center mb-12;
+}
+
+.mini-product-features-grid {
+  @apply grid md:grid-cols-2 lg:grid-cols-4 gap-8;
+}
+
+.mini-product-feature-card {
+  @apply text-center space-y-4 p-6 rounded-2xl bg-gray-50 hover:bg-gray-100 transition-colors;
+}
+
+.mini-product-feature-icon {
+  @apply h-12 w-12 mx-auto text-primary-600;
+}
+
+.mini-product-feature-title {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.mini-product-feature-description {
+  @apply text-sm text-gray-600;
+}
+
+/* Purchase Section - Sticky */
+.mini-product-purchase-section {
+  @apply sticky bottom-0 z-30 bg-white border-t border-gray-200 shadow-lg;
+  @apply lg:relative lg:border-t-0 lg:shadow-none;
+}
+
+.mini-product-purchase-content {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6;
+}
+
+.mini-product-purchase-card {
+  @apply max-w-md mx-auto lg:mx-0 lg:max-w-sm;
+  @apply bg-white border border-gray-200 rounded-2xl p-6 lg:p-8;
+  @apply shadow-xl lg:shadow-2xl;
+}
+
+.mini-product-purchase-header {
+  @apply space-y-2 mb-6;
+}
+
+.mini-product-purchase-title {
+  @apply text-2xl font-bold text-gray-900;
+}
+
+.mini-product-purchase-price {
+  @apply flex items-baseline gap-2;
+}
+
+.mini-product-purchase-price-amount {
+  @apply text-3xl font-bold text-primary-600;
+}
+
+.mini-product-purchase-price-label {
+  @apply text-base text-gray-500;
+}
+
+/* Quantity Selector */
+.mini-product-quantity-section {
+  @apply mb-6;
+}
+
+.mini-product-quantity-label {
+  @apply block text-sm font-semibold text-gray-700 mb-3;
+}
+
+.mini-product-quantity-controls {
+  @apply flex items-center gap-3;
+}
+
+.mini-product-quantity-button {
+  @apply w-10 h-10 rounded-lg border-2 border-gray-300;
+  @apply flex items-center justify-center text-xl font-semibold text-gray-700;
+  @apply hover:border-primary-500 hover:text-primary-600;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply transition-all focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
+
+.mini-product-quantity-input {
+  @apply flex-1 h-12 text-center text-lg font-semibold;
+  @apply border-2 border-gray-300 rounded-lg;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
+}
+
+.mini-product-quantity-help {
+  @apply text-xs text-gray-500 mt-2;
+}
+
+/* Total Section */
+.mini-product-total-section {
+  @apply border-t border-gray-200 pt-4 mb-6 space-y-2;
+}
+
+.mini-product-total-row {
+  @apply flex justify-between items-center;
+}
+
+.mini-product-total-row-final {
+  @apply pt-2 border-t border-gray-200;
+}
+
+.mini-product-total-label {
+  @apply text-base font-medium text-gray-700;
+}
+
+.mini-product-total-value {
+  @apply text-xl font-bold text-gray-900;
+}
+
+/* Checkout Section */
+.mini-product-checkout-section {
+  @apply mb-6;
+}
+
+.mini-product-checkout-error {
+  @apply mb-4 p-3 bg-red-50 border border-red-200 rounded-lg;
+  @apply text-sm text-red-700;
+}
+
+.mini-product-checkout-auth-prompt {
+  @apply space-y-4;
+}
+
+.mini-product-checkout-auth-text {
+  @apply text-sm text-gray-600 text-center;
+}
+
+.mini-product-checkout-auth-buttons {
+  @apply flex gap-3;
+}
+
+.mini-product-checkout-auth-button {
+  @apply flex-1 py-3 px-4 rounded-lg font-semibold;
+  @apply bg-primary-600 text-white hover:bg-primary-700;
+  @apply transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
+
+.mini-product-checkout-auth-button-secondary {
+  @apply bg-white text-primary-600 border-2 border-primary-600;
+  @apply hover:bg-primary-50;
+}
+
+.mini-product-checkout-role-message {
+  @apply text-center space-y-4;
+}
+
+.mini-product-checkout-role-message p {
+  @apply text-sm text-gray-600;
+}
+
+.mini-product-checkout-role-button {
+  @apply w-full py-3 px-4 rounded-lg font-semibold;
+  @apply bg-primary-600 text-white hover:bg-primary-700;
+  @apply transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
+
+.mini-product-buy-button {
+  @apply w-full py-4 px-6 rounded-lg font-bold text-lg;
+  @apply bg-primary-600 text-white hover:bg-primary-700;
+  @apply shadow-lg hover:shadow-xl transform hover:scale-[1.02];
+  @apply transition-all focus:outline-none focus:ring-2 focus:ring-primary-500;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Trust Indicators */
+.mini-product-trust-section {
+  @apply space-y-3 pt-6 border-t border-gray-200;
+}
+
+.mini-product-trust-item {
+  @apply flex items-center gap-2 text-sm text-gray-600;
+}
+
+.mini-product-trust-icon {
+  @apply h-5 w-5 text-primary-600;
+}
+
+/* Specifications Section */
+.mini-product-specs {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.mini-product-specs-content {
+  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.mini-product-specs-grid {
+  @apply grid md:grid-cols-2 gap-6;
+}
+
+.mini-product-spec-item {
+  @apply flex justify-between items-center py-4 border-b border-gray-200;
+}
+
+.mini-product-spec-label {
+  @apply text-sm font-medium text-gray-600;
+}
+
+.mini-product-spec-value {
+  @apply text-sm font-semibold text-gray-900;
+}
+
+/* Compliance Section */
+.mini-product-compliance {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.mini-product-compliance-content {
+  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center;
+}
+
+.mini-product-compliance-description {
+  @apply text-lg text-gray-600 mb-8 max-w-2xl mx-auto;
+}
+
+.mini-product-compliance-badges {
+  @apply flex flex-wrap justify-center gap-4;
+}
+
+.mini-product-compliance-badge {
+  @apply px-4 py-2 bg-primary-50 border border-primary-200 rounded-lg;
+  @apply text-sm font-semibold text-primary-700;
+}
+
+/* Image Gallery */
+.mini-product-gallery {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.mini-product-gallery-content {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.mini-product-gallery-grid {
+  @apply grid md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+.mini-product-gallery-item {
+  @apply relative aspect-square rounded-2xl overflow-hidden;
+  @apply bg-gray-100 cursor-pointer;
+  @apply hover:scale-105 transition-transform;
+}
+
+.mini-product-gallery-image {
+  @apply w-full h-full object-cover;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .mini-product-purchase-section {
+    @apply sticky;
+  }
+}
+
+@media (max-width: 768px) {
+  .mini-product-hero-title {
+    @apply text-4xl;
+  }
+  
+  .mini-product-hero-subtitle {
+    @apply text-lg;
+  }
+  
+  .mini-product-features-grid {
+    @apply grid-cols-1;
+  }
+}
+
 .checkout-cancel-help {
   @apply bg-blue-50 rounded-lg p-6 mb-8 text-left;
 }

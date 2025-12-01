@@ -25,6 +25,7 @@ import { UnauthorizedPage } from './pages/UnauthorizedPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { CheckoutSuccessPage } from './pages/CheckoutSuccessPage'
 import { CheckoutCancelPage } from './pages/CheckoutCancelPage'
+import { MiniProductPage } from './pages/MiniProductPage'
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
               <Route path="/unsubscribe" element={<UnsubscribePage />} />
               <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
               <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
+              <Route path="/products/mini" element={<MiniProductPage />} />
             </Routes>
           </main>
           <Footer />

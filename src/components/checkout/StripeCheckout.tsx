@@ -13,9 +13,11 @@ interface StripeCheckoutProps {
   product: ProductType
   quantity: number
   onError?: (error: string) => void
+  buttonText?: string
+  className?: string
 }
 
-export function StripeCheckout({ product, quantity, onError }: StripeCheckoutProps) {
+export function StripeCheckout({ product, quantity, onError, buttonText, className }: StripeCheckoutProps) {
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -126,9 +128,9 @@ export function StripeCheckout({ product, quantity, onError }: StripeCheckoutPro
     <button
       onClick={handleCheckout}
       disabled={isLoading || !user}
-      className="hvac-pro-checkout-button"
+      className={className || "hvac-pro-checkout-button"}
     >
-      {isLoading ? 'Processing...' : 'Proceed to Checkout'}
+      {isLoading ? 'Processing...' : (buttonText || 'Proceed to Checkout')}
     </button>
   )
 }
