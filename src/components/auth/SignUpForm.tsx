@@ -13,7 +13,9 @@ import {
   CheckBadgeIcon,
   ShieldCheckIcon,
   IdentificationIcon,
-  DocumentTextIcon
+  DocumentTextIcon,
+  HomeIcon,
+  WrenchScrewdriverIcon
 } from '@heroicons/react/24/outline'
 import type { UserRole } from '../../types/auth'
 import { US_STATES } from '../../config/usStates'
@@ -471,6 +473,104 @@ export function SignUpForm() {
                 </p>
               </div>
               
+              {/* Account Type Selection - Card Based */}
+              <div className="signup-account-type-section">
+                <label className="signup-account-type-label">
+                  Account Type <span className="text-red-500">*</span>
+                </label>
+                <div className="signup-account-type-cards">
+                  {/* Homeowner Card */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData({ ...formData, role: 'homeowner' })
+                      setFieldErrors({ ...fieldErrors, role: '' })
+                    }}
+                    className={`signup-account-type-card ${
+                      formData.role === 'homeowner' ? 'signup-account-type-card-selected' : ''
+                    }`}
+                  >
+                    <div className="signup-account-type-card-header">
+                      <div className="signup-account-type-icon-wrapper signup-account-type-icon-homeowner">
+                        <HomeIcon className="signup-account-type-icon" />
+                      </div>
+                      <div className="signup-account-type-card-content">
+                        <h3 className="signup-account-type-card-title">Homeowner</h3>
+                        <p className="signup-account-type-card-description">
+                          Perfect for protecting your home
+                        </p>
+                      </div>
+                    </div>
+                    {formData.role === 'homeowner' && (
+                      <div className="signup-account-type-card-checkmark">
+                        <CheckCircleIcon className="signup-account-type-checkmark-icon" />
+                      </div>
+                    )}
+                  </button>
+
+                  {/* HVAC Pro Card */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData({ ...formData, role: 'hvac_pro' })
+                      setFieldErrors({ ...fieldErrors, role: '' })
+                    }}
+                    className={`signup-account-type-card ${
+                      formData.role === 'hvac_pro' ? 'signup-account-type-card-selected' : ''
+                    }`}
+                  >
+                    <div className="signup-account-type-card-header">
+                      <div className="signup-account-type-icon-wrapper signup-account-type-icon-hvac">
+                        <WrenchScrewdriverIcon className="signup-account-type-icon" />
+                      </div>
+                      <div className="signup-account-type-card-content">
+                        <h3 className="signup-account-type-card-title">HVAC Professional</h3>
+                        <p className="signup-account-type-card-description">
+                          Contractor pricing and bulk ordering
+                        </p>
+                      </div>
+                    </div>
+                    {formData.role === 'hvac_pro' && (
+                      <div className="signup-account-type-card-checkmark">
+                        <CheckCircleIcon className="signup-account-type-checkmark-icon" />
+                      </div>
+                    )}
+                  </button>
+
+                  {/* Property Manager Card */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData({ ...formData, role: 'property_manager' })
+                      setFieldErrors({ ...fieldErrors, role: '' })
+                    }}
+                    className={`signup-account-type-card ${
+                      formData.role === 'property_manager' ? 'signup-account-type-card-selected' : ''
+                    }`}
+                  >
+                    <div className="signup-account-type-card-header">
+                      <div className="signup-account-type-icon-wrapper signup-account-type-icon-property-manager">
+                        <BuildingOfficeIcon className="signup-account-type-icon" />
+                      </div>
+                      <div className="signup-account-type-card-content">
+                        <h3 className="signup-account-type-card-title">Property Manager</h3>
+                        <p className="signup-account-type-card-description">
+                          Special pricing for property management
+                        </p>
+                      </div>
+                    </div>
+                    {formData.role === 'property_manager' && (
+                      <div className="signup-account-type-card-checkmark">
+                        <CheckCircleIcon className="signup-account-type-checkmark-icon" />
+                      </div>
+                    )}
+                  </button>
+                </div>
+                {fieldErrors.role && (
+                  <p className="field-error-message">{fieldErrors.role}</p>
+                )}
+              </div>
+
               <form className="signup-form" onSubmit={handleSubmit} noValidate>
                 {/* Full Name */}
                 <div className="signup-form-field">
@@ -523,25 +623,6 @@ export function SignUpForm() {
                   {fieldErrors.email && (
                     <p className="field-error-message">{fieldErrors.email}</p>
                   )}
-                </div>
-
-                {/* Account Type */}
-                <div className="signup-form-field">
-                  <label htmlFor="role" className="signup-form-field-label">
-                    Account Type
-                  </label>
-                  <select
-                    id="role"
-                    name="role"
-                    required
-                    className="signup-form-select"
-                    value={formData.role}
-                    onChange={handleChange}
-                  >
-                    <option value="hvac_pro">HVAC Professional</option>
-                    <option value="property_manager">Property Manager</option>
-                    <option value="homeowner">Homeowner</option>
-                  </select>
                 </div>
 
                 {/* Company (conditional) */}
