@@ -53,8 +53,22 @@ export function UnsubscribePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Final validation before submitting
-    if (!email || !email.includes('@')) {
+    // Final validation before submitting - strict email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!email || !emailRegex.test(email.trim())) {
+      setSubmitError('Please enter a valid email address.')
+      return
+    }
+    
+    // Additional validation: reject domain-like strings (common bot pattern)
+    const trimmedEmail = email.trim()
+    if (!trimmedEmail.includes('@') || trimmedEmail.split('@').length !== 2) {
+      setSubmitError('Please enter a valid email address.')
+      return
+    }
+    
+    const [localPart, domain] = trimmedEmail.split('@')
+    if (!localPart || !domain || !domain.includes('.')) {
       setSubmitError('Please enter a valid email address.')
       return
     }
@@ -68,9 +82,22 @@ export function UnsubscribePage() {
     localStorage.setItem('unsubscribe_last_submission', String(Date.now()))
     
     // Build submission data object
+    // Validate honeypot fields - if filled, it's likely a bot
+    const botField = (document.querySelector('input[name="bot-field"]') as HTMLInputElement)?.value
+    const websiteField = (document.querySelector('input[name="website"]') as HTMLInputElement)?.value
+    const urlField = (document.querySelector('input[name="url"]') as HTMLInputElement)?.value
+    
+    if (botField || websiteField || urlField) {
+      // Honeypot fields were filled - likely a bot, silently reject
+      console.warn('Bot detected: honeypot fields were filled')
+      setSubmitError('Invalid submission detected.')
+      setIsSubmitting(false)
+      return
+    }
+    
     const submissionData: Record<string, string> = {
       'form-name': 'unsubscribe',
-      email: email,
+      email: email.trim(), // Trim whitespace
       reason: reason,
       feedback: feedback || ''
     }
@@ -198,10 +225,16 @@ export function UnsubscribePage() {
               <input type="hidden" name="form-name" value="unsubscribe" />
               <input type="hidden" name="form-type" value="unsubscribe" />
               
-              {/* Honeypot field */}
+              {/* Honeypot fields - multiple fields to catch bots */}
               <div style={{ display: 'none' }}>
                 <label>
-                  Don't fill this out if you're human: <input name="bot-field" />
+                  Don't fill this out if you're human: <input name="bot-field" tabIndex={-1} autoComplete="off" />
+                </label>
+                <label>
+                  Leave this empty: <input name="website" tabIndex={-1} autoComplete="off" />
+                </label>
+                <label>
+                  Do not fill: <input name="url" tabIndex={-1} autoComplete="off" />
                 </label>
               </div>
 
@@ -321,7 +354,7 @@ export function UnsubscribePage() {
                   <button
                     type="button"
                     onClick={handleConfirmUnsubscribe}
-                    disabled={!email || !email.includes('@')}
+                    disabled={!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())}
                     className="unsubscribe-button unsubscribe-button-submit"
                   >
                     Unsubscribe from All Marketing Emails
