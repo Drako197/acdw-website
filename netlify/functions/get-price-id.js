@@ -102,9 +102,6 @@ exports.handler = async (event, context) => {
       }
     }
 
-    // Default to 'homeowner' role for guest checkout
-    const userRole = role || 'homeowner'
-
     // Validate product type
     const validProducts = ['mini', 'sensor', 'bundle']
     if (!validProducts.includes(product)) {
@@ -114,6 +111,22 @@ exports.handler = async (event, context) => {
         body: JSON.stringify({ error: 'Invalid product' }),
       }
     }
+
+    // Security: Sensor and Bundle require authentication (contractor-only products)
+    // Only Mini allows guest checkout (homeowner product)
+    if ((product === 'sensor' || product === 'bundle') && !role) {
+      return {
+        statusCode: 403,
+        headers,
+        body: JSON.stringify({ 
+          error: 'Authentication required. Sensor and Bundle products are only available to verified contractors.',
+          requiresAuth: true
+        }),
+      }
+    }
+
+    // Default to 'homeowner' role for guest checkout (only for Mini)
+    const userRole = role || 'homeowner'
 
     // Validate role
     const validRoles = ['homeowner', 'hvac_pro', 'property_manager']

@@ -15,14 +15,22 @@ interface StripeCheckoutProps {
   onError?: (error: string) => void
   buttonText?: string
   className?: string
+  allowGuestCheckout?: boolean // If false, requires authentication
 }
 
-export function StripeCheckout({ product, quantity, onError, buttonText, className }: StripeCheckoutProps) {
+export function StripeCheckout({ product, quantity, onError, buttonText, className, allowGuestCheckout = true }: StripeCheckoutProps) {
   const { user, isAuthenticated } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
 
   const handleCheckout = async () => {
+    // For products that don't allow guest checkout (Sensor, Bundle), require authentication
+    if (!allowGuestCheckout && !isAuthenticated) {
+      onError?.('Please sign in to purchase this product. Contractor pricing requires authentication.')
+      return
+    }
+
     // Allow guest checkout - use 'homeowner' role for guests
+    // Note: Sensor and Bundle should never reach here as guests (they require auth)
     const userRole = user?.role || 'homeowner'
 
     if (quantity < 1 || quantity > 500) {
@@ -54,6 +62,12 @@ export function StripeCheckout({ product, quantity, onError, buttonText, classNa
           error: errorData,
           request: { product, quantity, role: userRole }
         })
+        
+        // Handle authentication required error (403)
+        if (priceResponse.status === 403 && errorData.requiresAuth) {
+          throw new Error('Authentication required. Please sign in to purchase this product.')
+        }
+        
         throw new Error(errorData.error || `Failed to get price (${priceResponse.status})`)
       }
 

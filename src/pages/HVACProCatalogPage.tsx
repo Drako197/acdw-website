@@ -210,6 +210,7 @@ export function HVACProCatalogPage() {
                 product={selectedProduct}
                 quantity={quantity}
                 onError={setCheckoutError}
+                allowGuestCheckout={false} // Contractor products require authentication
               />
             </div>
           )}

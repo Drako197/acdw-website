@@ -210,6 +210,7 @@ export function PropertyManagerCatalogPage() {
                 product={selectedProduct}
                 quantity={quantity}
                 onError={setCheckoutError}
+                allowGuestCheckout={false} // Property Manager products require authentication
               />
             </div>
           )}

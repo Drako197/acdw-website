@@ -210,6 +210,7 @@ export function MiniProductPage() {
                         onError={setCheckoutError}
                         buttonText="Buy Now - Guest Checkout"
                         className="mini-product-buy-button"
+                        allowGuestCheckout={true} // Mini allows guest checkout
                       />
                       <p className="mini-product-checkout-guest-help">
                         <button
@@ -237,6 +238,7 @@ export function MiniProductPage() {
                         onError={setCheckoutError}
                         buttonText="Buy Now"
                         className="mini-product-buy-button"
+                        allowGuestCheckout={true} // Mini allows guest checkout
                       />
                     </>
                   ) : (
