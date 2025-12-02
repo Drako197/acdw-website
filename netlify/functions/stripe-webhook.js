@@ -120,11 +120,6 @@ exports.handler = async (event, context) => {
         }
         
         const shipstationResult = await shipstationFunction.handler(shipstationEvent, context)
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(orderData),
         })
         
         if (shipstationResponse.ok) {
