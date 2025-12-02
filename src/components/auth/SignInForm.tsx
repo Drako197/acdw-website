@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import { useSignIn } from '@clerk/clerk-react'
 import { 
   EyeIcon, 
@@ -27,6 +27,23 @@ export function SignInForm() {
   const { signIn, setActive } = useSignIn()
   const navigate = useNavigate()
   const location = useLocation()
+  const [searchParams] = useSearchParams()
+
+  // Get redirect URL from query params (for purchase intent preservation)
+  const getRedirectPath = () => {
+    // Priority 1: redirect query param (from purchase flow)
+    const redirectParam = searchParams.get('redirect')
+    if (redirectParam) {
+      return decodeURIComponent(redirectParam)
+    }
+    // Priority 2: saved path from location state
+    const savedPath = location.state?.from?.pathname
+    if (savedPath) {
+      return savedPath
+    }
+    // Priority 3: default dashboard
+    return '/dashboard'
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -58,10 +75,9 @@ export function SignInForm() {
             await setActive({ session: result.createdSessionId })
             // Small delay to ensure session is fully set (helps with Safari cookie/storage issues)
             await new Promise(resolve => setTimeout(resolve, 500))
-            // Redirect - DashboardPage will handle role-based redirects if needed
-            // If there's a saved path, use it; otherwise go to dashboard
-            const savedPath = location.state?.from?.pathname
-            navigate(savedPath || '/dashboard', { replace: true })
+            // Redirect with smart redirect logic (preserves purchase intent)
+            const redirectPath = getRedirectPath()
+            navigate(redirectPath, { replace: true })
           } catch (setActiveError: any) {
             console.error('Error setting active session:', setActiveError)
             // Safari-specific: Sometimes setActive fails due to cookie issues
@@ -172,8 +188,9 @@ export function SignInForm() {
         await setActive({ session: result.createdSessionId })
             // Small delay to ensure session is fully set (helps with Safari)
             await new Promise(resolve => setTimeout(resolve, 500))
-            const savedPath = location.state?.from?.pathname
-            navigate(savedPath || '/dashboard', { replace: true })
+            // Redirect with smart redirect logic (preserves purchase intent)
+            const redirectPath = getRedirectPath()
+            navigate(redirectPath, { replace: true })
           } catch (setActiveError: any) {
             console.error('Error setting active session:', setActiveError)
             if (setActiveError.message?.includes('cookie') || 

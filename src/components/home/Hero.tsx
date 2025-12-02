@@ -191,7 +191,7 @@ export function Hero() {
             
             <div className="hero-cta-buttons">
               <button 
-                onClick={() => navigate('/products?product=mini')}
+                onClick={() => navigate('/products/mini')}
                 className="hero-primary-button"
               >
                 Buy Now

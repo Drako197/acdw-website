@@ -7464,6 +7464,29 @@
   @apply h-5 w-5 ml-2;
 }
 
+/* Account Creation Offer for Guests */
+.checkout-success-account-offer {
+  @apply bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-8;
+}
+
+.checkout-success-account-offer-title {
+  @apply text-xl font-bold text-gray-900 mb-2;
+}
+
+.checkout-success-account-offer-message {
+  @apply text-base text-gray-700 mb-4;
+}
+
+.checkout-success-account-offer-button {
+  @apply w-full md:w-auto px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg;
+  @apply hover:bg-primary-700 transition-colors flex items-center justify-center gap-2;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
+
+.checkout-success-account-offer-note {
+  @apply text-sm text-gray-600 mt-3 text-center;
+}
+
 /* Checkout Cancel Page */
 .checkout-cancel-page {
   @apply min-h-screen bg-gradient-to-br from-gray-50 to-slate-50 py-12 px-4;
@@ -7518,28 +7541,78 @@
   @apply h-5 w-5;
 }
 
-/* Hero Section */
-.mini-product-hero {
+/* Hero Section - Option 1: Split Layout with Full-Width Background */
+.mini-product-hero-fullwidth {
+  @apply relative min-h-[600px] md:min-h-[700px] lg:min-h-[800px];
+  @apply flex items-center;
+}
+
+.mini-product-hero-background {
+  @apply absolute inset-0 bg-cover bg-center bg-no-repeat;
+  background-image: url('/images/acdw-mini-hero-background.png');
+  z-index: 0;
+}
+
+/* Gradient overlay for text readability */
+.mini-product-hero-background::before {
+  content: '';
+  @apply absolute inset-0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  z-index: 1;
+}
+
+/* Mobile - adjust hero background position and size */
+@media (max-width: 767px) {
+  .mini-product-hero-fullwidth {
+    @apply min-h-[500px];
+  }
+  
+  .mini-product-hero-background {
+    background-position-x: -150px;
+    background-size: 160% auto !important;
+    background-color: #000;
+    background-position-y: 0px !important;
+  }
+}
+
+/* Tablet portrait mode */
+@media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
+  .mini-product-hero-background {
+    background-position-x: -300px;
+    background-size: 160% auto !important;
+    background-color: #000;
+  }
+}
+
+.mini-product-hero-overlay {
+  @apply relative z-10 w-full;
   @apply py-12 md:py-20 lg:py-24;
-  background: linear-gradient(to bottom, #f9fafb 0%, #ffffff 100%);
 }
 
-.mini-product-hero-content {
+.mini-product-hero-content-wrapper {
   @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-  @apply grid lg:grid-cols-2 gap-12 lg:gap-16 items-center;
+  @apply grid lg:grid-cols-2 gap-8 lg:gap-12 items-center;
 }
 
-.mini-product-hero-text {
-  @apply space-y-6;
+/* Left Side - Product Info */
+.mini-product-hero-info {
+  @apply space-y-6 text-white;
 }
 
 .mini-product-hero-title {
-  @apply text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight;
+  @apply text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight;
   letter-spacing: -0.02em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .mini-product-hero-subtitle {
-  @apply text-xl md:text-2xl text-gray-600 leading-relaxed max-w-2xl;
+  @apply text-lg md:text-xl text-white/90 leading-relaxed;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
 }
 
 .mini-product-hero-price {
@@ -7547,59 +7620,70 @@
 }
 
 .mini-product-price-amount {
-  @apply text-4xl md:text-5xl font-bold text-primary-600;
+  @apply text-3xl md:text-4xl font-bold text-white;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .mini-product-price-label {
-  @apply text-lg text-gray-500;
+  @apply text-base md:text-lg text-white/80;
 }
 
-/* Hero Image */
-.mini-product-hero-image-container {
+/* Right Side - Purchase Card */
+.mini-product-purchase-card-hero {
   @apply relative;
 }
 
-.mini-product-hero-image-wrapper {
-  @apply relative aspect-square max-w-2xl mx-auto;
+.mini-product-purchase-card-content {
+  @apply bg-white rounded-2xl p-6 lg:p-8;
+  @apply border border-gray-200;
+  @apply shadow-2xl;
 }
 
-.mini-product-hero-image {
-  @apply w-full h-full object-contain;
-  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
+/* Mobile - Stack layout */
+@media (max-width: 1023px) {
+  .mini-product-hero-content-wrapper {
+    @apply grid-cols-1 gap-8;
+  }
+  
+  .mini-product-hero-info {
+    @apply text-center;
+  }
+  
+  .mini-product-purchase-card-hero {
+    @apply max-w-md mx-auto;
+  }
 }
 
-.mini-product-image-nav {
-  @apply absolute top-1/2 -translate-y-1/2 z-10;
-  @apply w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm;
-  @apply flex items-center justify-center;
-  @apply shadow-lg border border-gray-200;
-  @apply hover:bg-white transition-all;
-  @apply focus:outline-none focus:ring-2 focus:ring-primary-500;
+/* Right Side - Purchase Card (in hero initially) */
+.mini-product-purchase-card-hero {
+  @apply relative;
+  @apply transition-all duration-300;
 }
 
-.mini-product-image-nav-left {
-  @apply left-4;
+/* Sticky state - when scrolling past hero */
+.mini-product-purchase-card-sticky {
+  @apply fixed top-20 right-4 z-50;
+  @apply w-full max-w-sm;
+  @apply lg:block hidden; /* Only sticky on desktop */
+  @apply shadow-2xl;
+  animation: slideInFromRight 0.3s ease-out;
 }
 
-.mini-product-image-nav-right {
-  @apply right-4;
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-.mini-product-image-nav-icon {
-  @apply h-6 w-6 text-gray-700;
-}
-
-.mini-product-image-indicators {
-  @apply absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10;
-}
-
-.mini-product-image-indicator {
-  @apply w-2 h-2 rounded-full bg-gray-300 transition-all;
-  @apply hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500;
-}
-
-.mini-product-image-indicator.active {
-  @apply bg-primary-600 w-6;
+.mini-product-purchase-card-content {
+  @apply bg-white rounded-2xl p-6 lg:p-8;
+  @apply border border-gray-200;
+  @apply shadow-xl;
 }
 
 /* Features Section */
@@ -7739,6 +7823,18 @@
 
 .mini-product-checkout-auth-text {
   @apply text-sm text-gray-600 text-center;
+}
+
+.mini-product-checkout-guest-prompt {
+  @apply space-y-3;
+}
+
+.mini-product-checkout-guest-help {
+  @apply text-xs text-gray-500 text-center;
+}
+
+.mini-product-checkout-guest-link {
+  @apply text-primary-600 hover:text-primary-700 underline font-medium;
 }
 
 .mini-product-checkout-auth-buttons {

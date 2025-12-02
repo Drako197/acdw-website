@@ -28,14 +28,24 @@ exports.handler = async (event, context) => {
 
   try {
     // Parse request body
-    const { priceId, quantity, product, userEmail, userId } = JSON.parse(event.body)
+    const { priceId, quantity, product, userEmail, userId, isGuest } = JSON.parse(event.body)
 
     // Validate inputs
-    if (!priceId || !quantity || !product || !userEmail) {
+    if (!priceId || !quantity || !product) {
       return {
         statusCode: 400,
         headers,
         body: JSON.stringify({ error: 'Missing required fields' }),
+      }
+    }
+
+    // For guest checkout, email will be collected by Stripe
+    // For logged-in users, email is required
+    if (!isGuest && !userEmail) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Email required for logged-in users' }),
       }
     }
 
@@ -83,9 +93,11 @@ exports.handler = async (event, context) => {
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.URL || 'https://www.acdrainwiz.com'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.URL || 'https://www.acdrainwiz.com'}/checkout/success?session_id={CHECKOUT_SESSION_ID}${isGuest ? '&guest=true' : ''}`,
       cancel_url: `${process.env.URL || 'https://www.acdrainwiz.com'}/checkout/cancel`,
-      customer_email: userEmail,
+      // Only set customer_email if provided (for logged-in users)
+      // For guests, Stripe will collect email during checkout
+      ...(userEmail && { customer_email: userEmail }),
       
       // Enable shipping address collection
       shipping_address_collection: {
@@ -141,6 +153,7 @@ exports.handler = async (event, context) => {
         userId: userId || '',
         product,
         quantity: qty.toString(),
+        isGuest: isGuest ? 'true' : 'false',
       },
       
       // Enable automatic tax calculation (requires shipping address)

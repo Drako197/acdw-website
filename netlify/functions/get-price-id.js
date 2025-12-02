@@ -94,13 +94,16 @@ exports.handler = async (event, context) => {
     const { product, quantity, role } = JSON.parse(event.body)
 
     // Validate inputs
-    if (!product || !quantity || !role) {
+    if (!product || !quantity) {
       return {
         statusCode: 400,
         headers,
         body: JSON.stringify({ error: 'Missing required fields' }),
       }
     }
+
+    // Default to 'homeowner' role for guest checkout
+    const userRole = role || 'homeowner'
 
     // Validate product type
     const validProducts = ['mini', 'sensor', 'bundle']
@@ -114,7 +117,7 @@ exports.handler = async (event, context) => {
 
     // Validate role
     const validRoles = ['homeowner', 'hvac_pro', 'property_manager']
-    if (!validRoles.includes(role)) {
+    if (!validRoles.includes(userRole)) {
       return {
         statusCode: 400,
         headers,
@@ -146,7 +149,7 @@ exports.handler = async (event, context) => {
 
     // Calculate tier
     let tier = 'msrp'
-    if (role !== 'homeowner') {
+    if (userRole !== 'homeowner') {
       tier = calculateTier(qty)
       if (!tier) {
         return {
@@ -161,7 +164,7 @@ exports.handler = async (event, context) => {
     }
 
     // Get Price ID
-    const priceIdKey = getPriceIdKey(product, role, tier)
+    const priceIdKey = getPriceIdKey(product, userRole, tier)
     const priceId = PRICE_IDS[priceIdKey]
 
     if (!priceId) {
@@ -196,7 +199,7 @@ exports.handler = async (event, context) => {
           priceId,
           product,
           quantity: qty,
-          role,
+          role: userRole,
           tier,
           unitPrice: price.unit_amount / 100, // Convert from cents
           currency: price.currency,

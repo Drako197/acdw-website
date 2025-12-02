@@ -77,9 +77,16 @@ exports.handler = async (event, context) => {
       shippingCostAmount: session.shipping_cost?.amount_total,
     })
 
+    // Extract customer email (from customer_email or customer_details)
+    const customerEmail = session.customer_email || 
+                         session.customer_details?.email || 
+                         (session.customer && typeof session.customer === 'object' ? session.customer.email : null) ||
+                         null
+
     // Extract relevant information safely
     const orderDetails = {
       sessionId: session.id,
+      customerEmail, // Include customer email for account creation
       amountTotal: session.amount_total ? session.amount_total / 100 : 0,
       currency: session.currency || 'usd',
       paymentStatus: session.payment_status || 'unknown',

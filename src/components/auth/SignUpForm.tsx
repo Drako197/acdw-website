@@ -38,14 +38,15 @@ export function SignUpForm() {
   // Get role and redirect from URL parameters
   const searchParams = new URLSearchParams(location.search)
   const roleParam = searchParams.get('role') as UserRole | null
+  const emailParam = searchParams.get('email')
   const redirectParam = searchParams.get('redirect') || '/dashboard'
   
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
+    email: emailParam || '',
     password: '',
     confirmPassword: '',
-    role: (roleParam || 'hvac_pro') as UserRole,
+    role: (roleParam || 'homeowner') as UserRole,
     company: '',
     // HVAC Pro verification fields
     state: '',

@@ -18,14 +18,12 @@ interface StripeCheckoutProps {
 }
 
 export function StripeCheckout({ product, quantity, onError, buttonText, className }: StripeCheckoutProps) {
-  const { user } = useAuth()
+  const { user, isAuthenticated } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
 
   const handleCheckout = async () => {
-    if (!user) {
-      onError?.('Please log in to continue')
-      return
-    }
+    // Allow guest checkout - use 'homeowner' role for guests
+    const userRole = user?.role || 'homeowner'
 
     if (quantity < 1 || quantity > 500) {
       onError?.('Invalid quantity')
@@ -36,6 +34,7 @@ export function StripeCheckout({ product, quantity, onError, buttonText, classNa
 
     try {
       // Step 1: Get Price ID from server (validates role and calculates tier)
+      // For guests, use 'homeowner' role to get MSRP pricing
       const priceResponse = await fetch('/.netlify/functions/get-price-id', {
         method: 'POST',
         headers: {
@@ -44,7 +43,7 @@ export function StripeCheckout({ product, quantity, onError, buttonText, classNa
         body: JSON.stringify({
           product,
           quantity,
-          role: user.role,
+          role: userRole,
         }),
       })
 
@@ -53,7 +52,7 @@ export function StripeCheckout({ product, quantity, onError, buttonText, classNa
         console.error('Price ID lookup failed:', {
           status: priceResponse.status,
           error: errorData,
-          request: { product, quantity, role: user.role }
+          request: { product, quantity, role: userRole }
         })
         throw new Error(errorData.error || `Failed to get price (${priceResponse.status})`)
       }
@@ -73,6 +72,8 @@ export function StripeCheckout({ product, quantity, onError, buttonText, classNa
       }
 
       // Step 2: Create Checkout Session
+      // For guests, email will be collected by Stripe Checkout
+      // For logged-in users, use their email
       const checkoutResponse = await fetch('/.netlify/functions/create-checkout', {
         method: 'POST',
         headers: {
@@ -82,8 +83,9 @@ export function StripeCheckout({ product, quantity, onError, buttonText, classNa
           priceId,
           quantity,
           product,
-          userEmail: user.email,
-          userId: user.id,
+          userEmail: user?.email || '', // Empty for guests, Stripe will collect
+          userId: user?.id || '', // Empty for guests
+          isGuest: !isAuthenticated, // Flag to indicate guest checkout
         }),
       })
 
@@ -127,7 +129,7 @@ export function StripeCheckout({ product, quantity, onError, buttonText, classNa
   return (
     <button
       onClick={handleCheckout}
-      disabled={isLoading || !user}
+      disabled={isLoading}
       className={className || "hvac-pro-checkout-button"}
     >
       {isLoading ? 'Processing...' : (buttonText || 'Proceed to Checkout')}

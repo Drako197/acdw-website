@@ -9,7 +9,7 @@
  * - Stripe checkout integration
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { StripeCheckout } from '../components/checkout/StripeCheckout'
@@ -19,8 +19,6 @@ import {
   WrenchScrewdriverIcon,
   ClockIcon,
   ArrowLeftIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
   SparklesIcon
 } from '@heroicons/react/24/outline'
 
@@ -28,10 +26,23 @@ export function MiniProductPage() {
   const navigate = useNavigate()
   const { user, isAuthenticated } = useAuth()
   const [quantity, setQuantity] = useState(1)
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
 
-  // Product images (placeholder paths - update with actual images)
+  // Check for quantity in URL params (from redirect after login)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const qtyParam = params.get('qty')
+    if (qtyParam) {
+      const qty = parseInt(qtyParam, 10)
+      if (qty >= 1 && qty <= 10) {
+        setQuantity(qty)
+        // Clean up URL
+        window.history.replaceState({}, '', '/products/mini')
+      }
+    }
+  }, [])
+
+  // Product images for gallery (placeholder paths - update with actual images)
   const productImages = [
     '/images/ACDW-Mini-Cap-blk.png', // Main product image
     '/images/acdw-mini-hero-background.png', // Alternative angle
@@ -88,14 +99,6 @@ export function MiniProductPage() {
     }
   }
 
-  const nextImage = () => {
-    setSelectedImageIndex((prev) => (prev + 1) % productImages.length)
-  }
-
-  const prevImage = () => {
-    setSelectedImageIndex((prev) => (prev - 1 + productImages.length) % productImages.length)
-  }
-
   return (
     <div className="mini-product-page">
       {/* Back Navigation */}
@@ -109,58 +112,172 @@ export function MiniProductPage() {
         </button>
       </div>
 
-      {/* Hero Section */}
-      <section className="mini-product-hero">
-        <div className="mini-product-hero-content">
-          <div className="mini-product-hero-text">
-            <h1 className="mini-product-hero-title">
-              AC Drain Wiz Mini
-            </h1>
-            <p className="mini-product-hero-subtitle">
-              Prevent costly water damage with our flagship compact maintenance solution. 
-              Proactive cleaning, clear visibility, and code-compliant access—all in one compact design.
-            </p>
-            <div className="mini-product-hero-price">
-              <span className="mini-product-price-amount">${price.toFixed(2)}</span>
-              <span className="mini-product-price-label">per unit</span>
+      {/* Hero Section - Option 1: Split Layout with Full-Width Background */}
+      <section className="mini-product-hero-fullwidth">
+        {/* Background Image */}
+        <div className="mini-product-hero-background"></div>
+        
+        {/* Content Overlay */}
+        <div className="mini-product-hero-overlay">
+          <div className="mini-product-hero-content-wrapper">
+            {/* Left Side - Product Info */}
+            <div className="mini-product-hero-info">
+              <h1 className="mini-product-hero-title">
+                AC Drain Wiz Mini
+              </h1>
+              <p className="mini-product-hero-subtitle">
+                Prevent costly water damage with our flagship compact maintenance solution. 
+                Proactive cleaning, clear visibility, and code-compliant access—all in one compact design.
+              </p>
+              <div className="mini-product-hero-price">
+                <span className="mini-product-price-amount">${price.toFixed(2)}</span>
+                <span className="mini-product-price-label">per unit</span>
+              </div>
             </div>
-          </div>
-          
-          <div className="mini-product-hero-image-container">
-            <div className="mini-product-hero-image-wrapper">
-              <img
-                src={productImages[selectedImageIndex]}
-                alt="AC Drain Wiz Mini"
-                className="mini-product-hero-image"
-              />
-              {productImages.length > 1 && (
-                <>
-                  <button
-                    onClick={prevImage}
-                    className="mini-product-image-nav mini-product-image-nav-left"
-                    aria-label="Previous image"
-                  >
-                    <ChevronLeftIcon className="mini-product-image-nav-icon" />
-                  </button>
-                  <button
-                    onClick={nextImage}
-                    className="mini-product-image-nav mini-product-image-nav-right"
-                    aria-label="Next image"
-                  >
-                    <ChevronRightIcon className="mini-product-image-nav-icon" />
-                  </button>
-                  <div className="mini-product-image-indicators">
-                    {productImages.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedImageIndex(index)}
-                        className={`mini-product-image-indicator ${selectedImageIndex === index ? 'active' : ''}`}
-                        aria-label={`View image ${index + 1}`}
-                      />
-                    ))}
+
+            {/* Right Side - Purchase Card */}
+            <div className="mini-product-purchase-card-hero">
+              <div className="mini-product-purchase-card-content">
+                <div className="mini-product-purchase-header">
+                  <h2 className="mini-product-purchase-title">Order Now</h2>
+                  <div className="mini-product-purchase-price">
+                    <span className="mini-product-purchase-price-amount">${price.toFixed(2)}</span>
+                    <span className="mini-product-purchase-price-label">per unit</span>
                   </div>
-                </>
-              )}
+                </div>
+
+                {/* Quantity Selector */}
+                <div className="mini-product-quantity-section">
+                  <label className="mini-product-quantity-label">
+                    Quantity
+                  </label>
+                  <div className="mini-product-quantity-controls">
+                    <button
+                      type="button"
+                      onClick={() => handleQuantityChange(quantity - 1)}
+                      disabled={quantity <= 1}
+                      className="mini-product-quantity-button"
+                      aria-label="Decrease quantity"
+                    >
+                      −
+                    </button>
+                    <input
+                      type="number"
+                      min="1"
+                      max="10"
+                      value={quantity}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value) || 1
+                        handleQuantityChange(Math.max(1, Math.min(10, val)))
+                      }}
+                      className="mini-product-quantity-input"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleQuantityChange(quantity + 1)}
+                      disabled={quantity >= 10}
+                      className="mini-product-quantity-button"
+                      aria-label="Increase quantity"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <p className="mini-product-quantity-help">
+                    Select 1-10 units
+                  </p>
+                </div>
+
+                {/* Total Price */}
+                <div className="mini-product-total-section">
+                  <div className="mini-product-total-row mini-product-total-row-final">
+                    <span className="mini-product-total-label">Total</span>
+                    <span className="mini-product-total-value">${totalPrice.toFixed(2)}</span>
+                  </div>
+                </div>
+
+                {/* Checkout Button */}
+                <div className="mini-product-checkout-section">
+                  {!isAuthenticated ? (
+                    <div className="mini-product-checkout-guest-prompt">
+                      {checkoutError && (
+                        <div className="mini-product-checkout-error">
+                          <p>{checkoutError}</p>
+                        </div>
+                      )}
+                      <StripeCheckout
+                        product="mini"
+                        quantity={quantity}
+                        onError={setCheckoutError}
+                        buttonText="Buy Now - Guest Checkout"
+                        className="mini-product-buy-button"
+                      />
+                      <p className="mini-product-checkout-guest-help">
+                        <button
+                          onClick={() => {
+                            const redirectUrl = `/products/mini${quantity > 1 ? `?qty=${quantity}` : ''}`
+                            navigate(`/auth/signup?redirect=${encodeURIComponent(redirectUrl)}`)
+                          }}
+                          className="mini-product-checkout-guest-link"
+                        >
+                          Create an account
+                        </button>
+                        {' '}for faster checkout and order tracking
+                      </p>
+                    </div>
+                  ) : user?.role === 'homeowner' ? (
+                    <>
+                      {checkoutError && (
+                        <div className="mini-product-checkout-error">
+                          <p>{checkoutError}</p>
+                        </div>
+                      )}
+                      <StripeCheckout
+                        product="mini"
+                        quantity={quantity}
+                        onError={setCheckoutError}
+                        buttonText="Buy Now"
+                        className="mini-product-buy-button"
+                      />
+                    </>
+                  ) : (
+                    <div className="mini-product-checkout-role-message">
+                      <p>
+                        {user?.role === 'hvac_pro' 
+                          ? 'Visit your catalog for bulk pricing'
+                          : 'Contact us for pricing options'}
+                      </p>
+                      <button
+                        onClick={() => {
+                          if (user?.role === 'hvac_pro') {
+                            navigate('/business/pro/catalog')
+                          } else {
+                            navigate('/contact?type=sales')
+                          }
+                        }}
+                        className="mini-product-checkout-role-button"
+                      >
+                        {user?.role === 'hvac_pro' ? 'View Pro Catalog' : 'Contact Sales'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Trust Indicators */}
+                <div className="mini-product-trust-section">
+                  <div className="mini-product-trust-item">
+                    <ShieldCheckIcon className="mini-product-trust-icon" />
+                    <span>100% Satisfaction</span>
+                  </div>
+                  <div className="mini-product-trust-item">
+                    <CheckIcon className="mini-product-trust-icon" />
+                    <span>Free Shipping $50+</span>
+                  </div>
+                  <div className="mini-product-trust-item">
+                    <SparklesIcon className="mini-product-trust-icon" />
+                    <span>Made in USA</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -182,151 +299,6 @@ export function MiniProductPage() {
         </div>
       </section>
 
-      {/* Purchase Section - Sticky on Scroll */}
-      <section className="mini-product-purchase-section">
-        <div className="mini-product-purchase-content">
-          <div className="mini-product-purchase-card">
-            <div className="mini-product-purchase-header">
-              <h2 className="mini-product-purchase-title">Order AC Drain Wiz Mini</h2>
-              <div className="mini-product-purchase-price">
-                <span className="mini-product-purchase-price-amount">${price.toFixed(2)}</span>
-                <span className="mini-product-purchase-price-label">per unit</span>
-              </div>
-            </div>
-
-            {/* Quantity Selector */}
-            <div className="mini-product-quantity-section">
-              <label className="mini-product-quantity-label">
-                Quantity
-              </label>
-              <div className="mini-product-quantity-controls">
-                <button
-                  type="button"
-                  onClick={() => handleQuantityChange(quantity - 1)}
-                  disabled={quantity <= 1}
-                  className="mini-product-quantity-button"
-                  aria-label="Decrease quantity"
-                >
-                  −
-                </button>
-                <input
-                  type="number"
-                  min="1"
-                  max="10"
-                  value={quantity}
-                  onChange={(e) => {
-                    const val = parseInt(e.target.value) || 1
-                    handleQuantityChange(Math.max(1, Math.min(10, val)))
-                  }}
-                  className="mini-product-quantity-input"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleQuantityChange(quantity + 1)}
-                  disabled={quantity >= 10}
-                  className="mini-product-quantity-button"
-                  aria-label="Increase quantity"
-                >
-                  +
-                </button>
-              </div>
-              <p className="mini-product-quantity-help">
-                Select 1-10 units for direct purchase
-              </p>
-            </div>
-
-            {/* Total Price */}
-            <div className="mini-product-total-section">
-              <div className="mini-product-total-row">
-                <span className="mini-product-total-label">Subtotal</span>
-                <span className="mini-product-total-value">
-                  ${totalPrice.toFixed(2)}
-                </span>
-              </div>
-              <div className="mini-product-total-row mini-product-total-row-final">
-                <span className="mini-product-total-label">Total</span>
-                <span className="mini-product-total-value">${totalPrice.toFixed(2)}</span>
-              </div>
-            </div>
-
-            {/* Checkout Button */}
-            <div className="mini-product-checkout-section">
-              {!isAuthenticated ? (
-                <div className="mini-product-checkout-auth-prompt">
-                  <p className="mini-product-checkout-auth-text">
-                    Sign in or create an account to purchase
-                  </p>
-                  <div className="mini-product-checkout-auth-buttons">
-                    <button
-                      onClick={() => navigate('/auth/signin?redirect=/products/mini')}
-                      className="mini-product-checkout-auth-button"
-                    >
-                      Sign In
-                    </button>
-                    <button
-                      onClick={() => navigate('/auth/signup?redirect=/products/mini')}
-                      className="mini-product-checkout-auth-button mini-product-checkout-auth-button-secondary"
-                    >
-                      Create Account
-                    </button>
-                  </div>
-                </div>
-              ) : user?.role === 'homeowner' ? (
-                <>
-                  {checkoutError && (
-                    <div className="mini-product-checkout-error">
-                      <p>{checkoutError}</p>
-                    </div>
-                  )}
-                  <StripeCheckout
-                    product="mini"
-                    quantity={quantity}
-                    onError={setCheckoutError}
-                    buttonText="Buy Now"
-                    className="mini-product-buy-button"
-                  />
-                </>
-              ) : (
-                <div className="mini-product-checkout-role-message">
-                  <p>
-                    {user?.role === 'hvac_pro' 
-                      ? 'HVAC Pros: Visit your catalog for bulk pricing and additional products'
-                      : 'Contact us for pricing and bulk ordering options'}
-                  </p>
-                  <button
-                    onClick={() => {
-                      if (user?.role === 'hvac_pro') {
-                        navigate('/business/pro/catalog')
-                      } else {
-                        navigate('/contact?type=sales')
-                      }
-                    }}
-                    className="mini-product-checkout-role-button"
-                  >
-                    {user?.role === 'hvac_pro' ? 'View Pro Catalog' : 'Contact Sales'}
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Trust Indicators */}
-            <div className="mini-product-trust-section">
-              <div className="mini-product-trust-item">
-                <ShieldCheckIcon className="mini-product-trust-icon" />
-                <span>100% Satisfaction Guarantee</span>
-              </div>
-              <div className="mini-product-trust-item">
-                <CheckIcon className="mini-product-trust-icon" />
-                <span>Free Shipping on Orders Over $50</span>
-              </div>
-              <div className="mini-product-trust-item">
-                <SparklesIcon className="mini-product-trust-icon" />
-                <span>Made in USA</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Specifications Section */}
       <section className="mini-product-specs">
@@ -370,7 +342,6 @@ export function MiniProductPage() {
               <div
                 key={index}
                 className="mini-product-gallery-item"
-                onClick={() => setSelectedImageIndex(index)}
               >
                 <img
                   src={image}

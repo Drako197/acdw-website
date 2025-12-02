@@ -204,6 +204,12 @@ export function ProductsPage() {
   ]
 
   const handleProductCTA = (productId: string, isContractorOnly: boolean) => {
+    // Mini product: Direct to product page for purchase
+    if (productId === 'mini' && !isContractorOnly) {
+      navigate('/products/mini')
+      return
+    }
+    
     if (isContractorOnly) {
       if (!isAuthenticated) {
         navigate('/auth/signin')
@@ -405,7 +411,9 @@ export function ProductsPage() {
                         onClick={() => handleProductCTA(product.id, product.contractorOnly || false)}
                         className="unified-product-info-cta-button"
                       >
-                        {product.contractorOnly && !isAuthenticated 
+                        {product.id === 'mini' && !product.contractorOnly
+                          ? 'Buy Now'
+                          : product.contractorOnly && !isAuthenticated 
                           ? 'Sign In to Buy' 
                           : product.id === 'mini-sensor' && !isContractor
                           ? 'Sign In for Pricing'

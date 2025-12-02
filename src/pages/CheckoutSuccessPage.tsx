@@ -56,6 +56,7 @@ interface ShippingAddress {
 
 interface OrderDetails {
   sessionId: string
+  customerEmail?: string | null
   amountTotal: number
   currency: string
   paymentStatus: string
@@ -76,10 +77,14 @@ interface OrderDetails {
 export function CheckoutSuccessPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const { user } = useAuth()
+  const { user, isAuthenticated } = useAuth()
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [customerEmail, setCustomerEmail] = useState<string | null>(null)
+  
+  // Check if this was a guest checkout
+  const isGuestCheckout = searchParams.get('guest') === 'true' || !isAuthenticated
   
   useEffect(() => {
     const sessionIdParam = searchParams.get('session_id')
@@ -101,6 +106,11 @@ export function CheckoutSuccessPage() {
           } else {
             console.log('Order details fetched:', data)
             setOrderDetails(data)
+            
+            // Store customer email for account creation offer
+            if (data.customerEmail) {
+              setCustomerEmail(data.customerEmail)
+            }
             
             // Save shipping address to user profile if available
             if (data.shippingDetails && user?.id) {
@@ -220,6 +230,29 @@ export function CheckoutSuccessPage() {
             </div>
           )}
 
+          {/* Account Creation Offer for Guests */}
+          {isGuestCheckout && customerEmail && (
+            <div className="checkout-success-account-offer">
+              <h3 className="checkout-success-account-offer-title">Create an Account</h3>
+              <p className="checkout-success-account-offer-message">
+                Create a free account to track your order, access support resources, and manage your purchases.
+              </p>
+              <button
+                onClick={() => {
+                  // Navigate to signup with pre-filled email
+                  navigate(`/auth/signup?email=${encodeURIComponent(customerEmail)}&role=homeowner&redirect=/dashboard`)
+                }}
+                className="checkout-success-account-offer-button"
+              >
+                Create Account
+                <ArrowRightIcon className="checkout-success-button-icon" />
+              </button>
+              <p className="checkout-success-account-offer-note">
+                Your email ({customerEmail}) will be pre-filled. Takes less than a minute!
+              </p>
+            </div>
+          )}
+
           {/* Next Steps */}
           <div className="checkout-success-next-steps">
             <h2 className="checkout-success-next-steps-title">What's Next?</h2>
@@ -228,31 +261,50 @@ export function CheckoutSuccessPage() {
                 <DocumentTextIcon className="checkout-success-step-icon" />
                 <span>Check your email for order confirmation and shipping details</span>
               </li>
-              <li>
-                <DocumentTextIcon className="checkout-success-step-icon" />
-                <span>View your order history in your dashboard</span>
-              </li>
-              <li>
-                <DocumentTextIcon className="checkout-success-step-icon" />
-                <span>Access product documentation and support resources</span>
-              </li>
+              {isAuthenticated ? (
+                <>
+                  <li>
+                    <DocumentTextIcon className="checkout-success-step-icon" />
+                    <span>View your order history in your dashboard</span>
+                  </li>
+                  <li>
+                    <DocumentTextIcon className="checkout-success-step-icon" />
+                    <span>Access product documentation and support resources</span>
+                  </li>
+                </>
+              ) : (
+                <li>
+                  <DocumentTextIcon className="checkout-success-step-icon" />
+                  <span>Create an account above to track orders and access support</span>
+                </li>
+              )}
             </ul>
           </div>
 
           {/* Action Buttons */}
           <div className="checkout-success-actions">
+            {isAuthenticated ? (
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="checkout-success-button checkout-success-button-primary"
+              >
+                Go to Dashboard
+                <ArrowRightIcon className="checkout-success-button-icon" />
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate('/products')}
+                className="checkout-success-button checkout-success-button-primary"
+              >
+                Continue Shopping
+                <ArrowRightIcon className="checkout-success-button-icon" />
+              </button>
+            )}
             <button
-              onClick={() => navigate('/dashboard')}
-              className="checkout-success-button checkout-success-button-primary"
-            >
-              Go to Dashboard
-              <ArrowRightIcon className="checkout-success-button-icon" />
-            </button>
-            <button
-              onClick={() => navigate(user?.role === 'hvac_pro' ? '/business/pro/catalog' : '/products')}
+              onClick={() => navigate('/products')}
               className="checkout-success-button checkout-success-button-secondary"
             >
-              Continue Shopping
+              Browse Products
             </button>
           </div>
         </div>
