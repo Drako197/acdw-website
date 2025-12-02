@@ -12,6 +12,20 @@ export function UnsubscribePage() {
   
   const [email, setEmail] = useState(emailParam)
   
+  // Load reCAPTCHA script if site key is configured
+  useEffect(() => {
+    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
+    if (siteKey && siteKey !== 'RECAPTCHA_SITE_KEY' && typeof window.grecaptcha === 'undefined') {
+      // Load reCAPTCHA script dynamically
+      const script = document.createElement('script')
+      script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`
+      script.async = true
+      script.defer = true
+      document.head.appendChild(script)
+      console.log('reCAPTCHA script loaded')
+    }
+  }, [])
+  
   // Update email when URL parameter changes
   useEffect(() => {
     if (emailParam) {
@@ -48,6 +62,35 @@ export function UnsubscribePage() {
 
   const handleCancelUnsubscribe = () => {
     setShowConfirmation(false)
+  }
+
+  // Get reCAPTCHA site key from environment or use placeholder
+  const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || 'RECAPTCHA_SITE_KEY'
+
+  // Function to get reCAPTCHA token
+  const getRecaptchaToken = async (): Promise<string | null> => {
+    return new Promise((resolve) => {
+      // Check if reCAPTCHA is loaded
+      if (typeof window.grecaptcha === 'undefined') {
+        console.warn('reCAPTCHA not loaded - may be disabled or site key not configured')
+        // If reCAPTCHA is not configured, allow submission (graceful degradation)
+        resolve(null)
+        return
+      }
+
+      window.grecaptcha.ready(() => {
+        window.grecaptcha
+          .execute(RECAPTCHA_SITE_KEY, { action: 'unsubscribe' })
+          .then((token: string) => {
+            resolve(token)
+          })
+          .catch((error: any) => {
+            console.error('reCAPTCHA error:', error)
+            // On error, allow submission (graceful degradation)
+            resolve(null)
+          })
+      })
+    })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -95,11 +138,21 @@ export function UnsubscribePage() {
       return
     }
     
+    // Get reCAPTCHA token before submitting
+    const recaptchaToken = await getRecaptchaToken()
+    if (!recaptchaToken && RECAPTCHA_SITE_KEY !== 'RECAPTCHA_SITE_KEY') {
+      // Only require token if reCAPTCHA is configured
+      setSubmitError('Security verification failed. Please refresh and try again.')
+      setIsSubmitting(false)
+      return
+    }
+    
     const submissionData: Record<string, string> = {
       'form-name': 'unsubscribe',
       email: email.trim(), // Trim whitespace
       reason: reason,
-      feedback: feedback || ''
+      feedback: feedback || '',
+      ...(recaptchaToken && { 'recaptcha-token': recaptchaToken }) // Add token if available
     }
     
     // Check if we're in development mode
