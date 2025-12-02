@@ -120,9 +120,9 @@ export function UnsubscribePage() {
         // Create a mock successful response
         response = new Response(null, { status: 200, statusText: 'OK' })
       } else {
-        // In production, submit to Netlify
-        // Ensure we're submitting to the correct endpoint
-        const submitUrl = window.location.origin + '/'
+        // In production, submit through validation function first
+        // This prevents bots from bypassing client-side validation
+        const submitUrl = window.location.origin + '/.netlify/functions/validate-unsubscribe'
         response = await fetch(submitUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -131,9 +131,22 @@ export function UnsubscribePage() {
       }
       
       if (response.ok) {
-        setSubmitSuccess(true)
+        const result = await response.json()
+        if (result.success) {
+          setSubmitSuccess(true)
+        } else {
+          // Handle validation errors from server
+          const errorMessage = result.errors 
+            ? result.errors.join(', ')
+            : result.message || 'Something went wrong. Please try again.'
+          setSubmitError(errorMessage)
+        }
       } else {
-        setSubmitError('Something went wrong. Please try again or email us at support@acdrainwiz.com')
+        const errorData = await response.json().catch(() => ({}))
+        const errorMessage = errorData.errors 
+          ? errorData.errors.join(', ')
+          : errorData.message || 'Something went wrong. Please try again or email us at support@acdrainwiz.com'
+        setSubmitError(errorMessage)
       }
     } catch (error) {
       console.error('Form submission error:', error)
