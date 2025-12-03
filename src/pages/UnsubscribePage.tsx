@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { EnvelopeIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
-import { isValidEmail } from '../utils/emailValidation'
+import { isValidEmail, validateEmail } from '../utils/emailValidation'
 
 export function UnsubscribePage() {
   const navigate = useNavigate()
@@ -12,6 +12,7 @@ export function UnsubscribePage() {
   const emailParam = searchParams.get('email') || ''
   
   const [email, setEmail] = useState(emailParam)
+  const [emailError, setEmailError] = useState<string | null>(null)
   
   // Load reCAPTCHA script if site key is configured
   useEffect(() => {
@@ -31,8 +32,37 @@ export function UnsubscribePage() {
   useEffect(() => {
     if (emailParam) {
       setEmail(emailParam)
+      // Validate pre-filled email
+      const error = validateEmail(emailParam)
+      setEmailError(error)
     }
   }, [emailParam])
+
+  // Handle email input change with real-time validation
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value
+    setEmail(newEmail)
+    
+    // Clear error if field is empty (don't show error until user interacts)
+    if (!newEmail.trim()) {
+      setEmailError(null)
+      return
+    }
+    
+    // Validate in real-time
+    const error = validateEmail(newEmail)
+    setEmailError(error)
+  }
+
+  // Handle email input blur (when field loses focus)
+  const handleEmailBlur = () => {
+    if (!email.trim()) {
+      setEmailError('Please enter an email address')
+    } else {
+      const error = validateEmail(email)
+      setEmailError(error)
+    }
+  }
   const [reason, setReason] = useState('')
   const [feedback, setFeedback] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -97,18 +127,18 @@ export function UnsubscribePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Final validation before submitting - strict email format validation
+    // Final validation before submitting - use the same validation utility
     const trimmedEmail = email.trim()
-    if (!trimmedEmail || !isValidEmail(trimmedEmail)) {
-      setSubmitError('Please enter a valid email address.')
+    const emailValidationError = validateEmail(trimmedEmail)
+    
+    if (emailValidationError) {
+      setEmailError(emailValidationError)
+      setSubmitError(emailValidationError)
       return
     }
     
-    const [localPart, domain] = trimmedEmail.split('@')
-    if (!localPart || !domain || !domain.includes('.')) {
-      setSubmitError('Please enter a valid email address.')
-      return
-    }
+    // Clear any previous email errors if validation passes
+    setEmailError(null)
     
     setIsSubmitting(true)
     setSubmitError('')
@@ -187,6 +217,10 @@ export function UnsubscribePage() {
             ? result.errors.join(', ')
             : result.message || 'Something went wrong. Please try again.'
           setSubmitError(errorMessage)
+          // If it's an email validation error, also set emailError
+          if (errorMessage.toLowerCase().includes('email') || errorMessage.toLowerCase().includes('valid')) {
+            setEmailError(errorMessage)
+          }
         }
       } else {
         const errorData = await response.json().catch(() => ({}))
@@ -194,6 +228,10 @@ export function UnsubscribePage() {
           ? errorData.errors.join(', ')
           : errorData.message || 'Something went wrong. Please try again or email us at support@acdrainwiz.com'
         setSubmitError(errorMessage)
+        // If it's an email validation error, also set emailError
+        if (errorMessage.toLowerCase().includes('email') || errorMessage.toLowerCase().includes('valid')) {
+          setEmailError(errorMessage)
+        }
       }
     } catch (error) {
       console.error('Form submission error:', error)
@@ -308,15 +346,19 @@ export function UnsubscribePage() {
                   id="unsubscribe-email"
                   name="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleEmailChange}
+                  onBlur={handleEmailBlur}
                   required
-                  className={`unsubscribe-email-input ${emailParam ? 'unsubscribe-email-prefilled-input' : ''}`}
+                  className={`unsubscribe-email-input ${emailParam ? 'unsubscribe-email-prefilled-input' : ''} ${emailError ? 'input-error' : ''}`}
                   placeholder="your.email@example.com"
                 />
-                {emailParam && (
+                {emailParam && !emailError && (
                   <p className="unsubscribe-email-prefilled">
                     ✓ Email pre-filled from your preferences. You can edit it if needed.
                   </p>
+                )}
+                {emailError && (
+                  <p className="field-error-message">{emailError}</p>
                 )}
               </div>
 
