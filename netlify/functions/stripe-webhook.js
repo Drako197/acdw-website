@@ -120,13 +120,13 @@ exports.handler = async (event, context) => {
         }
         
         const shipstationResult = await shipstationFunction.handler(shipstationEvent, context)
-        })
         
-        if (shipstationResponse.ok) {
-          const shipstationResult = await shipstationResponse.json()
-          console.log('Order created in ShipStation:', shipstationResult)
+        // Check if ShipStation order was created successfully
+        if (shipstationResult.statusCode === 200) {
+          const result = JSON.parse(shipstationResult.body)
+          console.log('Order created in ShipStation:', result)
         } else {
-          const error = await shipstationResponse.json()
+          const error = JSON.parse(shipstationResult.body)
           console.error('Failed to create ShipStation order:', error)
           // Don't throw - we still want to acknowledge the webhook
           // The error notification email will be sent by create-shipstation-order
