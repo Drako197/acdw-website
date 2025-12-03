@@ -123,80 +123,72 @@ export function MiniProductPage() {
             {/* Left Side - Product Info */}
             <div className="mini-product-hero-info">
               <h1 className="mini-product-hero-title">
-                AC Drain Wiz Mini
+                Nothing Else Like It
               </h1>
               <p className="mini-product-hero-subtitle">
                 Prevent costly water damage with our flagship compact maintenance solution. 
                 Proactive cleaning, clear visibility, and code-compliant access—all in one compact design.
               </p>
-              <div className="mini-product-hero-price">
-                <span className="mini-product-price-amount">${price.toFixed(2)}</span>
-                <span className="mini-product-price-label">per unit</span>
-              </div>
             </div>
 
             {/* Right Side - Purchase Card */}
             <div className="mini-product-purchase-card-hero">
               <div className="mini-product-purchase-card-content">
-                <div className="mini-product-purchase-header">
-                  <h2 className="mini-product-purchase-title">Order Now</h2>
-                  <div className="mini-product-purchase-price">
-                    <span className="mini-product-purchase-price-amount">${price.toFixed(2)}</span>
-                    <span className="mini-product-purchase-price-label">per unit</span>
+                {/* Option A: Horizontal Flow Layout */}
+                {/* Row 1: Price (left) + Quantity (right) */}
+                <div className="mini-product-purchase-row-1">
+                  {/* Price Section */}
+                  <div className="mini-product-purchase-price-section">
+                    <h2 className="mini-product-purchase-title">Order Now</h2>
+                    <div className="mini-product-purchase-price">
+                      <span className="mini-product-purchase-price-amount">${price.toFixed(2)}</span>
+                      <span className="mini-product-purchase-price-label">per unit</span>
+                    </div>
+                  </div>
+
+                  {/* Quantity Selector */}
+                  <div className="mini-product-quantity-section-inline">
+                    <label className="mini-product-quantity-label">
+                      Quantity
+                    </label>
+                    <div className="mini-product-quantity-controls">
+                      <button
+                        type="button"
+                        onClick={() => handleQuantityChange(quantity - 1)}
+                        disabled={quantity <= 1}
+                        className="mini-product-quantity-button"
+                        aria-label="Decrease quantity"
+                      >
+                        −
+                      </button>
+                      <input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={quantity}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value) || 1
+                          handleQuantityChange(Math.max(1, Math.min(10, val)))
+                        }}
+                        className="mini-product-quantity-input"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleQuantityChange(quantity + 1)}
+                        disabled={quantity >= 10}
+                        className="mini-product-quantity-button"
+                        aria-label="Increase quantity"
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                {/* Quantity Selector */}
-                <div className="mini-product-quantity-section">
-                  <label className="mini-product-quantity-label">
-                    Quantity
-                  </label>
-                  <div className="mini-product-quantity-controls">
-                    <button
-                      type="button"
-                      onClick={() => handleQuantityChange(quantity - 1)}
-                      disabled={quantity <= 1}
-                      className="mini-product-quantity-button"
-                      aria-label="Decrease quantity"
-                    >
-                      −
-                    </button>
-                    <input
-                      type="number"
-                      min="1"
-                      max="10"
-                      value={quantity}
-                      onChange={(e) => {
-                        const val = parseInt(e.target.value) || 1
-                        handleQuantityChange(Math.max(1, Math.min(10, val)))
-                      }}
-                      className="mini-product-quantity-input"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleQuantityChange(quantity + 1)}
-                      disabled={quantity >= 10}
-                      className="mini-product-quantity-button"
-                      aria-label="Increase quantity"
-                    >
-                      +
-                    </button>
-                  </div>
-                  <p className="mini-product-quantity-help">
-                    Select 1-10 units
-                  </p>
-                </div>
-
-                {/* Total Price */}
-                <div className="mini-product-total-section">
-                  <div className="mini-product-total-row mini-product-total-row-final">
-                    <span className="mini-product-total-label">Total</span>
-                    <span className="mini-product-total-value">${totalPrice.toFixed(2)}</span>
-                  </div>
-                </div>
-
-                {/* Checkout Button */}
-                <div className="mini-product-checkout-section">
+                {/* Row 2: Checkout Button with Total */}
+                <div className="mini-product-purchase-row-2">
+                  {/* Checkout Button with Total */}
+                  <div className="mini-product-checkout-section-inline">
                   {!isAuthenticated ? (
                     <div className="mini-product-checkout-guest-prompt">
                       {checkoutError && (
@@ -204,14 +196,20 @@ export function MiniProductPage() {
                           <p>{checkoutError}</p>
                         </div>
                       )}
-                      <StripeCheckout
-                        product="mini"
-                        quantity={quantity}
-                        onError={setCheckoutError}
-                        buttonText="Buy Now - Guest Checkout"
-                        className="mini-product-buy-button"
-                        allowGuestCheckout={true} // Mini allows guest checkout
-                      />
+                      <div className="mini-product-buy-button-wrapper">
+                        <StripeCheckout
+                          product="mini"
+                          quantity={quantity}
+                          onError={setCheckoutError}
+                          buttonText="Buy Now - Guest Checkout"
+                          className="mini-product-buy-button-with-total mini-product-buy-button-guest"
+                          allowGuestCheckout={true}
+                        />
+                        <div className="mini-product-buy-button-total-overlay">
+                          <span className="mini-product-buy-button-total-label">Total:</span>
+                          <span className="mini-product-buy-button-total-value">${totalPrice.toFixed(2)}</span>
+                        </div>
+                      </div>
                       <p className="mini-product-checkout-guest-help">
                         <button
                           onClick={() => {
@@ -232,14 +230,20 @@ export function MiniProductPage() {
                           <p>{checkoutError}</p>
                         </div>
                       )}
-                      <StripeCheckout
-                        product="mini"
-                        quantity={quantity}
-                        onError={setCheckoutError}
-                        buttonText="Buy Now"
-                        className="mini-product-buy-button"
-                        allowGuestCheckout={true} // Mini allows guest checkout
-                      />
+                      <div className="mini-product-buy-button-wrapper">
+                        <StripeCheckout
+                          product="mini"
+                          quantity={quantity}
+                          onError={setCheckoutError}
+                          buttonText="Buy Now"
+                          className="mini-product-buy-button-with-total"
+                          allowGuestCheckout={true}
+                        />
+                        <div className="mini-product-buy-button-total-overlay">
+                          <span className="mini-product-buy-button-total-label">Total:</span>
+                          <span className="mini-product-buy-button-total-value">${totalPrice.toFixed(2)}</span>
+                        </div>
+                      </div>
                     </>
                   ) : (
                     <div className="mini-product-checkout-role-message">
@@ -262,19 +266,20 @@ export function MiniProductPage() {
                       </button>
                     </div>
                   )}
+                  </div>
                 </div>
 
-                {/* Trust Indicators */}
-                <div className="mini-product-trust-section">
-                  <div className="mini-product-trust-item">
+                {/* Trust Indicators - Integrated as badges */}
+                <div className="mini-product-trust-section-inline">
+                  <div className="mini-product-trust-badge">
                     <ShieldCheckIcon className="mini-product-trust-icon" />
                     <span>100% Satisfaction</span>
                   </div>
-                  <div className="mini-product-trust-item">
+                  <div className="mini-product-trust-badge">
                     <CheckIcon className="mini-product-trust-icon" />
                     <span>Free Shipping $50+</span>
                   </div>
-                  <div className="mini-product-trust-item">
+                  <div className="mini-product-trust-badge">
                     <SparklesIcon className="mini-product-trust-icon" />
                     <span>Made in USA</span>
                   </div>

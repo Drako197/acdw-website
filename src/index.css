@@ -7622,55 +7622,65 @@
 
 /* Hero Section - Option 1: Split Layout with Full-Width Background */
 .mini-product-hero-fullwidth {
-  @apply relative min-h-[600px] md:min-h-[700px] lg:min-h-[800px];
+  @apply relative;
+  min-height: 85vh;
   @apply flex items-center;
 }
 
 .mini-product-hero-background {
-  @apply absolute inset-0 bg-cover bg-center bg-no-repeat;
-  background-image: url('/images/acdw-mini-hero-background.png');
+  position: absolute;
+  inset: 0px;
+  background-size: contain;
+  background-position: top;
+  background-position-y: 120px;
+  background-repeat: no-repeat;
+  background-image: url('/images/acdw-mini-hero2-background.png');
   z-index: 0;
+  background-color: black;
 }
 
-/* Gradient overlay for text readability */
-.mini-product-hero-background::before {
-  content: '';
-  @apply absolute inset-0;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.5) 0%,
-    rgba(0, 0, 0, 0.3) 50%,
-    rgba(0, 0, 0, 0.6) 100%
-  );
-  z-index: 1;
-}
+/* Gradient overlay removed - background image should display at full brightness */
 
 /* Mobile - adjust hero background position and size */
 @media (max-width: 767px) {
   .mini-product-hero-fullwidth {
-    @apply min-h-[500px];
+    min-height: 115vh;
   }
   
   .mini-product-hero-background {
-    background-position-x: -150px;
-    background-size: 160% auto !important;
+    background-position-x: 0px;
+    background-size: 100% auto !important;
     background-color: #000;
-    background-position-y: 0px !important;
+    background-position-y: 50px !important;
   }
 }
 
 /* Tablet portrait mode */
 @media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
   .mini-product-hero-background {
-    background-position-x: -300px;
-    background-size: 160% auto !important;
+    background-position-x: 0px;
+    background-size: 100% auto !important;
     background-color: #000;
   }
 }
 
+/* Tablet view (768px to 1023px) - both portrait and landscape */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .mini-product-hero-overlay {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding-top: 22rem;
+    padding-bottom: 6rem;
+  }
+}
+
 .mini-product-hero-overlay {
-  @apply relative z-10 w-full;
-  @apply py-12 md:py-20 lg:py-24;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  padding-top: 20rem;
+  padding-bottom: 6rem;
 }
 
 .mini-product-hero-content-wrapper {
@@ -7760,7 +7770,7 @@
 }
 
 .mini-product-purchase-card-content {
-  @apply bg-white rounded-2xl p-6 lg:p-8;
+  @apply bg-white rounded-2xl p-4 lg:p-6;
   @apply border border-gray-200;
   @apply shadow-xl;
 }
@@ -7810,16 +7820,21 @@
 
 .mini-product-purchase-card {
   @apply max-w-md mx-auto lg:mx-0 lg:max-w-sm;
-  @apply bg-white border border-gray-200 rounded-2xl p-6 lg:p-8;
+  @apply bg-white border border-gray-200 rounded-2xl p-4 lg:p-6;
   @apply shadow-xl lg:shadow-2xl;
 }
 
-.mini-product-purchase-header {
-  @apply space-y-2 mb-6;
+/* Option A: Horizontal Flow Layout */
+.mini-product-purchase-row-1 {
+  @apply flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4;
+}
+
+.mini-product-purchase-price-section {
+  @apply flex-1;
 }
 
 .mini-product-purchase-title {
-  @apply text-2xl font-bold text-gray-900;
+  @apply text-sm font-medium text-gray-500 mb-2;
 }
 
 .mini-product-purchase-price {
@@ -7834,13 +7849,85 @@
   @apply text-base text-gray-500;
 }
 
-/* Quantity Selector */
+.mini-product-quantity-section-inline {
+  @apply flex-shrink-0;
+}
+
+.mini-product-purchase-row-2 {
+  @apply mb-4;
+  @apply pt-4 border-t border-gray-200;
+}
+
+.mini-product-checkout-section-inline {
+  @apply w-full;
+}
+
+.mini-product-buy-button-wrapper {
+  @apply relative w-full;
+}
+
+.mini-product-buy-button-with-total {
+  @apply w-full flex items-center justify-between gap-4;
+  @apply py-4 px-6 rounded-lg font-bold text-lg;
+  @apply bg-primary-600 text-white hover:bg-primary-700;
+  @apply shadow-lg hover:shadow-xl transform hover:scale-[1.02];
+  @apply transition-all focus:outline-none focus:ring-2 focus:ring-primary-500;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply pr-32; /* Make room for total overlay */
+}
+
+/* Tablet: Shorter button text for guest checkout - Fallback (all tablets) */
+@media screen and (min-width: 768px) and (max-width: 1366px) {
+  .mini-product-buy-button-guest {
+    position: relative;
+    font-size: 0 !important; /* Hide original text */
+  }
+  
+  .mini-product-buy-button-guest::before {
+    content: "Buy Now";
+    position: absolute;
+    left: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 700; /* font-bold */
+    color: white;
+    pointer-events: none;
+    z-index: 1;
+    white-space: nowrap;
+  }
+}
+
+.mini-product-buy-button-total-overlay {
+  @apply absolute right-6 top-1/2 -translate-y-1/2;
+  @apply flex items-center gap-2;
+  @apply pl-4 border-l-2 border-white/30;
+}
+
+.mini-product-buy-button-total-label {
+  @apply text-sm font-medium text-white/90;
+}
+
+.mini-product-buy-button-total-value {
+  @apply text-xl font-bold text-white;
+}
+
+/* Quantity Selector - Combined with Total for Option 3 */
 .mini-product-quantity-section {
-  @apply mb-6;
+  @apply mb-4;
+}
+
+.mini-product-quantity-section-combined {
+  @apply mb-4;
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4 items-end;
 }
 
 .mini-product-quantity-label {
-  @apply block text-sm font-semibold text-gray-700 mb-3;
+  @apply block text-sm font-semibold text-gray-700 mb-2;
+}
+
+.mini-product-quantity-section-inline .mini-product-quantity-label {
+  @apply mb-2;
 }
 
 .mini-product-quantity-controls {
@@ -7848,26 +7935,30 @@
 }
 
 .mini-product-quantity-button {
-  @apply w-10 h-10 rounded-lg border-2 border-gray-300;
-  @apply flex items-center justify-center text-xl font-semibold text-gray-700;
+  @apply w-9 h-9 rounded-lg border-2 border-gray-300;
+  @apply flex items-center justify-center text-lg font-semibold text-gray-700;
   @apply hover:border-primary-500 hover:text-primary-600;
   @apply disabled:opacity-50 disabled:cursor-not-allowed;
   @apply transition-all focus:outline-none focus:ring-2 focus:ring-primary-500;
 }
 
 .mini-product-quantity-input {
-  @apply flex-1 h-12 text-center text-lg font-semibold;
+  @apply flex-1 h-9 text-center text-base font-semibold;
   @apply border-2 border-gray-300 rounded-lg;
   @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
 }
 
 .mini-product-quantity-help {
-  @apply text-xs text-gray-500 mt-2;
+  @apply text-xs text-gray-500 mt-1;
 }
 
-/* Total Section */
+/* Total Section - Combined with Quantity for Option 3 */
 .mini-product-total-section {
-  @apply border-t border-gray-200 pt-4 mb-6 space-y-2;
+  @apply mb-4;
+}
+
+.mini-product-total-section-combined {
+  @apply flex flex-col justify-end;
 }
 
 .mini-product-total-row {
@@ -7876,6 +7967,11 @@
 
 .mini-product-total-row-final {
   @apply pt-2 border-t border-gray-200;
+}
+
+.mini-product-total-row-combined {
+  @apply flex flex-col md:flex-row md:justify-between md:items-center;
+  @apply gap-1 md:gap-2;
 }
 
 .mini-product-total-label {
@@ -7888,7 +7984,7 @@
 
 /* Checkout Section */
 .mini-product-checkout-section {
-  @apply mb-6;
+  @apply mb-4;
 }
 
 .mini-product-checkout-error {
@@ -7953,17 +8049,19 @@
   @apply disabled:opacity-50 disabled:cursor-not-allowed;
 }
 
-/* Trust Indicators */
-.mini-product-trust-section {
-  @apply space-y-3 pt-6 border-t border-gray-200;
+/* Trust Indicators - Option A: Badge Style */
+.mini-product-trust-section-inline {
+  @apply flex flex-wrap items-center gap-2 pt-3;
 }
 
-.mini-product-trust-item {
-  @apply flex items-center gap-2 text-sm text-gray-600;
+.mini-product-trust-badge {
+  @apply flex items-center gap-1.5 px-2.5 py-1.5 rounded-full;
+  @apply bg-gray-100 text-xs text-gray-600;
+  @apply flex-shrink-0;
 }
 
 .mini-product-trust-icon {
-  @apply h-5 w-5 text-primary-600;
+  @apply h-4 w-4 text-primary-600;
 }
 
 /* Specifications Section */
