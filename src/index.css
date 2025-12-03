@@ -7965,22 +7965,25 @@
 /* Mobile: Shorter button text for guest checkout */
 @media screen and (max-width: 767px) {
   .mini-product-buy-button-guest {
-    position: relative;
+    position: relative !important;
     font-size: 0 !important; /* Hide original text */
+    text-indent: -9999px !important; /* Additional hiding method */
+    overflow: hidden !important;
   }
   
   .mini-product-buy-button-guest::before {
-    content: "Buy Now";
-    position: absolute;
-    left: 1.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.125rem; /* text-lg */
-    font-weight: 700; /* font-bold */
-    color: white;
-    pointer-events: none;
-    z-index: 1;
-    white-space: nowrap;
+    content: "Buy Now" !important;
+    position: absolute !important;
+    left: 1.5rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    font-size: 1.125rem !important; /* text-lg */
+    font-weight: 700 !important; /* font-bold */
+    color: white !important;
+    pointer-events: none !important;
+    z-index: 10 !important;
+    white-space: nowrap !important;
+    text-indent: 0 !important;
   }
 }
 
