@@ -7683,6 +7683,24 @@
   padding-bottom: 6rem;
 }
 
+/* Desktop only (1024px and above) */
+@media screen and (min-width: 1024px) {
+  .mini-product-hero-overlay {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding-top: 40rem;
+    padding-bottom: 6rem;
+  }
+
+  .mini-product-hero-fullwidth {
+    position: relative;
+    min-height: 105vh;
+    display: flex;
+    align-items: center;
+  }
+}
+
 .mini-product-hero-content-wrapper {
   @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   @apply grid lg:grid-cols-2 gap-8 lg:gap-12 items-center;
