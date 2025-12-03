@@ -112,7 +112,7 @@ export function PromoPage() {
         <div className="promo-hero-content">
           <div className="promo-badge">Limited Time Offer</div>
           <h1 className="promo-hero-title">
-            Get 10% Off Your ACDW Mini Guaranteed, Plus a Chance to Win 50% Off
+            Get Up To 50% Off Your ACDW Mini Purchase
           </h1>
           <p className="promo-hero-subtitle">
             Register for our email list and receive a discount code for your AC Drain Wiz Mini purchase. Every subscriber gets 10% off their ACDW Mini, 

@@ -159,7 +159,7 @@ export function Hero() {
       <div className="homeowner-banner">
         <div className="homeowner-banner-content">
           <span className="homeowner-banner-text">
-            <strong>Limited Time:</strong> Join our email list and get 10% off guaranteed on your ACDW Mini, with a chance to win 50% off
+            <strong>Limited Time:</strong> Join Our Email List and Get <strong>Up To 50% Off</strong> Your First AC Drain Wiz Mini Purchase
           </span>
           <button 
             onClick={() => navigate('/promo')}

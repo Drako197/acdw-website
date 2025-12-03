@@ -4213,7 +4213,7 @@
 }
 
 .homeowner-banner-text {
-  @apply text-sm md:text-base;
+  @apply text-lg md:text-xl;
 }
 
 .homeowner-banner-text strong {
