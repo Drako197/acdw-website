@@ -70,29 +70,75 @@ const validateEmail = (email) => {
 const validateFormFields = (formType, formData) => {
   const errors = []
   
-  switch (formType) {
-    case 'contact':
-      // Contact form validation
-      const firstName = formData.get('firstName')?.trim() || ''
-      const lastName = formData.get('lastName')?.trim() || ''
-      const message = formData.get('message')?.trim() || ''
-      
-      if (!firstName) errors.push('First name is required')
-      if (!lastName) errors.push('Last name is required')
-      if (!message) errors.push('Message is required')
-      if (message && message.length > 2000) {
-        errors.push('Message must be 2000 characters or less')
-      }
-      
-      break
-      
-    case 'hero-email':
-    case 'promo':
-      // Email-only forms - email validation handled separately
-      break
-      
-    default:
-      console.warn(`Unknown form type: ${formType}`)
+  // Handle contact form subtypes (contact-general, contact-support, contact-sales, contact-installer, contact-demo)
+  if (formType.startsWith('contact-')) {
+    const contactSubType = formType.replace('contact-', '')
+    const firstName = formData.get('firstName')?.trim() || ''
+    const lastName = formData.get('lastName')?.trim() || ''
+    const message = formData.get('message')?.trim() || ''
+    
+    // Common fields for all contact forms
+    if (!firstName) errors.push('First name is required')
+    if (!lastName) errors.push('Last name is required')
+    if (!message) errors.push('Message is required')
+    if (message && message.length > 2000) {
+      errors.push('Message must be 2000 characters or less')
+    }
+    
+    // Form-specific required fields
+    switch (contactSubType) {
+      case 'support':
+        // Support form requires: product, issueType
+        const product = formData.get('product')?.trim() || ''
+        const issueType = formData.get('issueType')?.trim() || ''
+        if (!product) errors.push('Product is required')
+        if (!issueType) errors.push('Issue type is required')
+        break
+        
+      case 'sales':
+        // Sales form requires: company, role, interest
+        const company = formData.get('company')?.trim() || ''
+        const role = formData.get('role')?.trim() || ''
+        const interest = formData.get('interest')?.trim() || ''
+        if (!company) errors.push('Company is required')
+        if (!role) errors.push('Role is required')
+        if (!interest) errors.push('Interest type is required')
+        break
+        
+      case 'installer':
+        // Installer form requires: location, productToInstall
+        const location = formData.get('location')?.trim() || ''
+        const productToInstall = formData.get('productToInstall')?.trim() || ''
+        if (!location) errors.push('Location is required')
+        if (!productToInstall) errors.push('Product to install is required')
+        break
+        
+      case 'demo':
+        // Demo form requires: company, demoType
+        const demoCompany = formData.get('company')?.trim() || ''
+        const demoType = formData.get('demoType')?.trim() || ''
+        if (!demoCompany) errors.push('Company is required')
+        if (!demoType) errors.push('Demo type is required')
+        break
+        
+      case 'general':
+        // General form - no additional required fields beyond common ones
+        break
+        
+      default:
+        console.warn(`Unknown contact form subtype: ${contactSubType}`)
+    }
+  } else {
+    // Handle other form types
+    switch (formType) {
+      case 'hero-email':
+      case 'promo':
+        // Email-only forms - email validation handled separately
+        break
+        
+      default:
+        console.warn(`Unknown form type: ${formType}`)
+    }
   }
   
   return errors

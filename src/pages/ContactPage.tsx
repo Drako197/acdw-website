@@ -422,7 +422,7 @@ export function ContactPage() {
     // Build form data object manually from state to ensure all fields are included
     const submissionData: Record<string, string> = {
       'form-name': formName,
-      'form-type': 'contact',
+      'form-type': `contact-${activeFormType}`, // Include specific form type for validation
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
