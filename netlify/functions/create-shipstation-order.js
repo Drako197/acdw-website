@@ -105,10 +105,23 @@ Please check ShipStation integration and create order manually if needed.
 async function createShipStationOrder(orderData) {
   const apiKey = process.env.SHIPSTATION_API_KEY
   const apiSecret = process.env.SHIPSTATION_API_SECRET
-  const storeId = process.env.SHIPSTATION_STORE_ID || null
+  const storeIdEnv = process.env.SHIPSTATION_STORE_ID || null
 
   if (!apiKey || !apiSecret) {
     throw new Error('ShipStation API credentials not configured')
+  }
+
+  // ShipStation API requires storeId to be an integer, not a UUID
+  // If storeId is a UUID (contains hyphens), we'll skip it
+  // Orders will still be created successfully, just not associated with a specific store
+  let storeId = null
+  if (storeIdEnv) {
+    // Check if it's a numeric ID (integer) or UUID (contains hyphens)
+    if (!storeIdEnv.includes('-') && !isNaN(parseInt(storeIdEnv, 10))) {
+      storeId = parseInt(storeIdEnv, 10)
+    } else {
+      console.log('Store ID is a UUID, skipping storeId in request (API requires integer)')
+    }
   }
 
   // Create Basic Auth header
