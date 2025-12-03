@@ -7641,10 +7641,25 @@
 
 /* Gradient overlay removed - background image should display at full brightness */
 
-/* Mobile - adjust hero background position and size */
-@media (max-width: 767px) {
+/* Base overlay styles */
+.mini-product-hero-overlay {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  padding-top: 20rem;
+  padding-bottom: 6rem;
+}
+
+/* ============================================
+   BREAKPOINT 1: Small Mobile (max-width: 479px)
+   ============================================ */
+@media screen and (max-width: 479px) {
   .mini-product-hero-fullwidth {
-    min-height: 115vh;
+    min-height: 65vh;
+  }
+  
+  .mini-product-hero-overlay {
+    padding-top: 23rem;
   }
   
   .mini-product-hero-background {
@@ -7655,8 +7670,38 @@
   }
 }
 
-/* Tablet portrait mode */
-@media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
+/* ============================================
+   BREAKPOINT 2: Mobile (480px - 767px)
+   ============================================ */
+@media screen and (min-width: 480px) and (max-width: 767px) {
+  .mini-product-hero-fullwidth {
+    min-height: 65vh;
+  }
+  
+  .mini-product-hero-overlay {
+    padding-top: 25rem;
+  }
+  
+  .mini-product-hero-background {
+    background-position-x: 0px;
+    background-size: 100% auto !important;
+    background-color: #000;
+    background-position-y: 50px !important;
+  }
+}
+
+/* ============================================
+   BREAKPOINT 3: Tablet Portrait (768px - 1023px)
+   ============================================ */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .mini-product-hero-fullwidth {
+    min-height: 65vh;
+  }
+  
+  .mini-product-hero-overlay {
+    padding-top: 35rem;
+  }
+  
   .mini-product-hero-background {
     background-position-x: 0px;
     background-size: 100% auto !important;
@@ -7664,40 +7709,63 @@
   }
 }
 
-/* Tablet view (768px to 1023px) - both portrait and landscape */
-@media screen and (min-width: 768px) and (max-width: 1023px) {
-  .mini-product-hero-overlay {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    padding-top: 22rem;
-    padding-bottom: 6rem;
-  }
-}
-
-.mini-product-hero-overlay {
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  padding-top: 20rem;
-  padding-bottom: 6rem;
-}
-
-/* Desktop only (1024px and above) */
-@media screen and (min-width: 1024px) {
-  .mini-product-hero-overlay {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    padding-top: 40rem;
-    padding-bottom: 6rem;
-  }
-
+/* ============================================
+   BREAKPOINT 4: Tablet Landscape / Small Desktop (1024px - 1366px)
+   ============================================ */
+@media screen and (min-width: 1024px) and (max-width: 1366px) {
   .mini-product-hero-fullwidth {
-    position: relative;
-    min-height: 105vh;
+    min-height: 65vh;
     display: flex;
     align-items: center;
+  }
+  
+  .mini-product-hero-overlay {
+    padding-top: 45rem;
+  }
+}
+
+/* ============================================
+   BREAKPOINT 5: Large Desktop (1367px - 1599px)
+   ============================================ */
+@media screen and (min-width: 1367px) and (max-width: 1599px) {
+  .mini-product-hero-fullwidth {
+    min-height: 75vh;
+    display: flex;
+    align-items: center;
+  }
+  
+  .mini-product-hero-overlay {
+    padding-top: 55rem;
+  }
+}
+
+/* ============================================
+   BREAKPOINT 6: Extra Large Desktop (1600px - 1920px)
+   ============================================ */
+@media screen and (min-width: 1600px) and (max-width: 1920px) {
+  .mini-product-hero-fullwidth {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+  }
+  
+  .mini-product-hero-overlay {
+    padding-top: 65rem;
+  }
+}
+
+/* ============================================
+   BREAKPOINT 7: Ultra Large Desktop (1921px and above)
+   ============================================ */
+@media screen and (min-width: 1921px) {
+  .mini-product-hero-fullwidth {
+    min-height: 95vh;
+    display: flex;
+    align-items: center;
+  }
+  
+  .mini-product-hero-overlay {
+    padding-top: 75rem;
   }
 }
 
@@ -7894,7 +7962,29 @@
   @apply pr-32; /* Make room for total overlay */
 }
 
-/* Tablet: Shorter button text for guest checkout - Fallback (all tablets) */
+/* Mobile: Shorter button text for guest checkout */
+@media screen and (max-width: 767px) {
+  .mini-product-buy-button-guest {
+    position: relative;
+    font-size: 0 !important; /* Hide original text */
+  }
+  
+  .mini-product-buy-button-guest::before {
+    content: "Buy Now";
+    position: absolute;
+    left: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 700; /* font-bold */
+    color: white;
+    pointer-events: none;
+    z-index: 1;
+    white-space: nowrap;
+  }
+}
+
+/* Tablet: Shorter button text for guest checkout */
 @media screen and (min-width: 768px) and (max-width: 1366px) {
   .mini-product-buy-button-guest {
     position: relative;
