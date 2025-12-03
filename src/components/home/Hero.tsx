@@ -5,7 +5,7 @@ import { ArrowRightIcon, ChevronDownIcon, ChevronUpIcon, GiftIcon, CheckIcon } f
 import { useAuth } from '../../contexts/AuthContext'
 import { VideoModal } from './VideoModal'
 import { CustomerTypeSelector } from './CustomerTypeSelector'
-import { isValidEmail } from '../utils/emailValidation'
+import { isValidEmail } from '../../utils/emailValidation'
 
 export function Hero() {
   const navigate = useNavigate()
