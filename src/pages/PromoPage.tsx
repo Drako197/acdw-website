@@ -1,12 +1,16 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRightIcon, CheckIcon, EnvelopeIcon } from '@heroicons/react/24/outline'
+import { useRecaptcha } from '../hooks/useRecaptcha'
+import { validateEmail } from '../utils/emailValidation'
 
 export function PromoPage() {
   const navigate = useNavigate()
+  const { getRecaptchaToken, isConfigured: isRecaptchaConfigured } = useRecaptcha()
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
+  const [emailError, setEmailError] = useState<string | null>(null)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
@@ -15,6 +19,38 @@ export function PromoPage() {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitError('')
+    setEmailError(null)
+    
+    // Validate email
+    const emailValidationError = validateEmail(email.trim())
+    if (emailValidationError) {
+      setEmailError(emailValidationError)
+      setSubmitError(emailValidationError)
+      setIsSubmitting(false)
+      return
+    }
+    
+    // Check honeypot fields - if filled, it's likely a bot
+    const botField = (document.querySelector('input[name="bot-field"]') as HTMLInputElement)?.value
+    const honeypot1 = (document.querySelector('input[name="honeypot-1"]') as HTMLInputElement)?.value
+    const honeypot2 = (document.querySelector('input[name="honeypot-2"]') as HTMLInputElement)?.value
+    
+    if (botField || honeypot1 || honeypot2) {
+      // Honeypot fields were filled - likely a bot, silently reject
+      console.warn('Bot detected: honeypot fields were filled')
+      setSubmitError('Invalid submission detected.')
+      setIsSubmitting(false)
+      return
+    }
+    
+    // Get reCAPTCHA token before submitting
+    const recaptchaToken = await getRecaptchaToken('promo')
+    if (!recaptchaToken && isRecaptchaConfigured) {
+      // Only require token if reCAPTCHA is configured
+      setSubmitError('Security verification failed. Please refresh and try again.')
+      setIsSubmitting(false)
+      return
+    }
     
     // Prepare form data for Netlify
     const form = e.target as HTMLFormElement
@@ -23,10 +59,12 @@ export function PromoPage() {
     // Build submission data object
     const submissionData: Record<string, string> = {
       'form-name': 'promo-signup',
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      consent: formData.get('consent') ? 'yes' : 'no'
+      'form-type': 'promo',
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: email.trim(),
+      consent: formData.get('consent') ? 'yes' : 'no',
+      ...(recaptchaToken && { 'recaptcha-token': recaptchaToken }) // Add token if available
     }
     
     // Check if we're in development mode
@@ -47,18 +85,23 @@ export function PromoPage() {
         // Create a mock successful response
         response = new Response(null, { status: 200, statusText: 'OK' })
       } else {
-        // In production, submit to Netlify
-        response = await fetch('/', {
+        // In production, submit through validation function first
+        response = await fetch('/.netlify/functions/validate-form-submission', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: new URLSearchParams(submissionData).toString()
         })
       }
       
-      if (response.ok) {
+      const responseData = await response.json()
+      
+      if (response.ok && responseData.success) {
         setIsSubmitted(true)
       } else {
-        setSubmitError('Something went wrong. Please try again.')
+        // Handle error response from validation function
+        const errorMessage = responseData.message || responseData.error || 'Something went wrong. Please try again.'
+        setSubmitError(errorMessage)
+        console.error('Form submission error:', responseData)
       }
     } catch (error) {
       console.error('Form submission error:', error)
@@ -148,11 +191,11 @@ export function PromoPage() {
               <input type="hidden" name="form-name" value="promo-signup" />
               <input type="hidden" name="form-type" value="promo" />
               
-              {/* Honeypot field for spam protection */}
-              <div style={{ display: 'none' }}>
-                <label>
-                  Don't fill this out if you're human: <input name="bot-field" />
-                </label>
+              {/* Honeypot Fields - Hidden from users, bots will fill these */}
+              <div style={{ display: 'none' }} aria-hidden="true">
+                <input type="text" name="bot-field" tabIndex={-1} autoComplete="off" />
+                <input type="text" name="honeypot-1" tabIndex={-1} autoComplete="off" />
+                <input type="text" name="honeypot-2" tabIndex={-1} autoComplete="off" />
               </div>
               
               <div className="promo-form-group">
@@ -196,11 +239,30 @@ export function PromoPage() {
                   id="promo-email"
                   name="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="promo-form-input"
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                    // Clear error when user starts typing
+                    if (emailError) {
+                      setEmailError(null)
+                    }
+                  }}
+                  onBlur={() => {
+                    if (!email.trim()) {
+                      setEmailError('Please enter an email address')
+                    } else {
+                      const error = validateEmail(email.trim())
+                      setEmailError(error)
+                    }
+                  }}
+                  className={`promo-form-input ${emailError ? 'input-error' : ''}`}
                   placeholder="your.email@example.com"
                   required
                 />
+                {emailError && (
+                  <p className="field-error-message" style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#dc2626' }}>
+                    {emailError}
+                  </p>
+                )}
               </div>
               
               <div className="promo-form-group">

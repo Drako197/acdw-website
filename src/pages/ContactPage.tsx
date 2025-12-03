@@ -12,6 +12,7 @@ import {
   PresentationChartLineIcon
 } from '@heroicons/react/24/outline'
 import { validateEmail } from '../utils/emailValidation'
+import { useRecaptcha } from '../hooks/useRecaptcha'
 
 type ContactFormType = 'general' | 'support' | 'sales' | 'installer' | 'demo'
 
@@ -112,6 +113,7 @@ export function ContactPage() {
   }
 
   const [activeFormType, setActiveFormType] = useState<ContactFormType>(getFormTypeFromURL())
+  const { getRecaptchaToken, isConfigured: isRecaptchaConfigured } = useRecaptcha()
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
@@ -392,12 +394,35 @@ export function ContactPage() {
       return
     }
     
+    // Check honeypot fields - if filled, it's likely a bot
+    const botField = (document.querySelector('input[name="bot-field"]') as HTMLInputElement)?.value
+    const honeypot1 = (document.querySelector('input[name="honeypot-1"]') as HTMLInputElement)?.value
+    const honeypot2 = (document.querySelector('input[name="honeypot-2"]') as HTMLInputElement)?.value
+    
+    if (botField || honeypot1 || honeypot2) {
+      // Honeypot fields were filled - likely a bot, silently reject
+      console.warn('Bot detected: honeypot fields were filled')
+      setSubmitError('Invalid submission detected.')
+      setIsSubmitting(false)
+      return
+    }
+    
+    // Get reCAPTCHA token before submitting
+    const recaptchaToken = await getRecaptchaToken('contact')
+    if (!recaptchaToken && isRecaptchaConfigured) {
+      // Only require token if reCAPTCHA is configured
+      setSubmitError('Security verification failed. Please refresh and try again.')
+      setIsSubmitting(false)
+      return
+    }
+    
     // Prepare form data for Netlify
     const formName = `contact-${activeFormType}`
     
     // Build form data object manually from state to ensure all fields are included
     const submissionData: Record<string, string> = {
       'form-name': formName,
+      'form-type': 'contact',
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
@@ -406,7 +431,8 @@ export function ContactPage() {
       customerType: formData.customerType,
       message: formData.message,
       referralSource: formData.referralSource || '',
-      consent: formData.consent ? 'yes' : 'no'
+      consent: formData.consent ? 'yes' : 'no',
+      ...(recaptchaToken && { 'recaptcha-token': recaptchaToken }) // Add token if available
     }
     
     // Add form-specific fields
@@ -478,15 +504,17 @@ export function ContactPage() {
       return
     }
     
-    // Production: Submit to Netlify
+    // Production: Submit through validation function first
     try {
-      const response = await fetch('/', {
+      const response = await fetch('/.netlify/functions/validate-form-submission', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(submissionData).toString()
       })
       
-      if (response.ok) {
+      const responseData = await response.json()
+      
+      if (response.ok && responseData.success) {
         setSubmitSuccess(true)
     // Reset form
     setFormData({
@@ -519,7 +547,25 @@ export function ContactPage() {
         // Reset success message after 5 seconds
         setTimeout(() => setSubmitSuccess(false), 5000)
       } else {
-        setSubmitError('Something went wrong. Please try again or email us directly.')
+        // Handle error response from validation function
+        const errorMessage = responseData.message || responseData.error || 'Failed to submit form. Please try again.'
+        setSubmitError(errorMessage)
+        console.error('Form submission error:', responseData)
+        
+        // If there are field-specific errors, add them to fieldErrors
+        if (responseData.errors && Array.isArray(responseData.errors)) {
+          const newErrors: Record<string, string> = {}
+          responseData.errors.forEach((error: string) => {
+            // Try to match error to field (basic matching)
+            if (error.toLowerCase().includes('email')) newErrors.email = error
+            else if (error.toLowerCase().includes('first name')) newErrors.firstName = error
+            else if (error.toLowerCase().includes('last name')) newErrors.lastName = error
+            else if (error.toLowerCase().includes('message')) newErrors.message = error
+          })
+          if (Object.keys(newErrors).length > 0) {
+            setFieldErrors(prev => ({ ...prev, ...newErrors }))
+          }
+        }
       }
     } catch (error) {
       console.error('Form submission error:', error)
@@ -590,6 +636,13 @@ export function ContactPage() {
                 >
                   {/* Hidden Fields for Netlify */}
                   <input type="hidden" name="form-name" value={`contact-${activeFormType}`} />
+                  
+                  {/* Honeypot Fields - Hidden from users, bots will fill these */}
+                  <div style={{ display: 'none' }} aria-hidden="true">
+                    <input type="text" name="bot-field" tabIndex={-1} autoComplete="off" />
+                    <input type="text" name="honeypot-1" tabIndex={-1} autoComplete="off" />
+                    <input type="text" name="honeypot-2" tabIndex={-1} autoComplete="off" />
+                  </div>
                   <input type="hidden" name="form-type" value={activeFormType} />
                   
                   {/* Honeypot field for spam protection (hidden from users) */}
