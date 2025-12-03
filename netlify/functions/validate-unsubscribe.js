@@ -171,40 +171,13 @@ exports.handler = async (event, context) => {
     }
 
     // 2. Validate email format (strict regex)
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     const trimmedEmail = email.trim()
     
     if (!trimmedEmail) {
       errors.push('Email is required')
     } else if (!emailRegex.test(trimmedEmail)) {
       errors.push('Invalid email format')
-    } else {
-      // Additional validation: check for domain-like strings
-      const [localPart, domain] = trimmedEmail.split('@')
-      if (!localPart || !domain || !domain.includes('.')) {
-        errors.push('Invalid email format')
-      }
-      
-      // Reject common bot patterns (domain-like strings without @)
-      if (trimmedEmail.match(/^[a-z0-9-]+\.(com|net|org|io)$/i) && !trimmedEmail.includes('@')) {
-        errors.push('Invalid email format')
-      }
-      
-      // Reject emails that look like domain names (e.g., "test-com")
-      if (trimmedEmail.includes('-com') && trimmedEmail.split('@').length === 1) {
-        errors.push('Invalid email format')
-      }
-      
-      // Reject if email is just a domain (no local part)
-      if (!localPart || localPart.length === 0) {
-        errors.push('Invalid email format')
-      }
-      
-      // Reject if domain doesn't have TLD
-      const domainParts = domain.split('.')
-      if (domainParts.length < 2) {
-        errors.push('Invalid email format')
-      }
     }
 
     // 3. Validate reason (if provided, must be from allowed list)
