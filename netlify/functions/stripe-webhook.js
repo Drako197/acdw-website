@@ -59,8 +59,9 @@ exports.handler = async (event, context) => {
       // Create order in ShipStation
       try {
         // Fetch full session details including line items
+        // Note: shipping_details is already included and cannot be expanded
         const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
-          expand: ['line_items', 'customer', 'shipping_details']
+          expand: ['line_items', 'customer']
         })
         
         // Get line items
