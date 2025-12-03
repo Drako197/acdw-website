@@ -13,6 +13,12 @@ if (!clerkPubKey) {
   console.warn('Please set VITE_CLERK_PUBLISHABLE_KEY in Netlify environment variables.')
 }
 
+// Note: If you see "Clerk has been loaded with development keys" warning:
+// This is expected during testing. For production launch, switch to production keys:
+// 1. Generate production keys in Clerk Dashboard
+// 2. Update VITE_CLERK_PUBLISHABLE_KEY in Netlify environment variables
+// 3. Update CLERK_SECRET_KEY in Netlify environment variables
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     {clerkPubKey ? (
@@ -20,10 +26,11 @@ createRoot(document.getElementById('root')!).render(
         publishableKey={clerkPubKey}
         // Safari-specific configuration
         // Ensure cookies work properly on Safari mobile
-        afterSignInUrl="/dashboard"
-        afterSignUpUrl="/dashboard"
         signInUrl="/auth/signin"
         signUpUrl="/auth/signup"
+        // Use signInFallbackRedirectUrl/signUpFallbackRedirectUrl instead of deprecated afterSignInUrl/afterSignUpUrl
+        signInFallbackRedirectUrl="/dashboard"
+        signUpFallbackRedirectUrl="/dashboard"
       >
         <App />
       </ClerkProvider>
