@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { EnvelopeIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import { isValidEmail } from '../utils/emailValidation'
 
 export function UnsubscribePage() {
   const navigate = useNavigate()
@@ -97,15 +98,8 @@ export function UnsubscribePage() {
     e.preventDefault()
     
     // Final validation before submitting - strict email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!email || !emailRegex.test(email.trim())) {
-      setSubmitError('Please enter a valid email address.')
-      return
-    }
-    
-    // Additional validation: reject domain-like strings (common bot pattern)
     const trimmedEmail = email.trim()
-    if (!trimmedEmail.includes('@') || trimmedEmail.split('@').length !== 2) {
+    if (!trimmedEmail || !isValidEmail(trimmedEmail)) {
       setSubmitError('Please enter a valid email address.')
       return
     }
@@ -420,7 +414,7 @@ export function UnsubscribePage() {
                   <button
                     type="button"
                     onClick={handleConfirmUnsubscribe}
-                    disabled={!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())}
+                    disabled={!email || !isValidEmail(email.trim())}
                     className="unsubscribe-button unsubscribe-button-submit"
                   >
                     Unsubscribe from All Marketing Emails

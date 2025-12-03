@@ -5,12 +5,13 @@ import { DayPicker } from 'react-day-picker'
 import { 
   EnvelopeIcon, 
   PhoneIcon, 
-  BuildingOfficeIcon, 
+  BuildingOfficeIcon,
   QuestionMarkCircleIcon,
   ShoppingCartIcon,
   WrenchScrewdriverIcon,
   PresentationChartLineIcon
 } from '@heroicons/react/24/outline'
+import { validateEmail } from '../utils/emailValidation'
 
 type ContactFormType = 'general' | 'support' | 'sales' | 'installer' | 'demo'
 
@@ -159,8 +160,11 @@ export function ContactPage() {
       case 'email':
         if (!value || (typeof value === 'string' && value.trim().length === 0)) {
           return 'Please enter your email address'
-        } else if (typeof value === 'string' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          return 'Please enter a valid email address'
+        } else if (typeof value === 'string') {
+          const emailError = validateEmail(value)
+          if (emailError) {
+            return emailError
+          }
         }
         break
       case 'phone':

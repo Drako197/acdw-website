@@ -23,6 +23,7 @@ import type { UserRole } from '../../types/auth'
 import { US_STATES } from '../../config/usStates'
 import { validateLicenseFormat } from '../../config/licenseFormats'
 import { validateEIN } from '../../utils/verification'
+import { validateEmail } from '../../utils/emailValidation'
 
 interface FieldError {
   [key: string]: string
@@ -156,9 +157,9 @@ export function SignUpForm() {
         break
 
       case 'email':
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        if (!emailRegex.test(value)) {
-          errors.email = 'Please enter a valid email address'
+        const emailError = validateEmail(value)
+        if (emailError) {
+          errors.email = emailError
         } else {
           delete errors.email
         }

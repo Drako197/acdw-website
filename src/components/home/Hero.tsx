@@ -5,6 +5,7 @@ import { ArrowRightIcon, ChevronDownIcon, ChevronUpIcon, GiftIcon, CheckIcon } f
 import { useAuth } from '../../contexts/AuthContext'
 import { VideoModal } from './VideoModal'
 import { CustomerTypeSelector } from './CustomerTypeSelector'
+import { isValidEmail } from '../utils/emailValidation'
 
 export function Hero() {
   const navigate = useNavigate()
@@ -1218,7 +1219,7 @@ export function Hero() {
                   // Validate email
                   if (!email || email.trim().length === 0) {
                     errors.email = 'Email address is required'
-                  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                  } else if (!isValidEmail(email)) {
                     errors.email = 'Please enter a valid email address'
                   }
                   
