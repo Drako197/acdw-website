@@ -134,6 +134,49 @@ const validateFormFields = (formType, formData) => {
         if (!productsOfInterest) errors.push('At least one product of interest is required')
         break
         
+      case 'upgrade':
+        // Core 1.0 upgrade form requires: firstName, lastName, email, phone, street, city, state, zip, consent, photo
+        const upgradeFirstName = formData.get('firstName')?.trim() || ''
+        const upgradeLastName = formData.get('lastName')?.trim() || ''
+        const upgradeEmail = formData.get('email')?.trim() || ''
+        const upgradePhone = formData.get('phone')?.trim() || ''
+        const upgradeStreet = formData.get('street')?.trim() || ''
+        const upgradeCity = formData.get('city')?.trim() || ''
+        const upgradeState = formData.get('state')?.trim() || ''
+        const upgradeZip = formData.get('zip')?.trim() || ''
+        const upgradeConsent = formData.get('consent')
+        const upgradePhoto = formData.get('photo')
+        
+        if (!upgradeFirstName) errors.push('First name is required')
+        if (!upgradeLastName) errors.push('Last name is required')
+        if (!upgradeEmail) {
+          errors.push('Email is required')
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(upgradeEmail)) {
+          errors.push('Invalid email format')
+        }
+        if (!upgradePhone) errors.push('Phone is required')
+        if (!upgradeStreet) errors.push('Street address is required')
+        if (!upgradeCity) errors.push('City is required')
+        if (!upgradeState) errors.push('State is required')
+        if (!upgradeZip) {
+          errors.push('ZIP code is required')
+        } else if (!/^\d{5}$/.test(upgradeZip)) {
+          errors.push('ZIP code must be 5 digits')
+        }
+        if (!upgradeConsent || upgradeConsent !== 'yes') {
+          errors.push('You must acknowledge the terms to continue')
+        }
+        if (!upgradePhoto || upgradePhoto.size === 0) {
+          errors.push('Photo is required')
+        } else {
+          // Check file size (5MB limit)
+          const maxSize = 5 * 1024 * 1024 // 5MB in bytes
+          if (upgradePhoto.size > maxSize) {
+            errors.push('File size must be 5MB or less')
+          }
+        }
+        break
+        
       case 'general':
         // General form - no additional required fields beyond common ones
         break

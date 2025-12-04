@@ -6,10 +6,12 @@ import { useAuth } from '../../contexts/AuthContext'
 import { VideoModal } from './VideoModal'
 import { CustomerTypeSelector } from './CustomerTypeSelector'
 import { isValidEmail } from '../../utils/emailValidation'
+import { useRecaptcha } from '../../hooks/useRecaptcha'
 
 export function Hero() {
   const navigate = useNavigate()
   const { user, isAuthenticated } = useAuth()
+  const { getRecaptchaToken, isConfigured: isRecaptchaConfigured } = useRecaptcha()
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false)
@@ -18,6 +20,7 @@ export function Hero() {
   const [toastType, setToastType] = useState<'success' | 'error'>('success')
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [isUpgradeFormSubmitted, setIsUpgradeFormSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   
   // Check if user is a contractor
   const isContractor = isAuthenticated && user?.role === 'hvac_pro'
@@ -1189,6 +1192,7 @@ export function Hero() {
                 noValidate
                 onSubmit={async (e) => {
                   e.preventDefault()
+                  setIsSubmitting(true)
                   
                   const form = e.target as HTMLFormElement
                   const formData = new FormData(form)
@@ -1276,6 +1280,29 @@ export function Hero() {
                       setPhotoFileError(errors.photo)
                     }
                     showToast('Please fill in all required fields correctly.', 'error')
+                    setIsSubmitting(false)
+                    return
+                  }
+                  
+                  // Check honeypot fields - if filled, it's likely a bot
+                  const botField = (document.querySelector('input[name="bot-field"]') as HTMLInputElement)?.value
+                  const honeypot1 = (document.querySelector('input[name="honeypot-1"]') as HTMLInputElement)?.value
+                  const honeypot2 = (document.querySelector('input[name="honeypot-2"]') as HTMLInputElement)?.value
+                  
+                  if (botField || honeypot1 || honeypot2) {
+                    // Honeypot fields were filled - likely a bot, silently reject
+                    console.warn('Bot detected: honeypot fields were filled')
+                    showToast('Invalid submission detected.', 'error')
+                    setIsSubmitting(false)
+                    return
+                  }
+                  
+                  // Get reCAPTCHA token before submitting
+                  const recaptchaToken = await getRecaptchaToken('upgrade')
+                  if (!recaptchaToken && isRecaptchaConfigured) {
+                    // Only require token if reCAPTCHA is configured
+                    showToast('Security verification failed. Please refresh and try again.', 'error')
+                    setIsSubmitting(false)
                     return
                   }
                   
@@ -1286,6 +1313,7 @@ export function Hero() {
                   // Build FormData for file upload support
                   const netlifyFormData = new FormData()
                   netlifyFormData.append('form-name', 'core-upgrade')
+                  netlifyFormData.append('form-type', 'upgrade')
                   netlifyFormData.append('firstName', formData.get('firstName') as string || '')
                   netlifyFormData.append('lastName', formData.get('lastName') as string || '')
                   netlifyFormData.append('email', formData.get('email') as string || '')
@@ -1296,6 +1324,11 @@ export function Hero() {
                   netlifyFormData.append('state', formData.get('state') as string || '')
                   netlifyFormData.append('zip', formData.get('zip') as string || '')
                   netlifyFormData.append('consent', formData.get('consent') ? 'yes' : 'no')
+                  
+                  // Add reCAPTCHA token if available
+                  if (recaptchaToken) {
+                    netlifyFormData.append('recaptcha-token', recaptchaToken)
+                  }
                   
                   // Add the photo file if it exists
                   if (photoInput?.files && photoInput.files[0]) {
@@ -1312,6 +1345,7 @@ export function Hero() {
                       // In development, simulate a successful submission
                       console.log('📝 [DEV MODE] Core upgrade request simulated:', {
                         formName: 'core-upgrade',
+                        formType: 'upgrade',
                         firstName: formData.get('firstName'),
                         lastName: formData.get('lastName'),
                         email: formData.get('email'),
@@ -1321,19 +1355,55 @@ export function Hero() {
                         city: formData.get('city'),
                         state: formData.get('state'),
                         zip: formData.get('zip'),
-                        consent: formData.get('consent') ? 'yes' : 'no'
+                        consent: formData.get('consent') ? 'yes' : 'no',
+                        hasRecaptcha: !!recaptchaToken
                       })
                       // Simulate network delay
                       await new Promise(resolve => setTimeout(resolve, 1000))
                       // Create a mock successful response
                       response = new Response(null, { status: 200, statusText: 'OK' })
                     } else {
-                      // In production, submit to Netlify with FormData (supports file uploads)
-                      response = await fetch('/', {
+                      // In production, submit through validation function first
+                      response = await fetch('/.netlify/functions/validate-form-submission', {
                         method: 'POST',
                         body: netlifyFormData
                         // Don't set Content-Type header - browser will set it automatically with boundary for multipart/form-data
                       })
+                      
+                      const responseData = await response.json()
+                      
+                      if (response.ok && responseData.success) {
+                        // Validation passed, now submit to Netlify Forms
+                        const netlifySubmitData = new FormData()
+                        netlifySubmitData.append('form-name', 'core-upgrade')
+                        netlifySubmitData.append('firstName', formData.get('firstName') as string || '')
+                        netlifySubmitData.append('lastName', formData.get('lastName') as string || '')
+                        netlifySubmitData.append('email', formData.get('email') as string || '')
+                        netlifySubmitData.append('phone', formData.get('phone') as string || '')
+                        netlifySubmitData.append('street', formData.get('street') as string || '')
+                        netlifySubmitData.append('unit', formData.get('unit') as string || '')
+                        netlifySubmitData.append('city', formData.get('city') as string || '')
+                        netlifySubmitData.append('state', formData.get('state') as string || '')
+                        netlifySubmitData.append('zip', formData.get('zip') as string || '')
+                        netlifySubmitData.append('consent', formData.get('consent') ? 'yes' : 'no')
+                        
+                        // Add photo file
+                        if (photoInput?.files && photoInput.files[0]) {
+                          netlifySubmitData.append('photo', photoInput.files[0])
+                        }
+                        
+                        // Submit to Netlify Forms
+                        response = await fetch('/', {
+                          method: 'POST',
+                          body: netlifySubmitData
+                        })
+                      } else {
+                        // Handle error response from validation function
+                        const errorMessage = responseData.message || responseData.error || 'Failed to submit form. Please try again.'
+                        showToast(errorMessage, 'error')
+                        setIsSubmitting(false)
+                        return
+                      }
                     }
                     
                     if (response.ok) {
@@ -1346,6 +1416,8 @@ export function Hero() {
                   } catch (error) {
                     console.error('Form submission error:', error)
                     showToast('Network error. Please try again or email us at support@acdrainwiz.com', 'error')
+                  } finally {
+                    setIsSubmitting(false)
                   }
                 }}
               >
@@ -1353,10 +1425,16 @@ export function Hero() {
                 <input type="hidden" name="form-name" value="core-upgrade" />
                 <input type="hidden" name="form-type" value="upgrade" />
                 
-                {/* Honeypot field for spam protection */}
+                {/* Honeypot fields for spam protection */}
                 <div style={{ display: 'none' }}>
                   <label>
                     Don't fill this out if you're human: <input name="bot-field" />
+                  </label>
+                  <label>
+                    <input name="honeypot-1" tabIndex={-1} autoComplete="off" />
+                  </label>
+                  <label>
+                    <input name="honeypot-2" tabIndex={-1} autoComplete="off" />
                   </label>
                 </div>
                 <div className="upgrade-form-group">
@@ -1694,8 +1772,12 @@ export function Hero() {
                   }} className="upgrade-form-cancel">
                     Cancel
                   </button>
-                  <button type="submit" className="upgrade-form-submit">
-                    Submit Request (No Payment Required)
+                  <button 
+                    type="submit" 
+                    className="upgrade-form-submit"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Submit Request (No Payment Required)'}
                   </button>
                 </div>
               </form>
