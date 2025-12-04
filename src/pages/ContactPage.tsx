@@ -9,7 +9,8 @@ import {
   QuestionMarkCircleIcon,
   ShoppingCartIcon,
   WrenchScrewdriverIcon,
-  PresentationChartLineIcon
+  PresentationChartLineIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline'
 import { validateEmail } from '../utils/emailValidation'
 import { useRecaptcha } from '../hooks/useRecaptcha'
@@ -1551,11 +1552,44 @@ export function ContactPage() {
                     )}
                   </div>
 
-                  {/* Success Message */}
+                  {/* Animated Success Modal */}
                   {submitSuccess && (
-                    <div className="rounded-md bg-green-50 p-4">
-                      <div className="text-sm text-green-800">
-                        <strong>Thank you!</strong> Your message has been sent successfully. We'll get back to you within 24 hours.
+                    <div className="contact-success-modal-overlay">
+                      <div className="contact-success-modal">
+                        <div className="contact-success-modal-icon-wrapper">
+                          <svg 
+                            className="contact-success-modal-icon" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            stroke="currentColor"
+                            strokeWidth={2.5}
+                          >
+                            <circle 
+                              cx="12" 
+                              cy="12" 
+                              r="10" 
+                              className="contact-success-modal-circle"
+                            />
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              d="M9 12l2 2 4-4" 
+                              className="contact-success-modal-checkmark"
+                            />
+                          </svg>
+                        </div>
+                        <h3 className="contact-success-modal-title">Message Sent Successfully!</h3>
+                        <p className="contact-success-modal-message">
+                          Thank you for contacting us. We've received your message and will get back to you within 24 hours.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setSubmitSuccess(false)}
+                          className="contact-success-modal-close"
+                          aria-label="Close success message"
+                        >
+                          <XMarkIcon className="contact-success-modal-close-icon" />
+                        </button>
                       </div>
                     </div>
                   )}
