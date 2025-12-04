@@ -39,9 +39,16 @@ This guide will help you create all necessary custom fields in Pipedrive and map
 | `location` | Text | Installer | City/State/Region |
 | `preferredContact` | Dropdown | Installer | Email, Phone, Either |
 | `productToInstall` | Dropdown | Installer | ACDW Mini, ACDW Sensor, ACDW Mini & Sensor Combo |
-| `demoType` | Dropdown | Demo | In-Person, Virtual, Either |
+| `demoType` | Dropdown | Demo | In-Person, Virtual, Product Showcase, Compliance Review |
 | `preferredDate` | Date | Demo | Preferred demo date |
-| `preferredTime` | Dropdown | Demo | Morning, Afternoon, Evening, Flexible |
+| `preferredTime` | Dropdown | Demo | Morning, Afternoon, Flexible |
+| `city` | Text | Demo | City where demo is requested ⭐ NEW |
+| `state` | Text | Demo | State (2-letter code) ⭐ NEW |
+| `zip` | Text | Demo | ZIP code (5 digits) ⭐ NEW |
+| `productsOfInterest` | Text | Demo | Multi-select products (comma-separated) ⭐ NEW |
+| `numberOfAttendees` | Dropdown | Demo | 1-2, 3-5, 6-10, 10+ ⭐ NEW |
+| `portfolioSize` | Dropdown | Demo | 1-10, 11-50, 51-100, 101-250, 251-500, 500+, Not Applicable ⭐ NEW |
+| `demoFocus` | Dropdown | Demo | Installation, Monitoring, Compliance, ROI, Product Features, Custom ⭐ NEW |
 
 ---
 
@@ -141,6 +148,15 @@ This guide will help you create all necessary custom fields in Pipedrive and map
 - **demoType** → `demoType`
 - **preferredDate** → `preferredDate`
 - **preferredTime** → `preferredTime`
+- **city** → `city` ⭐ NEW
+- **state** → `state` ⭐ NEW
+- **zip** → `zip` ⭐ NEW
+- **productsOfInterest** → `productsOfInterest` ⭐ NEW
+- **numberOfAttendees** → `numberOfAttendees` ⭐ NEW
+- **portfolioSize** → `portfolioSize` ⭐ NEW (optional)
+- **demoFocus** → `demoFocus` ⭐ NEW (optional)
+
+**See `DEMO-FORM-PIPEDRIVE-UPDATE.md` for detailed setup instructions.**
 
 ---
 
@@ -217,7 +233,7 @@ After mapping all fields:
 All forms send these field names to Netlify:
 - `firstName`, `lastName`, `email`, `phone`, `company`
 - `customerType`, `referralSource`, `message`, `consent`
-- Form-specific: `product`, `issueType`, `priority`, `role`, `annualVolume`, `interest`, `location`, `preferredContact`, `productToInstall`, `demoType`, `preferredDate`, `preferredTime`
+- Form-specific: `product`, `issueType`, `priority`, `role`, `annualVolume`, `interest`, `location`, `preferredContact`, `productToInstall`, `demoType`, `preferredDate`, `preferredTime`, `city`, `state`, `zip`, `productsOfInterest`, `numberOfAttendees`, `portfolioSize`, `demoFocus`
 
 Make sure your Pipedrive custom field names match these exactly!
 

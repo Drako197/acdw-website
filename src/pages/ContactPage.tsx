@@ -1415,26 +1415,6 @@ export function ContactPage() {
                             />
                             <span>Mini + Sensor Bundle</span>
                           </label>
-                          <label className="contact-form-checkbox-label">
-                            <input
-                              type="checkbox"
-                              name="productsOfInterest"
-                              value="core-1.0"
-                              checked={formData.productsOfInterest?.includes('core-1.0') || false}
-                              onChange={(e) => {
-                                const current = formData.productsOfInterest || []
-                                const updated = e.target.checked
-                                  ? [...current, 'core-1.0']
-                                  : current.filter(p => p !== 'core-1.0')
-                                setFormData({ ...formData, productsOfInterest: updated })
-                                if (fieldErrors.productsOfInterest) {
-                                  setFieldErrors({ ...fieldErrors, productsOfInterest: '' })
-                                }
-                              }}
-                              className="contact-form-checkbox"
-                            />
-                            <span>Core 1.0</span>
-                          </label>
                         </div>
                         {fieldErrors.productsOfInterest && (
                           <p className="field-error-message">{fieldErrors.productsOfInterest}</p>
