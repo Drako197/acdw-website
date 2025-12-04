@@ -95,11 +95,7 @@ exports.handler = async (event, context) => {
     const rateLimitResult = checkRateLimit(ip, 'strict')
     
     if (!rateLimitResult.allowed) {
-      console.warn('🚫 Rate limit exceeded (unsubscribe)', {
-        ip,
-        limit: rateLimitResult.limit,
-        retryAfter: rateLimitResult.retryAfter
-      })
+      logRateLimit(ip, 'strict', rateLimitResult.limit, rateLimitResult.remaining, true)
       
       return {
         statusCode: 429,

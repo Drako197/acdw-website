@@ -8,6 +8,7 @@
 
 // Import utilities
 const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
+const { logAPIAccess, logRateLimit, EVENT_TYPES } = require('./utils/security-logger')
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 

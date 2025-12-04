@@ -11,6 +11,7 @@
 // Import utilities
 const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
 const { sanitizeAddress, sanitizeName, sanitizeZip } = require('./utils/input-sanitizer')
+const { logAPIAccess, logRateLimit, EVENT_TYPES } = require('./utils/security-logger')
 
 // Use Clerk Backend API
 // Note: For Netlify Functions, we'll use fetch to call Clerk's REST API

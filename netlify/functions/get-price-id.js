@@ -9,6 +9,7 @@
 
 // Import utilities
 const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
+const { logAPIAccess, logRateLimit, EVENT_TYPES } = require('./utils/security-logger')
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
@@ -96,6 +97,9 @@ exports.handler = async (event, context) => {
   }
 
   try {
+    // Log API access
+    logAPIAccess('/.netlify/functions/get-price-id', 'POST', ip, event.headers['user-agent'] || 'unknown', true)
+    
     // Parse request body
     const { product, quantity, role } = JSON.parse(event.body)
 

@@ -230,11 +230,7 @@ exports.handler = async (event, context) => {
   const rateLimitResult = checkRateLimit(ip, 'api')
   
   if (!rateLimitResult.allowed) {
-    console.warn('🚫 Rate limit exceeded (create-shipstation-order)', {
-      ip,
-      limit: rateLimitResult.limit,
-      retryAfter: rateLimitResult.retryAfter
-    })
+    logRateLimit(ip, 'api', rateLimitResult.limit, rateLimitResult.remaining, true)
     
     return {
       statusCode: 429,
