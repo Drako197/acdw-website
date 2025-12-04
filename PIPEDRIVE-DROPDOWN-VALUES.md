@@ -131,11 +131,11 @@
 ## **preferredTime** (Dropdown) - Demo Form Only
 
 **Exact values to add in Pipedrive:**
-- `morning`
-- `afternoon`
-- `flexible`
+- `Morning (9 AM - 12 PM)`
+- `Afternoon (12 PM - 4 PM)`
+- `Flexible`
 
-**Note:** No "evening" option - only these three.
+**Note:** These are the full descriptions that will be sent from the form. If you prefer shorter values, you can change the field to a Text field instead of Dropdown.
 
 ---
 

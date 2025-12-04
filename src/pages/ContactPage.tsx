@@ -1229,9 +1229,9 @@ export function ContactPage() {
                           className="input"
                         >
                           <option value="">Select time</option>
-                          <option value="morning">Morning (9 AM - 12 PM)</option>
-                          <option value="afternoon">Afternoon (12 PM - 4 PM)</option>
-                          <option value="flexible">Flexible</option>
+                          <option value="Morning (9 AM - 12 PM)">Morning (9 AM - 12 PM)</option>
+                          <option value="Afternoon (12 PM - 4 PM)">Afternoon (12 PM - 4 PM)</option>
+                          <option value="Flexible">Flexible</option>
                         </select>
                       </div>
                       
