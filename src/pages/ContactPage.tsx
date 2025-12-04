@@ -45,6 +45,13 @@ interface FormData {
   demoType?: string
   preferredDate?: string
   preferredTime?: string
+  city?: string
+  state?: string
+  zip?: string
+  productsOfInterest?: string[]
+  numberOfAttendees?: string
+  portfolioSize?: string
+  demoFocus?: string
 }
 
 const formTypeConfig: Record<ContactFormType, {
@@ -123,7 +130,8 @@ export function ContactPage() {
     customerType: '',
     message: '',
     referralSource: '',
-    consent: false
+    consent: false,
+    productsOfInterest: []
   })
 
   // Update form type when URL changes
@@ -374,7 +382,7 @@ export function ContactPage() {
       fieldsToValidate.push('location', 'productToInstall')
     }
     if (activeFormType === 'demo') {
-      fieldsToValidate.push('demoType')
+      fieldsToValidate.push('demoType', 'city', 'state', 'zip', 'numberOfAttendees')
     }
     
     // Validate each field
@@ -386,6 +394,14 @@ export function ContactPage() {
         setTouchedFields(prev => ({ ...prev, [fieldName]: true }))
       }
     })
+    
+    // Special validation for productsOfInterest (array field)
+    if (activeFormType === 'demo') {
+      if (!formData.productsOfInterest || formData.productsOfInterest.length === 0) {
+        errors.productsOfInterest = 'Please select at least one product of interest'
+        setTouchedFields(prev => ({ ...prev, productsOfInterest: true }))
+      }
+    }
     
     // If there are validation errors, stop submission
     if (Object.keys(errors).length > 0) {
@@ -448,6 +464,15 @@ export function ContactPage() {
     if (formData.demoType) submissionData.demoType = formData.demoType
     if (formData.preferredDate) submissionData.preferredDate = formData.preferredDate
     if (formData.preferredTime) submissionData.preferredTime = formData.preferredTime
+    if (formData.city) submissionData.city = formData.city
+    if (formData.state) submissionData.state = formData.state
+    if (formData.zip) submissionData.zip = formData.zip
+    if (formData.productsOfInterest && formData.productsOfInterest.length > 0) {
+      submissionData.productsOfInterest = formData.productsOfInterest.join(', ')
+    }
+    if (formData.numberOfAttendees) submissionData.numberOfAttendees = formData.numberOfAttendees
+    if (formData.portfolioSize) submissionData.portfolioSize = formData.portfolioSize
+    if (formData.demoFocus) submissionData.demoFocus = formData.demoFocus
     
     // Check if we're in development mode (multiple checks for reliability)
     const isDevelopment = 
@@ -492,7 +517,14 @@ export function ContactPage() {
         productToInstall: '',
         demoType: '',
         preferredDate: '',
-        preferredTime: ''
+        preferredTime: '',
+        city: '',
+        state: '',
+        zip: '',
+        productsOfInterest: [],
+        numberOfAttendees: '',
+        portfolioSize: '',
+        demoFocus: ''
       })
       // Reset errors
       setFieldErrors({})
@@ -538,7 +570,14 @@ export function ContactPage() {
           productToInstall: '',
           demoType: '',
           preferredDate: '',
-          preferredTime: ''
+          preferredTime: '',
+          city: '',
+          state: '',
+          zip: '',
+          productsOfInterest: [],
+          numberOfAttendees: '',
+          portfolioSize: '',
+          demoFocus: ''
         })
         // Reset errors
         setFieldErrors({})
@@ -1193,6 +1232,282 @@ export function ContactPage() {
                           <option value="morning">Morning (9 AM - 12 PM)</option>
                           <option value="afternoon">Afternoon (12 PM - 4 PM)</option>
                           <option value="flexible">Flexible</option>
+                        </select>
+                      </div>
+                      
+                      {/* Priority 1: Location Fields */}
+                      <div className="contact-form-grid">
+                        <div>
+                          <label htmlFor="demo-city" className="contact-form-label">
+                            City *
+                          </label>
+                          <input
+                            type="text"
+                            id="demo-city"
+                            name="city"
+                            value={formData.city || ''}
+                            onChange={handleInputChange}
+                            onBlur={handleBlur}
+                            required
+                            className={`input ${fieldErrors.city ? 'input-error' : ''}`}
+                            placeholder="City"
+                          />
+                          {fieldErrors.city && (
+                            <p className="field-error-message">{fieldErrors.city}</p>
+                          )}
+                        </div>
+                        <div>
+                          <label htmlFor="demo-state" className="contact-form-label">
+                            State *
+                          </label>
+                          <select
+                            id="demo-state"
+                            name="state"
+                            value={formData.state || ''}
+                            onChange={handleInputChange}
+                            onBlur={handleBlur}
+                            required
+                            className={`input ${fieldErrors.state ? 'input-error' : ''}`}
+                          >
+                            <option value="">Select state</option>
+                            <option value="FL">Florida</option>
+                            <option value="AL">Alabama</option>
+                            <option value="AK">Alaska</option>
+                            <option value="AZ">Arizona</option>
+                            <option value="AR">Arkansas</option>
+                            <option value="CA">California</option>
+                            <option value="CO">Colorado</option>
+                            <option value="CT">Connecticut</option>
+                            <option value="DE">Delaware</option>
+                            <option value="GA">Georgia</option>
+                            <option value="HI">Hawaii</option>
+                            <option value="ID">Idaho</option>
+                            <option value="IL">Illinois</option>
+                            <option value="IN">Indiana</option>
+                            <option value="IA">Iowa</option>
+                            <option value="KS">Kansas</option>
+                            <option value="KY">Kentucky</option>
+                            <option value="LA">Louisiana</option>
+                            <option value="ME">Maine</option>
+                            <option value="MD">Maryland</option>
+                            <option value="MA">Massachusetts</option>
+                            <option value="MI">Michigan</option>
+                            <option value="MN">Minnesota</option>
+                            <option value="MS">Mississippi</option>
+                            <option value="MO">Missouri</option>
+                            <option value="MT">Montana</option>
+                            <option value="NE">Nebraska</option>
+                            <option value="NV">Nevada</option>
+                            <option value="NH">New Hampshire</option>
+                            <option value="NJ">New Jersey</option>
+                            <option value="NM">New Mexico</option>
+                            <option value="NY">New York</option>
+                            <option value="NC">North Carolina</option>
+                            <option value="ND">North Dakota</option>
+                            <option value="OH">Ohio</option>
+                            <option value="OK">Oklahoma</option>
+                            <option value="OR">Oregon</option>
+                            <option value="PA">Pennsylvania</option>
+                            <option value="RI">Rhode Island</option>
+                            <option value="SC">South Carolina</option>
+                            <option value="SD">South Dakota</option>
+                            <option value="TN">Tennessee</option>
+                            <option value="TX">Texas</option>
+                            <option value="UT">Utah</option>
+                            <option value="VT">Vermont</option>
+                            <option value="VA">Virginia</option>
+                            <option value="WA">Washington</option>
+                            <option value="WV">West Virginia</option>
+                            <option value="WI">Wisconsin</option>
+                            <option value="WY">Wyoming</option>
+                            <option value="DC">District of Columbia</option>
+                          </select>
+                          {fieldErrors.state && (
+                            <p className="field-error-message">{fieldErrors.state}</p>
+                          )}
+                        </div>
+                        <div>
+                          <label htmlFor="demo-zip" className="contact-form-label">
+                            ZIP Code *
+                          </label>
+                          <input
+                            type="text"
+                            id="demo-zip"
+                            name="zip"
+                            value={formData.zip || ''}
+                            onChange={handleInputChange}
+                            onBlur={handleBlur}
+                            required
+                            className={`input ${fieldErrors.zip ? 'input-error' : ''}`}
+                            placeholder="ZIP Code"
+                            maxLength={5}
+                            pattern="[0-9]{5}"
+                          />
+                          {fieldErrors.zip && (
+                            <p className="field-error-message">{fieldErrors.zip}</p>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* Priority 1: Products of Interest */}
+                      <div>
+                        <label className="contact-form-label">
+                          Products of Interest *
+                        </label>
+                        <div className="contact-form-checkbox-group">
+                          <label className="contact-form-checkbox-label">
+                            <input
+                              type="checkbox"
+                              name="productsOfInterest"
+                              value="mini"
+                              checked={formData.productsOfInterest?.includes('mini') || false}
+                              onChange={(e) => {
+                                const current = formData.productsOfInterest || []
+                                const updated = e.target.checked
+                                  ? [...current, 'mini']
+                                  : current.filter(p => p !== 'mini')
+                                setFormData({ ...formData, productsOfInterest: updated })
+                                if (fieldErrors.productsOfInterest) {
+                                  setFieldErrors({ ...fieldErrors, productsOfInterest: '' })
+                                }
+                              }}
+                              className="contact-form-checkbox"
+                            />
+                            <span>AC Drain Wiz Mini</span>
+                          </label>
+                          <label className="contact-form-checkbox-label">
+                            <input
+                              type="checkbox"
+                              name="productsOfInterest"
+                              value="sensor"
+                              checked={formData.productsOfInterest?.includes('sensor') || false}
+                              onChange={(e) => {
+                                const current = formData.productsOfInterest || []
+                                const updated = e.target.checked
+                                  ? [...current, 'sensor']
+                                  : current.filter(p => p !== 'sensor')
+                                setFormData({ ...formData, productsOfInterest: updated })
+                                if (fieldErrors.productsOfInterest) {
+                                  setFieldErrors({ ...fieldErrors, productsOfInterest: '' })
+                                }
+                              }}
+                              className="contact-form-checkbox"
+                            />
+                            <span>AC Drain Wiz Sensor</span>
+                          </label>
+                          <label className="contact-form-checkbox-label">
+                            <input
+                              type="checkbox"
+                              name="productsOfInterest"
+                              value="bundle"
+                              checked={formData.productsOfInterest?.includes('bundle') || false}
+                              onChange={(e) => {
+                                const current = formData.productsOfInterest || []
+                                const updated = e.target.checked
+                                  ? [...current, 'bundle']
+                                  : current.filter(p => p !== 'bundle')
+                                setFormData({ ...formData, productsOfInterest: updated })
+                                if (fieldErrors.productsOfInterest) {
+                                  setFieldErrors({ ...fieldErrors, productsOfInterest: '' })
+                                }
+                              }}
+                              className="contact-form-checkbox"
+                            />
+                            <span>Mini + Sensor Bundle</span>
+                          </label>
+                          <label className="contact-form-checkbox-label">
+                            <input
+                              type="checkbox"
+                              name="productsOfInterest"
+                              value="core-1.0"
+                              checked={formData.productsOfInterest?.includes('core-1.0') || false}
+                              onChange={(e) => {
+                                const current = formData.productsOfInterest || []
+                                const updated = e.target.checked
+                                  ? [...current, 'core-1.0']
+                                  : current.filter(p => p !== 'core-1.0')
+                                setFormData({ ...formData, productsOfInterest: updated })
+                                if (fieldErrors.productsOfInterest) {
+                                  setFieldErrors({ ...fieldErrors, productsOfInterest: '' })
+                                }
+                              }}
+                              className="contact-form-checkbox"
+                            />
+                            <span>Core 1.0</span>
+                          </label>
+                        </div>
+                        {fieldErrors.productsOfInterest && (
+                          <p className="field-error-message">{fieldErrors.productsOfInterest}</p>
+                        )}
+                      </div>
+                      
+                      {/* Priority 1: Number of Attendees */}
+                      <div>
+                        <label htmlFor="numberOfAttendees" className="contact-form-label">
+                          Number of Attendees *
+                        </label>
+                        <select
+                          id="numberOfAttendees"
+                          name="numberOfAttendees"
+                          value={formData.numberOfAttendees || ''}
+                          onChange={handleInputChange}
+                          onBlur={handleBlur}
+                          required
+                          className={`input ${fieldErrors.numberOfAttendees ? 'input-error' : ''}`}
+                        >
+                          <option value="">Select number of attendees</option>
+                          <option value="1-2">1-2 people</option>
+                          <option value="3-5">3-5 people</option>
+                          <option value="6-10">6-10 people</option>
+                          <option value="10+">10+ people</option>
+                        </select>
+                        {fieldErrors.numberOfAttendees && (
+                          <p className="field-error-message">{fieldErrors.numberOfAttendees}</p>
+                        )}
+                      </div>
+                      
+                      {/* Priority 2: Portfolio Size */}
+                      <div>
+                        <label htmlFor="portfolioSize" className="contact-form-label">
+                          Property/Portfolio Size
+                        </label>
+                        <select
+                          id="portfolioSize"
+                          name="portfolioSize"
+                          value={formData.portfolioSize || ''}
+                          onChange={handleInputChange}
+                          className="input"
+                        >
+                          <option value="">Select portfolio size (if applicable)</option>
+                          <option value="1-10">1-10 units</option>
+                          <option value="11-50">11-50 units</option>
+                          <option value="51-100">51-100 units</option>
+                          <option value="101-250">101-250 units</option>
+                          <option value="251-500">251-500 units</option>
+                          <option value="500+">500+ units</option>
+                          <option value="not-applicable">Not Applicable</option>
+                        </select>
+                      </div>
+                      
+                      {/* Priority 2: Demo Focus */}
+                      <div>
+                        <label htmlFor="demoFocus" className="contact-form-label">
+                          Demo Focus
+                        </label>
+                        <select
+                          id="demoFocus"
+                          name="demoFocus"
+                          value={formData.demoFocus || ''}
+                          onChange={handleInputChange}
+                          className="input"
+                        >
+                          <option value="">What would you like to see? (optional)</option>
+                          <option value="installation">Installation Process</option>
+                          <option value="monitoring">Monitoring & Alerts</option>
+                          <option value="compliance">Code Compliance</option>
+                          <option value="roi">ROI & Business Case</option>
+                          <option value="product-features">Product Features Overview</option>
+                          <option value="custom">Custom/Other</option>
                         </select>
                       </div>
                     </>

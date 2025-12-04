@@ -114,11 +114,24 @@ const validateFormFields = (formType, formData) => {
         break
         
       case 'demo':
-        // Demo form requires: company, demoType
+        // Demo form requires: company, demoType, city, state, zip, numberOfAttendees, productsOfInterest
         const demoCompany = formData.get('company')?.trim() || ''
         const demoType = formData.get('demoType')?.trim() || ''
+        const demoCity = formData.get('city')?.trim() || ''
+        const demoState = formData.get('state')?.trim() || ''
+        const demoZip = formData.get('zip')?.trim() || ''
+        const numberOfAttendees = formData.get('numberOfAttendees')?.trim() || ''
+        const productsOfInterest = formData.get('productsOfInterest')?.trim() || ''
         if (!demoCompany) errors.push('Company is required')
         if (!demoType) errors.push('Demo type is required')
+        if (!demoCity) errors.push('City is required')
+        if (!demoState) errors.push('State is required')
+        if (!demoZip) errors.push('ZIP code is required')
+        if (demoZip && !/^\d{5}$/.test(demoZip)) {
+          errors.push('ZIP code must be 5 digits')
+        }
+        if (!numberOfAttendees) errors.push('Number of attendees is required')
+        if (!productsOfInterest) errors.push('At least one product of interest is required')
         break
         
       case 'general':

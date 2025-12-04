@@ -5548,6 +5548,18 @@
   @apply text-orange-600 font-medium;
 }
 
+.contact-form-checkbox-group {
+  @apply space-y-3 p-4 border border-gray-200 rounded-lg bg-gray-50;
+}
+
+.contact-form-checkbox-label {
+  @apply flex items-center gap-3 cursor-pointer hover:bg-gray-100 p-2 rounded transition-colors;
+}
+
+.contact-form-checkbox {
+  @apply h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded;
+}
+
 .contact-form-submit-button {
   @apply w-full btn btn-primary btn-lg;
 }
