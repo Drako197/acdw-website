@@ -822,6 +822,25 @@ export function ContactPage() {
 
                   {activeFormType === 'support' && (
                     <>
+                      <div>
+                        <label htmlFor="customerType" className="contact-form-label">
+                          Customer Type
+                        </label>
+                        <select
+                          id="customerType"
+                          name="customerType"
+                          value={formData.customerType}
+                          onChange={handleInputChange}
+                          className="input"
+                        >
+                          <option value="">Select your customer type</option>
+                          <option value="homeowner">Homeowner</option>
+                          <option value="hvac-contractor">HVAC Contractor</option>
+                          <option value="property-manager">Property Manager</option>
+                          <option value="city-official">City/Code Official</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
                       <div className="contact-form-grid">
                         <div>
                           <label htmlFor="product" className="contact-form-label">
@@ -893,6 +912,24 @@ export function ContactPage() {
 
                   {activeFormType === 'sales' && (
                     <>
+                      <div>
+                        <label htmlFor="customerType" className="contact-form-label">
+                          Customer Type
+                        </label>
+                        <select
+                          id="customerType"
+                          name="customerType"
+                          value={formData.customerType}
+                          onChange={handleInputChange}
+                          className="input"
+                        >
+                          <option value="">Select your customer type</option>
+                          <option value="hvac-contractor">HVAC Contractor</option>
+                          <option value="property-manager">Property Manager</option>
+                          <option value="city-official">City/Code Official</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
                       <div className="contact-form-grid">
                         <div>
                           <label htmlFor="role" className="contact-form-label">
@@ -1029,6 +1066,24 @@ export function ContactPage() {
 
                   {activeFormType === 'demo' && (
                     <>
+                      <div>
+                        <label htmlFor="customerType" className="contact-form-label">
+                          Customer Type
+                        </label>
+                        <select
+                          id="customerType"
+                          name="customerType"
+                          value={formData.customerType}
+                          onChange={handleInputChange}
+                          className="input"
+                        >
+                          <option value="">Select your customer type</option>
+                          <option value="hvac-contractor">HVAC Contractor</option>
+                          <option value="property-manager">Property Manager</option>
+                          <option value="city-official">City/Code Official</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
                       <div className="contact-form-grid">
                         <div>
                           <label htmlFor="demoType" className="contact-form-label">
