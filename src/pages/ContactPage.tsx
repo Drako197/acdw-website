@@ -926,7 +926,13 @@ export function ContactPage() {
                           <option value="">Select your customer type</option>
                           <option value="hvac-contractor">HVAC Contractor</option>
                           <option value="property-manager">Property Manager</option>
+                          <option value="distributor-wholesaler">Distributor/Wholesaler</option>
                           <option value="city-official">City/Code Official</option>
+                          <option value="facility-manager">Facility Manager</option>
+                          <option value="building-owner">Building Owner</option>
+                          <option value="maintenance-company">Maintenance Company</option>
+                          <option value="real-estate-developer">Real Estate Developer</option>
+                          <option value="construction-company">Construction Company</option>
                           <option value="other">Other</option>
                         </select>
                       </div>
@@ -945,10 +951,18 @@ export function ContactPage() {
                             className={`input ${fieldErrors.role ? 'input-error' : ''}`}
                           >
                             <option value="">Select your role</option>
+                            <option value="business-owner">Business Owner</option>
                             <option value="hvac-contractor">HVAC Contractor</option>
                             <option value="property-manager">Property Manager</option>
-                            <option value="retailer">Retailer</option>
+                            <option value="operations-manager">Operations Manager</option>
+                            <option value="facility-manager">Facility Manager</option>
+                            <option value="maintenance-manager">Maintenance Manager</option>
                             <option value="purchasing-manager">Purchasing Manager</option>
+                            <option value="procurement-manager">Procurement Manager</option>
+                            <option value="sales-manager">Sales Manager</option>
+                            <option value="project-manager">Project Manager</option>
+                            <option value="retailer">Retailer</option>
+                            <option value="distributor-wholesaler">Distributor/Wholesaler</option>
                             <option value="other">Other</option>
                           </select>
                           {fieldErrors.role && (
@@ -1080,7 +1094,13 @@ export function ContactPage() {
                           <option value="">Select your customer type</option>
                           <option value="hvac-contractor">HVAC Contractor</option>
                           <option value="property-manager">Property Manager</option>
+                          <option value="distributor-wholesaler">Distributor/Wholesaler</option>
                           <option value="city-official">City/Code Official</option>
+                          <option value="facility-manager">Facility Manager</option>
+                          <option value="building-owner">Building Owner</option>
+                          <option value="maintenance-company">Maintenance Company</option>
+                          <option value="real-estate-developer">Real Estate Developer</option>
+                          <option value="construction-company">Construction Company</option>
                           <option value="other">Other</option>
                         </select>
                       </div>
