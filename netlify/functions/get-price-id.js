@@ -7,6 +7,9 @@
  * Validates user role, calculates tier, and returns correct Stripe Price ID
  */
 
+// Import utilities
+const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 // Price ID mapping (set these in Stripe and update here)

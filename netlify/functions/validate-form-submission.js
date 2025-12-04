@@ -7,6 +7,10 @@
  * Supports multiple form types: contact, hero-email, promo
  */
 
+// Import utilities
+const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
+const { sanitizeFormData, validateFile } = require('./utils/input-sanitizer')
+
 // reCAPTCHA verification
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY
 
@@ -247,15 +251,55 @@ exports.handler = async (event, context) => {
     // Get reCAPTCHA token
     const recaptchaToken = formData.get('recaptcha-token') || ''
     
-    // Get email for validation
-    const email = formData.get('email') || ''
+    // Get email for validation (before sanitization)
+    const rawEmail = formData.get('email') || ''
     
     // Get request metadata for logging
-    const ip = event.headers['x-forwarded-for']?.split(',')[0] || 
-               event.headers['client-ip'] || 
-               event.headers['x-nf-client-connection-ip'] ||
-               'unknown'
+    const ip = getClientIP(event)
     const userAgent = event.headers['user-agent'] || 'unknown'
+
+    // Rate limiting check
+    const rateLimitType = formType === 'upgrade' ? 'strict' : 'form'
+    const rateLimitResult = checkRateLimit(ip, rateLimitType)
+    
+    if (!rateLimitResult.allowed) {
+      console.warn('🚫 Rate limit exceeded', {
+        ip,
+        formType,
+        limit: rateLimitResult.limit,
+        retryAfter: rateLimitResult.retryAfter
+      })
+      
+      return {
+        statusCode: 429,
+        headers: {
+          ...headers,
+          ...getRateLimitHeaders(rateLimitResult)
+        },
+        body: JSON.stringify({
+          success: false,
+          error: 'Too many requests. Please try again later.',
+          retryAfter: rateLimitResult.retryAfter
+        })
+      }
+    }
+
+    // Sanitize all text inputs (convert FormData to object for sanitization)
+    const formDataObj = {}
+    for (const [key, value] of formData.entries()) {
+      // Skip file fields - they're handled separately
+      if (key === 'photo' || value instanceof File || value instanceof Blob) {
+        formDataObj[key] = value
+      } else {
+        formDataObj[key] = String(value || '')
+      }
+    }
+    
+    // Sanitize form data
+    const sanitizedData = sanitizeFormData(formDataObj, formType)
+    
+    // Get sanitized email for validation
+    const email = sanitizedData.email || rawEmail
 
     // Validation errors array
     const errors = []
@@ -348,7 +392,8 @@ exports.handler = async (event, context) => {
       errors.push(emailValidation.error)
     }
 
-    // 3. Validate form-specific fields
+    // 3. Validate form-specific fields (using original formData for validation)
+    // Validation happens on original data, but we'll forward sanitized data
     const formErrors = validateFormFields(formType, formData)
     errors.push(...formErrors)
 
@@ -377,7 +422,7 @@ exports.handler = async (event, context) => {
       }
     }
 
-    // 5. If validation passed, forward to Netlify Forms
+    // 5. If validation passed, forward sanitized data to Netlify Forms
     const netlifyFormUrl = event.headers.host 
       ? `https://${event.headers.host}/`
       : 'https://acdrainwiz.com/'
@@ -389,13 +434,28 @@ exports.handler = async (event, context) => {
       hasRecaptcha: !!recaptchaToken
     })
     
-    // Forward the submission to Netlify Forms
+    // Build sanitized form data for forwarding
+    const sanitizedFormBody = new URLSearchParams()
+    for (const [key, value] of formData.entries()) {
+      // Skip honeypot and recaptcha fields (don't forward to Netlify)
+      if (key === 'bot-field' || key === 'honeypot-1' || key === 'honeypot-2' || key === 'recaptcha-token') {
+        continue
+      }
+      // Use sanitized value if available, otherwise use original
+      if (key in sanitizedData) {
+        sanitizedFormBody.append(key, sanitizedData[key])
+      } else {
+        sanitizedFormBody.append(key, value)
+      }
+    }
+    
+    // Forward the sanitized submission to Netlify Forms
     const forwardResponse = await fetch(netlifyFormUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: event.body, // Forward original form data
+      body: sanitizedFormBody.toString(), // Forward sanitized form data
     })
 
     if (forwardResponse.ok) {

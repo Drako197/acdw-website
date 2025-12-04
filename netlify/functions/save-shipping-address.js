@@ -8,6 +8,10 @@
  * The address is stored securely in Clerk's user metadata.
  */
 
+// Import utilities
+const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
+const { sanitizeAddress, sanitizeName, sanitizeZip } = require('./utils/input-sanitizer')
+
 // Use Clerk Backend API
 // Note: For Netlify Functions, we'll use fetch to call Clerk's REST API
 // Alternatively, we can use @clerk/backend package
@@ -35,9 +39,34 @@ exports.handler = async (event, context) => {
     }
   }
 
+  // Rate limiting check
+  const ip = getClientIP(event)
+  const rateLimitResult = checkRateLimit(ip, 'api')
+  
+  if (!rateLimitResult.allowed) {
+    console.warn('🚫 Rate limit exceeded (save-shipping-address)', {
+      ip,
+      limit: rateLimitResult.limit,
+      retryAfter: rateLimitResult.retryAfter
+    })
+    
+    return {
+      statusCode: 429,
+      headers: {
+        ...headers,
+        ...getRateLimitHeaders(rateLimitResult)
+      },
+      body: JSON.stringify({
+        error: 'Too many requests. Please try again later.',
+        retryAfter: rateLimitResult.retryAfter
+      })
+    }
+  }
+
   try {
-    // Parse request body
-    const { userId, shippingAddress } = JSON.parse(event.body)
+    // Parse and sanitize request body
+    const requestData = JSON.parse(event.body)
+    const { userId, shippingAddress } = requestData
 
     // Validate inputs
     if (!userId || !shippingAddress) {
@@ -47,9 +76,20 @@ exports.handler = async (event, context) => {
         body: JSON.stringify({ error: 'Missing required fields' }),
       }
     }
+    
+    // Sanitize address fields
+    const sanitizedAddress = {
+      name: sanitizeName(shippingAddress?.name || ''),
+      line1: sanitizeAddress(shippingAddress?.line1 || ''),
+      line2: shippingAddress?.line2 ? sanitizeAddress(shippingAddress.line2) : '',
+      city: sanitizeAddress(shippingAddress?.city || ''),
+      state: sanitizeAddress(shippingAddress?.state || ''),
+      postalCode: sanitizeZip(shippingAddress?.postalCode || ''),
+      country: shippingAddress?.country || 'US' // Default to US, validate against allowed countries
+    }
 
     // Validate shipping address fields
-    if (!shippingAddress.line1 || !shippingAddress.city || !shippingAddress.state || !shippingAddress.postalCode || !shippingAddress.country) {
+    if (!sanitizedAddress.line1 || !sanitizedAddress.city || !sanitizedAddress.state || !sanitizedAddress.postalCode || !sanitizedAddress.country) {
       return {
         statusCode: 400,
         headers,
@@ -124,7 +164,10 @@ exports.handler = async (event, context) => {
 
     return {
       statusCode: 200,
-      headers,
+      headers: {
+        ...headers,
+        ...getRateLimitHeaders(rateLimitResult)
+      },
       body: JSON.stringify({ 
         success: true,
         message: 'Shipping address saved to profile',

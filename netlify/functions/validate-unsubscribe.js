@@ -88,11 +88,32 @@ exports.handler = async (event, context) => {
     const recaptchaToken = formData.get('recaptcha-token') || ''
 
     // Get request metadata for logging
-    const ip = event.headers['x-forwarded-for']?.split(',')[0] || 
-               event.headers['client-ip'] || 
-               event.headers['x-nf-client-connection-ip'] ||
-               'unknown'
+    const ip = getClientIP(event)
     const userAgent = event.headers['user-agent'] || 'unknown'
+    
+    // Rate limiting check (strict for unsubscribe)
+    const rateLimitResult = checkRateLimit(ip, 'strict')
+    
+    if (!rateLimitResult.allowed) {
+      console.warn('🚫 Rate limit exceeded (unsubscribe)', {
+        ip,
+        limit: rateLimitResult.limit,
+        retryAfter: rateLimitResult.retryAfter
+      })
+      
+      return {
+        statusCode: 429,
+        headers: {
+          ...headers,
+          ...getRateLimitHeaders(rateLimitResult)
+        },
+        body: JSON.stringify({
+          success: false,
+          error: 'Too many requests. Please try again later.',
+          retryAfter: rateLimitResult.retryAfter
+        })
+      }
+    }
 
     // Validation errors array
     const errors = []
@@ -239,20 +260,31 @@ exports.handler = async (event, context) => {
       hasFeedback: !!feedback
     })
     
-    // Forward the submission to Netlify Forms
+    // Build sanitized form data for forwarding
+    const sanitizedFormBody = new URLSearchParams()
+    sanitizedFormBody.append('form-name', formData.get('form-name') || 'unsubscribe')
+    sanitizedFormBody.append('email', email) // Use sanitized email
+    sanitizedFormBody.append('consent', formData.get('consent') || 'no')
+    if (reason) sanitizedFormBody.append('reason', sanitizeString(reason, { maxLength: 500 }))
+    if (feedback) sanitizedFormBody.append('feedback', sanitizeMessage(feedback))
+    
+    // Forward the sanitized submission to Netlify Forms
     const forwardResponse = await fetch(netlifyFormUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: event.body, // Forward original form data
+      body: sanitizedFormBody.toString(), // Forward sanitized form data
     })
 
     if (forwardResponse.ok) {
-      // Success - return Netlify's response
+      // Success - return Netlify's response with rate limit headers
       return {
         statusCode: 200,
-        headers,
+        headers: {
+          ...headers,
+          ...getRateLimitHeaders(rateLimitResult)
+        },
         body: JSON.stringify({ 
           success: true,
           message: 'Unsubscribe request processed'

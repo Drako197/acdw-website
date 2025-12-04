@@ -5,6 +5,9 @@
  * Used on the success page to display order details
  */
 
+// Import utilities
+const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 exports.handler = async (event, context) => {
@@ -25,6 +28,30 @@ exports.handler = async (event, context) => {
       statusCode: 405,
       headers,
       body: JSON.stringify({ error: 'Method not allowed' }),
+    }
+  }
+  
+  // Rate limiting check
+  const ip = getClientIP(event)
+  const rateLimitResult = checkRateLimit(ip, 'api')
+  
+  if (!rateLimitResult.allowed) {
+    console.warn('🚫 Rate limit exceeded (get-checkout-session)', {
+      ip,
+      limit: rateLimitResult.limit,
+      retryAfter: rateLimitResult.retryAfter
+    })
+    
+    return {
+      statusCode: 429,
+      headers: {
+        ...headers,
+        ...getRateLimitHeaders(rateLimitResult)
+      },
+      body: JSON.stringify({
+        error: 'Too many requests. Please try again later.',
+        retryAfter: rateLimitResult.retryAfter
+      })
     }
   }
 
@@ -138,7 +165,10 @@ exports.handler = async (event, context) => {
 
     return {
       statusCode: 200,
-      headers,
+      headers: {
+        ...headers,
+        ...getRateLimitHeaders(rateLimitResult)
+      },
       body: JSON.stringify(orderDetails),
     }
   } catch (error) {

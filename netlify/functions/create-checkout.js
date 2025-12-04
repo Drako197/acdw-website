@@ -6,6 +6,9 @@
  * Creates a Stripe Checkout session with the correct price and quantity
  */
 
+// Import utilities
+const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 exports.handler = async (event, context) => {

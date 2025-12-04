@@ -224,6 +224,30 @@ exports.handler = async (event, context) => {
       body: JSON.stringify({ error: 'Method not allowed' }),
     }
   }
+  
+  // Rate limiting check (webhook endpoints get higher limits)
+  const ip = getClientIP(event)
+  const rateLimitResult = checkRateLimit(ip, 'api')
+  
+  if (!rateLimitResult.allowed) {
+    console.warn('🚫 Rate limit exceeded (create-shipstation-order)', {
+      ip,
+      limit: rateLimitResult.limit,
+      retryAfter: rateLimitResult.retryAfter
+    })
+    
+    return {
+      statusCode: 429,
+      headers: {
+        ...headers,
+        ...getRateLimitHeaders(rateLimitResult)
+      },
+      body: JSON.stringify({
+        error: 'Too many requests. Please try again later.',
+        retryAfter: rateLimitResult.retryAfter
+      })
+    }
+  }
 
   try {
     // Parse order data from request body
@@ -249,7 +273,10 @@ exports.handler = async (event, context) => {
 
     return {
       statusCode: 200,
-      headers,
+      headers: {
+        ...headers,
+        ...getRateLimitHeaders(rateLimitResult)
+      },
       body: JSON.stringify({ 
         success: true,
         orderId: result.orderId,
