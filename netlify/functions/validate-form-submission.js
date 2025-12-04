@@ -10,6 +10,14 @@
 // Import utilities
 const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
 const { sanitizeFormData, validateFile } = require('./utils/input-sanitizer')
+const { 
+  logFormSubmission, 
+  logBotDetected, 
+  logRecaptcha, 
+  logRateLimit, 
+  logInjectionAttempt,
+  EVENT_TYPES 
+} = require('./utils/security-logger')
 
 // reCAPTCHA verification
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY
@@ -263,12 +271,7 @@ exports.handler = async (event, context) => {
     const rateLimitResult = checkRateLimit(ip, rateLimitType)
     
     if (!rateLimitResult.allowed) {
-      console.warn('🚫 Rate limit exceeded', {
-        ip,
-        formType,
-        limit: rateLimitResult.limit,
-        retryAfter: rateLimitResult.retryAfter
-      })
+      logRateLimit(ip, rateLimitType, rateLimitResult.limit, rateLimitResult.remaining, true)
       
       return {
         statusCode: 429,
@@ -310,13 +313,7 @@ exports.handler = async (event, context) => {
       recaptchaResult = await verifyRecaptcha(recaptchaToken)
       
       if (!recaptchaResult.success) {
-        console.warn('🚫 reCAPTCHA verification failed', {
-          formType,
-          ip,
-          userAgent,
-          errors: recaptchaResult['error-codes'],
-          email: email.substring(0, 20) + '...'
-        })
+        logRecaptcha(false, 0, recaptchaResult.action, ip, userAgent, recaptchaResult['error-codes'])
         return {
           statusCode: 400,
           headers,
@@ -330,14 +327,7 @@ exports.handler = async (event, context) => {
       // Check score (0.0 = bot, 1.0 = human)
       const scoreThreshold = parseFloat(process.env.RECAPTCHA_SCORE_THRESHOLD || '0.5')
       if (recaptchaResult.score < scoreThreshold) {
-        console.warn('🚫 reCAPTCHA score too low', {
-          formType,
-          score: recaptchaResult.score,
-          threshold: scoreThreshold,
-          ip,
-          userAgent,
-          email: email.substring(0, 20) + '...'
-        })
+        logRecaptcha(true, recaptchaResult.score, recaptchaResult.action, ip, userAgent)
         return {
           statusCode: 400,
           headers,
@@ -348,12 +338,7 @@ exports.handler = async (event, context) => {
         }
       }
       
-      console.log('✅ reCAPTCHA verified', { 
-        formType,
-        score: recaptchaResult.score,
-        action: recaptchaResult.action,
-        email: email.substring(0, 20) + '...'
-      })
+      logRecaptcha(true, recaptchaResult.score, recaptchaResult.action, ip, userAgent)
     } else if (RECAPTCHA_SECRET_KEY) {
       // Token missing but reCAPTCHA is configured
       console.warn('⚠️ reCAPTCHA token missing (but configured)', {
@@ -367,14 +352,10 @@ exports.handler = async (event, context) => {
 
     // 1. Check honeypot fields (if filled, it's a bot)
     if (botField || honeypot1 || honeypot2) {
-      console.warn('🚫 Bot detected: honeypot fields filled', {
-        formType,
+      logBotDetected(formType, 'honeypot', ip, userAgent, {
         botField: !!botField,
         honeypot1: !!honeypot1,
         honeypot2: !!honeypot2,
-        ip,
-        userAgent,
-        email: email.substring(0, 20) + '...'
       })
       return {
         statusCode: 400,
@@ -427,12 +408,8 @@ exports.handler = async (event, context) => {
       ? `https://${event.headers.host}/`
       : 'https://acdrainwiz.com/'
     
-    console.log('✅ Validation passed, forwarding to Netlify Forms:', {
-      formType,
-      email: emailValidation.email?.substring(0, 20) + '...',
-      ip,
-      hasRecaptcha: !!recaptchaToken
-    })
+    // Log successful validation (will log submission after forwarding)
+    logFormSubmission(formType, email, ip, userAgent, true)
     
     // Build sanitized form data for forwarding
     const sanitizedFormBody = new URLSearchParams()
