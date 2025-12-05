@@ -97,6 +97,26 @@ exports.handler = async (event, context) => {
   }
 
   try {
+    // Get client IP
+    const ip = getClientIP(event)
+    
+    // Check rate limit
+    const rateLimitResult = checkRateLimit(ip, 'api')
+    if (!rateLimitResult.allowed) {
+      logRateLimit(ip, 'api', '/.netlify/functions/get-price-id')
+      return {
+        statusCode: 429,
+        headers: {
+          ...headers,
+          ...getRateLimitHeaders(rateLimitResult)
+        },
+        body: JSON.stringify({ 
+          error: 'Too many requests',
+          retryAfter: rateLimitResult.retryAfter
+        }),
+      }
+    }
+    
     // Log API access
     logAPIAccess('/.netlify/functions/get-price-id', 'POST', ip, event.headers['user-agent'] || 'unknown', true)
     
