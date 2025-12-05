@@ -77,75 +77,143 @@ export function ShippingPolicyPage() {
 
           {/* Section 2: Shipping Methods */}
           <div id="shipping-methods" className="mb-12">
-            <h2 className="legal-section-title">2. Shipping Methods & Delivery Timeframes</h2>
+            <h2 className="legal-section-title">2. Shipping Methods & Service</h2>
             <div className="prose max-w-none">
-              <p className="text-gray-700 mb-4">We offer the following shipping options:</p>
+              <p className="text-gray-700 mb-6">
+                We ship via <strong>UPS or FedEx Ground Service</strong> for all orders. The carrier is automatically 
+                selected based on the best rate and service for your location.
+              </p>
               
-              {/* US Shipping */}
-              <div className="bg-gray-50 rounded-lg p-6 mb-4">
-                <h3 className="font-semibold text-gray-900 mb-3">Standard Shipping (United States)</h3>
+              <div className="bg-gray-50 rounded-lg p-6 mb-6">
+                <h3 className="font-semibold text-gray-900 mb-3">Standard Ground Shipping</h3>
                 <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                  <li><strong>Cost:</strong> $15.00</li>
-                  <li><strong>Delivery Time:</strong> 5-7 business days</li>
-                  <li><strong>Carrier:</strong> UPS or FedEx</li>
+                  <li><strong>Service Level:</strong> Standard Ground (no expedited options available)</li>
+                  <li><strong>Carrier:</strong> UPS or FedEx (automatically selected)</li>
+                  <li><strong>Origin:</strong> Ships from Boca Raton, Florida (ZIP 33486)</li>
                   <li><strong>Tracking:</strong> Included - tracking number provided via email</li>
+                  <li><strong>Insurance:</strong> All shipments are insured</li>
                 </ul>
               </div>
 
-              {/* Canada Shipping */}
-              <div className="bg-gray-50 rounded-lg p-6 mb-4">
-                <h3 className="font-semibold text-gray-900 mb-3">Standard Shipping (Canada)</h3>
-                <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                  <li><strong>Cost:</strong> $20.00</li>
-                  <li><strong>Delivery Time:</strong> 7-14 business days</li>
-                  <li><strong>Carrier:</strong> UPS or FedEx</li>
-                  <li><strong>Tracking:</strong> Included - tracking number provided via email</li>
-                  <li><strong>Customs & Duties:</strong> Additional fees may apply and are the responsibility of the customer</li>
-                </ul>
-              </div>
-
-              {/* Free Shipping */}
-              <div className="bg-orange-50 rounded-lg p-6 mb-4">
-                <h3 className="font-semibold text-orange-900 mb-3">Free Shipping</h3>
-                <p className="text-gray-700 mb-2">
-                  Free standard shipping is available for orders over <strong>$50.00</strong> (before tax).
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                <h3 className="font-semibold text-blue-900 mb-3">💡 Shipping Cost Calculation</h3>
+                <p className="text-gray-700 mb-3">
+                  Shipping costs are calculated based on <strong>package weight</strong> and <strong>shipping distance</strong> 
+                  from our Boca Raton, Florida facility to your delivery address.
                 </p>
                 <p className="text-gray-700 text-sm">
-                  <strong>Note:</strong> Free shipping applies to standard shipping only. Express shipping options (if available) 
-                  may have different thresholds or may not be eligible for free shipping.
+                  Exact shipping costs are displayed during checkout based on your shipping address. 
+                  See Section 3 below for detailed zone-based pricing.
                 </p>
-              </div>
-
-              {/* Express Shipping (if applicable) */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="font-semibold text-gray-900 mb-3">Express Shipping (Optional)</h3>
-                <p className="text-gray-700">
-                  <strong>Note:</strong> If you plan to offer express shipping, add details here:
-                </p>
-                <ul className="list-disc pl-6 space-y-2 text-gray-700 mt-2">
-                  <li>Cost: [TO BE DETERMINED]</li>
-                  <li>Delivery Time: [TO BE DETERMINED - e.g., 2-3 business days]</li>
-                  <li>Availability: [TO BE DETERMINED - e.g., Continental US only]</li>
-                </ul>
               </div>
             </div>
           </div>
 
           {/* Section 3: Shipping Costs */}
           <div id="shipping-costs" className="mb-12">
-            <h2 className="legal-section-title">3. Shipping Costs</h2>
+            <h2 className="legal-section-title">3. Shipping Costs & Zones</h2>
             <div className="prose max-w-none">
-              <p className="text-gray-700 mb-4">Shipping costs are calculated based on:</p>
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>Destination (United States, Canada, International)</li>
-                <li>Shipping method selected (Standard, Express, etc.)</li>
-                <li>Order weight and dimensions</li>
-                <li>Free shipping eligibility (orders over $50)</li>
-              </ul>
-              <p className="text-gray-700 mt-4">
-                Shipping costs are displayed during checkout before you complete your purchase. 
-                You can review shipping options and costs before finalizing your order.
+              <p className="text-gray-700 mb-6">
+                Shipping costs are calculated based on <strong>shipping distance (zones)</strong> from our 
+                Boca Raton, Florida facility (ZIP 33486) and <strong>package weight</strong>.
               </p>
+
+              {/* Zone-Based Pricing Table */}
+              <div className="bg-white border border-gray-200 rounded-lg overflow-hidden mb-6">
+                <div className="bg-orange-600 px-6 py-3">
+                  <h3 className="font-semibold text-white text-lg">Zone-Based Shipping Rates</h3>
+                </div>
+                <div className="p-6">
+                  {/* Zone 1-2 */}
+                  <div className="mb-6">
+                    <h4 className="font-semibold text-gray-900 mb-2">Zone 1-2: Local/Regional ($9-$13)</h4>
+                    <p className="text-sm text-gray-600 mb-2"><strong>States:</strong> Florida, Georgia, South Carolina, Alabama</p>
+                    <p className="text-sm text-gray-600 mb-2"><strong>Delivery:</strong> 3-5 business days</p>
+                    <ul className="text-sm text-gray-700 space-y-1">
+                      <li>• Single unit (Mini or Sensor): <strong>$9.00</strong></li>
+                      <li>• Two units (2.5-4 lbs): <strong>$11.00</strong></li>
+                      <li>• Three units (4.5+ lbs): <strong>$13.00</strong></li>
+                    </ul>
+                  </div>
+
+                  <div className="border-t border-gray-200 my-4"></div>
+
+                  {/* Zone 3-4 */}
+                  <div className="mb-6">
+                    <h4 className="font-semibold text-gray-900 mb-2">Zone 3-4: Mid-Range ($11-$15)</h4>
+                    <p className="text-sm text-gray-600 mb-2"><strong>States:</strong> North Carolina, Tennessee, Mississippi, Louisiana, Texas, Arkansas, Oklahoma</p>
+                    <p className="text-sm text-gray-600 mb-2"><strong>Delivery:</strong> 4-6 business days</p>
+                    <ul className="text-sm text-gray-700 space-y-1">
+                      <li>• Single unit (Mini or Sensor): <strong>$11.00</strong></li>
+                      <li>• Two units (2.5-4 lbs): <strong>$13.00</strong></li>
+                      <li>• Three units (4.5+ lbs): <strong>$15.00</strong></li>
+                    </ul>
+                  </div>
+
+                  <div className="border-t border-gray-200 my-4"></div>
+
+                  {/* Zone 5-6 */}
+                  <div className="mb-6">
+                    <h4 className="font-semibold text-gray-900 mb-2">Zone 5-6: Long Distance ($13.50-$17.50)</h4>
+                    <p className="text-sm text-gray-600 mb-2"><strong>States:</strong> Mid-Atlantic, Midwest (VA, WV, KY, MO, KS, NE, IA, IL, IN, OH, MI, WI, MN, ND, SD)</p>
+                    <p className="text-sm text-gray-600 mb-2"><strong>Delivery:</strong> 5-7 business days</p>
+                    <ul className="text-sm text-gray-700 space-y-1">
+                      <li>• Single unit (Mini or Sensor): <strong>$13.50</strong></li>
+                      <li>• Two units (2.5-4 lbs): <strong>$15.50</strong></li>
+                      <li>• Three units (4.5+ lbs): <strong>$17.50</strong></li>
+                    </ul>
+                  </div>
+
+                  <div className="border-t border-gray-200 my-4"></div>
+
+                  {/* Zone 7-8 */}
+                  <div className="mb-6">
+                    <h4 className="font-semibold text-gray-900 mb-2">Zone 7-8: Cross-Country ($16.50-$20.50)</h4>
+                    <p className="text-sm text-gray-600 mb-2"><strong>States:</strong> West Coast, Pacific Northwest, Northeast (WA, OR, CA, NV, AZ, UT, ID, MT, WY, CO, NM, ME, NH, VT, MA, RI, CT, NY, PA, NJ, DE, MD, DC, AK, HI)</p>
+                    <p className="text-sm text-gray-600 mb-2"><strong>Delivery:</strong> 5-7 business days (7-10 for AK/HI)</p>
+                    <ul className="text-sm text-gray-700 space-y-1">
+                      <li>• Single unit (Mini or Sensor): <strong>$16.50</strong></li>
+                      <li>• Two units (2.5-4 lbs): <strong>$18.50</strong></li>
+                      <li>• Three units (4.5+ lbs): <strong>$20.50</strong></li>
+                    </ul>
+                  </div>
+
+                  <div className="border-t border-gray-200 my-4"></div>
+
+                  {/* Canada */}
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Canada: All Provinces ($20-$28)</h4>
+                    <p className="text-sm text-gray-600 mb-2"><strong>Delivery:</strong> 7-14 business days</p>
+                    <ul className="text-sm text-gray-700 space-y-1">
+                      <li>• Single unit (Mini or Sensor): <strong>$20.00</strong></li>
+                      <li>• Two units (2.5-4 lbs): <strong>$24.00</strong></li>
+                      <li>• Three units (4.5+ lbs): <strong>$28.00</strong></li>
+                    </ul>
+                    <p className="text-sm text-gray-600 mt-2">
+                      <strong>Note:</strong> Additional customs duties and taxes may apply (customer responsibility)
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-sm text-gray-700">
+                  <strong>📦 Product Weights:</strong> AC Drain Wiz Mini (~1.6 lbs with packaging) | AC Drain Wiz Sensor (~1.6 lbs with packaging)
+                </p>
+                <p className="text-sm text-gray-700 mt-2">
+                  <strong>💡 Note:</strong> Exact shipping cost is calculated and displayed during checkout based on your delivery address.
+                  Actual costs may vary slightly (+/- $1-2) based on precise destination and current carrier rates.
+                </p>
+              </div>
+
+              <p className="text-gray-700 mt-6">
+                <strong>No Additional Fees:</strong>
+              </p>
+              <ul className="list-disc pl-6 space-y-2 text-gray-700">
+                <li>Same shipping rate for residential and commercial addresses</li>
+                <li>No quantity-based shipping discounts</li>
+                <li>No free shipping thresholds</li>
+              </ul>
             </div>
           </div>
 
@@ -157,10 +225,16 @@ export function ShippingPolicyPage() {
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
                 <li><strong>United States:</strong> All 50 states, including Alaska and Hawaii</li>
                 <li><strong>Canada:</strong> All provinces and territories</li>
-                <li><strong>International:</strong> [TO BE DETERMINED - Specify if you ship internationally]</li>
               </ul>
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-4">
+                <p className="text-sm text-gray-700">
+                  <strong>International Shipping:</strong> We currently only ship to the United States and Canada. 
+                  If you're interested in international shipping, please contact us at{' '}
+                  <a href="mailto:support@acdrainwiz.com" className="text-orange-600 hover:text-orange-700">support@acdrainwiz.com</a>.
+                </p>
+              </div>
               <p className="text-gray-700 mt-4">
-                <strong>Note:</strong> Some remote locations may have extended delivery times or additional shipping fees. 
+                <strong>Note:</strong> Some remote locations (Alaska, Hawaii, Northern Canada) may have extended delivery times. 
                 Contact us at <a href="mailto:support@acdrainwiz.com" className="text-orange-600 hover:text-orange-700">support@acdrainwiz.com</a> if you have questions about shipping to your location.
               </p>
             </div>

@@ -9,6 +9,7 @@
 // Import utilities
 const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
 const { logAPIAccess, logRateLimit, EVENT_TYPES } = require('./utils/security-logger')
+const { calculateShipping, parseProducts } = require('./utils/shipping-calculator.cjs')
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
@@ -35,7 +36,7 @@ exports.handler = async (event, context) => {
 
   try {
     // Parse request body
-    const { priceId, quantity, product, userEmail, userId, isGuest } = JSON.parse(event.body)
+    const { priceId, quantity, product, userEmail, userId, isGuest, shippingAddress } = JSON.parse(event.body)
 
     // Validate inputs
     if (!priceId || !quantity || !product) {
@@ -78,17 +79,154 @@ exports.handler = async (event, context) => {
       }
     }
 
-    // Calculate shipping cost (will be updated based on address in shipping rate options)
-    // For now, we'll use Stripe shipping rate options (see setup instructions below)
-    // Or we can add shipping as a line item after address is collected
+    // Calculate shipping cost dynamically
+    // If shipping address is provided, calculate exact cost
+    // Otherwise, show zone-based options
+    let shippingOptions = []
     
-    // Shipping rates configuration
-    // Option 1: Use Stripe Shipping Rate Options (recommended)
-    // Create shipping rates in Stripe Dashboard, then reference them here
-    // Option 2: Add shipping as line item (requires knowing address first)
-    
-    // For now, we'll enable shipping address collection and use shipping rate options
-    // You'll need to create shipping rates in Stripe Dashboard first
+    if (shippingAddress && shippingAddress.state && shippingAddress.country) {
+      // Calculate exact shipping cost
+      console.log('Calculating shipping for address:', shippingAddress)
+      
+      const products = {
+        [product]: qty,
+      }
+      
+      const shippingResult = await calculateShipping(shippingAddress, products)
+      console.log('Shipping calculation result:', shippingResult)
+      
+      // Create single shipping option with calculated cost
+      shippingOptions = [
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: {
+              amount: Math.round(shippingResult.cost * 100), // Convert to cents
+              currency: 'usd',
+            },
+            display_name: shippingResult.method === 'api' 
+              ? 'Standard Ground Shipping' 
+              : 'Standard Ground Shipping (Estimated)',
+            delivery_estimate: {
+              minimum: {
+                unit: 'business_day',
+                value: shippingAddress.country === 'CA' ? 7 : 5,
+              },
+              maximum: {
+                unit: 'business_day',
+                value: shippingAddress.country === 'CA' ? 14 : 7,
+              },
+            },
+          },
+        },
+      ]
+    } else {
+      // No address provided, show zone-based options
+      console.log('No shipping address provided, using zone-based options')
+      
+      shippingOptions = [
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: {
+              amount: 900, // $9.00 - Zone 1-2 (FL, GA, SC, AL)
+              currency: 'usd',
+            },
+            display_name: 'Zone 1-2: FL, GA, SC, AL',
+            delivery_estimate: {
+              minimum: {
+                unit: 'business_day',
+                value: 3,
+              },
+              maximum: {
+                unit: 'business_day',
+                value: 5,
+              },
+            },
+          },
+        },
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: {
+              amount: 1100, // $11.00 - Zone 3-4
+              currency: 'usd',
+            },
+            display_name: 'Zone 3-4: NC, TN, MS, LA, TX',
+            delivery_estimate: {
+              minimum: {
+                unit: 'business_day',
+                value: 4,
+              },
+              maximum: {
+                unit: 'business_day',
+                value: 6,
+              },
+            },
+          },
+        },
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: {
+              amount: 1350, // $13.50 - Zone 5-6
+              currency: 'usd',
+            },
+            display_name: 'Zone 5-6: Mid-Atlantic, Midwest',
+            delivery_estimate: {
+              minimum: {
+                unit: 'business_day',
+                value: 5,
+              },
+              maximum: {
+                unit: 'business_day',
+                value: 7,
+              },
+            },
+          },
+        },
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: {
+              amount: 1650, // $16.50 - Zone 7-8
+              currency: 'usd',
+            },
+            display_name: 'Zone 7-8: West Coast, Northeast',
+            delivery_estimate: {
+              minimum: {
+                unit: 'business_day',
+                value: 5,
+              },
+              maximum: {
+                unit: 'business_day',
+                value: 7,
+              },
+            },
+          },
+        },
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: {
+              amount: 2000, // $20.00 - Canada
+              currency: 'usd',
+            },
+            display_name: 'Canada - All Provinces',
+            delivery_estimate: {
+              minimum: {
+                unit: 'business_day',
+                value: 7,
+              },
+              maximum: {
+                unit: 'business_day',
+                value: 14,
+              },
+            },
+          },
+        },
+      ]
+    }
     
     // Create Stripe Checkout session
     const session = await stripe.checkout.sessions.create({
@@ -106,55 +244,31 @@ exports.handler = async (event, context) => {
       // For guests, Stripe will collect email during checkout
       ...(userEmail && { customer_email: userEmail }),
       
-      // Enable shipping address collection
-      shipping_address_collection: {
-        allowed_countries: ['US', 'CA'], // US and Canada only
-      },
+      // Enable shipping address collection (unless address already provided)
+      ...(!shippingAddress && {
+        shipping_address_collection: {
+          allowed_countries: ['US', 'CA'], // US and Canada only
+        },
+      }),
       
-      // Shipping rate options - zone-based pricing
-      // Note: Stripe will show all options; customer selects based on their address
-      shipping_options: [
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: {
-              amount: 1500, // $15.00 in cents for US
-              currency: 'usd',
-            },
-            display_name: 'Standard Shipping (US)',
-            delivery_estimate: {
-              minimum: {
-                unit: 'business_day',
-                value: 5,
-              },
-              maximum: {
-                unit: 'business_day',
-                value: 7,
-              },
-            },
+      // Pre-fill shipping address if provided
+      ...(shippingAddress && {
+        shipping_address_collection: null,
+        shipping_details: {
+          address: {
+            line1: shippingAddress.line1 || '',
+            line2: shippingAddress.line2 || '',
+            city: shippingAddress.city || '',
+            state: shippingAddress.state || '',
+            postal_code: shippingAddress.postal_code || shippingAddress.zip || '',
+            country: shippingAddress.country || 'US',
           },
+          name: shippingAddress.name || '',
         },
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: {
-              amount: 2000, // $20.00 in cents for Canada
-              currency: 'usd',
-            },
-            display_name: 'Standard Shipping (Canada)',
-            delivery_estimate: {
-              minimum: {
-                unit: 'business_day',
-                value: 7,
-              },
-              maximum: {
-                unit: 'business_day',
-                value: 14,
-              },
-            },
-          },
-        },
-      ],
+      }),
+      
+      // Dynamic shipping options based on calculation or zone-based fallback
+      shipping_options: shippingOptions,
       
       metadata: {
         userId: userId || '',
