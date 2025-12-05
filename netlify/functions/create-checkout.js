@@ -80,20 +80,21 @@ exports.handler = async (event, context) => {
     }
 
     // Calculate shipping cost dynamically
-    // If shipping address is provided, calculate exact cost
-    // Otherwise, show zone-based options
+    // If shipping address is provided (logged-in user with saved address), calculate exact cost
+    // Otherwise, enable Stripe's dynamic shipping calculation webhook
     let shippingOptions = []
+    let shippingAddressCollection = {}
     
     if (shippingAddress && shippingAddress.state && shippingAddress.country) {
-      // Calculate exact shipping cost
-      console.log('Calculating shipping for address:', shippingAddress)
+      // Logged-in user with saved address: pre-calculate shipping
+      console.log('User has saved address, pre-calculating shipping:', shippingAddress)
       
       const products = {
         [product]: qty,
       }
       
       const shippingResult = await calculateShipping(shippingAddress, products)
-      console.log('Shipping calculation result:', shippingResult)
+      console.log('Pre-calculated shipping result:', shippingResult)
       
       // Create single shipping option with calculated cost
       shippingOptions = [
@@ -104,178 +105,51 @@ exports.handler = async (event, context) => {
               amount: Math.round(shippingResult.cost * 100), // Convert to cents
               currency: 'usd',
             },
-            display_name: shippingResult.method === 'api' 
-              ? 'Standard Ground Shipping' 
-              : 'Standard Ground Shipping (Estimated)',
+            display_name: 'Standard Ground Shipping',
             delivery_estimate: {
               minimum: {
                 unit: 'business_day',
-                value: shippingAddress.country === 'CA' ? 7 : 5,
+                value: shippingAddress.country === 'CA' ? 7 : 3,
               },
               maximum: {
                 unit: 'business_day',
                 value: shippingAddress.country === 'CA' ? 14 : 7,
               },
             },
+            metadata: {
+              zone: shippingAddress.state,
+              method: shippingResult.method,
+            },
           },
         },
       ]
+      
+      // Pre-fill shipping address
+      shippingAddressCollection = null
     } else {
-      // No address provided, calculate zone-based options for this quantity
-      console.log('No shipping address provided, calculating zone-based options for quantity:', qty)
+      // No saved address: enable Stripe's dynamic shipping calculation
+      console.log('No saved address, enabling dynamic shipping calculation via webhook')
       
-      // Calculate shipping cost for each zone based on quantity
-      const products = { [product]: qty }
+      // Enable shipping address collection with dynamic calculation
+      shippingAddressCollection = {
+        allowed_countries: ['US', 'CA'], // US and Canada only
+      }
       
-      // Zone 1-2 (FL, GA, SC, AL)
-      const zone1Cost = await calculateShipping(
-        { state: 'FL', country: 'US' }, 
-        products
-      )
-      
-      // Zone 3-4 (NC, TN, MS, LA, TX)
-      const zone2Cost = await calculateShipping(
-        { state: 'TX', country: 'US' }, 
-        products
-      )
-      
-      // Zone 5-6 (Mid-Atlantic, Midwest)
-      const zone3Cost = await calculateShipping(
-        { state: 'IL', country: 'US' }, 
-        products
-      )
-      
-      // Zone 7-8 (West Coast, Northeast)
-      const zone4Cost = await calculateShipping(
-        { state: 'CA', country: 'US' }, 
-        products
-      )
-      
-      // Canada
-      const canadaCost = await calculateShipping(
-        { state: 'ON', country: 'CA' }, 
-        products
-      )
-      
-      console.log('Zone-based shipping costs calculated:', {
-        zone1: zone1Cost.cost,
-        zone2: zone2Cost.cost,
-        zone3: zone3Cost.cost,
-        zone4: zone4Cost.cost,
-        canada: canadaCost.cost,
-      })
-      
-      shippingOptions = [
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: {
-              amount: Math.round(zone1Cost.cost * 100), // Convert to cents
-              currency: 'usd',
-            },
-            display_name: 'Zone 1-2: FL, GA, SC, AL',
-            delivery_estimate: {
-              minimum: {
-                unit: 'business_day',
-                value: 3,
-              },
-              maximum: {
-                unit: 'business_day',
-                value: 5,
-              },
-            },
-          },
-        },
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: {
-              amount: Math.round(zone2Cost.cost * 100), // Convert to cents
-              currency: 'usd',
-            },
-            display_name: 'Zone 3-4: NC, TN, MS, LA, TX',
-            delivery_estimate: {
-              minimum: {
-                unit: 'business_day',
-                value: 4,
-              },
-              maximum: {
-                unit: 'business_day',
-                value: 6,
-              },
-            },
-          },
-        },
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: {
-              amount: Math.round(zone3Cost.cost * 100), // Convert to cents
-              currency: 'usd',
-            },
-            display_name: 'Zone 5-6: Mid-Atlantic, Midwest',
-            delivery_estimate: {
-              minimum: {
-                unit: 'business_day',
-                value: 5,
-              },
-              maximum: {
-                unit: 'business_day',
-                value: 7,
-              },
-            },
-          },
-        },
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: {
-              amount: Math.round(zone4Cost.cost * 100), // Convert to cents
-              currency: 'usd',
-            },
-            display_name: 'Zone 7-8: West Coast, Northeast',
-            delivery_estimate: {
-              minimum: {
-                unit: 'business_day',
-                value: 5,
-              },
-              maximum: {
-                unit: 'business_day',
-                value: 7,
-              },
-            },
-          },
-        },
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: {
-              amount: Math.round(canadaCost.cost * 100), // Convert to cents
-              currency: 'usd',
-            },
-            display_name: 'Canada - All Provinces',
-            delivery_estimate: {
-              minimum: {
-                unit: 'business_day',
-                value: 7,
-              },
-              maximum: {
-                unit: 'business_day',
-                value: 14,
-              },
-            },
-          },
-        },
-      ]
+      // Set shipping_options to empty - Stripe will call our webhook
+      shippingOptions = []
     }
     
     // Create Stripe Checkout session
-    const session = await stripe.checkout.sessions.create({
+    const sessionConfig = {
       payment_method_types: ['card'],
       line_items: [
         {
           price: priceId,
           quantity: qty,
+          // Add product metadata for shipping calculation webhook
+          adjustable_quantity: {
+            enabled: false, // Disable quantity adjustment in Stripe checkout
+          },
         },
       ],
       mode: 'payment',
@@ -285,31 +159,31 @@ exports.handler = async (event, context) => {
       // For guests, Stripe will collect email during checkout
       ...(userEmail && { customer_email: userEmail }),
       
-      // Enable shipping address collection (unless address already provided)
-      ...(!shippingAddress && {
-        shipping_address_collection: {
-          allowed_countries: ['US', 'CA'], // US and Canada only
-        },
-      }),
+      metadata: {
+        userId: userId || '',
+        product,
+        quantity: qty.toString(),
+        isGuest: isGuest ? 'true' : 'false',
+      },
+    }
+
+    // Add shipping configuration based on whether we have a saved address
+    if (shippingAddress && shippingAddress.state && shippingAddress.country) {
+      // Logged-in user with saved address: pre-calculated shipping
+      console.log('Using pre-calculated shipping rate')
+      sessionConfig.shipping_options = shippingOptions
+      sessionConfig.shipping_address_collection = null
+    } else {
+      // Guest or no saved address: enable dynamic calculation
+      console.log('Enabling dynamic shipping calculation via Stripe webhook')
+      sessionConfig.shipping_address_collection = shippingAddressCollection
       
-      // Pre-fill shipping address if provided
-      ...(shippingAddress && {
-        shipping_address_collection: null,
-        shipping_details: {
-          address: {
-            line1: shippingAddress.line1 || '',
-            line2: shippingAddress.line2 || '',
-            city: shippingAddress.city || '',
-            state: shippingAddress.state || '',
-            postal_code: shippingAddress.postal_code || shippingAddress.zip || '',
-            country: shippingAddress.country || 'US',
-          },
-          name: shippingAddress.name || '',
-        },
-      }),
-      
-      // Dynamic shipping options based on calculation or zone-based fallback
-      shipping_options: shippingOptions,
+      // Note: Stripe will automatically call our webhook configured in Stripe Dashboard
+      // Webhook endpoint: /.netlify/functions/calculate-shipping-rate
+      // This is configured in Stripe Dashboard → Settings → Checkout settings → Shipping rate calculation
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionConfig)
       
       metadata: {
         userId: userId || '',
