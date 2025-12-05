@@ -83,6 +83,19 @@ export function Footer() {
                 <li><Link to="/compliance" className="footer-link">Compliance Resources</Link></li>
               </ul>
             </div>
+
+            {/* Legal */}
+            <div className="footer-section">
+              <h3 className="footer-section-title">
+                Legal
+              </h3>
+              <ul className="footer-link-list">
+                <li><Link to="/privacy-policy" className="footer-link">Privacy Policy</Link></li>
+                <li><Link to="/return-refund-policy" className="footer-link">Return & Refund</Link></li>
+                <li><Link to="/shipping-policy" className="footer-link">Shipping Policy</Link></li>
+                <li><Link to="/warranty-policy" className="footer-link">Warranty Policy</Link></li>
+              </ul>
+            </div>
           </div>
         </div>
 

@@ -8437,3 +8437,22 @@
   @apply h-5 w-5 mr-2;
 }
 
+/* Legal Pages Styling */
+.legal-page-container {
+  @apply min-h-screen bg-white;
+}
+
+.legal-page-back-button {
+  @apply inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mb-4;
+  @apply text-sm font-medium;
+}
+
+.legal-section-title {
+  @apply text-2xl font-bold text-gray-900 mb-4 mt-8;
+  @apply border-b border-gray-200 pb-2;
+}
+
+.legal-section-title:first-of-type {
+  @apply mt-0;
+}
+
