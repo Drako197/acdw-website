@@ -121,15 +121,56 @@ exports.handler = async (event, context) => {
         },
       ]
     } else {
-      // No address provided, show zone-based options
-      console.log('No shipping address provided, using zone-based options')
+      // No address provided, calculate zone-based options for this quantity
+      console.log('No shipping address provided, calculating zone-based options for quantity:', qty)
+      
+      // Calculate shipping cost for each zone based on quantity
+      const products = { [product]: qty }
+      
+      // Zone 1-2 (FL, GA, SC, AL)
+      const zone1Cost = await calculateShipping(
+        { state: 'FL', country: 'US' }, 
+        products
+      )
+      
+      // Zone 3-4 (NC, TN, MS, LA, TX)
+      const zone2Cost = await calculateShipping(
+        { state: 'TX', country: 'US' }, 
+        products
+      )
+      
+      // Zone 5-6 (Mid-Atlantic, Midwest)
+      const zone3Cost = await calculateShipping(
+        { state: 'IL', country: 'US' }, 
+        products
+      )
+      
+      // Zone 7-8 (West Coast, Northeast)
+      const zone4Cost = await calculateShipping(
+        { state: 'CA', country: 'US' }, 
+        products
+      )
+      
+      // Canada
+      const canadaCost = await calculateShipping(
+        { state: 'ON', country: 'CA' }, 
+        products
+      )
+      
+      console.log('Zone-based shipping costs calculated:', {
+        zone1: zone1Cost.cost,
+        zone2: zone2Cost.cost,
+        zone3: zone3Cost.cost,
+        zone4: zone4Cost.cost,
+        canada: canadaCost.cost,
+      })
       
       shippingOptions = [
         {
           shipping_rate_data: {
             type: 'fixed_amount',
             fixed_amount: {
-              amount: 900, // $9.00 - Zone 1-2 (FL, GA, SC, AL)
+              amount: Math.round(zone1Cost.cost * 100), // Convert to cents
               currency: 'usd',
             },
             display_name: 'Zone 1-2: FL, GA, SC, AL',
@@ -149,7 +190,7 @@ exports.handler = async (event, context) => {
           shipping_rate_data: {
             type: 'fixed_amount',
             fixed_amount: {
-              amount: 1100, // $11.00 - Zone 3-4
+              amount: Math.round(zone2Cost.cost * 100), // Convert to cents
               currency: 'usd',
             },
             display_name: 'Zone 3-4: NC, TN, MS, LA, TX',
@@ -169,7 +210,7 @@ exports.handler = async (event, context) => {
           shipping_rate_data: {
             type: 'fixed_amount',
             fixed_amount: {
-              amount: 1350, // $13.50 - Zone 5-6
+              amount: Math.round(zone3Cost.cost * 100), // Convert to cents
               currency: 'usd',
             },
             display_name: 'Zone 5-6: Mid-Atlantic, Midwest',
@@ -189,7 +230,7 @@ exports.handler = async (event, context) => {
           shipping_rate_data: {
             type: 'fixed_amount',
             fixed_amount: {
-              amount: 1650, // $16.50 - Zone 7-8
+              amount: Math.round(zone4Cost.cost * 100), // Convert to cents
               currency: 'usd',
             },
             display_name: 'Zone 7-8: West Coast, Northeast',
@@ -209,7 +250,7 @@ exports.handler = async (event, context) => {
           shipping_rate_data: {
             type: 'fixed_amount',
             fixed_amount: {
-              amount: 2000, // $20.00 - Canada
+              amount: Math.round(canadaCost.cost * 100), // Convert to cents
               currency: 'usd',
             },
             display_name: 'Canada - All Provinces',
