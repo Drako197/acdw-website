@@ -126,13 +126,15 @@ export function ShippingPolicyPage() {
                 <div className="p-6">
                   {/* Zone 1-2 */}
                   <div className="mb-6">
-                    <h4 className="font-semibold text-gray-900 mb-2">Zone 1-2: Local/Regional ($9-$13)</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Zone 1-2: Local/Regional ($9-$19)</h4>
                     <p className="text-sm text-gray-600 mb-2"><strong>States:</strong> Florida, Georgia, South Carolina, Alabama</p>
                     <p className="text-sm text-gray-600 mb-2"><strong>Delivery:</strong> 3-5 business days</p>
                     <ul className="text-sm text-gray-700 space-y-1">
-                      <li>• Single unit (Mini or Sensor): <strong>$9.00</strong></li>
-                      <li>• Two units (2.5-4 lbs): <strong>$11.00</strong></li>
-                      <li>• Three units (4.5+ lbs): <strong>$13.00</strong></li>
+                      <li>• 1-2 units: <strong>$9.00</strong></li>
+                      <li>• 3-4 units: <strong>$13.00</strong></li>
+                      <li>• 5-6 units: <strong>$15.00</strong></li>
+                      <li>• 7-8 units: <strong>$17.00</strong></li>
+                      <li>• 9-10 units: <strong>$19.00</strong></li>
                     </ul>
                   </div>
 
@@ -140,13 +142,15 @@ export function ShippingPolicyPage() {
 
                   {/* Zone 3-4 */}
                   <div className="mb-6">
-                    <h4 className="font-semibold text-gray-900 mb-2">Zone 3-4: Mid-Range ($11-$15)</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Zone 3-4: Mid-Range ($11-$22.50)</h4>
                     <p className="text-sm text-gray-600 mb-2"><strong>States:</strong> North Carolina, Tennessee, Mississippi, Louisiana, Texas, Arkansas, Oklahoma</p>
                     <p className="text-sm text-gray-600 mb-2"><strong>Delivery:</strong> 4-6 business days</p>
                     <ul className="text-sm text-gray-700 space-y-1">
-                      <li>• Single unit (Mini or Sensor): <strong>$11.00</strong></li>
-                      <li>• Two units (2.5-4 lbs): <strong>$13.00</strong></li>
-                      <li>• Three units (4.5+ lbs): <strong>$15.00</strong></li>
+                      <li>• 1-2 units: <strong>$11.00</strong></li>
+                      <li>• 3-4 units: <strong>$15.00</strong></li>
+                      <li>• 5-6 units: <strong>$17.50</strong></li>
+                      <li>• 7-8 units: <strong>$20.00</strong></li>
+                      <li>• 9-10 units: <strong>$22.50</strong></li>
                     </ul>
                   </div>
 
@@ -154,13 +158,15 @@ export function ShippingPolicyPage() {
 
                   {/* Zone 5-6 */}
                   <div className="mb-6">
-                    <h4 className="font-semibold text-gray-900 mb-2">Zone 5-6: Long Distance ($13.50-$17.50)</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Zone 5-6: Long Distance ($13.50-$26.50)</h4>
                     <p className="text-sm text-gray-600 mb-2"><strong>States:</strong> Mid-Atlantic, Midwest (VA, WV, KY, MO, KS, NE, IA, IL, IN, OH, MI, WI, MN, ND, SD)</p>
                     <p className="text-sm text-gray-600 mb-2"><strong>Delivery:</strong> 5-7 business days</p>
                     <ul className="text-sm text-gray-700 space-y-1">
-                      <li>• Single unit (Mini or Sensor): <strong>$13.50</strong></li>
-                      <li>• Two units (2.5-4 lbs): <strong>$15.50</strong></li>
-                      <li>• Three units (4.5+ lbs): <strong>$17.50</strong></li>
+                      <li>• 1-2 units: <strong>$13.50</strong></li>
+                      <li>• 3-4 units: <strong>$17.50</strong></li>
+                      <li>• 5-6 units: <strong>$20.50</strong></li>
+                      <li>• 7-8 units: <strong>$23.50</strong></li>
+                      <li>• 9-10 units: <strong>$26.50</strong></li>
                     </ul>
                   </div>
 
@@ -168,13 +174,15 @@ export function ShippingPolicyPage() {
 
                   {/* Zone 7-8 */}
                   <div className="mb-6">
-                    <h4 className="font-semibold text-gray-900 mb-2">Zone 7-8: Cross-Country ($16.50-$20.50)</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Zone 7-8: Cross-Country ($16.50-$31)</h4>
                     <p className="text-sm text-gray-600 mb-2"><strong>States:</strong> West Coast, Pacific Northwest, Northeast (WA, OR, CA, NV, AZ, UT, ID, MT, WY, CO, NM, ME, NH, VT, MA, RI, CT, NY, PA, NJ, DE, MD, DC, AK, HI)</p>
                     <p className="text-sm text-gray-600 mb-2"><strong>Delivery:</strong> 5-7 business days (7-10 for AK/HI)</p>
                     <ul className="text-sm text-gray-700 space-y-1">
-                      <li>• Single unit (Mini or Sensor): <strong>$16.50</strong></li>
-                      <li>• Two units (2.5-4 lbs): <strong>$18.50</strong></li>
-                      <li>• Three units (4.5+ lbs): <strong>$20.50</strong></li>
+                      <li>• 1-2 units: <strong>$16.50</strong></li>
+                      <li>• 3-4 units: <strong>$20.50</strong></li>
+                      <li>• 5-6 units: <strong>$24.00</strong></li>
+                      <li>• 7-8 units: <strong>$27.50</strong></li>
+                      <li>• 9-10 units: <strong>$31.00</strong></li>
                     </ul>
                   </div>
 
@@ -182,12 +190,14 @@ export function ShippingPolicyPage() {
 
                   {/* Canada */}
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Canada: All Provinces ($20-$28)</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Canada: All Provinces ($20-$46)</h4>
                     <p className="text-sm text-gray-600 mb-2"><strong>Delivery:</strong> 7-14 business days</p>
                     <ul className="text-sm text-gray-700 space-y-1">
-                      <li>• Single unit (Mini or Sensor): <strong>$20.00</strong></li>
-                      <li>• Two units (2.5-4 lbs): <strong>$24.00</strong></li>
-                      <li>• Three units (4.5+ lbs): <strong>$28.00</strong></li>
+                      <li>• 1-2 units: <strong>$20.00</strong></li>
+                      <li>• 3-4 units: <strong>$28.00</strong></li>
+                      <li>• 5-6 units: <strong>$34.00</strong></li>
+                      <li>• 7-8 units: <strong>$40.00</strong></li>
+                      <li>• 9-10 units: <strong>$46.00</strong></li>
                     </ul>
                     <p className="text-sm text-gray-600 mt-2">
                       <strong>Note:</strong> Additional customs duties and taxes may apply (customer responsibility)

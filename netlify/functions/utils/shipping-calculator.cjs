@@ -15,31 +15,42 @@ const PRODUCT_WEIGHTS = {
 };
 
 // Zone-based fallback rates (if API fails)
+// Weight tiers: 1-2 units (0-4 lbs), 3-4 units (4-8 lbs), 5-6 units (8-12 lbs), 7-8 units (12-16 lbs), 9-10 units (16+ lbs)
 const ZONE_RATES = {
   1: { // Zones 1-2: FL, GA, SC, AL
-    single: 9.00,
-    double: 11.00,
-    triple: 13.00,
+    1: 9.00,   // 1-2 units (0-4 lbs)
+    3: 13.00,  // 3-4 units (4-8 lbs)
+    5: 15.00,  // 5-6 units (8-12 lbs)
+    7: 17.00,  // 7-8 units (12-16 lbs)
+    9: 19.00,  // 9-10 units (16+ lbs)
   },
   2: { // Zones 3-4: NC, TN, MS, LA, TX (parts)
-    single: 11.00,
-    double: 13.00,
-    triple: 15.00,
+    1: 11.00,  // 1-2 units
+    3: 15.00,  // 3-4 units
+    5: 17.50,  // 5-6 units
+    7: 20.00,  // 7-8 units
+    9: 22.50,  // 9-10 units
   },
   3: { // Zones 5-6: Mid-Atlantic, Midwest
-    single: 13.50,
-    double: 15.50,
-    triple: 17.50,
+    1: 13.50,  // 1-2 units
+    3: 17.50,  // 3-4 units
+    5: 20.50,  // 5-6 units
+    7: 23.50,  // 7-8 units
+    9: 26.50,  // 9-10 units
   },
   4: { // Zones 7-8: West Coast, Northeast
-    single: 16.50,
-    double: 18.50,
-    triple: 20.50,
+    1: 16.50,  // 1-2 units
+    3: 20.50,  // 3-4 units
+    5: 24.00,  // 5-6 units
+    7: 27.50,  // 7-8 units
+    9: 31.00,  // 9-10 units
   },
   canada: { // Canada
-    single: 20.00,
-    double: 24.00,
-    triple: 28.00,
+    1: 20.00,  // 1-2 units
+    3: 28.00,  // 3-4 units
+    5: 34.00,  // 5-6 units
+    7: 40.00,  // 7-8 units
+    9: 46.00,  // 9-10 units
   },
 };
 
@@ -103,11 +114,16 @@ function calculateZoneBasedShipping(address, products) {
   const totalWeight = calculateWeight(products);
   
   // Determine rate tier based on weight
-  let rateTier = 'single'; // 0-2 lbs
-  if (totalWeight > 4.5) {
-    rateTier = 'triple'; // 4.5+ lbs
-  } else if (totalWeight > 2.5) {
-    rateTier = 'double'; // 2.5-4.5 lbs
+  // Weight tiers: 0-4 lbs (1-2 units), 4-8 lbs (3-4 units), 8-12 lbs (5-6 units), 12-16 lbs (7-8 units), 16+ lbs (9-10 units)
+  let rateTier = 1; // 1-2 units (0-4 lbs)
+  if (totalWeight > 16) {
+    rateTier = 9; // 9-10 units (16+ lbs)
+  } else if (totalWeight > 12) {
+    rateTier = 7; // 7-8 units (12-16 lbs)
+  } else if (totalWeight > 8) {
+    rateTier = 5; // 5-6 units (8-12 lbs)
+  } else if (totalWeight > 4) {
+    rateTier = 3; // 3-4 units (4-8 lbs)
   }
   
   const rates = ZONE_RATES[zone];
