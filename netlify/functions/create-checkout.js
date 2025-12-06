@@ -104,10 +104,8 @@ exports.handler = async (event, context) => {
 
     // Calculate shipping cost
     // Shipping should ALWAYS be pre-calculated before creating Stripe session
-    // Either from CheckoutPage or from saved address
     // SECURITY: Always re-verify shipping cost server-side to prevent manipulation
     let shippingCost
-    let shippingOptions = []
     
     if (!shippingAddress || !shippingAddress.state || !shippingAddress.country) {
       // No shipping address provided
@@ -156,44 +154,30 @@ exports.handler = async (event, context) => {
       }
     }
     
-    // Create single shipping option with calculated cost
-    shippingOptions = [
-      {
-        shipping_rate_data: {
-          type: 'fixed_amount',
-          fixed_amount: {
-            amount: Math.round(shippingCost * 100), // Convert to cents
-            currency: 'usd',
-          },
-          display_name: 'Standard Ground Shipping',
-          delivery_estimate: {
-            minimum: {
-              unit: 'business_day',
-              value: shippingAddress.country === 'CA' ? 7 : 3,
-            },
-            maximum: {
-              unit: 'business_day',
-              value: shippingAddress.country === 'CA' ? 14 : 7,
-            },
-          },
-          metadata: {
-            zone: shippingAddress?.state || 'unknown',
-          },
-        },
-      },
-    ]
-    
     // Create Stripe Checkout session
+    // Add shipping as a separate line item instead of using shipping_options
+    // This avoids requiring the customer to re-enter their address at Stripe
     const sessionConfig = {
       payment_method_types: ['card'],
       line_items: [
         {
           price: priceId,
           quantity: qty,
-          // Add product metadata for shipping calculation webhook
           adjustable_quantity: {
             enabled: false, // Disable quantity adjustment in Stripe checkout
           },
+        },
+        // Add shipping as a line item
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'Shipping & Handling',
+              description: `Standard Ground (${shippingAddress.country === 'CA' ? '7-14' : '3-7'} business days) to ${shippingAddress.city}, ${shippingAddress.state}`,
+            },
+            unit_amount: Math.round(shippingCost * 100), // Convert to cents
+          },
+          quantity: 1,
         },
       ],
       mode: 'payment',
@@ -208,29 +192,12 @@ exports.handler = async (event, context) => {
         product,
         quantity: qty.toString(),
         isGuest: isGuest ? 'true' : 'false',
+        shippingCost: shippingCost.toString(),
+        shippingAddress: JSON.stringify(shippingAddress),
       },
     }
 
-    // Add shipping configuration
-    // With new flow, we ALWAYS have a shipping address from CheckoutPage
-    // So we ALWAYS use pre-calculated shipping
-    console.log('Using pre-calculated shipping rate:', shippingCost)
-    sessionConfig.shipping_options = shippingOptions
-    
-    // Pre-fill the shipping address in Stripe
-    if (shippingAddress.line1 && shippingAddress.city) {
-      sessionConfig.shipping_details = {
-        address: {
-          line1: shippingAddress.line1 || '',
-          line2: shippingAddress.line2 || '',
-          city: shippingAddress.city || '',
-          state: shippingAddress.state || '',
-          postal_code: shippingAddress.postal_code || shippingAddress.zip || '',
-          country: shippingAddress.country || 'US',
-        },
-        name: shippingAddress.name || userEmail || '',
-      }
-    }
+    console.log('Creating Stripe session with shipping as line item:', shippingCost)
 
     const session = await stripe.checkout.sessions.create(sessionConfig)
 
