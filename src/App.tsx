@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { Header } from './components/layout/Header'
 import { Footer } from './components/layout/Footer'
@@ -31,15 +31,17 @@ import { CheckoutCancelPage } from './pages/CheckoutCancelPage'
 import { MiniProductPage } from './pages/MiniProductPage'
 import { CheckoutPage } from './pages/CheckoutPage'
 
-function App() {
+function AppContent() {
+  const location = useLocation()
+  
+  // Hide header/footer on checkout page for cleaner Stripe-like experience
+  const hideHeaderFooter = location.pathname === '/checkout'
+  
   return (
-    <AuthProvider>
-      <Router>
-        <ScrollToTop />
-        <div className="min-h-screen flex flex-col bg-gray-50">
-          <Header />
-          <main className="flex-1">
-            <Routes>
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      {!hideHeaderFooter && <Header />}
+      <main className="flex-1">
+        <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/homeowner" element={<HomeownerHomePage />} />
               <Route path="/property-manager" element={<PropertyManagerPage />} />
@@ -72,8 +74,17 @@ function App() {
               <Route path="/products/mini" element={<MiniProductPage />} />
             </Routes>
           </main>
-          <Footer />
+          {!hideHeaderFooter && <Footer />}
         </div>
+  )
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <ScrollToTop />
+        <AppContent />
       </Router>
     </AuthProvider>
   )
