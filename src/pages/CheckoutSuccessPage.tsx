@@ -84,7 +84,9 @@ export function CheckoutSuccessPage() {
   const [customerEmail, setCustomerEmail] = useState<string | null>(null)
   
   // Check if this was a guest checkout
-  const isGuestCheckout = searchParams.get('guest') === 'true' || !isAuthenticated
+  // Only show account creation offer if user is NOT authenticated
+  // Even if URL says guest=true, don't show if user is logged in
+  const isGuestCheckout = !isAuthenticated
   
   useEffect(() => {
     const sessionIdParam = searchParams.get('session_id')
@@ -230,8 +232,9 @@ export function CheckoutSuccessPage() {
             </div>
           )}
 
-          {/* Account Creation Offer for Guests */}
-          {isGuestCheckout && customerEmail && (
+          {/* Account Creation Offer for Guests Only */}
+          {/* Hide this section if user is already logged in */}
+          {!isAuthenticated && customerEmail && (
             <div className="checkout-success-account-offer">
               <h3 className="checkout-success-account-offer-title">Create an Account</h3>
               <p className="checkout-success-account-offer-message">
