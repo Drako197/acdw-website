@@ -8456,3 +8456,168 @@
   @apply mt-0;
 }
 
+/* ===================================
+   STRIPE-STYLE CHECKOUT PAGE
+   =================================== */
+
+/* Main page container */
+.stripe-checkout-page {
+  @apply min-h-screen bg-white;
+}
+
+.stripe-checkout-container {
+  @apply max-w-7xl mx-auto px-4 py-8;
+}
+
+/* Header with logo and back button */
+.stripe-checkout-header {
+  @apply flex items-center gap-4 mb-8 pb-4 border-b border-gray-200;
+}
+
+.stripe-checkout-back-button {
+  @apply text-gray-400 hover:text-gray-600 transition-colors;
+}
+
+.stripe-checkout-logo {
+  @apply flex items-center;
+}
+
+/* Two-column layout */
+.stripe-checkout-layout {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-12;
+}
+
+/* Left column - Order summary (like Stripe) */
+.stripe-checkout-left {
+  @apply lg:pr-8 lg:border-r border-gray-200;
+}
+
+.stripe-order-summary {
+  @apply space-y-6;
+}
+
+.stripe-order-title {
+  @apply text-sm font-medium text-gray-500 uppercase tracking-wide;
+}
+
+.stripe-order-amount {
+  @apply text-4xl font-bold text-gray-900 mb-6;
+}
+
+.stripe-order-items {
+  @apply space-y-4 pb-6 border-b border-gray-200;
+}
+
+/* Line items (product + shipping) */
+.stripe-line-item {
+  @apply flex justify-between gap-4;
+}
+
+.stripe-line-item-details {
+  @apply flex-1;
+}
+
+.stripe-line-item-name {
+  @apply font-semibold text-gray-900;
+}
+
+.stripe-line-item-description {
+  @apply text-sm text-gray-500 mt-1;
+}
+
+.stripe-line-item-qty {
+  @apply text-xs text-gray-400 mt-2;
+}
+
+.stripe-line-item-price {
+  @apply font-semibold text-gray-900 flex-shrink-0;
+}
+
+.stripe-calculating {
+  @apply flex justify-center py-4;
+}
+
+/* Right column - Form (like Stripe payment form) */
+.stripe-checkout-right {
+  @apply lg:pl-8;
+}
+
+.stripe-form-container {
+  @apply max-w-md;
+}
+
+/* Form styling matching Stripe */
+.stripe-form-label {
+  @apply block text-sm font-medium text-gray-700 mb-1.5;
+}
+
+.stripe-form-input {
+  @apply w-full px-3 py-2.5 border border-gray-300 rounded-md text-gray-900;
+  @apply focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50;
+  @apply transition-all duration-150;
+}
+
+.stripe-form-input:hover {
+  @apply border-gray-400;
+}
+
+.stripe-form-input-error {
+  @apply border-red-500 focus:border-red-500 focus:ring-red-200;
+}
+
+.stripe-form-error {
+  @apply text-red-600 text-xs mt-1;
+}
+
+/* Form row for city/state/zip */
+.stripe-form-row {
+  @apply flex gap-3;
+}
+
+.stripe-form-col-1 {
+  @apply flex-1;
+}
+
+.stripe-form-col-2 {
+  flex: 2;
+}
+
+/* Pay button (matching Stripe's green button) */
+.stripe-pay-button {
+  @apply w-full bg-gradient-to-b from-green-500 to-green-600 text-white py-3 px-4 rounded-md;
+  @apply font-semibold text-base;
+  @apply hover:from-green-600 hover:to-green-700;
+  @apply focus:ring-4 focus:ring-green-200;
+  @apply disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed;
+  @apply transition-all duration-150;
+  @apply shadow-sm;
+}
+
+.stripe-pay-button:hover:not(:disabled) {
+  @apply shadow-md;
+}
+
+/* Footer text */
+.stripe-footer-text {
+  @apply text-xs text-center text-gray-500 mt-4;
+}
+
+/* Mobile responsive */
+@media (max-width: 1024px) {
+  .stripe-checkout-layout {
+    @apply grid-cols-1;
+  }
+  
+  .stripe-checkout-left {
+    @apply pr-0 border-r-0 border-b border-gray-200 pb-8;
+  }
+  
+  .stripe-checkout-right {
+    @apply pl-0 pt-8;
+  }
+  
+  .stripe-form-container {
+    @apply max-w-full;
+  }
+}
+

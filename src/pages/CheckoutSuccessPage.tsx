@@ -86,7 +86,7 @@ export function CheckoutSuccessPage() {
   // Check if this was a guest checkout
   // Only show account creation offer if user is NOT authenticated
   // Even if URL says guest=true, don't show if user is logged in
-  const isGuestCheckout = !isAuthenticated
+  // const isGuestCheckout = !isAuthenticated // Removed - using isAuthenticated directly
   
   useEffect(() => {
     const sessionIdParam = searchParams.get('session_id')
