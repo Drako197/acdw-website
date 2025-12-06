@@ -316,20 +316,6 @@ export function CheckoutPage() {
           <div className="stripe-checkout-right">
             <div className="stripe-form-container">
               <div className="space-y-4">
-                {/* Email (if guest) */}
-                {!isAuthenticated && (
-                  <div>
-                    <label className="stripe-form-label">Email</label>
-                    <input
-                      type="email"
-                      value={user?.email || ''}
-                      className="stripe-form-input"
-                      placeholder="you@example.com"
-                      disabled={isAuthenticated}
-                    />
-                  </div>
-                )}
-
                 {/* Full Name */}
                 <div>
                   <label className="stripe-form-label">Full Name</label>
