@@ -35,6 +35,29 @@ exports.handler = async (event, context) => {
   }
 
   try {
+    // Get client IP
+    const ip = getClientIP(event)
+    
+    // Check rate limit
+    const rateLimitResult = checkRateLimit(ip, 'api')
+    if (!rateLimitResult.allowed) {
+      logRateLimit(ip, 'api', '/.netlify/functions/create-checkout')
+      return {
+        statusCode: 429,
+        headers: {
+          ...headers,
+          ...getRateLimitHeaders(rateLimitResult)
+        },
+        body: JSON.stringify({ 
+          error: 'Too many requests',
+          retryAfter: rateLimitResult.retryAfter
+        }),
+      }
+    }
+    
+    // Log API access
+    logAPIAccess('/.netlify/functions/create-checkout', 'POST', ip, event.headers['user-agent'] || 'unknown', true)
+    
     // Parse request body
     const { priceId, quantity, product, userEmail, userId, isGuest, shippingAddress, preCalculatedShippingCost } = JSON.parse(event.body)
 
@@ -105,9 +128,18 @@ exports.handler = async (event, context) => {
       [product]: qty,
     }
     
-    const shippingResult = await calculateShipping(shippingAddress, products)
-    console.log('Shipping calculation result:', shippingResult)
-    shippingCost = shippingResult.cost
+    let shippingResult
+    try {
+      shippingResult = await calculateShipping(shippingAddress, products)
+      console.log('Shipping calculation result:', shippingResult)
+      shippingCost = shippingResult.cost
+    } catch (shippingError) {
+      console.error('Shipping calculation failed:', shippingError)
+      // Use a reasonable fallback based on zone
+      const fallbackCost = shippingAddress.country === 'CA' ? 20.00 : 15.00
+      console.log('Using fallback shipping cost:', fallbackCost)
+      shippingCost = fallbackCost
+    }
     
     // SECURITY: If client provided a pre-calculated cost, verify it matches
     // This prevents manipulation of shipping cost
@@ -179,44 +211,35 @@ exports.handler = async (event, context) => {
       },
     }
 
-    // Add shipping configuration based on whether we have a saved address
-    if (shippingAddress && shippingAddress.state && shippingAddress.country) {
-      // Logged-in user with saved address: pre-calculated shipping
-      console.log('Using pre-calculated shipping rate')
-      sessionConfig.shipping_options = shippingOptions
-      sessionConfig.shipping_address_collection = null
-    } else {
-      // Guest or no saved address: enable dynamic calculation
-      console.log('Enabling dynamic shipping calculation via Stripe webhook')
-      sessionConfig.shipping_address_collection = shippingAddressCollection
-      
-      // Note: Stripe will automatically call our webhook configured in Stripe Dashboard
-      // Webhook endpoint: /.netlify/functions/calculate-shipping-rate
-      // This is configured in Stripe Dashboard → Settings → Checkout settings → Shipping rate calculation
+    // Add shipping configuration
+    // With new flow, we ALWAYS have a shipping address from CheckoutPage
+    // So we ALWAYS use pre-calculated shipping
+    console.log('Using pre-calculated shipping rate:', shippingCost)
+    sessionConfig.shipping_options = shippingOptions
+    
+    // Pre-fill the shipping address in Stripe
+    if (shippingAddress.line1 && shippingAddress.city) {
+      sessionConfig.shipping_details = {
+        address: {
+          line1: shippingAddress.line1 || '',
+          line2: shippingAddress.line2 || '',
+          city: shippingAddress.city || '',
+          state: shippingAddress.state || '',
+          postal_code: shippingAddress.postal_code || shippingAddress.zip || '',
+          country: shippingAddress.country || 'US',
+        },
+        name: shippingAddress.name || userEmail || '',
+      }
     }
 
     const session = await stripe.checkout.sessions.create(sessionConfig)
-      
-      metadata: {
-        userId: userId || '',
-        product,
-        quantity: qty.toString(),
-        isGuest: isGuest ? 'true' : 'false',
-      },
-      
-      // Enable automatic tax calculation (requires shipping address)
-      // Note: Stripe Tax must be enabled in your Stripe Dashboard
-      // Temporarily disabled - enable by setting STRIPE_TAX_ENABLED=true in Netlify
-      // ...(process.env.STRIPE_TAX_ENABLED === 'true' && {
-      //   automatic_tax: {
-      //     enabled: true,
-      //   },
-      // }),
-    })
 
     return {
       statusCode: 200,
-      headers,
+      headers: {
+        ...headers,
+        ...getRateLimitHeaders(rateLimitResult)
+      },
       body: JSON.stringify({
         sessionId: session.id,
         url: session.url,
