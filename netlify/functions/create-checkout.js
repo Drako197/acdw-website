@@ -82,32 +82,45 @@ exports.handler = async (event, context) => {
     // Calculate shipping cost
     // Shipping should ALWAYS be pre-calculated before creating Stripe session
     // Either from CheckoutPage or from saved address
+    // SECURITY: Always re-verify shipping cost server-side to prevent manipulation
     let shippingCost
     let shippingOptions = []
     
-    if (preCalculatedShippingCost !== undefined && preCalculatedShippingCost !== null) {
-      // Shipping already calculated on CheckoutPage
-      console.log('Using pre-calculated shipping cost:', preCalculatedShippingCost)
-      shippingCost = preCalculatedShippingCost
-    } else if (shippingAddress && shippingAddress.state && shippingAddress.country) {
-      // Calculate shipping from provided address
-      console.log('Calculating shipping from provided address:', shippingAddress)
-      
-      const products = {
-        [product]: qty,
-      }
-      
-      const shippingResult = await calculateShipping(shippingAddress, products)
-      console.log('Shipping calculation result:', shippingResult)
-      shippingCost = shippingResult.cost
-    } else {
-      // No shipping address or pre-calculated cost
+    if (!shippingAddress || !shippingAddress.state || !shippingAddress.country) {
+      // No shipping address provided
       // This shouldn't happen with new flow, but handle gracefully
-      console.error('No shipping address or pre-calculated cost provided')
+      console.error('No shipping address provided')
       return {
         statusCode: 400,
         headers,
         body: JSON.stringify({ error: 'Shipping address required. Please go through checkout page.' }),
+      }
+    }
+    
+    // SECURITY: Always calculate shipping server-side
+    // Even if client provided preCalculatedShippingCost, we verify it
+    console.log('Calculating shipping from provided address:', shippingAddress)
+    
+    const products = {
+      [product]: qty,
+    }
+    
+    const shippingResult = await calculateShipping(shippingAddress, products)
+    console.log('Shipping calculation result:', shippingResult)
+    shippingCost = shippingResult.cost
+    
+    // SECURITY: If client provided a pre-calculated cost, verify it matches
+    // This prevents manipulation of shipping cost
+    if (preCalculatedShippingCost !== undefined && preCalculatedShippingCost !== null) {
+      const difference = Math.abs(shippingCost - preCalculatedShippingCost)
+      if (difference > 0.50) {
+        // Shipping cost differs by more than $0.50 - possible manipulation
+        console.warn('Shipping cost mismatch:', {
+          serverCalculated: shippingCost,
+          clientProvided: preCalculatedShippingCost,
+          difference,
+        })
+        // Use server-calculated value, not client-provided
       }
     }
     

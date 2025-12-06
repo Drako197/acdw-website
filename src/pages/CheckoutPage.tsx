@@ -47,6 +47,7 @@ export function CheckoutPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
 
   // Parse cart data from URL params
+  // SECURITY NOTE: These params come from get-price-id (server-side), but validate anyway
   useEffect(() => {
     const product = searchParams.get('product')
     const productName = searchParams.get('productName')
@@ -60,12 +61,43 @@ export function CheckoutPage() {
       return
     }
     
+    // Validate product type
+    const validProducts = ['mini', 'sensor', 'bundle']
+    if (!validProducts.includes(product)) {
+      console.error('Invalid product type:', product)
+      navigate('/products')
+      return
+    }
+    
+    // Validate quantity
+    const qty = parseInt(quantity)
+    if (isNaN(qty) || qty < 1 || qty > 500) {
+      console.error('Invalid quantity:', quantity)
+      navigate('/products')
+      return
+    }
+    
+    // Validate price ID format (should start with price_)
+    if (!priceId.startsWith('price_')) {
+      console.error('Invalid price ID format:', priceId)
+      navigate('/products')
+      return
+    }
+    
+    // Validate unit price
+    const price = parseFloat(unitPrice)
+    if (isNaN(price) || price < 0 || price > 10000) {
+      console.error('Invalid unit price:', unitPrice)
+      navigate('/products')
+      return
+    }
+    
     setCart({
-      product,
-      productName: productName || product.charAt(0).toUpperCase() + product.slice(1),
-      quantity: parseInt(quantity),
-      priceId,
-      unitPrice: parseFloat(unitPrice),
+      product: sanitizeInput(product),
+      productName: sanitizeInput(productName || product.charAt(0).toUpperCase() + product.slice(1)),
+      quantity: qty,
+      priceId: sanitizeInput(priceId),
+      unitPrice: price,
     })
   }, [searchParams, navigate])
 
@@ -76,8 +108,19 @@ export function CheckoutPage() {
     }
   }, [shippingAddress.city, shippingAddress.state, shippingAddress.zip, cart])
 
+  // Basic client-side sanitization to prevent XSS
+  const sanitizeInput = (value: string): string => {
+    return value
+      .replace(/[<>]/g, '') // Remove < and > to prevent HTML injection
+      .replace(/javascript:/gi, '') // Remove javascript: protocol
+      .replace(/on\w+=/gi, '') // Remove event handlers like onclick=
+      .trim()
+  }
+
   const handleInputChange = (field: keyof ShippingAddress, value: string) => {
-    setShippingAddress(prev => ({ ...prev, [field]: value }))
+    // Sanitize input before storing
+    const sanitizedValue = sanitizeInput(value)
+    setShippingAddress(prev => ({ ...prev, [field]: sanitizedValue }))
     // Clear error for this field
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }))
