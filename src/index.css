@@ -8474,12 +8474,36 @@
   @apply flex items-center gap-4 mb-8 pb-4 border-b border-gray-200;
 }
 
-.stripe-checkout-back-button {
-  @apply text-gray-400 hover:text-gray-600 transition-colors;
+.stripe-checkout-back-link {
+  @apply flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-all cursor-pointer;
+  @apply font-medium text-sm;
+}
+
+.stripe-checkout-back-link .stripe-back-arrow {
+  transition: transform 0.2s ease;
+}
+
+.stripe-checkout-back-link:hover .stripe-back-arrow {
+  transform: translateX(-2px);
 }
 
 .stripe-checkout-logo {
   @apply flex items-center;
+  transition: opacity 0.2s ease;
+}
+
+.stripe-checkout-back-link:hover .stripe-checkout-logo {
+  opacity: 0;
+}
+
+.stripe-checkout-back-text {
+  opacity: 0;
+  position: absolute;
+  transition: opacity 0.2s ease;
+}
+
+.stripe-checkout-back-link:hover .stripe-checkout-back-text {
+  opacity: 1;
 }
 
 /* Two-column layout */
@@ -8555,10 +8579,50 @@
   @apply w-full px-3 py-2.5 border border-gray-300 rounded-md text-gray-900;
   @apply focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50;
   @apply transition-all duration-150;
+  position: relative;
 }
 
 .stripe-form-input:hover {
   @apply border-gray-400;
+}
+
+/* Shimmer loading effect (like Stripe's Lottie animation) */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.stripe-form-input.loading,
+.stripe-form-input:focus {
+  background: linear-gradient(
+    90deg,
+    #f8f9fa 0px,
+    #e9ecef 40px,
+    #f8f9fa 80px
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+}
+
+.stripe-form-input:focus {
+  animation: none;
+  background: white;
+}
+
+/* Input focus animation */
+.stripe-form-input {
+  background: white;
+  transition: all 0.15s ease, box-shadow 0.15s ease;
+}
+
+.stripe-form-input:focus {
+  @apply border-blue-500;
+  box-shadow: 0 0 0 3px rgba(0, 116, 212, 0.1);
+  outline: none;
 }
 
 .stripe-form-input-error {

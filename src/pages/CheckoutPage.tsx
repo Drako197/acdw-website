@@ -282,16 +282,17 @@ export function CheckoutPage() {
   return (
     <div className="stripe-checkout-page">
       <div className="stripe-checkout-container">
-        {/* Logo/Header */}
+        {/* Logo/Header with hover effect (logo → "Back") */}
         <div className="stripe-checkout-header">
-          <button
+          <div 
             onClick={() => navigate(-1)}
-            className="stripe-checkout-back-button"
+            className="stripe-checkout-back-link"
           >
-            <ArrowLeftIcon className="h-4 w-4" />
-          </button>
-          <div className="stripe-checkout-logo">
-            <img src="/images/ac-drain-wiz-logo.png" alt="AC Drain Wiz" className="h-8" />
+            <ArrowLeftIcon className="h-4 w-4 stripe-back-arrow" />
+            <div className="stripe-checkout-logo">
+              <img src="/images/ac-drain-wiz-logo.png" alt="AC Drain Wiz" className="h-8" />
+            </div>
+            <span className="stripe-checkout-back-text">Back</span>
           </div>
         </div>
 
