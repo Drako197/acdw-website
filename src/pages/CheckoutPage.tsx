@@ -45,6 +45,16 @@ export function CheckoutPage() {
   const [isCalculating, setIsCalculating] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
+  const [isPageLoading, setIsPageLoading] = useState(true)
+
+  // Show loading skeleton for 2 seconds on initial load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsPageLoading(false)
+    }, 2000)
+    
+    return () => clearTimeout(timer)
+  }, [])
 
   // Parse cart data from URL params
   // SECURITY NOTE: These params come from get-price-id (server-side), but validate anyway
@@ -282,17 +292,16 @@ export function CheckoutPage() {
   return (
     <div className="stripe-checkout-page">
       <div className="stripe-checkout-container">
-        {/* Logo/Header with hover effect (logo → "Back") */}
+        {/* Logo/Header */}
         <div className="stripe-checkout-header">
-          <div 
+          <button
             onClick={() => navigate(-1)}
-            className="stripe-checkout-back-link"
+            className="stripe-checkout-back-button"
           >
-            <ArrowLeftIcon className="h-4 w-4 stripe-back-arrow" />
-            <div className="stripe-checkout-logo">
-              <img src="/images/ac-drain-wiz-logo.png" alt="AC Drain Wiz" className="h-8" />
-            </div>
-            <span className="stripe-checkout-back-text">Back</span>
+            <ArrowLeftIcon className="h-4 w-4" />
+          </button>
+          <div className="stripe-checkout-logo">
+            <img src="/images/ac-drain-wiz-logo.png" alt="AC Drain Wiz" className="h-8" />
           </div>
         </div>
 
@@ -342,6 +351,42 @@ export function CheckoutPage() {
           {/* Shipping Form - Right Column (like Stripe payment form) */}
           <div className="stripe-checkout-right">
             <div className="stripe-form-container">
+              {isPageLoading ? (
+                /* Skeleton Loading State */
+                <div className="space-y-4">
+                  <div className="skeleton-field">
+                    <div className="skeleton-label"></div>
+                    <div className="skeleton-input"></div>
+                  </div>
+                  <div className="skeleton-field">
+                    <div className="skeleton-label"></div>
+                    <div className="skeleton-input"></div>
+                  </div>
+                  <div className="skeleton-field">
+                    <div className="skeleton-label"></div>
+                    <div className="skeleton-input"></div>
+                  </div>
+                  <div className="skeleton-field-row">
+                    <div className="skeleton-field flex-2">
+                      <div className="skeleton-label"></div>
+                      <div className="skeleton-input"></div>
+                    </div>
+                    <div className="skeleton-field flex-1">
+                      <div className="skeleton-label"></div>
+                      <div className="skeleton-input"></div>
+                    </div>
+                    <div className="skeleton-field flex-1">
+                      <div className="skeleton-label"></div>
+                      <div className="skeleton-input"></div>
+                    </div>
+                  </div>
+                  <div className="skeleton-field">
+                    <div className="skeleton-label"></div>
+                    <div className="skeleton-input"></div>
+                  </div>
+                  <div className="skeleton-button"></div>
+                </div>
+              ) : (
               <div className="space-y-4">
                 {/* Full Name */}
                 <div>
@@ -468,6 +513,7 @@ export function CheckoutPage() {
                   Powered by <strong>Stripe</strong>
                 </p>
               </div>
+              )}
             </div>
           </div>
         </div>
