@@ -43,42 +43,61 @@ export function StripeCheckout({ product, quantity, onError, buttonText, classNa
     setIsLoading(true)
 
     try {
-      // Step 1: Get Price ID from server (validates role and calculates tier)
-      // For guests, use 'homeowner' role to get MSRP pricing
-      const priceResponse = await fetch('/.netlify/functions/get-price-id', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          product,
-          quantity,
-          role: userRole,
-        }),
-      })
+      // DEVELOPMENT MODE: Check if running on localhost
+      const isDevelopment = window.location.hostname === 'localhost' || window.location.port === '5173'
+      
+      let priceId: string
+      let unitPrice: number
+      let requiresContact = false
 
-      if (!priceResponse.ok) {
-        const errorData = await priceResponse.json()
-        console.error('Price ID lookup failed:', {
-          status: priceResponse.status,
-          error: errorData,
-          request: { product, quantity, role: userRole }
+      if (isDevelopment) {
+        // Development fallback - use mock data
+        console.warn('⚠️ DEVELOPMENT MODE: Using mock pricing. Use "netlify dev" for full testing.')
+        
+        // Mock Price IDs and pricing (these won't work with real Stripe, but allow UI testing)
+        priceId = 'price_DEV_mock_' + product
+        unitPrice = product === 'mini' ? 99.99 : product === 'sensor' ? 74.99 : 174.99
+        
+        console.log('Mock checkout data:', { product, quantity, priceId, unitPrice })
+      } else {
+        // PRODUCTION: Get Price ID from server (validates role and calculates tier)
+        const priceResponse = await fetch('/.netlify/functions/get-price-id', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            product,
+            quantity,
+            role: userRole,
+          }),
         })
-        
-        // Handle authentication required error (403)
-        if (priceResponse.status === 403 && errorData.requiresAuth) {
-          throw new Error('Authentication required. Please sign in to purchase this product.')
+
+        if (!priceResponse.ok) {
+          const errorData = await priceResponse.json()
+          console.error('Price ID lookup failed:', {
+            status: priceResponse.status,
+            error: errorData,
+            request: { product, quantity, role: userRole }
+          })
+          
+          // Handle authentication required error (403)
+          if (priceResponse.status === 403 && errorData.requiresAuth) {
+            throw new Error('Authentication required. Please sign in to purchase this product.')
+          }
+          
+          throw new Error(errorData.error || `Failed to get price (${priceResponse.status})`)
         }
-        
-        throw new Error(errorData.error || `Failed to get price (${priceResponse.status})`)
-      }
 
-      const priceData = await priceResponse.json()
-      const { priceId, unitPrice, requiresContact } = priceData
+        const priceData = await priceResponse.json()
+        priceId = priceData.priceId
+        unitPrice = priceData.unitPrice
+        requiresContact = priceData.requiresContact || false
 
-      if (!priceId) {
-        console.error('No Price ID returned:', priceData)
-        throw new Error('No price ID received from server')
+        if (!priceId) {
+          console.error('No Price ID returned:', priceData)
+          throw new Error('No price ID received from server')
+        }
       }
 
       if (requiresContact) {
