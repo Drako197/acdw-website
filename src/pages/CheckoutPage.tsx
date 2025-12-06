@@ -201,7 +201,29 @@ export function CheckoutPage() {
   }
 
   const handleProceedToPayment = async () => {
-    if (!cart || !validateForm() || shippingCost === null) {
+    if (!cart) {
+      return
+    }
+    
+    // Validate form first
+    if (!validateForm()) {
+      return
+    }
+    
+    // Check if shipping is calculated
+    if (shippingCost === null) {
+      // Show error for fields that would trigger shipping calculation
+      const newErrors: { [key: string]: string } = {}
+      if (!shippingAddress.city.trim()) {
+        newErrors.city = 'Please enter your city to calculate shipping'
+      }
+      if (!shippingAddress.state.trim()) {
+        newErrors.state = 'Please enter your state to calculate shipping'
+      }
+      if (!shippingAddress.zip.trim()) {
+        newErrors.zip = 'Please enter your ZIP to calculate shipping'
+      }
+      setErrors(prev => ({ ...prev, ...newErrors }))
       return
     }
     
@@ -427,7 +449,7 @@ export function CheckoutPage() {
                 {/* Pay Button (matching Stripe's exact blue button) */}
                 <button
                   onClick={handleProceedToPayment}
-                  disabled={isProcessing || shippingCost === null}
+                  disabled={isProcessing}
                   className="stripe-pay-button"
                   type="button"
                 >
