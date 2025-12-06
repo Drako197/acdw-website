@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { ArrowLeftIcon, TruckIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 
 interface ShippingAddress {
   name: string
@@ -254,252 +254,205 @@ export function CheckoutPage() {
   const total = shippingCost !== null ? subtotal + shippingCost : subtotal
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="mb-8">
-            <button
-              onClick={() => navigate(-1)}
-              className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
-            >
-              <ArrowLeftIcon className="h-5 w-5 mr-2" />
-              Back
-            </button>
-            <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
-            <p className="text-gray-600 mt-2">Enter your shipping information to continue</p>
+    <div className="stripe-checkout-page">
+      <div className="stripe-checkout-container">
+        {/* Logo/Header */}
+        <div className="stripe-checkout-header">
+          <button
+            onClick={() => navigate(-1)}
+            className="stripe-checkout-back-button"
+          >
+            <ArrowLeftIcon className="h-4 w-4" />
+          </button>
+          <div className="stripe-checkout-logo">
+            <img src="/images/ac-drain-wiz-logo.png" alt="AC Drain Wiz" className="h-8" />
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Shipping Form - Left Side */}
-            <div className="lg:col-span-2">
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <div className="flex items-center mb-6">
-                  <TruckIcon className="h-6 w-6 text-orange-600 mr-3" />
-                  <h2 className="text-xl font-semibold text-gray-900">Shipping Information</h2>
+        <div className="stripe-checkout-layout">
+          {/* Order Summary - Left Column (like Stripe) */}
+          <div className="stripe-checkout-left">
+            <div className="stripe-order-summary">
+              <h2 className="stripe-order-title">Pay ACDW</h2>
+              <div className="stripe-order-amount">${total.toFixed(2)}</div>
+              
+              <div className="stripe-order-items">
+                {/* Product Line Item */}
+                <div className="stripe-line-item">
+                  <div className="stripe-line-item-details">
+                    <div className="stripe-line-item-name">{cart.productName}</div>
+                    <div className="stripe-line-item-description">
+                      Compact AC drain line cleaning system for residential and commercial use
+                    </div>
+                    <div className="stripe-line-item-qty">Qty {cart.quantity}</div>
+                  </div>
+                  <div className="stripe-line-item-price">${(cart.unitPrice * cart.quantity).toFixed(2)}</div>
                 </div>
 
-                <div className="space-y-4">
-                  {/* Full Name */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      value={shippingAddress.name}
-                      onChange={(e) => handleInputChange('name', e.target.value)}
-                      className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
-                        errors.name ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                      placeholder="John Doe"
-                    />
-                    {errors.name && (
-                      <p className="text-red-500 text-sm mt-1 italic">{errors.name}</p>
-                    )}
-                  </div>
-
-                  {/* Street Address */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Street Address *
-                    </label>
-                    <input
-                      type="text"
-                      value={shippingAddress.line1}
-                      onChange={(e) => handleInputChange('line1', e.target.value)}
-                      className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
-                        errors.line1 ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                      placeholder="123 Main St"
-                    />
-                    {errors.line1 && (
-                      <p className="text-red-500 text-sm mt-1 italic">{errors.line1}</p>
-                    )}
-                  </div>
-
-                  {/* Apartment, Suite, etc. */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Apartment, Suite, etc. (Optional)
-                    </label>
-                    <input
-                      type="text"
-                      value={shippingAddress.line2}
-                      onChange={(e) => handleInputChange('line2', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                      placeholder="Apt 4B"
-                    />
-                  </div>
-
-                  {/* City, State, ZIP */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        City *
-                      </label>
-                      <input
-                        type="text"
-                        value={shippingAddress.city}
-                        onChange={(e) => handleInputChange('city', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
-                          errors.city ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                        placeholder="Miami"
-                      />
-                      {errors.city && (
-                        <p className="text-red-500 text-sm mt-1 italic">{errors.city}</p>
-                      )}
+                {/* Shipping Line Item */}
+                {shippingCost !== null && (
+                  <div className="stripe-line-item">
+                    <div className="stripe-line-item-details">
+                      <div className="stripe-line-item-name">Shipping & Handling</div>
+                      <div className="stripe-line-item-description">
+                        Standard Ground ({shippingAddress.country === 'CA' ? '7-14' : '3-7'} business days) to {shippingAddress.city ? `${shippingAddress.city}, ${shippingAddress.state}` : 'your location'}
+                      </div>
+                      <div className="stripe-line-item-qty">Qty 1</div>
                     </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        State *
-                      </label>
-                      <input
-                        type="text"
-                        value={shippingAddress.state}
-                        onChange={(e) => handleInputChange('state', e.target.value.toUpperCase())}
-                        className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
-                          errors.state ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                        placeholder="FL"
-                        maxLength={2}
-                      />
-                      {errors.state && (
-                        <p className="text-red-500 text-sm mt-1 italic">{errors.state}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        ZIP Code *
-                      </label>
-                      <input
-                        type="text"
-                        value={shippingAddress.zip}
-                        onChange={(e) => handleInputChange('zip', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
-                          errors.zip ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                        placeholder="33101"
-                      />
-                      {errors.zip && (
-                        <p className="text-red-500 text-sm mt-1 italic">{errors.zip}</p>
-                      )}
-                    </div>
+                    <div className="stripe-line-item-price">${shippingCost.toFixed(2)}</div>
                   </div>
-
-                  {/* Country */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Country *
-                    </label>
-                    <select
-                      value={shippingAddress.country}
-                      onChange={(e) => handleInputChange('country', e.target.value)}
-                      className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
-                        errors.country ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    >
-                      <option value="US">United States</option>
-                      <option value="CA">Canada</option>
-                    </select>
-                    {errors.country && (
-                      <p className="text-red-500 text-sm mt-1 italic">{errors.country}</p>
-                    )}
+                )}
+                
+                {isCalculating && (
+                  <div className="stripe-calculating">
+                    <span className="text-sm text-gray-500">Calculating shipping...</span>
                   </div>
-                </div>
+                )}
               </div>
             </div>
+          </div>
 
-            {/* Order Summary - Right Side */}
-            <div className="lg:col-span-1">
-              <div className="bg-white rounded-lg shadow-md p-6 sticky top-4">
-                <div className="flex items-center mb-6">
-                  <ShoppingCartIcon className="h-6 w-6 text-orange-600 mr-3" />
-                  <h2 className="text-xl font-semibold text-gray-900">Order Summary</h2>
+          {/* Shipping Form - Right Column (like Stripe payment form) */}
+          <div className="stripe-checkout-right">
+            <div className="stripe-form-container">
+              <div className="space-y-4">
+                {/* Email (if guest) */}
+                {!isAuthenticated && (
+                  <div>
+                    <label className="stripe-form-label">Email</label>
+                    <input
+                      type="email"
+                      value={user?.email || ''}
+                      className="stripe-form-input"
+                      placeholder="you@example.com"
+                      disabled={isAuthenticated}
+                    />
+                  </div>
+                )}
+
+                {/* Full Name */}
+                <div>
+                  <label className="stripe-form-label">Full Name</label>
+                  <input
+                    type="text"
+                    value={shippingAddress.name}
+                    onChange={(e) => handleInputChange('name', e.target.value)}
+                    className={`stripe-form-input ${errors.name ? 'stripe-form-input-error' : ''}`}
+                    placeholder="John Doe"
+                  />
+                  {errors.name && (
+                    <p className="stripe-form-error">{errors.name}</p>
+                  )}
                 </div>
 
-                <div className="space-y-4">
-                  {/* Product */}
-                  <div className="flex justify-between text-gray-600">
-                    <span>{cart.productName}</span>
-                    <span>${cart.unitPrice.toFixed(2)}</span>
-                  </div>
+                {/* Street Address */}
+                <div>
+                  <label className="stripe-form-label">Address</label>
+                  <input
+                    type="text"
+                    value={shippingAddress.line1}
+                    onChange={(e) => handleInputChange('line1', e.target.value)}
+                    className={`stripe-form-input ${errors.line1 ? 'stripe-form-input-error' : ''}`}
+                    placeholder="123 Main St"
+                  />
+                  {errors.line1 && (
+                    <p className="stripe-form-error">{errors.line1}</p>
+                  )}
+                </div>
 
-                  {/* Quantity */}
-                  <div className="flex justify-between text-gray-600">
-                    <span>Quantity</span>
-                    <span>×{cart.quantity}</span>
-                  </div>
+                {/* Apartment, Suite, etc. */}
+                <div>
+                  <label className="stripe-form-label">Apartment, suite, etc. (Optional)</label>
+                  <input
+                    type="text"
+                    value={shippingAddress.line2}
+                    onChange={(e) => handleInputChange('line2', e.target.value)}
+                    className="stripe-form-input"
+                    placeholder="Apt 4B"
+                  />
+                </div>
 
-                  <div className="border-t border-gray-200 pt-4">
-                    {/* Subtotal */}
-                    <div className="flex justify-between text-gray-900 font-medium mb-2">
-                      <span>Subtotal</span>
-                      <span>${subtotal.toFixed(2)}</span>
-                    </div>
-
-                    {/* Shipping */}
-                    <div className="flex justify-between text-gray-900 font-medium mb-4">
-                      <span>Shipping</span>
-                      <span>
-                        {isCalculating ? (
-                          <span className="text-sm text-gray-500">Calculating...</span>
-                        ) : shippingCost !== null ? (
-                          `$${shippingCost.toFixed(2)}`
-                        ) : (
-                          <span className="text-sm text-gray-500">Enter address</span>
-                        )}
-                      </span>
-                    </div>
-
-                    {/* Shipping Details */}
-                    {shippingCost !== null && (
-                      <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-4">
-                        <p className="text-sm text-blue-900 font-medium mb-1">
-                          Standard Ground Shipping
-                        </p>
-                        <p className="text-xs text-blue-700">
-                          Delivery: {shippingAddress.country === 'CA' ? '7-14' : '3-7'} business days
-                        </p>
-                      </div>
+                {/* City, State, ZIP in a row */}
+                <div className="stripe-form-row">
+                  <div className="stripe-form-col-2">
+                    <label className="stripe-form-label">City</label>
+                    <input
+                      type="text"
+                      value={shippingAddress.city}
+                      onChange={(e) => handleInputChange('city', e.target.value)}
+                      className={`stripe-form-input ${errors.city ? 'stripe-form-input-error' : ''}`}
+                      placeholder="Miami"
+                    />
+                    {errors.city && (
+                      <p className="stripe-form-error">{errors.city}</p>
                     )}
-
-                    {/* Total */}
-                    <div className="border-t border-gray-200 pt-4">
-                      <div className="flex justify-between text-lg font-bold text-gray-900">
-                        <span>Total</span>
-                        <span>${total.toFixed(2)}</span>
-                      </div>
-                    </div>
                   </div>
 
-                  {/* Proceed to Payment Button */}
-                  <button
-                    onClick={handleProceedToPayment}
-                    disabled={isProcessing || shippingCost === null || Object.keys(errors).length > 0}
-                    className={`w-full py-3 px-4 rounded-md font-semibold transition-colors ${
-                      isProcessing || shippingCost === null
-                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                        : 'bg-orange-600 text-white hover:bg-orange-700'
-                    }`}
+                  <div className="stripe-form-col-1">
+                    <label className="stripe-form-label">State</label>
+                    <input
+                      type="text"
+                      value={shippingAddress.state}
+                      onChange={(e) => handleInputChange('state', e.target.value.toUpperCase())}
+                      className={`stripe-form-input ${errors.state ? 'stripe-form-input-error' : ''}`}
+                      placeholder="FL"
+                      maxLength={2}
+                    />
+                    {errors.state && (
+                      <p className="stripe-form-error">{errors.state}</p>
+                    )}
+                  </div>
+
+                  <div className="stripe-form-col-1">
+                    <label className="stripe-form-label">ZIP</label>
+                    <input
+                      type="text"
+                      value={shippingAddress.zip}
+                      onChange={(e) => handleInputChange('zip', e.target.value)}
+                      className={`stripe-form-input ${errors.zip ? 'stripe-form-input-error' : ''}`}
+                      placeholder="33101"
+                    />
+                    {errors.zip && (
+                      <p className="stripe-form-error">{errors.zip}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Country */}
+                <div>
+                  <label className="stripe-form-label">Country</label>
+                  <select
+                    value={shippingAddress.country}
+                    onChange={(e) => handleInputChange('country', e.target.value)}
+                    className={`stripe-form-input ${errors.country ? 'stripe-form-input-error' : ''}`}
                   >
-                    {isProcessing ? (
-                      <span className="flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                        Processing...
-                      </span>
-                    ) : (
-                      'Proceed to Payment'
-                    )}
-                  </button>
-
-                  <p className="text-xs text-gray-500 text-center mt-4">
-                    You'll be redirected to Stripe for secure payment
-                  </p>
+                    <option value="US">United States</option>
+                    <option value="CA">Canada</option>
+                  </select>
+                  {errors.country && (
+                    <p className="stripe-form-error">{errors.country}</p>
+                  )}
                 </div>
+
+                {/* Pay Button (like Stripe's green button) */}
+                <button
+                  onClick={handleProceedToPayment}
+                  disabled={isProcessing || shippingCost === null || Object.keys(errors).length > 0}
+                  className="stripe-pay-button"
+                >
+                  {isProcessing ? (
+                    <span className="flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                      Processing...
+                    </span>
+                  ) : (
+                    'Pay'
+                  )}
+                </button>
+
+                <p className="stripe-footer-text">
+                  Powered by <strong>Stripe</strong>
+                </p>
               </div>
             </div>
           </div>
