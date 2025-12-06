@@ -169,27 +169,31 @@ export function CheckoutPage() {
     const newErrors: { [key: string]: string } = {}
     
     if (!shippingAddress.name.trim()) {
-      newErrors.name = 'Name is required'
+      newErrors.name = 'Please enter your full name'
     }
     
     if (!shippingAddress.line1.trim()) {
-      newErrors.line1 = 'Street address is required'
+      newErrors.line1 = 'Please enter your street address'
     }
     
     if (!shippingAddress.city.trim()) {
-      newErrors.city = 'City is required'
+      newErrors.city = 'Please enter your city'
     }
     
     if (!shippingAddress.state.trim()) {
-      newErrors.state = 'State/Province is required'
+      newErrors.state = 'Please enter your state'
+    } else if (shippingAddress.country === 'US' && shippingAddress.state.length !== 2) {
+      newErrors.state = 'Please enter 2-letter state code (e.g., FL)'
     }
     
     if (!shippingAddress.zip.trim()) {
-      newErrors.zip = 'ZIP/Postal code is required'
+      newErrors.zip = 'Please enter your ZIP code'
+    } else if (shippingAddress.country === 'US' && !/^\d{5}(-\d{4})?$/.test(shippingAddress.zip)) {
+      newErrors.zip = 'Please enter a valid ZIP code (e.g., 33101)'
     }
     
     if (!shippingAddress.country.trim()) {
-      newErrors.country = 'Country is required'
+      newErrors.country = 'Please select a country'
     }
     
     setErrors(newErrors)
@@ -420,11 +424,12 @@ export function CheckoutPage() {
                   )}
                 </div>
 
-                {/* Pay Button (like Stripe's green button) */}
+                {/* Pay Button (matching Stripe's exact blue button) */}
                 <button
                   onClick={handleProceedToPayment}
-                  disabled={isProcessing || shippingCost === null || Object.keys(errors).length > 0}
+                  disabled={isProcessing || shippingCost === null}
                   className="stripe-pay-button"
+                  type="button"
                 >
                   {isProcessing ? (
                     <span className="flex items-center justify-center">
