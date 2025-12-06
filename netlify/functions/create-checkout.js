@@ -36,7 +36,7 @@ exports.handler = async (event, context) => {
 
   try {
     // Parse request body
-    const { priceId, quantity, product, userEmail, userId, isGuest, shippingAddress } = JSON.parse(event.body)
+    const { priceId, quantity, product, userEmail, userId, isGuest, shippingAddress, preCalculatedShippingCost } = JSON.parse(event.body)
 
     // Validate inputs
     if (!priceId || !quantity || !product) {
@@ -79,65 +79,64 @@ exports.handler = async (event, context) => {
       }
     }
 
-    // Calculate shipping cost dynamically
-    // If shipping address is provided (logged-in user with saved address), calculate exact cost
-    // Otherwise, enable Stripe's dynamic shipping calculation webhook
+    // Calculate shipping cost
+    // Shipping should ALWAYS be pre-calculated before creating Stripe session
+    // Either from CheckoutPage or from saved address
+    let shippingCost
     let shippingOptions = []
-    let shippingAddressCollection = {}
     
-    if (shippingAddress && shippingAddress.state && shippingAddress.country) {
-      // Logged-in user with saved address: pre-calculate shipping
-      console.log('User has saved address, pre-calculating shipping:', shippingAddress)
+    if (preCalculatedShippingCost !== undefined && preCalculatedShippingCost !== null) {
+      // Shipping already calculated on CheckoutPage
+      console.log('Using pre-calculated shipping cost:', preCalculatedShippingCost)
+      shippingCost = preCalculatedShippingCost
+    } else if (shippingAddress && shippingAddress.state && shippingAddress.country) {
+      // Calculate shipping from provided address
+      console.log('Calculating shipping from provided address:', shippingAddress)
       
       const products = {
         [product]: qty,
       }
       
       const shippingResult = await calculateShipping(shippingAddress, products)
-      console.log('Pre-calculated shipping result:', shippingResult)
-      
-      // Create single shipping option with calculated cost
-      shippingOptions = [
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: {
-              amount: Math.round(shippingResult.cost * 100), // Convert to cents
-              currency: 'usd',
+      console.log('Shipping calculation result:', shippingResult)
+      shippingCost = shippingResult.cost
+    } else {
+      // No shipping address or pre-calculated cost
+      // This shouldn't happen with new flow, but handle gracefully
+      console.error('No shipping address or pre-calculated cost provided')
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Shipping address required. Please go through checkout page.' }),
+      }
+    }
+    
+    // Create single shipping option with calculated cost
+    shippingOptions = [
+      {
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: {
+            amount: Math.round(shippingCost * 100), // Convert to cents
+            currency: 'usd',
+          },
+          display_name: 'Standard Ground Shipping',
+          delivery_estimate: {
+            minimum: {
+              unit: 'business_day',
+              value: shippingAddress.country === 'CA' ? 7 : 3,
             },
-            display_name: 'Standard Ground Shipping',
-            delivery_estimate: {
-              minimum: {
-                unit: 'business_day',
-                value: shippingAddress.country === 'CA' ? 7 : 3,
-              },
-              maximum: {
-                unit: 'business_day',
-                value: shippingAddress.country === 'CA' ? 14 : 7,
-              },
-            },
-            metadata: {
-              zone: shippingAddress.state,
-              method: shippingResult.method,
+            maximum: {
+              unit: 'business_day',
+              value: shippingAddress.country === 'CA' ? 14 : 7,
             },
           },
+          metadata: {
+            zone: shippingAddress?.state || 'unknown',
+          },
         },
-      ]
-      
-      // Pre-fill shipping address
-      shippingAddressCollection = null
-    } else {
-      // No saved address: enable Stripe's dynamic shipping calculation
-      console.log('No saved address, enabling dynamic shipping calculation via webhook')
-      
-      // Enable shipping address collection with dynamic calculation
-      shippingAddressCollection = {
-        allowed_countries: ['US', 'CA'], // US and Canada only
-      }
-      
-      // Set shipping_options to empty - Stripe will call our webhook
-      shippingOptions = []
-    }
+      },
+    ]
     
     // Create Stripe Checkout session
     const sessionConfig = {

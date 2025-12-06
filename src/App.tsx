@@ -29,6 +29,7 @@ import { ProfilePage } from './pages/ProfilePage'
 import { CheckoutSuccessPage } from './pages/CheckoutSuccessPage'
 import { CheckoutCancelPage } from './pages/CheckoutCancelPage'
 import { MiniProductPage } from './pages/MiniProductPage'
+import { CheckoutPage } from './pages/CheckoutPage'
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
               <Route path="/customer-selection" element={<CustomerSelectionPage />} />
                     <Route path="/products" element={<ProductsPage />} />
                     <Route path="/solutions" element={<ProductsPage />} />
+                    <Route path="/checkout" element={<CheckoutPage />} />
                     <Route path="/contact" element={<ContactPage />} />
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/support" element={<SupportPage />} />

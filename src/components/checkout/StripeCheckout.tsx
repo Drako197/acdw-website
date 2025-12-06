@@ -6,6 +6,7 @@
  */
 
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import type { ProductType } from '../../config/pricing'
 
@@ -20,6 +21,7 @@ interface StripeCheckoutProps {
 
 export function StripeCheckout({ product, quantity, onError, buttonText, className, allowGuestCheckout = true }: StripeCheckoutProps) {
   const { user, isAuthenticated } = useAuth()
+  const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 
   const handleCheckout = async () => {
@@ -72,7 +74,7 @@ export function StripeCheckout({ product, quantity, onError, buttonText, classNa
       }
 
       const priceData = await priceResponse.json()
-      const { priceId, requiresContact } = priceData
+      const { priceId, unitPrice, requiresContact } = priceData
 
       if (!priceId) {
         console.error('No Price ID returned:', priceData)
@@ -85,54 +87,18 @@ export function StripeCheckout({ product, quantity, onError, buttonText, classNa
         return
       }
 
-      // Step 2: Create Checkout Session
-      // For guests, email will be collected by Stripe Checkout
-      // For logged-in users, use their email
-      const checkoutResponse = await fetch('/.netlify/functions/create-checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          priceId,
-          quantity,
-          product,
-          userEmail: user?.email || '', // Empty for guests, Stripe will collect
-          userId: user?.id || '', // Empty for guests
-          isGuest: !isAuthenticated, // Flag to indicate guest checkout
-        }),
+      // Step 2: Navigate to checkout page with cart data
+      // CheckoutPage will collect address, calculate shipping, then create Stripe session
+      const productName = product.charAt(0).toUpperCase() + product.slice(1)
+      const checkoutParams = new URLSearchParams({
+        product,
+        productName,
+        quantity: quantity.toString(),
+        priceId,
+        unitPrice: unitPrice.toString(),
       })
 
-      if (!checkoutResponse.ok) {
-        const errorData = await checkoutResponse.json()
-        console.error('Checkout session creation failed:', {
-          status: checkoutResponse.status,
-          error: errorData,
-          request: { priceId, quantity, product }
-        })
-        
-        // Show detailed error to user
-        const errorMessage = errorData.details 
-          ? `${errorData.error}\n\nDetails: ${errorData.details}`
-          : errorData.error || `Failed to create checkout session (${checkoutResponse.status})`
-        
-        throw new Error(errorMessage)
-      }
-
-      const checkoutData = await checkoutResponse.json()
-      const { url } = checkoutData
-
-      if (!url) {
-        console.error('No checkout URL returned:', checkoutData)
-        throw new Error('No checkout URL received from server')
-      }
-
-      // Step 3: Redirect to Stripe Checkout
-      if (url) {
-        window.location.href = url
-      } else {
-        throw new Error('No checkout URL received')
-      }
+      navigate(`/checkout?${checkoutParams.toString()}`)
     } catch (error: any) {
       console.error('Checkout error:', error)
       onError?.(error.message || 'Checkout failed. Please try again.')
