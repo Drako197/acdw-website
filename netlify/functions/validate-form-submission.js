@@ -205,6 +205,42 @@ const validateFormFields = (formType, formData) => {
         // Email-only forms - email validation handled separately
         break
         
+      case 'upgrade':
+        // Core 1.0 upgrade form requires: firstName, lastName, email, phone, street, city, state, zip, consent, photo
+        const upgradeFirstName = formData.get('firstName')?.trim() || ''
+        const upgradeLastName = formData.get('lastName')?.trim() || ''
+        const upgradeEmail = formData.get('email')?.trim() || ''
+        const upgradePhone = formData.get('phone')?.trim() || ''
+        const upgradeStreet = formData.get('street')?.trim() || ''
+        const upgradeCity = formData.get('city')?.trim() || ''
+        const upgradeState = formData.get('state')?.trim() || ''
+        const upgradeZip = formData.get('zip')?.trim() || ''
+        const upgradeConsent = formData.get('consent')
+        const upgradePhoto = formData.get('photo')
+        
+        if (!upgradeFirstName) errors.push('First name is required')
+        if (!upgradeLastName) errors.push('Last name is required')
+        if (!upgradeEmail) {
+          errors.push('Email is required')
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(upgradeEmail)) {
+          errors.push('Invalid email format')
+        }
+        if (!upgradePhone) errors.push('Phone is required')
+        if (!upgradeStreet) errors.push('Street address is required')
+        if (!upgradeCity) errors.push('City is required')
+        if (!upgradeState) errors.push('State is required')
+        if (!upgradeZip) {
+          errors.push('ZIP code is required')
+        } else if (!/^\d{5}$/.test(upgradeZip)) {
+          errors.push('ZIP code must be 5 digits')
+        }
+        if (!upgradeConsent || upgradeConsent !== 'yes') {
+          errors.push('You must acknowledge the terms to continue')
+        }
+        // Note: Photo validation is handled separately for multipart forms
+        // File size check happens in file validation step
+        break
+        
       case 'unsubscribe':
         // Unsubscribe form requires: email, reason (optional but must be valid if provided)
         const unsubscribeReason = formData.get('reason')?.trim() || ''
@@ -659,10 +695,14 @@ exports.handler = async (event, context) => {
         const FormData = require('form-data')
         const formDataToForward = new FormData()
         
+        // CRITICAL: Always include form-name first (Netlify Forms requires this)
+        formDataToForward.append('form-name', formName)
+        
         // Add all fields
         for (const [key, value] of formData.entries()) {
-          // Skip honeypot and recaptcha fields (don't forward to Netlify)
-          if (key === 'bot-field' || key === 'honeypot-1' || key === 'honeypot-2' || key === 'recaptcha-token') {
+          // Skip honeypot, recaptcha, and form-type fields (don't forward to Netlify)
+          // But DO include form-name (already added above)
+          if (key === 'bot-field' || key === 'honeypot-1' || key === 'honeypot-2' || key === 'recaptcha-token' || key === 'form-type' || key === 'form-name') {
             continue
           }
           
