@@ -18,6 +18,7 @@ const {
   logInjectionAttempt,
   EVENT_TYPES 
 } = require('./utils/security-logger')
+const { parseMultipartFormData } = require('./utils/parse-multipart')
 
 // reCAPTCHA verification
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY
@@ -287,8 +288,49 @@ exports.handler = async (event, context) => {
     
     const path = event.path || ''
     
-    // Parse form data
-    const formData = new URLSearchParams(event.body)
+    // Parse form data - handle both multipart/form-data and application/x-www-form-urlencoded
+    const contentType = event.headers['content-type'] || event.headers['Content-Type'] || ''
+    let formData
+    let fileData = {} // Store file data for multipart forms
+    
+    if (contentType.includes('multipart/form-data')) {
+      // For multipart/form-data (file uploads), parse using busboy
+      try {
+        const { fields, files } = await parseMultipartFormData(event)
+        
+        // Create a formData-like object for validation
+        formData = {
+          get: (key) => {
+            if (fields[key] !== undefined) return fields[key]
+            if (files[key]) return files[key]
+            return null
+          },
+          entries: function* () {
+            for (const [key, value] of Object.entries(fields)) {
+              yield [key, value]
+            }
+            for (const [key, file] of Object.entries(files)) {
+              yield [key, file]
+            }
+          }
+        }
+        
+        fileData = files // Store files for later forwarding to Netlify Forms
+      } catch (error) {
+        console.error('Error parsing multipart form data:', error)
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ 
+            error: 'Invalid form data format',
+            message: 'Unable to parse form submission'
+          }),
+        }
+      }
+    } else {
+      // For application/x-www-form-urlencoded, use URLSearchParams
+      formData = new URLSearchParams(event.body)
+    }
     
     // Get form name and type
     const formName = formData.get('form-name') || ''
@@ -600,28 +642,66 @@ exports.handler = async (event, context) => {
     logFormSubmission(formType, email, ip, userAgent, true)
     
     // Build sanitized form data for forwarding
-    const sanitizedFormBody = new URLSearchParams()
-    for (const [key, value] of formData.entries()) {
-      // Skip honeypot and recaptcha fields (don't forward to Netlify)
-      if (key === 'bot-field' || key === 'honeypot-1' || key === 'honeypot-2' || key === 'recaptcha-token') {
-        continue
-      }
-      // Use sanitized value if available, otherwise use original
-      if (key in sanitizedData) {
-        sanitizedFormBody.append(key, sanitizedData[key])
-      } else {
-        sanitizedFormBody.append(key, value)
-      }
-    }
+    const requestContentType = event.headers['content-type'] || event.headers['Content-Type'] || ''
+    let forwardResponse
     
-    // Forward the sanitized submission to Netlify Forms
-    const forwardResponse = await fetch(netlifyFormUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: sanitizedFormBody.toString(), // Forward sanitized form data
-    })
+    if (requestContentType.includes('multipart/form-data')) {
+      // For multipart forms (with file uploads), rebuild FormData
+      const FormData = require('form-data')
+      const formDataToForward = new FormData()
+      
+      // Add all fields
+      for (const [key, value] of formData.entries()) {
+        // Skip honeypot and recaptcha fields (don't forward to Netlify)
+        if (key === 'bot-field' || key === 'honeypot-1' || key === 'honeypot-2' || key === 'recaptcha-token') {
+          continue
+        }
+        
+        // Handle file uploads
+        if (fileData[key]) {
+          const file = fileData[key]
+          formDataToForward.append(key, file.data, {
+            filename: file.filename,
+            contentType: file.mimeType
+          })
+        } else {
+          // Use sanitized value if available, otherwise use original
+          const valueToUse = sanitizedData[key] !== undefined ? sanitizedData[key] : value
+          formDataToForward.append(key, valueToUse)
+        }
+      }
+      
+      // Forward multipart form data
+      forwardResponse = await fetch(netlifyFormUrl, {
+        method: 'POST',
+        headers: formDataToForward.getHeaders(),
+        body: formDataToForward
+      })
+    } else {
+      // For application/x-www-form-urlencoded, use URLSearchParams
+      const sanitizedFormBody = new URLSearchParams()
+      for (const [key, value] of formData.entries()) {
+        // Skip honeypot and recaptcha fields (don't forward to Netlify)
+        if (key === 'bot-field' || key === 'honeypot-1' || key === 'honeypot-2' || key === 'recaptcha-token') {
+          continue
+        }
+        // Use sanitized value if available, otherwise use original
+        if (key in sanitizedData) {
+          sanitizedFormBody.append(key, sanitizedData[key])
+        } else {
+          sanitizedFormBody.append(key, value)
+        }
+      }
+      
+      // Forward the sanitized submission to Netlify Forms
+      forwardResponse = await fetch(netlifyFormUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: sanitizedFormBody.toString(), // Forward sanitized form data
+      })
+    }
 
     if (forwardResponse.ok) {
       // Success - return Netlify's response
