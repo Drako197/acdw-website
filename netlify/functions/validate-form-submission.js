@@ -317,13 +317,21 @@ exports.handler = async (event, context) => {
         
         fileData = files // Store files for later forwarding to Netlify Forms
       } catch (error) {
-        console.error('Error parsing multipart form data:', error)
+        console.error('❌ Error parsing multipart form data:', {
+          error: error.message,
+          stack: error.stack,
+          contentType,
+          bodyType: typeof event.body,
+          bodyLength: event.body ? (Buffer.isBuffer(event.body) ? event.body.length : String(event.body).length) : 0,
+          isBase64Encoded: event.isBase64Encoded
+        })
         return {
           statusCode: 400,
           headers,
           body: JSON.stringify({ 
             error: 'Invalid form data format',
-            message: 'Unable to parse form submission'
+            message: 'Unable to parse form submission. Please try again.',
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
           }),
         }
       }
@@ -647,36 +655,68 @@ exports.handler = async (event, context) => {
     
     if (requestContentType.includes('multipart/form-data')) {
       // For multipart forms (with file uploads), rebuild FormData
-      const FormData = require('form-data')
-      const formDataToForward = new FormData()
-      
-      // Add all fields
-      for (const [key, value] of formData.entries()) {
-        // Skip honeypot and recaptcha fields (don't forward to Netlify)
-        if (key === 'bot-field' || key === 'honeypot-1' || key === 'honeypot-2' || key === 'recaptcha-token') {
-          continue
+      try {
+        const FormData = require('form-data')
+        const formDataToForward = new FormData()
+        
+        // Add all fields
+        for (const [key, value] of formData.entries()) {
+          // Skip honeypot and recaptcha fields (don't forward to Netlify)
+          if (key === 'bot-field' || key === 'honeypot-1' || key === 'honeypot-2' || key === 'recaptcha-token') {
+            continue
+          }
+          
+          // Handle file uploads
+          if (fileData[key]) {
+            const file = fileData[key]
+            formDataToForward.append(key, file.data, {
+              filename: file.filename,
+              contentType: file.mimeType
+            })
+          } else {
+            // Use sanitized value if available, otherwise use original
+            const valueToUse = sanitizedData[key] !== undefined ? sanitizedData[key] : value
+            // Only append if value is a string (not a file object)
+            if (typeof valueToUse === 'string') {
+              formDataToForward.append(key, valueToUse)
+            }
+          }
         }
         
-        // Handle file uploads
-        if (fileData[key]) {
-          const file = fileData[key]
-          formDataToForward.append(key, file.data, {
-            filename: file.filename,
-            contentType: file.mimeType
+        // Forward multipart form data
+        // Note: form-data library returns a stream, which fetch() in Node.js should handle
+        // But we need to ensure it's properly converted
+        const formDataHeaders = formDataToForward.getHeaders()
+        forwardResponse = await fetch(netlifyFormUrl, {
+          method: 'POST',
+          headers: {
+            ...formDataHeaders,
+            // Ensure we don't override content-type
+          },
+          body: formDataToForward
+        }).catch(fetchError => {
+          console.error('❌ Fetch error when forwarding multipart:', {
+            error: fetchError.message,
+            stack: fetchError.stack,
+            formType
           })
-        } else {
-          // Use sanitized value if available, otherwise use original
-          const valueToUse = sanitizedData[key] !== undefined ? sanitizedData[key] : value
-          formDataToForward.append(key, valueToUse)
+          throw fetchError
+        })
+      } catch (forwardError) {
+        console.error('❌ Error forwarding multipart form to Netlify:', {
+          error: forwardError.message,
+          stack: forwardError.stack,
+          formType
+        })
+        return {
+          statusCode: 500,
+          headers,
+          body: JSON.stringify({ 
+            error: 'Form submission failed',
+            message: 'Unable to forward form data to Netlify Forms'
+          }),
         }
       }
-      
-      // Forward multipart form data
-      forwardResponse = await fetch(netlifyFormUrl, {
-        method: 'POST',
-        headers: formDataToForward.getHeaders(),
-        body: formDataToForward
-      })
     } else {
       // For application/x-www-form-urlencoded, use URLSearchParams
       const sanitizedFormBody = new URLSearchParams()
@@ -736,7 +776,11 @@ exports.handler = async (event, context) => {
     console.error('❌ Validation error:', {
       message: error.message,
       stack: error.stack,
-      body: event.body?.substring(0, 200)
+      contentType: event.headers['content-type'] || event.headers['Content-Type'],
+      bodyType: typeof event.body,
+      bodyLength: event.body ? (Buffer.isBuffer(event.body) ? event.body.length : String(event.body).length) : 0,
+      isBase64Encoded: event.isBase64Encoded,
+      path: event.path
     })
     
     return {
@@ -744,7 +788,8 @@ exports.handler = async (event, context) => {
       headers,
       body: JSON.stringify({ 
         error: 'Server error',
-        message: 'An error occurred processing your request'
+        message: 'An error occurred processing your request',
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
       }),
     }
   }

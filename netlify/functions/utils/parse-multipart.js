@@ -59,13 +59,32 @@ function parseMultipartFormData(event) {
       }
     })
     
-    // Parse the body
-    const bodyBuffer = Buffer.isBuffer(event.body) 
-      ? event.body 
-      : Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8')
+    // Parse the body - Netlify Functions may receive body as string or Buffer
+    let bodyBuffer
+    if (Buffer.isBuffer(event.body)) {
+      bodyBuffer = event.body
+    } else if (typeof event.body === 'string') {
+      // If it's a string, check if it's base64 encoded
+      if (event.isBase64Encoded) {
+        bodyBuffer = Buffer.from(event.body, 'base64')
+      } else {
+        // If it's a plain string, convert to buffer
+        bodyBuffer = Buffer.from(event.body, 'binary')
+      }
+    } else {
+      // Fallback: try to convert to buffer
+      bodyBuffer = Buffer.from(String(event.body), 'binary')
+    }
     
-    busboy.write(bodyBuffer)
-    busboy.end()
+    try {
+      busboy.write(bodyBuffer)
+      busboy.end()
+    } catch (writeError) {
+      if (!hasError) {
+        hasError = true
+        reject(new Error(`Failed to write to busboy: ${writeError.message}`))
+      }
+    }
   })
 }
 
