@@ -684,21 +684,19 @@ exports.handler = async (event, context) => {
         }
         
         // Forward multipart form data
-        // Note: form-data library returns a stream, which fetch() in Node.js should handle
-        // But we need to ensure it's properly converted
+        // form-data library returns a readable stream that fetch() can handle directly
         const formDataHeaders = formDataToForward.getHeaders()
+        
         forwardResponse = await fetch(netlifyFormUrl, {
           method: 'POST',
-          headers: {
-            ...formDataHeaders,
-            // Ensure we don't override content-type
-          },
+          headers: formDataHeaders,
           body: formDataToForward
         }).catch(fetchError => {
           console.error('❌ Fetch error when forwarding multipart:', {
             error: fetchError.message,
             stack: fetchError.stack,
-            formType
+            formType,
+            headers: formDataHeaders
           })
           throw fetchError
         })
