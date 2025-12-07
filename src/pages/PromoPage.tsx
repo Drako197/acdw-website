@@ -183,7 +183,6 @@ export function PromoPage() {
               onSubmit={handleSubmit} 
               className="promo-registration-form"
               name="promo-signup"
-              data-netlify="true"
               data-netlify-honeypot="bot-field"
               noValidate
             >

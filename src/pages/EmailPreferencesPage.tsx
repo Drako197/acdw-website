@@ -53,10 +53,12 @@ export function EmailPreferencesPage() {
       
       if (isDevelopment) {
         // In development, simulate a successful submission
+        // SECURITY: Don't log full email - only log first 3 characters for debugging
+        const emailPrefix = email ? email.substring(0, 3) + '***' : 'none'
         console.log('📝 [DEV MODE] Email preferences update simulated:', {
-          email,
+          email: emailPrefix, // Sanitized - only first 3 chars
           preferences,
-          data: submissionData
+          data: { ...submissionData, email: emailPrefix } // Sanitize in data too
         })
         // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 1000))
@@ -111,7 +113,6 @@ export function EmailPreferencesPage() {
             <form 
               onSubmit={handleSubmit}
               name="email-preferences"
-              data-netlify="true"
               data-netlify-honeypot="bot-field"
               noValidate
             >

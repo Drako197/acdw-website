@@ -24,7 +24,7 @@ export function ProtectedRoute({
   requireAuth = true,
   fallback = '/login',
 }: ProtectedRouteProps) {
-  const { isAuthenticated, user, isLoading } = useAuth()
+  const { isAuthenticated, user, isLoading, sessionError, isSessionValid } = useAuth()
   const location = useLocation()
 
   // Show loading state while checking auth
@@ -36,6 +36,22 @@ export function ProtectedRoute({
           <p className="text-gray-600">Loading...</p>
         </div>
       </div>
+    )
+  }
+
+  // Check for session expiration
+  if (sessionError || (requireAuth && !isSessionValid())) {
+    console.warn('🔒 Session invalid, redirecting to login:', sessionError)
+    // Save the attempted location for redirect after login
+    return (
+      <Navigate 
+        to={fallback} 
+        state={{ 
+          from: location,
+          message: sessionError || 'Your session has expired. Please sign in again.'
+        }} 
+        replace 
+      />
     )
   }
 

@@ -114,6 +114,43 @@ exports.handler = async (event, context) => {
                          (session.customer && typeof session.customer === 'object' ? session.customer.email : null) ||
                          null
 
+    // Parse line items to separate product from shipping
+    let productSubtotal = 0
+    let shippingCost = 0
+    const parsedLineItems = []
+    
+    if (lineItems?.data) {
+      for (const item of lineItems.data) {
+        const itemAmount = item.amount_total ? item.amount_total / 100 : 0
+        const itemDescription = item.description || item.price?.product?.name || 'Product'
+        
+        // Check if this is a shipping line item
+        const isShipping = itemDescription.toLowerCase().includes('shipping') || 
+                          itemDescription.toLowerCase().includes('handling')
+        
+        if (isShipping) {
+          shippingCost = itemAmount
+        } else {
+          productSubtotal += itemAmount
+        }
+        
+        parsedLineItems.push({
+          description: itemDescription,
+          quantity: item.quantity || 1,
+          amount: itemAmount,
+          isShipping: isShipping,
+        })
+      }
+    }
+    
+    // If we couldn't parse line items, fall back to Stripe's calculations
+    if (parsedLineItems.length === 0) {
+      productSubtotal = session.amount_subtotal ? session.amount_subtotal / 100 : 0
+      shippingCost = session.shipping_cost?.amount_total 
+        ? session.shipping_cost.amount_total / 100
+        : 0
+    }
+
     // Extract relevant information safely
     const orderDetails = {
       sessionId: session.id,
@@ -121,19 +158,12 @@ exports.handler = async (event, context) => {
       amountTotal: session.amount_total ? session.amount_total / 100 : 0,
       currency: session.currency || 'usd',
       paymentStatus: session.payment_status || 'unknown',
-      subtotal: session.amount_subtotal ? session.amount_subtotal / 100 : null,
+      subtotal: productSubtotal, // Product cost only (excluding shipping)
       // Tax might be in total_details.breakdown.taxes or total_details.amount_tax
       tax: session.total_details?.breakdown?.taxes?.[0]?.amount 
         ? session.total_details.breakdown.taxes[0].amount / 100
         : (session.total_details?.amount_tax ? session.total_details.amount_tax / 100 : null),
-      // Shipping cost from shipping_cost.amount_total or calculated from breakdown
-      shipping: session.shipping_cost?.amount_total 
-        ? session.shipping_cost.amount_total / 100
-        : (session.total_details?.breakdown?.shipping?.amount_total
-          ? session.total_details.breakdown.shipping.amount_total / 100
-          : (session.amount_total && session.amount_subtotal
-            ? Math.max(0, (session.amount_total - session.amount_subtotal - (session.total_details?.amount_tax || 0)) / 100)
-            : null)),
+      shipping: shippingCost, // Shipping cost from line items
       shippingDetails: session.shipping_details
         ? {
             name: session.shipping_details.name || '',
@@ -147,11 +177,7 @@ exports.handler = async (event, context) => {
             },
           }
         : null,
-      lineItems: lineItems?.data?.map((item) => ({
-        description: item.description || item.price?.product?.name || 'Product',
-        quantity: item.quantity || 1,
-        amount: item.amount_total ? item.amount_total / 100 : 0,
-      })) || [],
+      lineItems: parsedLineItems,
       metadata: session.metadata || {},
     }
     

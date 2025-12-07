@@ -496,14 +496,14 @@ export function ContactPage() {
       
       // Simulate success
       setSubmitSuccess(true)
-      // Reset form
-      setFormData({
+    // Reset form
+    setFormData({
         firstName: '',
         lastName: '',
-        email: '',
-        company: '',
-        phone: '',
-        customerType: '',
+      email: '',
+      company: '',
+      phone: '',
+      customerType: '',
         message: '',
         referralSource: '',
         consent: false,
@@ -649,8 +649,8 @@ export function ContactPage() {
                   </button>
                 )
               })}
+              </div>
             </div>
-                  </div>
 
           <div className="contact-layout-grid">
             {/* Form Section */}
@@ -663,14 +663,13 @@ export function ContactPage() {
                   <div className="contact-form-title-section">
                     <h2 className="contact-form-title">{activeConfig.title}</h2>
                     <p className="contact-form-description">{activeConfig.description}</p>
-            </div>
-          </div>
+                  </div>
+                  </div>
 
                 <form 
                   onSubmit={handleSubmit} 
                   className="contact-form-field"
                   name={`contact-${activeFormType}`}
-                  data-netlify="true"
                   data-netlify-honeypot="bot-field"
                   noValidate
                 >
@@ -682,7 +681,7 @@ export function ContactPage() {
                     <input type="text" name="bot-field" tabIndex={-1} autoComplete="off" />
                     <input type="text" name="honeypot-1" tabIndex={-1} autoComplete="off" />
                     <input type="text" name="honeypot-2" tabIndex={-1} autoComplete="off" />
-                  </div>
+              </div>
                   <input type="hidden" name="form-type" value={activeFormType} />
                   
                   {/* Honeypot field for spam protection (hidden from users) */}
@@ -690,7 +689,7 @@ export function ContactPage() {
                     <label>
                       Don't fill this out if you're human: <input name="bot-field" />
                     </label>
-                  </div>
+            </div>
                   
                   {/* Common Fields */}
                   <div className="contact-form-grid">
@@ -712,7 +711,7 @@ export function ContactPage() {
                       {fieldErrors.firstName && (
                         <p className="field-error-message">{fieldErrors.firstName}</p>
                       )}
-                    </div>
+          </div>
 
                     <div className="contact-form-field">
                       <label htmlFor="lastName" className="contact-form-label">
@@ -732,7 +731,7 @@ export function ContactPage() {
                       {fieldErrors.lastName && (
                         <p className="field-error-message">{fieldErrors.lastName}</p>
                       )}
-                    </div>
+                </div>
                 </div>
 
                   <div className="contact-form-field">
@@ -805,7 +804,7 @@ export function ContactPage() {
                         {fieldErrors.company && (
                           <p className="field-error-message">{fieldErrors.company}</p>
                         )}
-                      </div>
+                </div>
                     )}
                 </div>
 
@@ -862,25 +861,25 @@ export function ContactPage() {
 
                   {activeFormType === 'support' && (
                     <>
-                      <div>
+              <div>
                         <label htmlFor="customerType" className="contact-form-label">
-                          Customer Type
-                        </label>
-                        <select
-                          id="customerType"
-                          name="customerType"
-                          value={formData.customerType}
-                          onChange={handleInputChange}
-                          className="input"
-                        >
-                          <option value="">Select your customer type</option>
-                          <option value="homeowner">Homeowner</option>
-                          <option value="hvac-contractor">HVAC Contractor</option>
+                  Customer Type
+                </label>
+                <select
+                  id="customerType"
+                  name="customerType"
+                  value={formData.customerType}
+                  onChange={handleInputChange}
+                  className="input"
+                >
+                  <option value="">Select your customer type</option>
+                  <option value="homeowner">Homeowner</option>
+                  <option value="hvac-contractor">HVAC Contractor</option>
                           <option value="property-manager">Property Manager</option>
-                          <option value="city-official">City/Code Official</option>
-                          <option value="other">Other</option>
-                        </select>
-                      </div>
+                  <option value="city-official">City/Code Official</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
                       <div className="contact-form-grid">
                         <div>
                           <label htmlFor="product" className="contact-form-label">
@@ -952,7 +951,7 @@ export function ContactPage() {
 
                   {activeFormType === 'sales' && (
                     <>
-                      <div>
+              <div>
                         <label htmlFor="customerType" className="contact-form-label">
                           Customer Type
                         </label>

@@ -6,7 +6,7 @@
  * SECURITY: Clerk handles JWT tokens, session management, and role validation.
  */
 
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useUser, useAuth as useClerkAuth } from '@clerk/clerk-react'
 import type { User, AuthState, LoginCredentials, SignupData } from '../types/auth'
@@ -18,6 +18,8 @@ interface AuthContextType extends AuthState {
   refreshToken: () => Promise<void>
   hasRole: (role: User['role']) => boolean
   hasAnyRole: (roles: User['role'][]) => boolean
+  isSessionValid: () => boolean
+  sessionError: string | null
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -25,7 +27,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 // AuthProvider that uses Clerk (only when ClerkProvider is present)
 function AuthProviderWithClerk({ children }: { children: ReactNode }) {
   const { user: clerkUser, isLoaded: userLoaded } = useUser()
-  const { signOut } = useClerkAuth()
+  const { signOut, isSignedIn, getToken } = useClerkAuth()
+  const [sessionError, setSessionError] = useState<string | null>(null)
 
   // Convert Clerk user to our User type
   const user: User | null = clerkUser
@@ -41,8 +44,40 @@ function AuthProviderWithClerk({ children }: { children: ReactNode }) {
       }
     : null
 
-  const isAuthenticated = !!user
+  const isAuthenticated = !!user && !!isSignedIn
   const isLoading = !userLoaded
+  
+  // Session validation: Check if Clerk session is still valid
+  useEffect(() => {
+    if (userLoaded && !isSignedIn && clerkUser) {
+      // User object exists but Clerk says not signed in - session expired
+      setSessionError('Your session has expired. Please sign in again.')
+      console.warn('⚠️ Session expired - Clerk user exists but isSignedIn is false')
+    }
+  }, [userLoaded, isSignedIn, clerkUser])
+  
+  // Validate session periodically (every 5 minutes)
+  useEffect(() => {
+    if (!isAuthenticated) return
+    
+    const validateSession = async () => {
+      try {
+        const token = await getToken()
+        if (!token) {
+          setSessionError('Your session has expired. Please sign in again.')
+          console.warn('⚠️ Session validation failed - No token available')
+        }
+      } catch (error) {
+        console.error('Session validation error:', error)
+        setSessionError('Your session has expired. Please sign in again.')
+      }
+    }
+    
+    // Check session every 5 minutes
+    const intervalId = setInterval(validateSession, 5 * 60 * 1000)
+    
+    return () => clearInterval(intervalId)
+  }, [isAuthenticated, getToken])
 
   const login = async (_credentials: LoginCredentials) => {
     throw new Error('Use Clerk SignIn component for login')
@@ -58,6 +93,18 @@ function AuthProviderWithClerk({ children }: { children: ReactNode }) {
 
   const refreshToken = async () => {
     // Clerk handles token refresh automatically
+    // But we can force a check by getting a new token
+    try {
+      await getToken({ skipCache: true })
+      setSessionError(null)
+    } catch (error) {
+      console.error('Token refresh failed:', error)
+      setSessionError('Your session has expired. Please sign in again.')
+    }
+  }
+
+  const isSessionValid = (): boolean => {
+    return isAuthenticated && !sessionError
   }
 
   const hasRole = (role: User['role']): boolean => {
@@ -81,6 +128,8 @@ function AuthProviderWithClerk({ children }: { children: ReactNode }) {
         refreshToken,
         hasRole,
         hasAnyRole,
+        isSessionValid,
+        sessionError,
       }}
     >
       {children}
@@ -117,6 +166,10 @@ function AuthProviderWithoutClerk({ children }: { children: ReactNode }) {
   const hasAnyRole = (_roles: User['role'][]): boolean => {
     return false
   }
+  
+  const isSessionValid = (): boolean => {
+    return false
+  }
 
   return (
     <AuthContext.Provider
@@ -131,6 +184,8 @@ function AuthProviderWithoutClerk({ children }: { children: ReactNode }) {
         refreshToken,
         hasRole,
         hasAnyRole,
+        isSessionValid,
+        sessionError: null,
       }}
     >
       {children}

@@ -1186,7 +1186,6 @@ export function Hero() {
                   <form 
                 className="upgrade-modal-form" 
                 name="core-upgrade"
-                data-netlify="true"
                 data-netlify-honeypot="bot-field"
                 encType="multipart/form-data"
                 noValidate

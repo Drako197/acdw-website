@@ -315,7 +315,6 @@ export function UnsubscribePage() {
             <form 
               onSubmit={handleSubmit}
               name="unsubscribe"
-              data-netlify="true"
               data-netlify-honeypot="bot-field"
               noValidate
             >

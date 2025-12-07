@@ -204,6 +204,37 @@ const validateFormFields = (formType, formData) => {
         // Email-only forms - email validation handled separately
         break
         
+      case 'unsubscribe':
+        // Unsubscribe form requires: email, reason (optional but must be valid if provided)
+        const unsubscribeReason = formData.get('reason')?.trim() || ''
+        if (unsubscribeReason) {
+          // SECURITY: Validate dropdown value - prevent malformed email injection
+          const ALLOWED_UNSUBSCRIBE_REASONS = [
+            'too-many-emails',
+            'not-relevant',
+            'never-signed-up',
+            'other'
+          ]
+          
+          if (!ALLOWED_UNSUBSCRIBE_REASONS.includes(unsubscribeReason)) {
+            // Check if reason looks like a malformed email (bot attack pattern)
+            if (unsubscribeReason.includes('-') && !unsubscribeReason.includes('@')) {
+              errors.push('Invalid reason selected - suspicious pattern detected')
+              console.warn('🚨 Bot attack detected: Malformed email in unsubscribe reason field', {
+                reason: unsubscribeReason,
+                ip: getClientIP ? getClientIP(event) : 'unknown'
+              })
+            } else {
+              errors.push('Invalid reason selected')
+            }
+          }
+        }
+        break
+        
+      case 'email-preferences':
+        // Email preferences form - email validation handled separately
+        break
+        
       default:
         console.warn(`Unknown form type: ${formType}`)
     }
@@ -245,11 +276,133 @@ exports.handler = async (event, context) => {
   }
 
   try {
+    // SECURITY: Check if this is a webhook endpoint (exempt from some validations)
+    const isWebhookEndpoint = (path) => {
+      return path && (path.includes('stripe-webhook') || path.includes('webhook'))
+    }
+    
+    const isCheckoutEndpoint = (path) => {
+      return path && (path.includes('create-checkout') || path.includes('get-checkout-session') || path.includes('get-price-id'))
+    }
+    
+    const path = event.path || ''
+    
     // Parse form data
     const formData = new URLSearchParams(event.body)
     
-    // Get form type from form data or default to 'contact'
+    // Get form name and type
+    const formName = formData.get('form-name') || ''
     const formType = formData.get('form-type') || 'contact'
+    
+    // SECURITY: Form name whitelist validation (only allow known form names)
+    const ALLOWED_FORM_NAMES = [
+      'contact-general',
+      'contact-support',
+      'contact-sales',
+      'contact-installer',
+      'contact-demo',
+      'email-preferences',
+      'unsubscribe',
+      'promo-signup',
+      'core-upgrade',
+      'hero-email'
+    ]
+    
+    // Only validate form name if this is a form submission (not a webhook or checkout endpoint)
+    if (!isWebhookEndpoint(path) && !isCheckoutEndpoint(path)) {
+      if (formName && !ALLOWED_FORM_NAMES.includes(formName)) {
+        console.warn('❌ Invalid form name rejected:', {
+          formName,
+          ip: getClientIP(event),
+          userAgent: event.headers['user-agent'] || 'unknown',
+          path
+        })
+        logBotDetected(formType, 'invalid-form-name', getClientIP(event), event.headers['user-agent'] || 'unknown', {
+          formName,
+          allowedNames: ALLOWED_FORM_NAMES
+        })
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ 
+            error: 'Invalid form name',
+            message: 'Form submission rejected'
+          }),
+        }
+      }
+    }
+    
+    // SECURITY: Origin/Referer validation (exempt webhooks and checkout endpoints)
+    if (!isWebhookEndpoint(path) && !isCheckoutEndpoint(path)) {
+      const ALLOWED_ORIGINS = [
+        'https://www.acdrainwiz.com',
+        'https://acdrainwiz.com'
+      ]
+      
+      const origin = event.headers.origin || event.headers.referer || ''
+      const isValidOrigin = !origin || ALLOWED_ORIGINS.some(allowed => origin.startsWith(allowed))
+      
+      if (!isValidOrigin) {
+        console.warn('❌ Invalid origin rejected:', {
+          origin,
+          ip: getClientIP(event),
+          userAgent: event.headers['user-agent'] || 'unknown',
+          path
+        })
+        logBotDetected(formType, 'invalid-origin', getClientIP(event), event.headers['user-agent'] || 'unknown', {
+          origin,
+          allowedOrigins: ALLOWED_ORIGINS
+        })
+        return {
+          statusCode: 403,
+          headers,
+          body: JSON.stringify({ 
+            error: 'Invalid origin',
+            message: 'Request rejected'
+          }),
+        }
+      }
+    }
+    
+    // SECURITY: User-Agent validation (exempt webhooks)
+    if (!isWebhookEndpoint(path)) {
+      const BOT_USER_AGENTS = [
+        'curl',
+        'wget',
+        'python-requests',
+        'go-http-client',
+        'java/',
+        'scrapy',
+        'bot',
+        'crawler',
+        'spider',
+        'httpie',
+        'postman'
+      ]
+      
+      const userAgent = event.headers['user-agent'] || ''
+      const isBotUserAgent = BOT_USER_AGENTS.some(bot => userAgent.toLowerCase().includes(bot.toLowerCase()))
+      
+      if (isBotUserAgent) {
+        console.warn('❌ Bot user agent rejected:', {
+          userAgent,
+          ip: getClientIP(event),
+          path
+        })
+        logBotDetected(formType, 'bot-user-agent', getClientIP(event), userAgent, {
+          userAgent,
+          detectedBots: BOT_USER_AGENTS.filter(bot => userAgent.toLowerCase().includes(bot.toLowerCase()))
+        })
+        return {
+          statusCode: 403,
+          headers,
+          body: JSON.stringify({ 
+            error: 'Bot detected',
+            message: 'Request rejected'
+          }),
+        }
+      }
+    }
     
     // Get honeypot fields (field names may vary by form)
     const botField = formData.get('bot-field') || formData.get('website') || formData.get('url') || ''
@@ -345,7 +498,7 @@ exports.handler = async (event, context) => {
         formType,
         ip,
         userAgent,
-        email: email.substring(0, 20) + '...'
+        email: email ? email.substring(0, 3) + '***' : 'none' // SECURITY: Only log first 3 chars
       })
       // Graceful degradation - allow but log
     }
@@ -377,6 +530,39 @@ exports.handler = async (event, context) => {
     // Validation happens on original data, but we'll forward sanitized data
     const formErrors = validateFormFields(formType, formData)
     errors.push(...formErrors)
+    
+    // SECURITY: Additional validation for unsubscribe form - dropdown value validation
+    if (formType === 'unsubscribe' || formName === 'unsubscribe') {
+      const unsubscribeReason = formData.get('reason')?.trim() || ''
+      if (unsubscribeReason) {
+        const ALLOWED_UNSUBSCRIBE_REASONS = [
+          'too-many-emails',
+          'not-relevant',
+          'never-signed-up',
+          'other'
+        ]
+        
+        if (!ALLOWED_UNSUBSCRIBE_REASONS.includes(unsubscribeReason)) {
+          // Check if reason looks like a malformed email (bot attack pattern)
+          if (unsubscribeReason.includes('-') && !unsubscribeReason.includes('@') && unsubscribeReason.length > 10) {
+            errors.push('Invalid reason selected - suspicious pattern detected')
+            console.warn('🚨 Bot attack detected: Malformed email in unsubscribe reason field', {
+              reason: unsubscribeReason,
+              formName,
+              ip,
+              userAgent
+            })
+            logBotDetected(formType, 'malformed-email-in-dropdown', ip, userAgent, {
+              reason: unsubscribeReason,
+              formName,
+              allowedReasons: ALLOWED_UNSUBSCRIBE_REASONS
+            })
+          } else {
+            errors.push('Invalid reason selected')
+          }
+        }
+      }
+    }
 
     // 4. Check for suspicious patterns
     if (email && !email.includes('@')) {
@@ -385,10 +571,12 @@ exports.handler = async (event, context) => {
 
     // If validation failed, reject
     if (errors.length > 0) {
+      // SECURITY: Don't log full email - only log first 3 characters for debugging
+      const emailPrefix = email ? email.substring(0, 3) + '***' : 'none'
       console.warn('❌ Validation failed:', {
         formType,
         errors,
-        email: email.substring(0, 20) + '...',
+        email: emailPrefix, // Sanitized - only first 3 chars
         ip,
         userAgent
       })

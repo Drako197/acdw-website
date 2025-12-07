@@ -109,7 +109,7 @@ const logFormSubmission = (formType, email, ip, userAgent, success = true, error
     success ? EVENT_TYPES.FORM_SUBMISSION : EVENT_TYPES.FORM_VALIDATION_FAILED,
     {
       formType,
-      email: email ? email.substring(0, 20) + '...' : 'unknown', // Partial email for privacy
+      email: email ? email.substring(0, 3) + '***' : 'unknown', // SECURITY: Only log first 3 chars
       success,
       errors: errors.length > 0 ? errors : undefined,
     },
