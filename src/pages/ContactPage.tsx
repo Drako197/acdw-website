@@ -494,6 +494,9 @@ export function ContactPage() {
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 1000))
       
+      // Scroll to top to show success message
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      
       // Simulate success
       setSubmitSuccess(true)
     // Reset form
@@ -548,6 +551,9 @@ export function ContactPage() {
       const responseData = await response.json()
       
       if (response.ok && responseData.success) {
+        // Scroll to top to show success message
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        
         setSubmitSuccess(true)
     // Reset form
     setFormData({

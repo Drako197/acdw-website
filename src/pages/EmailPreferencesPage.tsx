@@ -76,6 +76,9 @@ export function EmailPreferencesPage() {
       }
       
       if (response.ok) {
+        // Scroll to top to show success message
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        
         setSubmitSuccess(true)
         setTimeout(() => setSubmitSuccess(false), 5000)
       } else {

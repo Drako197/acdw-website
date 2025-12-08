@@ -183,9 +183,25 @@ exports.handler = async (event, context) => {
       mode: 'payment',
       success_url: `${process.env.URL || 'https://www.acdrainwiz.com'}/checkout/success?session_id={CHECKOUT_SESSION_ID}${isGuest ? '&guest=true' : ''}`,
       cancel_url: `${process.env.URL || 'https://www.acdrainwiz.com'}/checkout/cancel`,
-      // Only set customer_email if provided (for logged-in users)
-      // For guests, Stripe will collect email during checkout
+      
+      // CRITICAL FOR RECEIPT EMAILS:
+      // For guest checkout, always create a customer
+      // This ensures Stripe has a customer email to send receipt to
+      ...(isGuest && { customer_creation: 'always' }),
+      
+      // Set customer_email for logged-in users (Stripe will collect for guests)
       ...(userEmail && { customer_email: userEmail }),
+      
+      // Set receipt_email explicitly to ensure payment confirmation email is sent
+      // NOTE: When receipt_email is provided, Stripe ignores dashboard email settings
+      // This ensures emails are sent regardless of dashboard configuration
+      // For logged-in users: use their email
+      // For guests: Stripe will automatically use the customer's email (created via customer_creation: 'always')
+      ...(userEmail && {
+        payment_intent_data: {
+          receipt_email: userEmail, // Explicitly set receipt email for logged-in users
+        }
+      }),
       
       metadata: {
         userId: userId || '',
@@ -198,8 +214,27 @@ exports.handler = async (event, context) => {
     }
 
     console.log('Creating Stripe session with shipping as line item:', shippingCost)
+    console.log('Checkout session email configuration:', {
+      hasUserEmail: !!userEmail,
+      userEmail: userEmail ? `${userEmail.substring(0, 3)}***@${userEmail.split('@')[1]}` : 'none',
+      isGuest,
+      customerCreation: isGuest ? 'always' : 'not set',
+      customerEmailSet: !!userEmail,
+      receiptEmailSet: !!userEmail, // Set in payment_intent_data for logged-in users
+      note: isGuest 
+        ? 'Guest checkout: customer_creation=always ensures Customer is created with email. Stripe sends receipt automatically to Customer.' 
+        : 'Logged-in user: receipt_email explicitly set in payment_intent_data. Stripe sends receipt automatically.',
+      important: 'Stripe sends receipts automatically when Customer exists OR receipt_email is set on PaymentIntent.'
+    })
 
     const session = await stripe.checkout.sessions.create(sessionConfig)
+    
+    // Log session details for debugging
+    console.log('Stripe checkout session created:', {
+      sessionId: session.id,
+      customerEmail: session.customer_email || 'will be collected during checkout',
+      url: session.url?.substring(0, 50) + '...'
+    })
 
     return {
       statusCode: 200,

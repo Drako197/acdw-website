@@ -5,6 +5,18 @@
  * Validates before forwarding to Netlify Forms
  */
 
+// Import security utilities
+const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
+const { sanitizeFormData } = require('./utils/input-sanitizer')
+const { 
+  logFormSubmission, 
+  logBotDetected, 
+  logRecaptcha, 
+  logRateLimit,
+  logInjectionAttempt,
+  EVENT_TYPES 
+} = require('./utils/security-logger')
+
 // reCAPTCHA verification
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY
 
@@ -90,6 +102,67 @@ exports.handler = async (event, context) => {
     // Get request metadata for logging
     const ip = getClientIP(event)
     const userAgent = event.headers['user-agent'] || 'unknown'
+    const origin = event.headers['origin'] || event.headers['referer'] || 'unknown'
+    
+    // SECURITY: Block known bot user agents
+    const BOT_USER_AGENTS = [
+      'curl', 'wget', 'python-requests', 'python', 'go-http-client',
+      'java/', 'scrapy', 'bot', 'crawler', 'spider', 'headless',
+      'phantom', 'selenium', 'postman', 'insomnia', 'httpie'
+    ]
+    
+    const lowerUserAgent = userAgent.toLowerCase()
+    if (BOT_USER_AGENTS.some(bot => lowerUserAgent.includes(bot))) {
+      logBotDetected('unsubscribe', 'bot-user-agent', ip, userAgent, {
+        detectedPattern: BOT_USER_AGENTS.find(bot => lowerUserAgent.includes(bot))
+      })
+      console.warn('🚫 Bot detected: User-Agent match', {
+        userAgent,
+        ip
+      })
+      // Return success to bot to prevent detection, but don't forward to Netlify
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ 
+          success: true,
+          message: 'Request processed'
+        }),
+      }
+    }
+    
+    // SECURITY: Validate Origin/Referer (must be from our domain)
+    const ALLOWED_ORIGINS = [
+      'https://www.acdrainwiz.com',
+      'https://acdrainwiz.com',
+      'http://localhost:5173', // Development
+      'http://localhost:8888', // Netlify dev
+    ]
+    
+    const hasValidOrigin = ALLOWED_ORIGINS.some(allowedOrigin => 
+      origin.startsWith(allowedOrigin)
+    )
+    
+    if (!hasValidOrigin && origin !== 'unknown') {
+      logBotDetected('unsubscribe', 'invalid-origin', ip, userAgent, {
+        origin,
+        allowedOrigins: ALLOWED_ORIGINS
+      })
+      console.warn('🚫 Bot detected: Invalid origin', {
+        origin,
+        ip,
+        userAgent
+      })
+      // Return success to bot to prevent detection, but don't forward to Netlify
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ 
+          success: true,
+          message: 'Request processed'
+        }),
+      }
+    }
     
     // Rate limiting check (strict for unsubscribe)
     const rateLimitResult = checkRateLimit(ip, 'strict')
@@ -157,38 +230,55 @@ exports.handler = async (event, context) => {
         }
       }
       
+      logRecaptcha(true, recaptchaResult.score, recaptchaResult.action, ip, userAgent)
       console.log('✅ reCAPTCHA verified', { 
         score: recaptchaResult.score,
         action: recaptchaResult.action,
-        email: email.substring(0, 20) + '...'
+        email: email.substring(0, 20) + '***'
       })
     } else if (RECAPTCHA_SECRET_KEY) {
-      // Token missing but reCAPTCHA is configured - could be bot or reCAPTCHA not loaded
-      console.warn('⚠️ reCAPTCHA token missing (but configured)', {
+      // Token missing but reCAPTCHA is configured - REJECT (stricter enforcement)
+      logBotDetected('unsubscribe', 'missing-recaptcha', ip, userAgent, {
+        email: trimmedEmail.substring(0, 20) + '***'
+      })
+      console.warn('🚫 reCAPTCHA token missing (bot likely)', {
         ip,
         userAgent,
-        email: email.substring(0, 20) + '...'
+        email: email.substring(0, 20) + '***'
       })
-      // For now, we'll allow it but log it (graceful degradation)
-      // You can change this to reject if you want stricter enforcement
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ 
+          error: 'Security verification required',
+          message: 'Please enable JavaScript and try again'
+        }),
+      }
     }
 
     // 1. Check honeypot fields (if filled, it's a bot)
     if (botField || website || url) {
+      logBotDetected('unsubscribe', 'honeypot', ip, userAgent, {
+        botField: !!botField,
+        website: !!website,
+        url: !!url,
+        email: email.substring(0, 20) + '***'
+      })
       console.warn('🚫 Bot detected: honeypot fields filled', {
         botField: !!botField,
         website: !!website,
         url: !!url,
         ip,
         userAgent,
-        email: email.substring(0, 20) + '...' // Log partial email for debugging
+        email: email.substring(0, 20) + '***'
       })
+      // Return success to bot to prevent detection, but don't forward to Netlify
       return {
-        statusCode: 400,
+        statusCode: 200,
         headers,
         body: JSON.stringify({ 
-          error: 'Invalid submission',
-          message: 'Bot detected'
+          success: true,
+          message: 'Request processed'
         }),
       }
     }
@@ -214,20 +304,56 @@ exports.handler = async (event, context) => {
       '' // Empty is allowed (optional field)
     ]
     if (reason && !allowedReasons.includes(reason)) {
-      errors.push('Invalid reason selected')
+      // SECURITY: Check if reason contains malformed email (bot attack pattern)
+      if (reason.includes('-') && !reason.includes('@') && reason.length > 10) {
+        logBotDetected('unsubscribe', 'malformed-email-in-dropdown', ip, userAgent, {
+          reason,
+          email: trimmedEmail.substring(0, 20) + '***'
+        })
+        console.warn('🚨 Bot attack detected: Malformed email in reason field', {
+          reason,
+          ip,
+          userAgent
+        })
+        errors.push('Invalid reason selected - suspicious pattern detected')
+      } else {
+        errors.push('Invalid reason selected')
+      }
     }
 
     // 4. Check for suspicious patterns
     // Reject if email looks like a domain name (common bot pattern)
     if (trimmedEmail && !trimmedEmail.includes('@')) {
+      logBotDetected('unsubscribe', 'invalid-email-format', ip, userAgent, {
+        email: trimmedEmail.substring(0, 20) + '***'
+      })
+      errors.push('Invalid email format')
+    }
+    
+    // 5. Additional bot pattern detection - malformed email in email field
+    // Pattern: domain-name-com instead of email@domain.com
+    const malformedEmailPattern = /^[a-z0-9]+-[a-z0-9]+-com$/i
+    if (malformedEmailPattern.test(trimmedEmail)) {
+      logBotDetected('unsubscribe', 'malformed-email-pattern', ip, userAgent, {
+        email: trimmedEmail
+      })
+      console.warn('🚨 Bot attack detected: Malformed email pattern', {
+        email: trimmedEmail,
+        ip,
+        userAgent
+      })
       errors.push('Invalid email format')
     }
 
     // If validation failed, reject
     if (errors.length > 0) {
+      logFormSubmission('unsubscribe', trimmedEmail, false, ip, userAgent, {
+        errors,
+        reason
+      })
       console.warn('❌ Validation failed:', {
         errors,
-        email: trimmedEmail.substring(0, 20) + '...',
+        email: trimmedEmail.substring(0, 20) + '***',
         ip,
         userAgent,
         reason
@@ -238,7 +364,8 @@ exports.handler = async (event, context) => {
         headers,
         body: JSON.stringify({ 
           error: 'Validation failed',
-          errors: errors
+          errors: errors,
+          success: false
         }),
       }
     }
@@ -249,20 +376,33 @@ exports.handler = async (event, context) => {
       ? `https://${event.headers.host}/`
       : 'https://acdrainwiz.com/'
     
+    logFormSubmission('unsubscribe', trimmedEmail, true, ip, userAgent, {
+      hasReason: !!reason,
+      hasFeedback: !!feedback,
+      recaptchaScore: recaptchaResult?.score
+    })
     console.log('✅ Validation passed, forwarding to Netlify Forms:', {
-      email: trimmedEmail.substring(0, 20) + '...',
+      email: trimmedEmail.substring(0, 20) + '***',
       ip,
       hasReason: !!reason,
       hasFeedback: !!feedback
     })
     
+    // Sanitize form data before forwarding
+    const formDataObj = {
+      email: trimmedEmail,
+      reason: reason,
+      feedback: feedback
+    }
+    const sanitizedData = sanitizeFormData(formDataObj, 'unsubscribe')
+    
     // Build sanitized form data for forwarding
     const sanitizedFormBody = new URLSearchParams()
     sanitizedFormBody.append('form-name', formData.get('form-name') || 'unsubscribe')
-    sanitizedFormBody.append('email', email) // Use sanitized email
+    sanitizedFormBody.append('email', sanitizedData.email)
     sanitizedFormBody.append('consent', formData.get('consent') || 'no')
-    if (reason) sanitizedFormBody.append('reason', sanitizeString(reason, { maxLength: 500 }))
-    if (feedback) sanitizedFormBody.append('feedback', sanitizeMessage(feedback))
+    if (sanitizedData.reason) sanitizedFormBody.append('reason', sanitizedData.reason)
+    if (sanitizedData.feedback) sanitizedFormBody.append('feedback', sanitizedData.feedback)
     
     // Forward the sanitized submission to Netlify Forms
     const forwardResponse = await fetch(netlifyFormUrl, {

@@ -9,7 +9,7 @@
 
 // Import utilities
 const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
-const { sanitizeFormData, validateFile } = require('./utils/input-sanitizer')
+const { sanitizeFormData } = require('./utils/input-sanitizer')
 const { 
   logFormSubmission, 
   logBotDetected, 
@@ -18,7 +18,7 @@ const {
   logInjectionAttempt,
   EVENT_TYPES 
 } = require('./utils/security-logger')
-const { parseMultipartFormData } = require('./utils/parse-multipart')
+// parseMultipartFormData no longer needed - files uploaded separately via upload-file function
 
 // reCAPTCHA verification
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY
@@ -147,49 +147,6 @@ const validateFormFields = (formType, formData) => {
         if (!productsOfInterest) errors.push('At least one product of interest is required')
         break
         
-      case 'upgrade':
-        // Core 1.0 upgrade form requires: firstName, lastName, email, phone, street, city, state, zip, consent, photo
-        const upgradeFirstName = formData.get('firstName')?.trim() || ''
-        const upgradeLastName = formData.get('lastName')?.trim() || ''
-        const upgradeEmail = formData.get('email')?.trim() || ''
-        const upgradePhone = formData.get('phone')?.trim() || ''
-        const upgradeStreet = formData.get('street')?.trim() || ''
-        const upgradeCity = formData.get('city')?.trim() || ''
-        const upgradeState = formData.get('state')?.trim() || ''
-        const upgradeZip = formData.get('zip')?.trim() || ''
-        const upgradeConsent = formData.get('consent')
-        const upgradePhoto = formData.get('photo')
-        
-        if (!upgradeFirstName) errors.push('First name is required')
-        if (!upgradeLastName) errors.push('Last name is required')
-        if (!upgradeEmail) {
-          errors.push('Email is required')
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(upgradeEmail)) {
-          errors.push('Invalid email format')
-        }
-        if (!upgradePhone) errors.push('Phone is required')
-        if (!upgradeStreet) errors.push('Street address is required')
-        if (!upgradeCity) errors.push('City is required')
-        if (!upgradeState) errors.push('State is required')
-        if (!upgradeZip) {
-          errors.push('ZIP code is required')
-        } else if (!/^\d{5}$/.test(upgradeZip)) {
-          errors.push('ZIP code must be 5 digits')
-        }
-        if (!upgradeConsent || upgradeConsent !== 'yes') {
-          errors.push('You must acknowledge the terms to continue')
-        }
-        if (!upgradePhoto || upgradePhoto.size === 0) {
-          errors.push('Photo is required')
-        } else {
-          // Check file size (5MB limit)
-          const maxSize = 5 * 1024 * 1024 // 5MB in bytes
-          if (upgradePhoto.size > maxSize) {
-            errors.push('File size must be 5MB or less')
-          }
-        }
-        break
-        
       case 'general':
         // General form - no additional required fields beyond common ones
         break
@@ -206,7 +163,7 @@ const validateFormFields = (formType, formData) => {
         break
         
       case 'upgrade':
-        // Core 1.0 upgrade form requires: firstName, lastName, email, phone, street, city, state, zip, consent, photo
+        // Core 1.0 upgrade form requires: firstName, lastName, email, phone, street, city, state, zip, consent, photoUrl
         const upgradeFirstName = formData.get('firstName')?.trim() || ''
         const upgradeLastName = formData.get('lastName')?.trim() || ''
         const upgradeEmail = formData.get('email')?.trim() || ''
@@ -216,7 +173,7 @@ const validateFormFields = (formType, formData) => {
         const upgradeState = formData.get('state')?.trim() || ''
         const upgradeZip = formData.get('zip')?.trim() || ''
         const upgradeConsent = formData.get('consent')
-        const upgradePhoto = formData.get('photo')
+        const upgradePhotoUrl = formData.get('photoUrl')?.trim() || '' // Now expecting URL instead of file
         
         if (!upgradeFirstName) errors.push('First name is required')
         if (!upgradeLastName) errors.push('Last name is required')
@@ -237,8 +194,12 @@ const validateFormFields = (formType, formData) => {
         if (!upgradeConsent || upgradeConsent !== 'yes') {
           errors.push('You must acknowledge the terms to continue')
         }
-        // Note: Photo validation is handled separately for multipart forms
-        // File size check happens in file validation step
+        if (!upgradePhotoUrl) {
+          errors.push('Photo is required. Please upload a photo of your installed Core 1.0.')
+        } else if (!upgradePhotoUrl.startsWith('data:image/') && !upgradePhotoUrl.startsWith('https://res.cloudinary.com/')) {
+          // Validate that photoUrl is either a data URL or a Cloudinary URL
+          errors.push('Invalid photo format. Please upload a valid image file.')
+        }
         break
         
       case 'unsubscribe':
@@ -324,57 +285,25 @@ exports.handler = async (event, context) => {
     
     const path = event.path || ''
     
-    // Parse form data - handle both multipart/form-data and application/x-www-form-urlencoded
+    // Parse form data - all forms now use application/x-www-form-urlencoded
+    // File uploads are handled separately via upload-file function
     const contentType = event.headers['content-type'] || event.headers['Content-Type'] || ''
-    let formData
-    let fileData = {} // Store file data for multipart forms
     
+    // Multipart should not be used anymore - files should be uploaded separately
     if (contentType.includes('multipart/form-data')) {
-      // For multipart/form-data (file uploads), parse using busboy
-      try {
-        const { fields, files } = await parseMultipartFormData(event)
-        
-        // Create a formData-like object for validation
-        formData = {
-          get: (key) => {
-            if (fields[key] !== undefined) return fields[key]
-            if (files[key]) return files[key]
-            return null
-          },
-          entries: function* () {
-            for (const [key, value] of Object.entries(fields)) {
-              yield [key, value]
-            }
-            for (const [key, file] of Object.entries(files)) {
-              yield [key, file]
-            }
-          }
-        }
-        
-        fileData = files // Store files for later forwarding to Netlify Forms
-      } catch (error) {
-        console.error('❌ Error parsing multipart form data:', {
-          error: error.message,
-          stack: error.stack,
-          contentType,
-          bodyType: typeof event.body,
-          bodyLength: event.body ? (Buffer.isBuffer(event.body) ? event.body.length : String(event.body).length) : 0,
-          isBase64Encoded: event.isBase64Encoded
-        })
-        return {
-          statusCode: 400,
-          headers,
-          body: JSON.stringify({ 
-            error: 'Invalid form data format',
-            message: 'Unable to parse form submission. Please try again.',
-            details: process.env.NODE_ENV === 'development' ? error.message : undefined
-          }),
-        }
+      console.warn('⚠️ Multipart form data received - this should not happen with new flow')
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ 
+          error: 'Invalid form data format',
+          message: 'Please use the standard form submission. File uploads should be handled separately.'
+        }),
       }
-    } else {
-      // For application/x-www-form-urlencoded, use URLSearchParams
-      formData = new URLSearchParams(event.body)
     }
+    
+    // Parse as URLSearchParams (standard form data)
+    const formData = new URLSearchParams(event.body)
     
     // Get form name and type
     const formName = formData.get('form-name') || ''
@@ -504,6 +433,74 @@ exports.handler = async (event, context) => {
     // Get request metadata for logging
     const ip = getClientIP(event)
     const userAgent = event.headers['user-agent'] || 'unknown'
+    const origin = event.headers['origin'] || event.headers['referer'] || 'unknown'
+    
+    // SECURITY: Block known bot user agents (Phase 2 - Bot Detection)
+    const BOT_USER_AGENTS = [
+      'curl', 'wget', 'python-requests', 'python', 'go-http-client',
+      'java/', 'scrapy', 'bot', 'crawler', 'spider', 'headless',
+      'phantom', 'selenium', 'postman', 'insomnia', 'httpie'
+    ]
+    
+    const lowerUserAgent = userAgent.toLowerCase()
+    if (BOT_USER_AGENTS.some(bot => lowerUserAgent.includes(bot))) {
+      logBotDetected(formType, 'bot-user-agent', ip, userAgent, {
+        detectedPattern: BOT_USER_AGENTS.find(bot => lowerUserAgent.includes(bot)),
+        formName
+      })
+      console.warn('🚫 Bot detected: User-Agent match', {
+        userAgent,
+        ip,
+        formType,
+        formName
+      })
+      // Return success to bot to prevent detection, but don't forward to Netlify
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ 
+          success: true,
+          message: 'Form submitted successfully'
+        }),
+      }
+    }
+    
+    // SECURITY: Validate Origin/Referer (Phase 2 - Origin Validation)
+    // Must be from our domain to prevent CSRF and direct POST attacks
+    const ALLOWED_ORIGINS = [
+      'https://www.acdrainwiz.com',
+      'https://acdrainwiz.com',
+      'http://localhost:5173', // Development
+      'http://localhost:8888', // Netlify dev
+    ]
+    
+    const hasValidOrigin = ALLOWED_ORIGINS.some(allowedOrigin => 
+      origin.startsWith(allowedOrigin)
+    )
+    
+    if (!hasValidOrigin && origin !== 'unknown') {
+      logBotDetected(formType, 'invalid-origin', ip, userAgent, {
+        origin,
+        allowedOrigins: ALLOWED_ORIGINS,
+        formName
+      })
+      console.warn('🚫 Bot detected: Invalid origin', {
+        origin,
+        ip,
+        userAgent,
+        formType,
+        formName
+      })
+      // Return success to bot to prevent detection, but don't forward to Netlify
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ 
+          success: true,
+          message: 'Form submitted successfully'
+        }),
+      }
+    }
 
     // Rate limiting check
     const rateLimitType = formType === 'upgrade' ? 'strict' : 'form'
@@ -526,15 +523,11 @@ exports.handler = async (event, context) => {
       }
     }
 
-    // Sanitize all text inputs (convert FormData to object for sanitization)
+    // Sanitize all text inputs (convert URLSearchParams to object for sanitization)
     const formDataObj = {}
     for (const [key, value] of formData.entries()) {
-      // Skip file fields - they're handled separately
-      if (key === 'photo' || value instanceof File || value instanceof Blob) {
-        formDataObj[key] = value
-      } else {
-        formDataObj[key] = String(value || '')
-      }
+      // All values are strings now (no files - files converted to URLs on client)
+      formDataObj[key] = String(value || '')
     }
     
     // Sanitize form data
@@ -620,11 +613,32 @@ exports.handler = async (event, context) => {
     // SECURITY: Additional validation for unsubscribe form - dropdown value validation
     if (formType === 'unsubscribe' || formName === 'unsubscribe') {
       const unsubscribeReason = formData.get('reason')?.trim() || ''
+      const unsubscribeEmail = formData.get('email')?.trim() || ''
+      
+      // Validate email format strictly - detect malformed email pattern
+      const malformedEmailPattern = /^[a-z0-9]+-[a-z0-9]+-com$/i
+      if (malformedEmailPattern.test(unsubscribeEmail)) {
+        logBotDetected(formType, 'malformed-email-pattern', ip, userAgent, {
+          email: unsubscribeEmail,
+          formName
+        })
+        console.warn('🚨 Bot attack detected: Malformed email pattern in email field', {
+          email: unsubscribeEmail,
+          ip,
+          userAgent,
+          formName
+        })
+        errors.push('Invalid email format')
+      }
+      
+      // Validate reason dropdown
       if (unsubscribeReason) {
         const ALLOWED_UNSUBSCRIBE_REASONS = [
           'too-many-emails',
           'not-relevant',
           'never-signed-up',
+          'spam',
+          'privacy-concerns',
           'other'
         ]
         
@@ -632,16 +646,16 @@ exports.handler = async (event, context) => {
           // Check if reason looks like a malformed email (bot attack pattern)
           if (unsubscribeReason.includes('-') && !unsubscribeReason.includes('@') && unsubscribeReason.length > 10) {
             errors.push('Invalid reason selected - suspicious pattern detected')
+            logBotDetected(formType, 'malformed-email-in-dropdown', ip, userAgent, {
+              reason: unsubscribeReason,
+              formName,
+              email: rawEmail.substring(0, 20) + '***'
+            })
             console.warn('🚨 Bot attack detected: Malformed email in unsubscribe reason field', {
               reason: unsubscribeReason,
               formName,
               ip,
               userAgent
-            })
-            logBotDetected(formType, 'malformed-email-in-dropdown', ip, userAgent, {
-              reason: unsubscribeReason,
-              formName,
-              allowedReasons: ALLOWED_UNSUBSCRIBE_REASONS
             })
           } else {
             errors.push('Invalid reason selected')
@@ -685,101 +699,29 @@ exports.handler = async (event, context) => {
     // Log successful validation (will log submission after forwarding)
     logFormSubmission(formType, email, ip, userAgent, true)
     
-    // Build sanitized form data for forwarding
-    const requestContentType = event.headers['content-type'] || event.headers['Content-Type'] || ''
-    let forwardResponse
-    
-    if (requestContentType.includes('multipart/form-data')) {
-      // For multipart forms (with file uploads), rebuild FormData
-      try {
-        const FormData = require('form-data')
-        const formDataToForward = new FormData()
-        
-        // CRITICAL: Always include form-name first (Netlify Forms requires this)
-        formDataToForward.append('form-name', formName)
-        
-        // Add all fields
-        for (const [key, value] of formData.entries()) {
-          // Skip honeypot, recaptcha, and form-type fields (don't forward to Netlify)
-          // But DO include form-name (already added above)
-          if (key === 'bot-field' || key === 'honeypot-1' || key === 'honeypot-2' || key === 'recaptcha-token' || key === 'form-type' || key === 'form-name') {
-            continue
-          }
-          
-          // Handle file uploads
-          if (fileData[key]) {
-            const file = fileData[key]
-            formDataToForward.append(key, file.data, {
-              filename: file.filename,
-              contentType: file.mimeType
-            })
-          } else {
-            // Use sanitized value if available, otherwise use original
-            const valueToUse = sanitizedData[key] !== undefined ? sanitizedData[key] : value
-            // Only append if value is a string (not a file object)
-            if (typeof valueToUse === 'string') {
-              formDataToForward.append(key, valueToUse)
-            }
-          }
-        }
-        
-        // Forward multipart form data
-        // form-data library returns a readable stream that fetch() can handle directly
-        const formDataHeaders = formDataToForward.getHeaders()
-        
-        forwardResponse = await fetch(netlifyFormUrl, {
-          method: 'POST',
-          headers: formDataHeaders,
-          body: formDataToForward
-        }).catch(fetchError => {
-          console.error('❌ Fetch error when forwarding multipart:', {
-            error: fetchError.message,
-            stack: fetchError.stack,
-            formType,
-            headers: formDataHeaders
-          })
-          throw fetchError
-        })
-      } catch (forwardError) {
-        console.error('❌ Error forwarding multipart form to Netlify:', {
-          error: forwardError.message,
-          stack: forwardError.stack,
-          formType
-        })
-        return {
-          statusCode: 500,
-          headers,
-          body: JSON.stringify({ 
-            error: 'Form submission failed',
-            message: 'Unable to forward form data to Netlify Forms'
-          }),
-        }
+    // Build sanitized form data for forwarding (all forms now use standard form data)
+    const sanitizedFormBody = new URLSearchParams()
+    for (const [key, value] of formData.entries()) {
+      // Skip honeypot, recaptcha, and form-type fields (don't forward to Netlify)
+      if (key === 'bot-field' || key === 'honeypot-1' || key === 'honeypot-2' || key === 'recaptcha-token' || key === 'form-type') {
+        continue
       }
-    } else {
-      // For application/x-www-form-urlencoded, use URLSearchParams
-      const sanitizedFormBody = new URLSearchParams()
-      for (const [key, value] of formData.entries()) {
-        // Skip honeypot and recaptcha fields (don't forward to Netlify)
-        if (key === 'bot-field' || key === 'honeypot-1' || key === 'honeypot-2' || key === 'recaptcha-token') {
-          continue
-        }
-        // Use sanitized value if available, otherwise use original
-        if (key in sanitizedData) {
-          sanitizedFormBody.append(key, sanitizedData[key])
-        } else {
-          sanitizedFormBody.append(key, value)
-        }
+      // Use sanitized value if available, otherwise use original
+      if (key in sanitizedData) {
+        sanitizedFormBody.append(key, sanitizedData[key])
+      } else {
+        sanitizedFormBody.append(key, value)
       }
-      
-      // Forward the sanitized submission to Netlify Forms
-      forwardResponse = await fetch(netlifyFormUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: sanitizedFormBody.toString(), // Forward sanitized form data
-      })
     }
+    
+    // Forward the sanitized submission to Netlify Forms (standard form data)
+    const forwardResponse = await fetch(netlifyFormUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: sanitizedFormBody.toString(), // Forward sanitized form data
+    })
 
     if (forwardResponse.ok) {
       // Success - return Netlify's response

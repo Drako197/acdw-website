@@ -74,14 +74,23 @@ const STATE_ZONES = {
 
 /**
  * Calculate total weight for products
+ * Scales properly for any quantity - no limits
  */
 function calculateWeight(products) {
   let totalWeight = 0;
   
   for (const [productType, quantity] of Object.entries(products)) {
     const weight = PRODUCT_WEIGHTS[productType] || 1.6; // Default to 1.6 lbs
-    totalWeight += weight * quantity;
+    const productWeight = weight * quantity;
+    totalWeight += productWeight;
+    
+    // Log for debugging large orders
+    if (quantity > 10) {
+      console.log(`Large order detected: ${quantity} x ${productType} (${weight} lbs each) = ${productWeight} lbs`);
+    }
   }
+  
+  console.log(`Total shipping weight calculated: ${totalWeight.toFixed(2)} lbs for products:`, products);
   
   return totalWeight;
 }
@@ -108,31 +117,54 @@ function getShippingZone(address) {
 
 /**
  * Calculate shipping cost using zone-based rates (fallback method)
+ * Scales properly for any quantity/weight
  */
 function calculateZoneBasedShipping(address, products) {
   const zone = getShippingZone(address);
   const totalWeight = calculateWeight(products);
   
-  // Determine rate tier based on weight
-  // Weight tiers: 0-4 lbs (1-2 units), 4-8 lbs (3-4 units), 8-12 lbs (5-6 units), 12-16 lbs (7-8 units), 16+ lbs (9-10 units)
-  let rateTier = 1; // 1-2 units (0-4 lbs)
-  if (totalWeight > 16) {
-    rateTier = 9; // 9-10 units (16+ lbs)
-  } else if (totalWeight > 12) {
-    rateTier = 7; // 7-8 units (12-16 lbs)
-  } else if (totalWeight > 8) {
-    rateTier = 5; // 5-6 units (8-12 lbs)
-  } else if (totalWeight > 4) {
-    rateTier = 3; // 3-4 units (4-8 lbs)
-  }
-  
   const rates = ZONE_RATES[zone];
   if (!rates) {
     // Fallback to mid-range if zone not found
-    return ZONE_RATES[3][rateTier];
+    return calculateScaledRate(ZONE_RATES[3], totalWeight);
   }
   
-  return rates[rateTier];
+  return calculateScaledRate(rates, totalWeight);
+}
+
+/**
+ * Calculate shipping rate that scales with weight
+ * Uses tiered rates up to 16 lbs, then scales per pound after that
+ */
+function calculateScaledRate(zoneRates, totalWeight) {
+  // Base rate tiers for weights up to 16 lbs
+  if (totalWeight <= 4) {
+    return zoneRates[1]; // 1-2 units (0-4 lbs)
+  } else if (totalWeight <= 8) {
+    return zoneRates[3]; // 3-4 units (4-8 lbs)
+  } else if (totalWeight <= 12) {
+    return zoneRates[5]; // 5-6 units (8-12 lbs)
+  } else if (totalWeight <= 16) {
+    return zoneRates[7]; // 7-8 units (12-16 lbs)
+  }
+  
+  // For weights over 16 lbs, scale based on the 9-10 unit rate
+  // Use the 9-10 unit rate as base, then add per-pound cost
+  const baseRate = zoneRates[9]; // 9-10 units (16+ lbs base)
+  const baseWeight = 16; // Weight at which tier 9 rate applies
+  const excessWeight = totalWeight - baseWeight;
+  
+  // Calculate per-pound rate based on zone
+  // Approximate: difference between tier 7 and tier 9 divided by 8 lbs
+  // This gives us a per-pound rate for scaling
+  const tier7Rate = zoneRates[7];
+  const tier9Rate = zoneRates[9];
+  const perPoundRate = (tier9Rate - tier7Rate) / 8; // 8 lbs difference (16 - 8 = 8)
+  
+  // Scale the rate: base rate + (excess weight * per-pound rate)
+  const scaledRate = baseRate + (excessWeight * perPoundRate);
+  
+  return Math.round(scaledRate * 100) / 100; // Round to 2 decimals
 }
 
 /**
@@ -149,6 +181,11 @@ async function calculateShipStationShipping(address, products) {
   
   try {
     const totalWeight = calculateWeight(products);
+    
+    // Log weight for large orders
+    if (totalWeight > 20) {
+      console.log(`Large order shipping calculation: ${totalWeight.toFixed(2)} lbs to ${address.state || address.country}`);
+    }
     
     // ShipStation API endpoint for rate quotes
     const response = await fetch('https://ssapi.shipstation.com/shipments/getrates', {
@@ -277,5 +314,6 @@ module.exports = {
   calculateWeight,
   getShippingZone,
   calculateZoneBasedShipping,
+  calculateScaledRate, // Export for testing
 };
 

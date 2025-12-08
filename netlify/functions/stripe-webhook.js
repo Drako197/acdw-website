@@ -56,13 +56,62 @@ exports.handler = async (event, context) => {
       // Payment was successful
       console.log('Payment successful:', session.id)
       
+      // Fetch full session details including line items
+      // Note: shipping_details is already included and cannot be expanded
+      const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
+        expand: ['line_items', 'customer', 'payment_intent']
+      })
+      
+      // Get customer email from session (for guest checkout, this is collected during checkout)
+      const customerEmail = fullSession.customer_email || fullSession.customer_details?.email
+      
+      // Check if this is a guest checkout (no userId in metadata means guest)
+      const isGuest = fullSession.metadata?.isGuest === 'true' || !fullSession.metadata?.userId
+      
+      // Get payment intent ID (could be string or expanded object)
+      const paymentIntentId = typeof fullSession.payment_intent === 'string' 
+        ? fullSession.payment_intent 
+        : fullSession.payment_intent?.id
+      
+      // CRITICAL: Set receipt_email on PaymentIntent for guest checkout
+      // For logged-in users, receipt_email is already set in create-checkout.js
+      // For guest checkout, we need to set it here because we don't have the email until checkout completes
+      if (customerEmail && paymentIntentId && isGuest) {
+        try {
+          // Retrieve payment intent to check current receipt_email
+          const paymentIntent = typeof fullSession.payment_intent === 'object' && fullSession.payment_intent.id
+            ? fullSession.payment_intent
+            : await stripe.paymentIntents.retrieve(paymentIntentId)
+          
+          // If receipt_email is not set, set it now
+          // This ensures Stripe sends the receipt email
+          // NOTE: Stripe does NOT send real receipt emails in Test Mode - only in Live Mode
+          if (!paymentIntent.receipt_email) {
+            await stripe.paymentIntents.update(paymentIntentId, {
+              receipt_email: customerEmail,
+            })
+            console.log('✅ Set receipt_email on PaymentIntent for guest checkout:', customerEmail.substring(0, 3) + '***@' + customerEmail.split('@')[1])
+            console.log('   → Stripe will send receipt email automatically (Live Mode only)')
+            console.log('   ⚠️  NOTE: Test Mode does NOT send real emails - test in Live Mode to verify')
+          } else {
+            console.log('✅ receipt_email already set on PaymentIntent:', paymentIntent.receipt_email.substring(0, 3) + '***@' + paymentIntent.receipt_email.split('@')[1])
+            console.log('   → Stripe will send receipt email automatically (Live Mode only)')
+            console.log('   ⚠️  NOTE: Test Mode does NOT send real emails - test in Live Mode to verify')
+          }
+        } catch (emailError) {
+          console.error('❌ Failed to set receipt_email on PaymentIntent:', emailError.message)
+          // Don't fail the webhook - order processing should continue
+        }
+      } else if (customerEmail && !isGuest) {
+        console.log('✅ Logged-in user - receipt_email already set in checkout session')
+        console.log('   → Stripe will send receipt email automatically')
+      } else if (!customerEmail) {
+        console.warn('⚠️ No customer email found for session:', session.id)
+        console.warn('   Receipt email cannot be sent without email address')
+      }
+      
       // Create order in ShipStation
       try {
-        // Fetch full session details including line items
-        // Note: shipping_details is already included and cannot be expanded
-        const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
-          expand: ['line_items', 'customer']
-        })
         
         // Get line items
         const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {

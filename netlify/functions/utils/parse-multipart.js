@@ -10,7 +10,7 @@ const Busboy = require('busboy')
  * @param {Object} event - Netlify Function event
  * @returns {Promise<{fields: Object, files: Object}>}
  */
-function parseMultipartFormData(event) {
+function parseMultipartFormData(event, originalBody = null) {
   return new Promise((resolve, reject) => {
     const busboy = Busboy({ headers: event.headers })
     const fields = {}
@@ -59,21 +59,25 @@ function parseMultipartFormData(event) {
       }
     })
     
-    // Parse the body - Netlify Functions may receive body as string or Buffer
+    // Parse the body - Use provided originalBody if available, otherwise parse from event.body
     let bodyBuffer
-    if (Buffer.isBuffer(event.body)) {
-      bodyBuffer = event.body
-    } else if (typeof event.body === 'string') {
-      // If it's a string, check if it's base64 encoded
-      if (event.isBase64Encoded) {
-        bodyBuffer = Buffer.from(event.body, 'base64')
-      } else {
-        // If it's a plain string, convert to buffer
-        bodyBuffer = Buffer.from(event.body, 'binary')
-      }
+    if (originalBody) {
+      bodyBuffer = originalBody
     } else {
-      // Fallback: try to convert to buffer
-      bodyBuffer = Buffer.from(String(event.body), 'binary')
+      if (Buffer.isBuffer(event.body)) {
+        bodyBuffer = event.body
+      } else if (typeof event.body === 'string') {
+        // If it's a string, check if it's base64 encoded
+        if (event.isBase64Encoded) {
+          bodyBuffer = Buffer.from(event.body, 'base64')
+        } else {
+          // If it's a plain string, convert to buffer
+          bodyBuffer = Buffer.from(event.body, 'binary')
+        }
+      } else {
+        // Fallback: try to convert to buffer
+        bodyBuffer = Buffer.from(String(event.body), 'binary')
+      }
     }
     
     try {

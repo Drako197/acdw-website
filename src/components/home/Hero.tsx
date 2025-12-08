@@ -203,10 +203,28 @@ export function Hero() {
               </button>
               
               <button 
-                onClick={() => setIsVideoModalOpen(true)}
-                className="hero-secondary-button"
+                disabled
+                className="hero-secondary-button hero-secondary-button-disabled"
+                style={{ cursor: 'not-allowed', opacity: 0.6 }}
               >
-                See How It Works
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+                  <span>See How It Works</span>
+                  <span 
+                    style={{ 
+                      fontSize: '0.7rem', 
+                      fontWeight: '600',
+                      color: '#ffffff',
+                      backgroundColor: '#f59e0b',
+                      padding: '2px 8px',
+                      borderRadius: '12px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                      lineHeight: '1.2'
+                    }}
+                  >
+                    Video Coming Soon
+                  </span>
+                </div>
               </button>
             </div>
             
@@ -1309,35 +1327,110 @@ export function Hero() {
                   setFieldErrors({})
                   setPhotoFileError('')
                   
-                  // Build FormData for file upload support
-                  const netlifyFormData = new FormData()
-                  netlifyFormData.append('form-name', 'core-upgrade')
-                  netlifyFormData.append('form-type', 'upgrade')
-                  netlifyFormData.append('firstName', formData.get('firstName') as string || '')
-                  netlifyFormData.append('lastName', formData.get('lastName') as string || '')
-                  netlifyFormData.append('email', formData.get('email') as string || '')
-                  netlifyFormData.append('phone', formData.get('phone') as string || '')
-                  netlifyFormData.append('street', formData.get('street') as string || '')
-                  netlifyFormData.append('unit', formData.get('unit') as string || '')
-                  netlifyFormData.append('city', formData.get('city') as string || '')
-                  netlifyFormData.append('state', formData.get('state') as string || '')
-                  netlifyFormData.append('zip', formData.get('zip') as string || '')
-                  netlifyFormData.append('consent', formData.get('consent') ? 'yes' : 'no')
-                  
-                  // Add reCAPTCHA token if available
-                  if (recaptchaToken) {
-                    netlifyFormData.append('recaptcha-token', recaptchaToken)
-                  }
-                  
-                  // Add the photo file if it exists
-                  if (photoInput?.files && photoInput.files[0]) {
-                    netlifyFormData.append('photo', photoInput.files[0])
-                  }
-                  
                   // Check if we're in development mode
                   const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost'
                   
                   try {
+                    let photoUrl = ''
+                    
+                    // Step 1: Convert photo file to base64 data URL on client side (if provided)
+                    if (photoInput?.files && photoInput.files[0]) {
+                      const file = photoInput.files[0]
+                      
+                      // Validate file size (5MB limit)
+                      const maxSize = 5 * 1024 * 1024 // 5MB
+                      if (file.size > maxSize) {
+                        setPhotoFileError('File size exceeds 5MB limit')
+                        showToast('File size exceeds 5MB limit. Please choose a smaller file.', 'error')
+                        setIsSubmitting(false)
+                        return
+                      }
+                      
+                      // Validate file type (images only)
+                      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+                      if (!allowedTypes.includes(file.type)) {
+                        setPhotoFileError('Invalid file type. Only images are allowed.')
+                        showToast('Invalid file type. Please upload an image file (JPEG, PNG, GIF, or WebP).', 'error')
+                        setIsSubmitting(false)
+                        return
+                      }
+                      
+                      if (isDevelopment) {
+                        // In development, simulate file conversion
+                        console.log('📸 [DEV MODE] File conversion simulated:', {
+                          filename: file.name,
+                          size: file.size,
+                          type: file.type
+                        })
+                        photoUrl = 'https://via.placeholder.com/800x600.jpg?text=Dev+Mode+Image'
+                      } else {
+                        // Step 1: Convert file to base64 data URL
+                        const base64DataUrl = await new Promise<string>((resolve, reject) => {
+                          const reader = new FileReader()
+                          reader.onload = () => {
+                            resolve(reader.result as string)
+                          }
+                          reader.onerror = () => {
+                            reject(new Error('Failed to read file'))
+                          }
+                          reader.readAsDataURL(file)
+                        })
+                        
+                        // Step 2: Upload to Cloudinary and get permanent URL
+                        try {
+                          const uploadResponse = await fetch('/.netlify/functions/upload-image', {
+                            method: 'POST',
+                            headers: {
+                              'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                              imageData: base64DataUrl
+                              // Folder is handled by Cloudinary upload preset
+                            })
+                          })
+                          
+                          const uploadData = await uploadResponse.json()
+                          
+                          if (!uploadResponse.ok || !uploadData.success) {
+                            const errorMessage = uploadData.error || uploadData.message || 'Failed to upload image. Please try again.'
+                            setPhotoFileError(errorMessage)
+                            showToast(errorMessage, 'error')
+                            setIsSubmitting(false)
+                            return
+                          }
+                          
+                          photoUrl = uploadData.imageUrl // Use the permanent Cloudinary URL
+                        } catch (uploadError) {
+                          console.error('Image upload error:', uploadError)
+                          setPhotoFileError('Network error during image upload. Please try again.')
+                          showToast('Network error during image upload. Please try again.', 'error')
+                          setIsSubmitting(false)
+                          return
+                        }
+                      }
+                    }
+                    
+                    // Step 2: Submit form data with photo URL (standard form data, no multipart)
+                    const formDataToSubmit = new URLSearchParams()
+                    formDataToSubmit.append('form-name', 'core-upgrade')
+                    formDataToSubmit.append('form-type', 'upgrade')
+                    formDataToSubmit.append('firstName', formData.get('firstName') as string || '')
+                    formDataToSubmit.append('lastName', formData.get('lastName') as string || '')
+                    formDataToSubmit.append('email', formData.get('email') as string || '')
+                    formDataToSubmit.append('phone', formData.get('phone') as string || '')
+                    formDataToSubmit.append('street', formData.get('street') as string || '')
+                    formDataToSubmit.append('unit', formData.get('unit') as string || '')
+                    formDataToSubmit.append('city', formData.get('city') as string || '')
+                    formDataToSubmit.append('state', formData.get('state') as string || '')
+                    formDataToSubmit.append('zip', formData.get('zip') as string || '')
+                    formDataToSubmit.append('consent', formData.get('consent') ? 'yes' : 'no')
+                    formDataToSubmit.append('photoUrl', photoUrl) // Add photo URL instead of file
+                    
+                    // Add reCAPTCHA token if available
+                    if (recaptchaToken) {
+                      formDataToSubmit.append('recaptcha-token', recaptchaToken)
+                    }
+                    
                     let response: Response
                     
                     if (isDevelopment) {
@@ -1349,7 +1442,7 @@ export function Hero() {
                         lastName: formData.get('lastName'),
                         email: formData.get('email'),
                         phone: formData.get('phone'),
-                        photo: photoInput?.files?.[0]?.name || 'No file',
+                        photoUrl: photoUrl ? 'Uploaded' : 'No file',
                         street: formData.get('street'),
                         city: formData.get('city'),
                         state: formData.get('state'),
@@ -1362,47 +1455,26 @@ export function Hero() {
                       // Create a mock successful response
                       response = new Response(null, { status: 200, statusText: 'OK' })
                     } else {
-                      // In production, submit through validation function first
+                      // In production, submit through validation function
+                      // The validation function handles forwarding to Netlify Forms automatically
                       response = await fetch('/.netlify/functions/validate-form-submission', {
                         method: 'POST',
-                        body: netlifyFormData
-                        // Don't set Content-Type header - browser will set it automatically with boundary for multipart/form-data
+                        headers: {
+                          'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: formDataToSubmit.toString()
                       })
                       
                       const responseData = await response.json()
                       
-                      if (response.ok && responseData.success) {
-                        // Validation passed, now submit to Netlify Forms
-                        const netlifySubmitData = new FormData()
-                        netlifySubmitData.append('form-name', 'core-upgrade')
-                        netlifySubmitData.append('firstName', formData.get('firstName') as string || '')
-                        netlifySubmitData.append('lastName', formData.get('lastName') as string || '')
-                        netlifySubmitData.append('email', formData.get('email') as string || '')
-                        netlifySubmitData.append('phone', formData.get('phone') as string || '')
-                        netlifySubmitData.append('street', formData.get('street') as string || '')
-                        netlifySubmitData.append('unit', formData.get('unit') as string || '')
-                        netlifySubmitData.append('city', formData.get('city') as string || '')
-                        netlifySubmitData.append('state', formData.get('state') as string || '')
-                        netlifySubmitData.append('zip', formData.get('zip') as string || '')
-                        netlifySubmitData.append('consent', formData.get('consent') ? 'yes' : 'no')
-                        
-                        // Add photo file
-                        if (photoInput?.files && photoInput.files[0]) {
-                          netlifySubmitData.append('photo', photoInput.files[0])
-                        }
-                        
-                        // Submit to Netlify Forms
-                        response = await fetch('/', {
-                          method: 'POST',
-                          body: netlifySubmitData
-                        })
-                      } else {
+                      if (!response.ok || !responseData.success) {
                         // Handle error response from validation function
                         const errorMessage = responseData.message || responseData.error || 'Failed to submit form. Please try again.'
                         showToast(errorMessage, 'error')
                         setIsSubmitting(false)
                         return
                       }
+                      // Success - validation function already forwarded to Netlify Forms
                     }
                     
                     if (response.ok) {

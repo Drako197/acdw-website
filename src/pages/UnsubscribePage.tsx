@@ -210,6 +210,9 @@ export function UnsubscribePage() {
       if (response.ok) {
         const result = await response.json()
         if (result.success) {
+          // Scroll to top to show success message
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+          
           setSubmitSuccess(true)
         } else {
           // Handle validation errors from server
