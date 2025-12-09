@@ -14,6 +14,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { validateEmail } from '../utils/emailValidation'
 import { useRecaptcha } from '../hooks/useRecaptcha'
+import { useCsrfToken } from '../hooks/useCsrfToken'
 
 type ContactFormType = 'general' | 'support' | 'sales' | 'installer' | 'demo'
 
@@ -122,6 +123,8 @@ export function ContactPage() {
 
   const [activeFormType, setActiveFormType] = useState<ContactFormType>(getFormTypeFromURL())
   const { getRecaptchaToken, isConfigured: isRecaptchaConfigured } = useRecaptcha()
+  const { csrfToken } = useCsrfToken()
+  const [formLoadTime] = useState<number>(Date.now()) // Set when component mounts for behavioral analysis
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
@@ -424,8 +427,9 @@ export function ContactPage() {
       return
     }
     
-    // Get reCAPTCHA token before submitting
-    const recaptchaToken = await getRecaptchaToken('contact')
+    // Get reCAPTCHA token before submitting (use specific form type for tracking)
+    // Note: reCAPTCHA actions can only contain A-Za-z/_ (no hyphens)
+    const recaptchaToken = await getRecaptchaToken(`contact_${activeFormType}`)
     if (!recaptchaToken && isRecaptchaConfigured) {
       // Only require token if reCAPTCHA is configured
       setSubmitError('Security verification failed. Please refresh and try again.')
@@ -449,7 +453,9 @@ export function ContactPage() {
       message: formData.message,
       referralSource: formData.referralSource || '',
       consent: formData.consent ? 'yes' : 'no',
-      ...(recaptchaToken && { 'recaptcha-token': recaptchaToken }) // Add token if available
+      'form-load-time': formLoadTime.toString(), // Include form load time for behavioral analysis
+      ...(recaptchaToken && { 'recaptcha-token': recaptchaToken }), // Add token if available
+      ...(csrfToken && { 'csrf-token': csrfToken }) // Add CSRF token if available
     }
     
     // Add form-specific fields
@@ -596,7 +602,14 @@ export function ContactPage() {
         // Handle error response from validation function
         const errorMessage = responseData.message || responseData.error || 'Failed to submit form. Please try again.'
         setSubmitError(errorMessage)
-        console.error('Form submission error:', responseData)
+        console.error('Form submission error:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: responseData.error,
+          message: responseData.message,
+          errors: responseData.errors,
+          fullResponse: responseData
+        })
         
         // If there are field-specific errors, add them to fieldErrors
         if (responseData.errors && Array.isArray(responseData.errors)) {
@@ -614,7 +627,11 @@ export function ContactPage() {
         }
       }
     } catch (error) {
-      console.error('Form submission error:', error)
+      console.error('Form submission error:', {
+        error: error,
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined
+      })
       setSubmitError('Network error. Please check your connection and try again.')
     } finally {
       setIsSubmitting(false)

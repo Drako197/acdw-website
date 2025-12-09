@@ -17,6 +17,13 @@ const {
   EVENT_TYPES 
 } = require('./utils/security-logger')
 
+// Import enhanced bot defense utilities
+const { validateRequestFingerprint } = require('./utils/request-fingerprint')
+const { validateIP, addToBlacklist } = require('./utils/ip-reputation')
+const { validateSubmissionBehavior } = require('./utils/behavioral-analysis')
+const { validateEmailDomain } = require('./utils/email-domain-validator')
+const { validateCSRFToken } = require('./utils/csrf-validator')
+
 // reCAPTCHA verification
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY
 
@@ -103,6 +110,95 @@ exports.handler = async (event, context) => {
     const ip = getClientIP(event)
     const userAgent = event.headers['user-agent'] || 'unknown'
     const origin = event.headers['origin'] || event.headers['referer'] || 'unknown'
+    const path = event.path || ''
+    
+    // Define allowed reason values (must match dropdown in form)
+    const ALLOWED_REASONS = [
+      '', // Empty is allowed (optional field)
+      'too-many-emails',
+      'not-relevant',
+      'never-signed-up',
+      'spam',
+      'privacy-concerns',
+      'other'
+    ]
+    
+    // ============================================
+    // PHASE 1: Request Fingerprinting
+    // ============================================
+    try {
+      const fingerprintCheck = validateRequestFingerprint(event, ip, userAgent)
+      if (fingerprintCheck.isBot) {
+        logBotDetected('unsubscribe', 'request-fingerprint-failed', ip, userAgent, {
+          reason: fingerprintCheck.reason,
+          details: fingerprintCheck.details
+        })
+        // Return success to bot (honeypot technique)
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({ 
+            success: true,
+            message: 'Request processed'
+          }),
+        }
+      }
+    } catch (fingerprintError) {
+      // Fail open - allow if check fails
+      console.error('Fingerprint check error:', fingerprintError.message)
+    }
+    
+    // ============================================
+    // PHASE 2: IP Reputation & Blacklist
+    // ============================================
+    try {
+      const ipValidation = await validateIP(ip, userAgent, 'unsubscribe')
+      if (!ipValidation.allowed) {
+        logBotDetected('unsubscribe', 'ip-validation-failed', ip, userAgent, {
+          reason: ipValidation.reason,
+          details: ipValidation.details
+        })
+        // Return success to bot (honeypot technique)
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({ 
+            success: true,
+            message: 'Request processed'
+          }),
+        }
+      }
+    } catch (ipCheckError) {
+      // Fail open - allow if check fails
+      console.error('IP validation error:', ipCheckError.message)
+    }
+    
+    // ============================================
+    // PHASE 5: CSRF Token Validation
+    // ============================================
+    const csrfToken = formData.get('csrf-token') || event.headers['x-csrf-token'] || ''
+    
+    try {
+      const csrfValidation = await validateCSRFToken(csrfToken, ip, userAgent, 'unsubscribe')
+      if (!csrfValidation.valid) {
+        logBotDetected('unsubscribe', 'csrf-validation-failed', ip, userAgent, {
+          reason: csrfValidation.reason,
+          details: csrfValidation.details
+        })
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ 
+            error: csrfValidation.reason || 'Security token required',
+            message: csrfValidation.details?.message || 'Please refresh the page and try again'
+          }),
+        }
+      }
+    } catch (csrfError) {
+      // If validation fails, log but allow (fail open for legitimate users)
+      // This prevents breaking forms if KV is not configured
+      console.warn('⚠️ CSRF validation error (allowing request):', csrfError.message)
+    }
     
     // SECURITY: Block known bot user agents
     const BOT_USER_AGENTS = [
@@ -209,9 +305,13 @@ exports.handler = async (event, context) => {
         }
       }
       
+      // ============================================
+      // PHASE 4: Enhanced reCAPTCHA (Stricter for unsubscribe)
+      // ============================================
       // Check score (0.0 = bot, 1.0 = human)
-      // Threshold: 0.5 (adjust based on your needs)
-      const scoreThreshold = parseFloat(process.env.RECAPTCHA_SCORE_THRESHOLD || '0.5')
+      // Stricter threshold for unsubscribe form: 0.7 (up from 0.5)
+      const scoreThreshold = parseFloat(process.env.RECAPTCHA_SCORE_THRESHOLD || '0.7')
+      
       if (recaptchaResult.score < scoreThreshold) {
         console.warn('🚫 reCAPTCHA score too low', {
           score: recaptchaResult.score,
@@ -226,6 +326,23 @@ exports.handler = async (event, context) => {
           body: JSON.stringify({ 
             error: 'Suspicious activity detected',
             message: 'Please try again'
+          }),
+        }
+      }
+      
+      // Verify reCAPTCHA action matches form type
+      const expectedAction = 'unsubscribe'
+      if (recaptchaResult.action && recaptchaResult.action !== expectedAction) {
+        logBotDetected('unsubscribe', 'invalid-recaptcha-action', ip, userAgent, {
+          expected: expectedAction,
+          received: recaptchaResult.action
+        })
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ 
+            error: 'Security verification failed',
+            message: 'Please refresh and try again'
           }),
         }
       }
@@ -291,19 +408,28 @@ exports.handler = async (event, context) => {
       errors.push('Email is required')
     } else if (!emailRegex.test(trimmedEmail)) {
       errors.push('Invalid email format')
+    } else {
+      // ============================================
+      // PHASE 6: Email Domain Validation
+      // ============================================
+      try {
+        const domainValidation = await validateEmailDomain(trimmedEmail, ip, userAgent, 'unsubscribe')
+        if (!domainValidation.valid) {
+          logBotDetected('unsubscribe', 'email-domain-validation-failed', ip, userAgent, {
+            reason: domainValidation.reason,
+            details: domainValidation.details
+          })
+          errors.push(domainValidation.details?.message || domainValidation.reason)
+        }
+      } catch (emailValidationError) {
+        // Fail open - allow if check fails
+        console.error('Email domain validation error:', emailValidationError.message)
+      }
     }
 
     // 3. Validate reason (if provided, must be from allowed list)
-    const allowedReasons = [
-      'too-many-emails',
-      'not-relevant',
-      'never-signed-up',
-      'spam',
-      'privacy-concerns',
-      'other',
-      '' // Empty is allowed (optional field)
-    ]
-    if (reason && !allowedReasons.includes(reason)) {
+    // This blocks the bot attack where malformed emails are submitted in the reason field
+    if (reason && !ALLOWED_REASONS.includes(reason)) {
       // SECURITY: Check if reason contains malformed email (bot attack pattern)
       if (reason.includes('-') && !reason.includes('@') && reason.length > 10) {
         logBotDetected('unsubscribe', 'malformed-email-in-dropdown', ip, userAgent, {
@@ -315,6 +441,10 @@ exports.handler = async (event, context) => {
           ip,
           userAgent
         })
+        
+        // Add to blacklist - this IP is actively attacking
+        await addToBlacklist(ip, 'Bot attack: Malformed email in dropdown field', userAgent)
+        
         errors.push('Invalid reason selected - suspicious pattern detected')
       } else {
         errors.push('Invalid reason selected')
@@ -345,6 +475,36 @@ exports.handler = async (event, context) => {
       errors.push('Invalid email format')
     }
 
+    // ============================================
+    // PHASE 3: Behavioral Analysis
+    // ============================================
+    const formLoadTime = formData.get('form-load-time')
+    try {
+      const behaviorValidation = await validateSubmissionBehavior(ip, trimmedEmail, 'unsubscribe', formLoadTime)
+      if (!behaviorValidation.allowed) {
+        logBotDetected('unsubscribe', 'behavioral-validation-failed', ip, userAgent, {
+          reason: behaviorValidation.reason,
+          details: behaviorValidation.details
+        })
+        
+        // Add to blacklist if suspicious
+        await addToBlacklist(ip, behaviorValidation.reason, userAgent)
+        
+        // Return success to bot (honeypot technique)
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({ 
+            success: true,
+            message: 'Request processed'
+          }),
+        }
+      }
+    } catch (behaviorError) {
+      // Fail open - allow if check fails
+      console.error('Behavioral analysis error:', behaviorError.message)
+    }
+    
     // If validation failed, reject
     if (errors.length > 0) {
       logFormSubmission('unsubscribe', trimmedEmail, false, ip, userAgent, {
@@ -358,6 +518,11 @@ exports.handler = async (event, context) => {
         userAgent,
         reason
       })
+      
+      // Add to blacklist if multiple errors (likely bot)
+      if (errors.length > 2) {
+        await addToBlacklist(ip, `Multiple validation errors: ${errors.join(', ')}`, userAgent)
+      }
       
       return {
         statusCode: 400,

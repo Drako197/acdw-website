@@ -18,6 +18,14 @@ const {
   logInjectionAttempt,
   EVENT_TYPES 
 } = require('./utils/security-logger')
+
+// Import enhanced bot defense utilities
+const { validateRequestFingerprint } = require('./utils/request-fingerprint')
+const { validateIP, addToBlacklist } = require('./utils/ip-reputation')
+const { validateSubmissionBehavior } = require('./utils/behavioral-analysis')
+const { validateEmailDomain } = require('./utils/email-domain-validator')
+const { validateCSRFToken } = require('./utils/csrf-validator')
+const { initBlobsStores } = require('./utils/blobs-store')
 // parseMultipartFormData no longer needed - files uploaded separately via upload-file function
 
 // reCAPTCHA verification
@@ -242,6 +250,17 @@ const validateFormFields = (formType, formData) => {
 }
 
 exports.handler = async (event, context) => {
+  // Initialize Blobs stores within handler context (required for Blobs to work)
+  // This must be called inside the handler where Netlify context is available
+  // Wrap in try-catch to prevent function crash if Blobs fails
+  let blobsInit = { initialized: false }
+  try {
+    blobsInit = initBlobsStores(context)
+  } catch (blobsError) {
+    // Blobs initialization failed - log but continue (fail-open)
+    console.warn('⚠️ Blobs initialization error (continuing with fallback):', blobsError.message)
+  }
+  
   const headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
@@ -435,6 +454,105 @@ exports.handler = async (event, context) => {
     const userAgent = event.headers['user-agent'] || 'unknown'
     const origin = event.headers['origin'] || event.headers['referer'] || 'unknown'
     
+    // ============================================
+    // PHASE 1: Request Fingerprinting
+    // ============================================
+    // Only apply to form endpoints (not webhooks/checkout)
+    if (!isWebhookEndpoint(path) && !isCheckoutEndpoint(path)) {
+      try {
+        const fingerprintCheck = validateRequestFingerprint(event, ip, userAgent)
+        if (fingerprintCheck.isBot) {
+          logBotDetected(formType, 'request-fingerprint-failed', ip, userAgent, {
+            reason: fingerprintCheck.reason,
+            details: fingerprintCheck.details,
+            formName
+          })
+          // Return success to bot (honeypot technique)
+          return {
+            statusCode: 200,
+            headers,
+            body: JSON.stringify({ 
+              success: true,
+              message: 'Form submitted successfully'
+            }),
+          }
+        }
+      } catch (fingerprintError) {
+        // Fail open - allow if check fails
+        console.error('Fingerprint check error:', fingerprintError.message)
+      }
+    }
+    
+    // ============================================
+    // PHASE 2: IP Reputation & Blacklist
+    // ============================================
+    // Only apply to form endpoints (not webhooks/checkout)
+    if (!isWebhookEndpoint(path) && !isCheckoutEndpoint(path)) {
+      try {
+        const ipValidation = await validateIP(ip, userAgent, formType)
+        if (!ipValidation.allowed) {
+          logBotDetected(formType, 'ip-validation-failed', ip, userAgent, {
+            reason: ipValidation.reason,
+            details: ipValidation.details,
+            formName
+          })
+          // Return success to bot (honeypot technique)
+          return {
+            statusCode: 200,
+            headers,
+            body: JSON.stringify({ 
+              success: true,
+              message: 'Form submitted successfully'
+            }),
+          }
+        }
+      } catch (ipCheckError) {
+        // Fail open - allow if check fails
+        console.error('IP validation error:', ipCheckError.message)
+      }
+    }
+    
+    // ============================================
+    // PHASE 5: CSRF Token Validation
+    // ============================================
+    // Only apply to form endpoints (not webhooks/checkout)
+    if (!isWebhookEndpoint(path) && !isCheckoutEndpoint(path)) {
+      const csrfToken = formData.get('csrf-token') || event.headers['x-csrf-token'] || ''
+      
+      try {
+        const csrfValidation = await validateCSRFToken(csrfToken, ip, userAgent, formType)
+        if (!csrfValidation.valid) {
+          // If Blobs is unavailable, fail-open (allow request) to prevent blocking legitimate users
+          if (csrfValidation.reason && csrfValidation.reason.includes('Blobs unavailable')) {
+            console.warn('⚠️ CSRF validation skipped - Blobs unavailable (allowing request)', {
+              formType,
+              ip
+            })
+            // Continue with form submission
+          } else {
+            // Blobs is available but token is invalid - this is suspicious
+            logBotDetected(formType, 'csrf-validation-failed', ip, userAgent, {
+              reason: csrfValidation.reason,
+              details: csrfValidation.details,
+              formName
+            })
+            return {
+              statusCode: 400,
+              headers,
+              body: JSON.stringify({ 
+                error: csrfValidation.reason || 'Security token required',
+                message: csrfValidation.details?.message || 'Please refresh the page and try again'
+              }),
+            }
+          }
+        }
+      } catch (csrfError) {
+        // If validation fails, log but allow (fail open for legitimate users)
+        // This prevents breaking forms if KV is not configured
+        console.warn('⚠️ CSRF validation error (allowing request):', csrfError.message)
+      }
+    }
+    
     // SECURITY: Block known bot user agents (Phase 2 - Bot Detection)
     const BOT_USER_AGENTS = [
       'curl', 'wget', 'python-requests', 'python', 'go-http-client',
@@ -556,8 +674,15 @@ exports.handler = async (event, context) => {
         }
       }
       
+      // ============================================
+      // PHASE 4: Enhanced reCAPTCHA
+      // ============================================
       // Check score (0.0 = bot, 1.0 = human)
-      const scoreThreshold = parseFloat(process.env.RECAPTCHA_SCORE_THRESHOLD || '0.5')
+      // Stricter threshold for unsubscribe form: 0.7, others: 0.5
+      const scoreThreshold = formType === 'unsubscribe' 
+        ? parseFloat(process.env.RECAPTCHA_SCORE_THRESHOLD || '0.7')
+        : parseFloat(process.env.RECAPTCHA_SCORE_THRESHOLD || '0.5')
+      
       if (recaptchaResult.score < scoreThreshold) {
         logRecaptcha(true, recaptchaResult.score, recaptchaResult.action, ip, userAgent)
         return {
@@ -567,6 +692,21 @@ exports.handler = async (event, context) => {
             error: 'Suspicious activity detected',
             message: 'Please try again'
           }),
+        }
+      }
+      
+      // Verify reCAPTCHA action matches form type (if action is provided)
+      if (recaptchaResult.action) {
+        // reCAPTCHA actions use underscores (contact_general) while form names use hyphens (contact-general)
+        const expectedAction = formType === 'unsubscribe' ? 'unsubscribe' : formType.replace(/-/g, '_')
+        if (recaptchaResult.action !== expectedAction && recaptchaResult.action !== 'submit') {
+          // Allow 'submit' as generic action, but log specific action mismatches
+          logBotDetected(formType, 'invalid-recaptcha-action', ip, userAgent, {
+            expected: expectedAction,
+            received: recaptchaResult.action,
+            formName
+          })
+          // Don't block - just log (some forms may use generic 'submit' action)
         }
       }
       
@@ -603,6 +743,24 @@ exports.handler = async (event, context) => {
     const emailValidation = validateEmail(email)
     if (!emailValidation.valid) {
       errors.push(emailValidation.error)
+    } else if (email && !isWebhookEndpoint(path) && !isCheckoutEndpoint(path)) {
+      // ============================================
+      // PHASE 6: Email Domain Validation
+      // ============================================
+      try {
+        const domainValidation = await validateEmailDomain(email, ip, userAgent, formType)
+        if (!domainValidation.valid) {
+          logBotDetected(formType, 'email-domain-validation-failed', ip, userAgent, {
+            reason: domainValidation.reason,
+            details: domainValidation.details,
+            formName
+          })
+          errors.push(domainValidation.details?.message || domainValidation.reason)
+        }
+      } catch (emailValidationError) {
+        // Fail open - allow if check fails
+        console.error('Email domain validation error:', emailValidationError.message)
+      }
     }
 
     // 3. Validate form-specific fields (using original formData for validation)
@@ -668,6 +826,40 @@ exports.handler = async (event, context) => {
     if (email && !email.includes('@')) {
       errors.push('Invalid email format')
     }
+    
+    // ============================================
+    // PHASE 3: Behavioral Analysis
+    // ============================================
+    // Only apply to form endpoints (not webhooks/checkout)
+    if (!isWebhookEndpoint(path) && !isCheckoutEndpoint(path)) {
+      const formLoadTime = formData.get('form-load-time')
+      try {
+        const behaviorValidation = await validateSubmissionBehavior(ip, email, formType, formLoadTime)
+        if (!behaviorValidation.allowed) {
+          logBotDetected(formType, 'behavioral-validation-failed', ip, userAgent, {
+            reason: behaviorValidation.reason,
+            details: behaviorValidation.details,
+            formName
+          })
+          
+          // Add to blacklist if suspicious
+          await addToBlacklist(ip, behaviorValidation.reason, userAgent)
+          
+          // Return success to bot (honeypot technique)
+          return {
+            statusCode: 200,
+            headers,
+            body: JSON.stringify({ 
+              success: true,
+              message: 'Form submitted successfully'
+            }),
+          }
+        }
+      } catch (behaviorError) {
+        // Fail open - allow if check fails
+        console.error('Behavioral analysis error:', behaviorError.message)
+      }
+    }
 
     // If validation failed, reject
     if (errors.length > 0) {
@@ -678,8 +870,14 @@ exports.handler = async (event, context) => {
         errors,
         email: emailPrefix, // Sanitized - only first 3 chars
         ip,
-        userAgent
+        userAgent,
+        formName
       })
+      
+      // Add to blacklist if multiple errors (likely bot)
+      if (errors.length > 2 && !isWebhookEndpoint(path) && !isCheckoutEndpoint(path)) {
+        await addToBlacklist(ip, `Multiple validation errors: ${errors.join(', ')}`, userAgent)
+      }
       
       return {
         statusCode: 400,
@@ -724,6 +922,37 @@ exports.handler = async (event, context) => {
     })
 
     if (forwardResponse.ok) {
+      // Success - send confirmation email to customer (fire and forget)
+      // Don't block form submission if email fails
+      try {
+        const { sendConfirmationEmail } = require('./send-confirmation-email')
+        
+        // Convert formData to plain object for email template
+        const emailFormData = {}
+        for (const [key, value] of formData.entries()) {
+          // Skip internal fields
+          if (key === 'bot-field' || key === 'honeypot-1' || key === 'honeypot-2' || key === 'recaptcha-token' || key === 'form-type' || key === 'form-name') {
+            continue
+          }
+          emailFormData[key] = value
+        }
+        
+        // Send confirmation email asynchronously (don't await - fire and forget)
+        sendConfirmationEmail(formType, emailFormData).catch(emailError => {
+          // Log error but don't fail form submission
+          console.error('⚠️ Failed to send confirmation email (non-blocking):', {
+            formType,
+            error: emailError.message || emailError
+          })
+        })
+      } catch (emailSetupError) {
+        // Log error but don't fail form submission
+        console.error('⚠️ Error setting up confirmation email (non-blocking):', {
+          formType,
+          error: emailSetupError.message || emailSetupError
+        })
+      }
+      
       // Success - return Netlify's response
       return {
         statusCode: 200,
