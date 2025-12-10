@@ -328,22 +328,6 @@ export function CheckoutPage() {
           <div className="stripe-checkout-logo">
             <img src="/images/ac-drain-wiz-logo.png" alt="AC Drain Wiz" className="h-8" />
           </div>
-          {/* VERIFICATION BANNER - REMOVE AFTER CONFIRMING CORRECT CODEBASE */}
-          <div style={{ 
-            background: 'linear-gradient(90deg, #ff0000, #ff6600, #ffff00, #00ff00, #0066ff, #6600ff)',
-            color: 'white',
-            padding: '8px',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: '14px',
-            position: 'absolute',
-            top: '60px',
-            left: '0',
-            right: '0',
-            zIndex: 9999
-          }}>
-            ✅ CHECKOUT PAGE - CORRECT CODEBASE VERIFIED - SPACEBAR FIX IN PROGRESS
-          </div>
         </div>
 
         <div className="stripe-checkout-layout">
