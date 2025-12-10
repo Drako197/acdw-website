@@ -134,18 +134,7 @@
       <input type="checkbox" name="supportEmails" />
     </form>
 
-    <form name="unsubscribe" data-netlify="true" hidden>
-      <input type="email" name="email" />
-      <select name="reason">
-        <option value=""></option>
-        <option value="too-many-emails">Too many emails</option>
-        <option value="not-relevant">Content not relevant</option>
-        <option value="never-signed-up">I never signed up</option>
-        <option value="spam">Emails look like spam</option>
-        <option value="privacy-concerns">Privacy concerns</option>
-        <option value="other">Other</option>
-      </select>
-      <textarea name="feedback"></textarea>
-    </form>
+    <!-- Unsubscribe form removed - now handled entirely by validate-unsubscribe.js function -->
+    <!-- This prevents Netlify Forms from creating a bypassable backend -->
   </body>
 </html>

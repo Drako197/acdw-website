@@ -23,6 +23,7 @@ const { validateIP, addToBlacklist } = require('./utils/ip-reputation')
 const { validateSubmissionBehavior } = require('./utils/behavioral-analysis')
 const { validateEmailDomain } = require('./utils/email-domain-validator')
 const { validateCSRFToken } = require('./utils/csrf-validator')
+const { initBlobsStores, getUnsubscribeStore } = require('./utils/blobs-store')
 
 // reCAPTCHA verification
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY
@@ -96,6 +97,9 @@ exports.handler = async (event, context) => {
   }
 
   try {
+    // Initialize Blobs stores (required for unsubscribe storage)
+    initBlobsStores(context)
+    
     // Parse form data (Netlify Forms sends as URL-encoded)
     const formData = new URLSearchParams(event.body)
     const email = formData.get('email') || ''
@@ -535,78 +539,102 @@ exports.handler = async (event, context) => {
       }
     }
 
-    // 5. If validation passed, forward to Netlify Forms
-    // Netlify Forms expects form data at the root URL
-    const netlifyFormUrl = event.headers.host 
-      ? `https://${event.headers.host}/`
-      : 'https://acdrainwiz.com/'
+    // 5. If validation passed, store in Blobs and send notification via Resend
+    // NO LONGER FORWARDING TO NETLIFY FORMS - This eliminates the bypass attack vector
     
     logFormSubmission('unsubscribe', trimmedEmail, true, ip, userAgent, {
       hasReason: !!reason,
       hasFeedback: !!feedback,
       recaptchaScore: recaptchaResult?.score
     })
-    console.log('✅ Validation passed, forwarding to Netlify Forms:', {
+    console.log('✅ Validation passed, processing unsubscribe (no Netlify Forms):', {
       email: trimmedEmail.substring(0, 20) + '***',
       ip,
       hasReason: !!reason,
       hasFeedback: !!feedback
     })
     
-    // Sanitize form data before forwarding
+    // Sanitize form data
     const formDataObj = {
       email: trimmedEmail,
-      reason: reason,
-      feedback: feedback
+      reason: reason || null,
+      feedback: feedback || null
     }
     const sanitizedData = sanitizeFormData(formDataObj, 'unsubscribe')
     
-    // Build sanitized form data for forwarding
-    const sanitizedFormBody = new URLSearchParams()
-    sanitizedFormBody.append('form-name', formData.get('form-name') || 'unsubscribe')
-    sanitizedFormBody.append('email', sanitizedData.email)
-    sanitizedFormBody.append('consent', formData.get('consent') || 'no')
-    if (sanitizedData.reason) sanitizedFormBody.append('reason', sanitizedData.reason)
-    if (sanitizedData.feedback) sanitizedFormBody.append('feedback', sanitizedData.feedback)
+    // Store unsubscribe in Blobs for record-keeping
+    const unsubscribeStore = getUnsubscribeStore()
+    const timestamp = Date.now()
+    const unsubscribeKey = `unsubscribe:${timestamp}:${trimmedEmail.replace(/[@.]/g, '_')}`
     
-    // Forward the sanitized submission to Netlify Forms
-    const forwardResponse = await fetch(netlifyFormUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: sanitizedFormBody.toString(), // Forward sanitized form data
-    })
-
-    if (forwardResponse.ok) {
-      // Success - return Netlify's response with rate limit headers
-      return {
-        statusCode: 200,
-        headers: {
-          ...headers,
-          ...getRateLimitHeaders(rateLimitResult)
-        },
-        body: JSON.stringify({ 
-          success: true,
-          message: 'Unsubscribe request processed'
-        }),
+    const unsubscribeData = {
+      email: sanitizedData.email,
+      reason: sanitizedData.reason,
+      feedback: sanitizedData.feedback,
+      timestamp: new Date().toISOString(),
+      ip,
+      userAgent,
+      recaptchaScore: recaptchaResult?.score || null
+    }
+    
+    try {
+      if (unsubscribeStore) {
+        await unsubscribeStore.set(unsubscribeKey, JSON.stringify(unsubscribeData))
+        console.log('✅ Unsubscribe stored in Blobs:', { key: unsubscribeKey })
+      } else {
+        console.warn('⚠️ Blobs store not available - skipping storage (unsubscribe still processed)')
       }
-    } else {
-      // Netlify Forms rejected it
-      const errorText = await forwardResponse.text()
-      console.error('Netlify Forms error:', {
-        status: forwardResponse.status,
-        error: errorText
+    } catch (blobError) {
+      console.error('⚠️ Failed to store unsubscribe in Blobs:', blobError.message)
+      // Don't fail the unsubscribe if Blobs fails - continue processing
+    }
+    
+    // Send notification email via Resend
+    const notificationUrl = event.headers.host 
+      ? `https://${event.headers.host}/.netlify/functions/send-unsubscribe-notification`
+      : 'https://acdrainwiz.com/.netlify/functions/send-unsubscribe-notification'
+    
+    try {
+      const notificationResponse = await fetch(notificationUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: sanitizedData.email,
+          reason: sanitizedData.reason,
+          feedback: sanitizedData.feedback,
+          ip,
+          userAgent
+        }),
       })
       
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({ 
-          error: 'Form submission failed',
-          message: 'Unable to process unsubscribe request'
-        }),
+      if (notificationResponse.ok) {
+        const notificationResult = await notificationResponse.json()
+        console.log('✅ Unsubscribe notification sent:', { messageId: notificationResult.messageId })
+      } else {
+        console.warn('⚠️ Failed to send notification email (unsubscribe still processed):', {
+          status: notificationResponse.status
+        })
       }
+    } catch (notificationError) {
+      console.error('⚠️ Error sending notification email (unsubscribe still processed):', {
+        error: notificationError.message
+      })
+      // Don't fail the unsubscribe if notification fails - continue processing
+    }
+    
+    // Success - return with rate limit headers
+    return {
+      statusCode: 200,
+      headers: {
+        ...headers,
+        ...getRateLimitHeaders(rateLimitResult)
+      },
+      body: JSON.stringify({ 
+        success: true,
+        message: 'Unsubscribe request processed'
+      }),
     }
 
   } catch (error) {
