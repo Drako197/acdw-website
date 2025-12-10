@@ -159,10 +159,26 @@ exports.handler = async (event, context) => {
       currency: session.currency || 'usd',
       paymentStatus: session.payment_status || 'unknown',
       subtotal: productSubtotal, // Product cost only (excluding shipping)
-      // Tax might be in total_details.breakdown.taxes or total_details.amount_tax
-      tax: session.total_details?.breakdown?.taxes?.[0]?.amount 
-        ? session.total_details.breakdown.taxes[0].amount / 100
-        : (session.total_details?.amount_tax ? session.total_details.amount_tax / 100 : null),
+      // Extract tax from Stripe Tax (handles multiple tax types: sales tax, VAT, GST, etc.)
+      // Stripe Tax stores taxes in total_details.breakdown.taxes array
+      tax: (() => {
+        const taxBreakdown = session.total_details?.breakdown?.taxes || []
+        if (taxBreakdown.length > 0) {
+          // Sum all taxes (handles multiple tax types)
+          return taxBreakdown.reduce((sum, tax) => sum + (tax.amount / 100), 0)
+        }
+        // Fallback to legacy amount_tax field
+        return session.total_details?.amount_tax ? session.total_details.amount_tax / 100 : 0
+      })(),
+      // Tax breakdown for display (shows individual tax types)
+      taxDetails: (() => {
+        const taxBreakdown = session.total_details?.breakdown?.taxes || []
+        return taxBreakdown.map(tax => ({
+          amount: tax.amount / 100,
+          rate: tax.rate?.display_name || 'Tax',
+          percentage: tax.rate?.percentage || 0,
+        }))
+      })(),
       shipping: shippingCost, // Shipping cost from line items
       shippingDetails: session.shipping_details
         ? {

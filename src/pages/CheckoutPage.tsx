@@ -119,21 +119,32 @@ export function CheckoutPage() {
   }, [shippingAddress.city, shippingAddress.state, shippingAddress.zip, cart])
 
   // Basic client-side sanitization to prevent XSS
+  // Only sanitize dangerous characters on final submission, not during typing
   const sanitizeInput = (value: string): string => {
     return value
       .replace(/[<>]/g, '') // Remove < and > to prevent HTML injection
       .replace(/javascript:/gi, '') // Remove javascript: protocol
       .replace(/on\w+=/gi, '') // Remove event handlers like onclick=
-      .trim()
+      .trim() // Only trim on final validation
   }
 
   const handleInputChange = (field: keyof ShippingAddress, value: string) => {
-    // Sanitize input before storing
-    const sanitizedValue = sanitizeInput(value)
-    setShippingAddress(prev => ({ ...prev, [field]: sanitizedValue }))
+    // Don't sanitize during typing - allow all characters including spaces
+    // Sanitization will happen on form submission
+    // Use functional update to ensure we're working with latest state
+    setShippingAddress(prev => ({ ...prev, [field]: value }))
     // Clear error for this field
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }))
+    }
+  }
+
+  // Explicit handler to ensure spacebar works - stops event propagation
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Allow spacebar and all other keys to work normally in input fields
+    // Stop propagation to prevent any global handlers from interfering
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+      e.stopPropagation()
     }
   }
 
@@ -215,22 +226,36 @@ export function CheckoutPage() {
       return
     }
     
-    // Validate form first
+    // Sanitize all address fields before submission
+    const sanitizedAddress: ShippingAddress = {
+      name: sanitizeInput(shippingAddress.name),
+      line1: sanitizeInput(shippingAddress.line1),
+      line2: sanitizeInput(shippingAddress.line2),
+      city: sanitizeInput(shippingAddress.city),
+      state: sanitizeInput(shippingAddress.state),
+      zip: sanitizeInput(shippingAddress.zip),
+      country: shippingAddress.country, // Country doesn't need sanitization
+    }
+    
+    // Update state with sanitized values for validation
+    setShippingAddress(sanitizedAddress)
+    
+    // Validate form first (uses state, which we just updated)
     if (!validateForm()) {
       return
     }
     
-    // Check if shipping is calculated
+    // Check if shipping is calculated (use sanitized address)
     if (shippingCost === null) {
       // Show error for fields that would trigger shipping calculation
       const newErrors: { [key: string]: string } = {}
-      if (!shippingAddress.city.trim()) {
+      if (!sanitizedAddress.city.trim()) {
         newErrors.city = 'Please enter your city to calculate shipping'
       }
-      if (!shippingAddress.state.trim()) {
+      if (!sanitizedAddress.state.trim()) {
         newErrors.state = 'Please enter your state to calculate shipping'
       }
-      if (!shippingAddress.zip.trim()) {
+      if (!sanitizedAddress.zip.trim()) {
         newErrors.zip = 'Please enter your ZIP to calculate shipping'
       }
       setErrors(prev => ({ ...prev, ...newErrors }))
@@ -252,8 +277,8 @@ export function CheckoutPage() {
           userId: user?.id || '',
           isGuest: !isAuthenticated,
           shippingAddress: {
-            ...shippingAddress,
-            postal_code: shippingAddress.zip,
+            ...sanitizedAddress,
+            postal_code: sanitizedAddress.zip,
           },
           preCalculatedShippingCost: shippingCost,
         }),
@@ -302,6 +327,22 @@ export function CheckoutPage() {
           </button>
           <div className="stripe-checkout-logo">
             <img src="/images/ac-drain-wiz-logo.png" alt="AC Drain Wiz" className="h-8" />
+          </div>
+          {/* VERIFICATION BANNER - REMOVE AFTER CONFIRMING CORRECT CODEBASE */}
+          <div style={{ 
+            background: 'linear-gradient(90deg, #ff0000, #ff6600, #ffff00, #00ff00, #0066ff, #6600ff)',
+            color: 'white',
+            padding: '8px',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: '14px',
+            position: 'absolute',
+            top: '60px',
+            left: '0',
+            right: '0',
+            zIndex: 9999
+          }}>
+            ✅ CHECKOUT PAGE - CORRECT CODEBASE VERIFIED - SPACEBAR FIX IN PROGRESS
           </div>
         </div>
 
@@ -395,6 +436,7 @@ export function CheckoutPage() {
                     type="text"
                     value={shippingAddress.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
+                    onKeyDown={handleKeyDown}
                     className={`stripe-form-input ${errors.name ? 'stripe-form-input-error' : ''}`}
                     placeholder="John Doe"
                   />
@@ -410,6 +452,7 @@ export function CheckoutPage() {
                     type="text"
                     value={shippingAddress.line1}
                     onChange={(e) => handleInputChange('line1', e.target.value)}
+                    onKeyDown={handleKeyDown}
                     className={`stripe-form-input ${errors.line1 ? 'stripe-form-input-error' : ''}`}
                     placeholder="123 Main St"
                   />
@@ -425,6 +468,7 @@ export function CheckoutPage() {
                     type="text"
                     value={shippingAddress.line2}
                     onChange={(e) => handleInputChange('line2', e.target.value)}
+                    onKeyDown={handleKeyDown}
                     className="stripe-form-input"
                     placeholder="Apt 4B"
                   />
@@ -438,6 +482,7 @@ export function CheckoutPage() {
                       type="text"
                       value={shippingAddress.city}
                       onChange={(e) => handleInputChange('city', e.target.value)}
+                      onKeyDown={handleKeyDown}
                       className={`stripe-form-input ${errors.city ? 'stripe-form-input-error' : ''}`}
                       placeholder="Miami"
                     />
@@ -452,6 +497,7 @@ export function CheckoutPage() {
                       type="text"
                       value={shippingAddress.state}
                       onChange={(e) => handleInputChange('state', e.target.value.toUpperCase())}
+                      onKeyDown={handleKeyDown}
                       className={`stripe-form-input ${errors.state ? 'stripe-form-input-error' : ''}`}
                       placeholder="FL"
                       maxLength={2}
@@ -467,6 +513,7 @@ export function CheckoutPage() {
                       type="text"
                       value={shippingAddress.zip}
                       onChange={(e) => handleInputChange('zip', e.target.value)}
+                      onKeyDown={handleKeyDown}
                       className={`stripe-form-input ${errors.zip ? 'stripe-form-input-error' : ''}`}
                       placeholder="33101"
                     />

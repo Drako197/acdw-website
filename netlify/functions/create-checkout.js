@@ -181,6 +181,30 @@ exports.handler = async (event, context) => {
         },
       ],
       mode: 'payment',
+      // Enable Stripe Tax automatic calculation
+      // Stripe will calculate sales tax (US) or VAT/GST (international) based on shipping address
+      automatic_tax: {
+        enabled: true,
+      },
+      // Pre-fill shipping address (collected on checkout page for shipping calculation)
+      // This allows Stripe Tax to calculate tax immediately without requiring duplicate address entry
+      // The address will be pre-filled in Stripe Checkout, but user can still edit it if needed
+      shipping: {
+        name: shippingAddress.name || 'Customer',
+        address: {
+          line1: shippingAddress.line1,
+          line2: shippingAddress.line2 || '',
+          city: shippingAddress.city,
+          state: shippingAddress.state,
+          postal_code: shippingAddress.postal_code || shippingAddress.zip || '',
+          country: shippingAddress.country,
+        },
+      },
+      // Still enable address collection (address will be pre-filled, but editable)
+      // This is required for Stripe Tax to work properly
+      shipping_address_collection: {
+        allowed_countries: ['US', 'CA'], // Add other countries as needed
+      },
       success_url: `${process.env.URL || 'https://www.acdrainwiz.com'}/checkout/success?session_id={CHECKOUT_SESSION_ID}${isGuest ? '&guest=true' : ''}`,
       cancel_url: `${process.env.URL || 'https://www.acdrainwiz.com'}/checkout/cancel`,
       
@@ -226,6 +250,41 @@ exports.handler = async (event, context) => {
         : 'Logged-in user: receipt_email explicitly set in payment_intent_data. Stripe sends receipt automatically.',
       important: 'Stripe sends receipts automatically when Customer exists OR receipt_email is set on PaymentIntent.'
     })
+    
+    // Validate shipping address format for tax calculation
+    const shippingAddr = sessionConfig.shipping?.address
+    const addressValidation = {
+      hasLine1: !!shippingAddr?.line1,
+      hasCity: !!shippingAddr?.city,
+      hasState: !!shippingAddr?.state,
+      hasPostalCode: !!shippingAddr?.postal_code,
+      hasCountry: !!shippingAddr?.country,
+      stateLength: shippingAddr?.state?.length || 0,
+      countryLength: shippingAddr?.country?.length || 0,
+      isValid: !!(shippingAddr?.line1 && shippingAddr?.city && shippingAddr?.state && shippingAddr?.postal_code && shippingAddr?.country),
+    }
+    
+    // Log tax configuration for debugging
+    console.log('🔍 Stripe Tax Configuration:', {
+      automaticTaxEnabled: sessionConfig.automatic_tax?.enabled,
+      hasShippingAddress: !!sessionConfig.shipping,
+      shippingAddress: sessionConfig.shipping ? {
+        name: sessionConfig.shipping.name,
+        line1: sessionConfig.shipping.address.line1?.substring(0, 30) + '...',
+        city: sessionConfig.shipping.address.city,
+        state: sessionConfig.shipping.address.state,
+        postal_code: sessionConfig.shipping.address.postal_code,
+        country: sessionConfig.shipping.address.country,
+      } : 'none',
+      addressValidation: addressValidation,
+      shippingAddressCollection: sessionConfig.shipping_address_collection?.allowed_countries,
+      warnings: [
+        !addressValidation.isValid && '⚠️ Address missing required fields for tax calculation',
+        addressValidation.stateLength !== 2 && '⚠️ State should be 2-letter code (e.g., "FL" not "Florida")',
+        addressValidation.countryLength !== 2 && '⚠️ Country should be 2-letter code (e.g., "US" not "United States")',
+        '💡 If tax still not showing, check: (1) Tax Registrations in Stripe Dashboard → Settings → Tax → Registrations, (2) Shipping origin address is set, (3) Product tax codes are configured'
+      ].filter(Boolean),
+    })
 
     const session = await stripe.checkout.sessions.create(sessionConfig)
     
@@ -233,7 +292,20 @@ exports.handler = async (event, context) => {
     console.log('Stripe checkout session created:', {
       sessionId: session.id,
       customerEmail: session.customer_email || 'will be collected during checkout',
-      url: session.url?.substring(0, 50) + '...'
+      url: session.url?.substring(0, 50) + '...',
+      // Log tax details if available
+      taxDetails: session.total_details?.breakdown?.taxes ? {
+        taxCount: session.total_details.breakdown.taxes.length,
+        totalTax: session.total_details.amount_tax ? (session.total_details.amount_tax / 100).toFixed(2) : '0.00',
+        taxes: session.total_details.breakdown.taxes.map(t => ({
+          amount: (t.amount / 100).toFixed(2),
+          rate: t.rate?.display_name || 'Unknown',
+        })),
+      } : 'No tax calculated - Check Stripe Tax settings in Dashboard',
+      automaticTaxStatus: session.automatic_tax?.enabled ? 'enabled' : 'disabled',
+      warning: session.total_details?.breakdown?.taxes?.length === 0 
+        ? '⚠️ Tax not calculated - Verify Stripe Tax is enabled in Stripe Dashboard → Settings → Tax'
+        : null,
     })
 
     return {

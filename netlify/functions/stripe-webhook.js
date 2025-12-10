@@ -156,7 +156,17 @@ exports.handler = async (event, context) => {
           },
           items: orderItems,
           orderTotal: session.amount_total ? session.amount_total / 100 : 0,
-          taxAmount: session.total_details?.amount_tax ? session.total_details.amount_tax / 100 : 0,
+          // Extract tax from Stripe Tax (handles multiple tax types: sales tax, VAT, GST, etc.)
+          // Stripe Tax stores taxes in total_details.breakdown.taxes array
+          taxAmount: (() => {
+            const taxBreakdown = session.total_details?.breakdown?.taxes || []
+            if (taxBreakdown.length > 0) {
+              // Sum all taxes (handles multiple tax types)
+              return taxBreakdown.reduce((sum, tax) => sum + (tax.amount / 100), 0)
+            }
+            // Fallback to legacy amount_tax field
+            return session.total_details?.amount_tax ? session.total_details.amount_tax / 100 : 0
+          })(),
           shippingAmount: session.shipping_cost?.amount_total ? session.shipping_cost.amount_total / 100 : 0,
         }
         
