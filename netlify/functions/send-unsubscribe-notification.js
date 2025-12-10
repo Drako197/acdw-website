@@ -11,6 +11,7 @@ const { Resend } = require('resend')
 const RESEND_API_KEY = process.env.RESEND_API_KEY
 const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || 'support@acdrainwiz.com'
 const FROM_EMAIL = process.env.FROM_EMAIL || 'AC Drain Wiz <unsubscribe@acdrainwiz.com>'
+const ZAPIER_UNSUBSCRIBE_WEBHOOK_URL = process.env.ZAPIER_UNSUBSCRIBE_WEBHOOK_URL
 
 exports.handler = async (event, context) => {
   // Only allow POST requests
@@ -158,6 +159,46 @@ Timestamp: ${new Date().toISOString()}
       to: NOTIFICATION_EMAIL,
       from: FROM_EMAIL
     })
+
+    // Call Zapier webhook if configured (maintains Zapier integration)
+    if (ZAPIER_UNSUBSCRIBE_WEBHOOK_URL) {
+      try {
+        const zapierPayload = {
+          form_name: 'unsubscribe',
+          email: email,
+          reason: reason || '',
+          feedback: feedback || '',
+          created_at: new Date().toISOString(),
+          // Additional metadata (bonus fields)
+          ip: ip || null,
+          user_agent: userAgent || null
+        }
+
+        const zapierResponse = await fetch(ZAPIER_UNSUBSCRIBE_WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(zapierPayload),
+        })
+
+        if (zapierResponse.ok) {
+          console.log('✅ Zapier webhook called successfully')
+        } else {
+          console.warn('⚠️ Zapier webhook returned non-200 status:', {
+            status: zapierResponse.status,
+            statusText: zapierResponse.statusText
+          })
+        }
+      } catch (zapierError) {
+        // Don't fail unsubscribe if Zapier fails - log and continue
+        console.error('⚠️ Zapier webhook failed (unsubscribe still processed):', {
+          error: zapierError.message
+        })
+      }
+    } else {
+      console.log('ℹ️ Zapier webhook URL not configured - skipping Zapier call')
+    }
 
     return {
       statusCode: 200,
