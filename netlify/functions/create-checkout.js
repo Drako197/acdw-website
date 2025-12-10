@@ -186,21 +186,8 @@ exports.handler = async (event, context) => {
       automatic_tax: {
         enabled: true,
       },
-      // Pre-fill shipping address (collected on checkout page for shipping calculation)
-      // This allows Stripe Tax to calculate tax immediately without requiring duplicate address entry
-      // The address will be pre-filled in Stripe Checkout, but user can still edit it if needed
-      shipping: {
-        name: shippingAddress.name || 'Customer',
-        address: {
-          line1: shippingAddress.line1,
-          line2: shippingAddress.line2 || '',
-          city: shippingAddress.city,
-          state: shippingAddress.state,
-          postal_code: shippingAddress.postal_code || shippingAddress.zip || '',
-          country: shippingAddress.country,
-        },
-      },
-      // Still enable address collection (address will be pre-filled, but editable)
+      // NOTE: Stripe Checkout doesn't support pre-filling shipping addresses
+      // User will need to enter address in Stripe, but tax will calculate correctly once entered
       // This is required for Stripe Tax to work properly
       shipping_address_collection: {
         allowed_countries: ['US', 'CA'], // Add other countries as needed
@@ -267,23 +254,11 @@ exports.handler = async (event, context) => {
     // Log tax configuration for debugging
     console.log('🔍 Stripe Tax Configuration:', {
       automaticTaxEnabled: sessionConfig.automatic_tax?.enabled,
-      hasShippingAddress: !!sessionConfig.shipping,
-      shippingAddress: sessionConfig.shipping ? {
-        name: sessionConfig.shipping.name,
-        line1: sessionConfig.shipping.address.line1?.substring(0, 30) + '...',
-        city: sessionConfig.shipping.address.city,
-        state: sessionConfig.shipping.address.state,
-        postal_code: sessionConfig.shipping.address.postal_code,
-        country: sessionConfig.shipping.address.country,
-      } : 'none',
-      addressValidation: addressValidation,
       shippingAddressCollection: sessionConfig.shipping_address_collection?.allowed_countries,
+      note: 'Stripe Checkout will collect shipping address - tax will calculate once address is entered',
       warnings: [
-        !addressValidation.isValid && '⚠️ Address missing required fields for tax calculation',
-        addressValidation.stateLength !== 2 && '⚠️ State should be 2-letter code (e.g., "FL" not "Florida")',
-        addressValidation.countryLength !== 2 && '⚠️ Country should be 2-letter code (e.g., "US" not "United States")',
         '💡 If tax still not showing, check: (1) Tax Registrations in Stripe Dashboard → Settings → Tax → Registrations, (2) Shipping origin address is set, (3) Product tax codes are configured'
-      ].filter(Boolean),
+      ],
     })
 
     const session = await stripe.checkout.sessions.create(sessionConfig)
