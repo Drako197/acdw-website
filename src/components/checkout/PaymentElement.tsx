@@ -73,12 +73,25 @@ function PaymentElementInner({
     setError(null)
 
     try {
+      // CRITICAL: elements.submit() must be called before confirmPayment()
+      // This validates the form and prepares it for submission
+      const { error: elementsError } = await elements.submit()
+      
+      if (elementsError) {
+        // Form validation failed
+        setError(elementsError.message || 'Please check your payment details')
+        onPaymentError(elementsError.message || 'Please check your payment details')
+        setIsSubmitting(false)
+        setIsProcessing(false)
+        return
+      }
+
       // Extract payment intent ID from client secret for return URL
       // Client secret format: pi_xxx_secret_yyy
       const paymentIntentIdMatch = clientSecret.match(/^pi_([^_]+)/)
       const paymentIntentId = paymentIntentIdMatch ? paymentIntentIdMatch[0] : ''
 
-      // Confirm payment with Stripe
+      // Now confirm payment with Stripe (after elements.submit())
       const { error: submitError, paymentIntent } = await stripe.confirmPayment({
         elements,
         clientSecret,
