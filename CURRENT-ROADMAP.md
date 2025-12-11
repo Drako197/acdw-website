@@ -120,6 +120,60 @@
 
 ---
 
+### 7. Multi-Product Shopping Cart for Pros & Property Managers
+**Status:** Pending  
+**Description:** Update catalog pages to support shopping cart experience with multiple products and quantities
+
+**Current State:**
+- Catalog pages (HVAC Pro & Property Manager) only support single product purchases
+- Quantity selector exists but only for one product at a time
+- Checkout flow handles single `CartItem` only
+
+**Requirements:**
+- Allow pros/property managers to add multiple product types to cart
+- Support different quantities for each product (e.g., 10 Minis, 50 Sensors, 100 Bundles)
+- Shopping cart UI with ability to update quantities
+- Remove items from cart
+- Update checkout flow to handle multiple products
+- Calculate tier pricing per product based on quantity
+- Calculate shipping for multiple products
+- Calculate tax for entire order
+- Update ShipStation integration for multi-product orders
+
+**Research Phase:**
+- [ ] Research best practices for multi-product shopping carts
+- [ ] Review Stripe Payment Element support for multiple line items
+- [ ] Research how to handle tier pricing with multiple products
+- [ ] Review ShipStation API for multi-product orders
+- [ ] Design cart state management approach
+- [ ] Design UI/UX for cart experience
+- [ ] Plan checkout flow for multiple products
+
+**Implementation Phase:**
+- [ ] Create shopping cart context/state management
+- [ ] Update catalog pages to support "Add to Cart" functionality
+- [ ] Create shopping cart page/component
+- [ ] Update cart to support multiple products with quantities
+- [ ] Add quantity update functionality in cart
+- [ ] Add remove item functionality
+- [ ] Update checkout page to handle multiple products
+- [ ] Update `create-payment-intent` to handle multiple line items
+- [ ] Update tax calculation for multi-product orders
+- [ ] Update shipping calculation for multi-product orders
+- [ ] Update ShipStation integration for multi-product orders
+- [ ] Update success page to show all products
+- [ ] Test complete flow with multiple products
+
+**Estimated Time:** 
+- Research: 4-6 hours
+- Implementation: 20-30 hours
+- Testing: 4-6 hours
+- **Total: 28-42 hours**
+
+**Priority:** P2 (Can be done after launch, but high value for B2B customers)
+
+---
+
 ## 📋 Next Immediate Steps
 
 ### Recommended Order:
@@ -136,7 +190,12 @@
    - Can be done incrementally
    - Start with highest-traffic forms first
 
-4. **Google Analytics** (P2)
+4. **Multi-Product Shopping Cart** (P2)
+   - High value for B2B customers (pros & property managers)
+   - Can be done after launch
+   - Requires research phase first
+
+5. **Google Analytics** (P2)
    - Important for tracking but not launch blocker
    - Can be added after launch
 
