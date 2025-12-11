@@ -31,3 +31,5 @@ dist-ssr
 .env.local
 .env.*.local
 **/*.md
+# Allow workflow documentation
+!DEV-BRANCH-WORKFLOW.md
