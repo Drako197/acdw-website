@@ -231,7 +231,7 @@ exports.handler = async (event, context) => {
   
   // Rate limiting check (webhook endpoints get higher limits)
   const ip = getClientIP(event)
-  const rateLimitResult = checkRateLimit(ip, 'api')
+  const rateLimitResult = await checkRateLimit(ip, 'api')
   
   if (!rateLimitResult.allowed) {
     logRateLimit(ip, 'api', rateLimitResult.limit, rateLimitResult.remaining, true)

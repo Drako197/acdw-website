@@ -36,7 +36,7 @@ exports.handler = async (event, context) => {
     const ip = getClientIP(event)
     
     // Check rate limit - more generous for shipping calculation (10 per minute)
-    const rateLimitResult = checkRateLimit(ip, 'api')
+    const rateLimitResult = await checkRateLimit(ip, 'api')
     if (!rateLimitResult.allowed) {
       logRateLimit(ip, 'api', '/.netlify/functions/calculate-shipping')
       return {

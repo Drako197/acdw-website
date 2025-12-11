@@ -1,11 +1,7 @@
-/**
- * Image Upload Handler - Cloudinary Integration
- * 
- * Accepts base64 image data and uploads to Cloudinary
- * Returns a permanent URL for the image
- */
 
-const { getClientIP } = require('./utils/rate-limiter')
+
+const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
+const { getSecurityHeaders } = require('./utils/cors-config')
 
 // Cloudinary configuration
 const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME
@@ -13,12 +9,8 @@ const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY
 const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET
 
 exports.handler = async (event, context) => {
-  const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  }
+
+    const headers = getSecurityHeaders(event)
 
   // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
@@ -37,6 +29,23 @@ exports.handler = async (event, context) => {
       body: JSON.stringify({ error: 'Method not allowed' }),
     }
   }
+
+    // Rate limiting
+    const ip = getClientIP(event)
+    const rateLimitResult = await checkRateLimit(ip, 'form')
+    if (!rateLimitResult.allowed) {
+        return {
+            statusCode: 429,
+            headers: {
+                ...headers,
+                ...getRateLimitHeaders(rateLimitResult)
+            },
+            body: JSON.stringify({
+                error: 'Too many form submissions. Please wait and try again.',
+                retryAfter: rateLimitResult.retryAfter
+            }),
+        }
+    }
 
   try {
     // Check if Cloudinary is configured

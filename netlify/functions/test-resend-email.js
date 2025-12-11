@@ -12,10 +12,8 @@ const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || 'support@acdrainwiz
 const FROM_EMAIL = process.env.FROM_EMAIL || 'AC Drain Wiz <unsubscribe@acdrainwiz.com>'
 
 exports.handler = async (event, context) => {
-  const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-  }
+
+    const headers = getSecurityHeaders(event)
 
   // Build response with diagnostic info
   const diagnostics = {

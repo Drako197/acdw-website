@@ -1,15 +1,8 @@
-/**
- * Generic Form Submission Validator
- * 
- * Server-side validation to prevent bot submissions
- * Validates before forwarding to Netlify Forms
- * 
- * Supports multiple form types: contact, hero-email, promo
- */
 
 // Import utilities
 const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
 const { sanitizeFormData } = require('./utils/input-sanitizer')
+const { getSecurityHeaders } = require('./utils/cors-config')
 const { 
   logFormSubmission, 
   logBotDetected, 
@@ -261,18 +254,7 @@ exports.handler = async (event, context) => {
     console.warn('⚠️ Blobs initialization error (continuing with fallback):', blobsError.message)
   }
   
-  const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
-    'X-XSS-Protection': '1; mode=block',
-    'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Permissions-Policy': 'geolocation=(), microphone=(), camera=()',
-    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
-  }
+    const headers = getSecurityHeaders(event)
 
   // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
@@ -290,7 +272,24 @@ exports.handler = async (event, context) => {
       headers,
       body: JSON.stringify({ error: 'Method not allowed' }),
     }
-  }
+    }
+
+    // Rate limiting
+    const ip = getClientIP(event)
+    const rateLimitResult = await checkRateLimit(ip, 'form')
+    if (!rateLimitResult.allowed) {
+        return {
+            statusCode: 429,
+            headers: {
+                ...headers,
+                ...getRateLimitHeaders(rateLimitResult)
+            },
+            body: JSON.stringify({
+                error: 'Too many form submissions. Please wait and try again.',
+                retryAfter: rateLimitResult.retryAfter
+            }),
+        }
+    }
 
   try {
     // SECURITY: Check if this is a webhook endpoint (exempt from some validations)
@@ -622,7 +621,7 @@ exports.handler = async (event, context) => {
 
     // Rate limiting check
     const rateLimitType = formType === 'upgrade' ? 'strict' : 'form'
-    const rateLimitResult = checkRateLimit(ip, rateLimitType)
+    const rateLimitResult = await checkRateLimit(ip, rateLimitType)
     
     if (!rateLimitResult.allowed) {
       logRateLimit(ip, rateLimitType, rateLimitResult.limit, rateLimitResult.remaining, true)

@@ -1,9 +1,7 @@
-/**
- * Send Unsubscribe Notification via Resend
- * 
- * Sends email notification to site owner when someone unsubscribes
- * Replaces Netlify Forms notification system
- */
+
+
+const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
+const { getSecurityHeaders } = require('./utils/cors-config')
 
 const { Resend } = require('resend')
 
@@ -18,21 +16,13 @@ exports.handler = async (event, context) => {
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
+        headers: getSecurityHeaders(event),
       body: JSON.stringify({ error: 'Method not allowed' }),
     }
   }
 
   // CORS headers
-  const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  }
+    const headers = getSecurityHeaders(event)
 
   // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {

@@ -1,11 +1,6 @@
-/**
- * Initialize Netlify Blobs Stores
- * 
- * This function creates the required Blobs stores by writing an initial entry.
- * Stores are created automatically when you first write to them.
- * 
- * Run this function once after deployment to initialize all stores.
- */
+
+
+const { getSecurityHeaders } = require('./utils/cors-config')
 
 const { getStore } = require('@netlify/blobs')
 
@@ -13,10 +8,8 @@ const { getStore } = require('@netlify/blobs')
  * Netlify Function Handler
  */
 exports.handler = async (event, context) => {
-  // Get site ID from various possible sources in Netlify Functions
-  // NOTE: SITE_ID is a reserved Netlify environment variable (automatically set)
-  // We can try to get it from context or headers, but it's usually auto-detected
-  const siteID = 
+
+    const siteID = 
     context?.site?.id || 
     process.env.SITE_ID ||  // Reserved variable - Netlify sets this automatically
     process.env.NETLIFY_SITE_ID ||
@@ -89,12 +82,7 @@ exports.handler = async (event, context) => {
       )
     }
   }
-  const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  }
+    const headers = getSecurityHeaders(event)
 
   // Handle preflight
   if (event.httpMethod === 'OPTIONS') {

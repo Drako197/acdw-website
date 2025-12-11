@@ -40,7 +40,7 @@ exports.handler = async (event, context) => {
     const ip = getClientIP(event)
     
     // Check rate limit (stricter for updates - prevent abuse)
-    const rateLimitResult = checkRateLimit(ip, 'api')
+    const rateLimitResult = await checkRateLimit(ip, 'api')
     if (!rateLimitResult.allowed) {
       logRateLimit(ip, 'api', '/.netlify/functions/update-payment-intent')
       return {
