@@ -206,6 +206,117 @@ exports.handler = async (event, context) => {
     case 'payment_intent.succeeded':
       const paymentIntent = stripeEvent.data.object
       console.log('PaymentIntent succeeded:', paymentIntent.id)
+      
+      // Handle Payment Intent from Payment Element (not Checkout Session)
+      // This is for the new embedded Payment Element flow
+      try {
+        // Retrieve full Payment Intent with shipping details
+        const fullPaymentIntent = await stripe.paymentIntents.retrieve(paymentIntent.id, {
+          expand: ['customer', 'payment_method'],
+        })
+        
+        // Get customer email
+        const customerEmail = fullPaymentIntent.receipt_email || 
+                             (fullPaymentIntent.customer && typeof fullPaymentIntent.customer === 'object' 
+                               ? fullPaymentIntent.customer.email 
+                               : null) ||
+                             null
+        
+        // Check if this is a guest checkout (no userId in metadata means guest)
+        const isGuest = fullPaymentIntent.metadata?.isGuest === 'true' || !fullPaymentIntent.metadata?.userId
+        
+        // Extract shipping address
+        const shipping = fullPaymentIntent.shipping
+        if (!shipping || !shipping.address) {
+          console.warn('No shipping address found for PaymentIntent:', paymentIntent.id)
+          break
+        }
+        
+        // Extract product information from metadata
+        const product = fullPaymentIntent.metadata?.product || 'unknown'
+        const quantity = parseInt(fullPaymentIntent.metadata?.quantity || '1')
+        const shippingCost = parseFloat(fullPaymentIntent.metadata?.shippingCost || '0')
+        
+        // Get price ID from metadata or try to extract from amount
+        // Note: With Payment Element, we don't have line items, so we use metadata
+        const priceId = fullPaymentIntent.metadata?.priceId || null
+        
+        // Build order items for ShipStation
+        const orderItems = []
+        if (priceId && SKU_MAPPING[priceId]) {
+          const mapping = SKU_MAPPING[priceId]
+          orderItems.push({
+            sku: mapping.sku,
+            name: mapping.name,
+            quantity: quantity,
+            unitPrice: fullPaymentIntent.amount ? (fullPaymentIntent.amount / 100) / quantity : 0, // Approximate unit price
+          })
+        } else {
+          // Fallback: use product name from metadata
+          orderItems.push({
+            sku: `UNKNOWN-${product.toUpperCase()}`,
+            name: product,
+            quantity: quantity,
+            unitPrice: fullPaymentIntent.amount ? (fullPaymentIntent.amount / 100) / quantity : 0,
+          })
+        }
+        
+        // Extract tax information
+        const taxBreakdown = fullPaymentIntent.amount_details?.breakdown?.taxes || []
+        const taxAmount = taxBreakdown.length > 0
+          ? taxBreakdown.reduce((sum, tax) => sum + (tax.amount / 100), 0)
+          : (fullPaymentIntent.amount_details?.amount_tax ? fullPaymentIntent.amount_details.amount_tax / 100 : 0)
+        
+        // Build order data for ShipStation
+        const orderData = {
+          orderNumber: paymentIntent.id, // Use Payment Intent ID as order number
+          orderDate: new Date().toISOString(),
+          customerName: shipping.name || 'Customer',
+          customerEmail: customerEmail || '',
+          customerPhone: '', // Payment Intent doesn't include phone
+          shippingAddress: {
+            name: shipping.name || 'Customer',
+            street1: shipping.address.line1 || '',
+            street2: shipping.address.line2 || '',
+            city: shipping.address.city || '',
+            state: shipping.address.state || '',
+            postalCode: shipping.address.postal_code || '',
+            country: shipping.address.country || 'US',
+          },
+          items: orderItems,
+          orderTotal: fullPaymentIntent.amount ? fullPaymentIntent.amount / 100 : 0,
+          taxAmount: taxAmount,
+          shippingAmount: shippingCost,
+        }
+        
+        // Call ShipStation function to create order
+        const shipstationFunction = require('./create-shipstation-order')
+        const shipstationEvent = {
+          httpMethod: 'POST',
+          body: JSON.stringify(orderData),
+          headers: event.headers,
+        }
+        
+        const shipstationResult = await shipstationFunction.handler(shipstationEvent, context)
+        
+        // Check if ShipStation order was created successfully
+        if (shipstationResult.statusCode === 200) {
+          const result = JSON.parse(shipstationResult.body)
+          console.log('Order created in ShipStation from PaymentIntent:', result)
+        } else {
+          const error = JSON.parse(shipstationResult.body)
+          console.error('Failed to create ShipStation order from PaymentIntent:', error)
+          // Don't throw - we still want to acknowledge the webhook
+        }
+      } catch (error) {
+        console.error('Error processing PaymentIntent order creation:', {
+          message: error.message,
+          stack: error.stack,
+          paymentIntentId: paymentIntent.id
+        })
+        // Don't throw - we still want to acknowledge the webhook
+      }
+      
       break
 
     case 'payment_intent.payment_failed':
