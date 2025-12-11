@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.acdw.pull-dev</string>
+    
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/uxdesign/Desktop/Project/ACDW Website/scripts/pull-dev-branch.sh</string>
+    </array>
+    
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Weekday</key>
+        <integer>1</integer>
+        <key>Hour</key>
+        <integer>9</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+    
+    <key>StandardOutPath</key>
+    <string>/Users/uxdesign/Desktop/Project/ACDW Website/.git-pull-log.txt</string>
+    
+    <key>StandardErrorPath</key>
+    <string>/Users/uxdesign/Desktop/Project/ACDW Website/.git-pull-log-errors.txt</string>
+    
+    <key>RunAtLoad</key>
+    <false/>
+</dict>
+</plist>
+

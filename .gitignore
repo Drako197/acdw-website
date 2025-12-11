@@ -34,6 +34,16 @@ dist-ssr
 # Non Essential Files
 **/*.md
 *.md
+# Allow workflow documentation
+!DEV-BRANCH-WORKFLOW.md
+!NETLIFY-BRANCH-DEPLOY-SETUP.md
+!DAILY-DEV-SYNC-SETUP.md
 scripts/
+# Allow sync scripts
+!scripts/pull-dev-branch.sh
+!scripts/com.acdw.pull-dev.plist
+# Git pull logs
+.git-pull-log.txt
+.git-pull-log-errors.txt
 
 S
