@@ -124,18 +124,95 @@ exports.handler = async (event, context) => {
     const productAmount = price.unit_amount * qty // In cents
     const shippingAmount = Math.round(shippingCost * 100) // Convert to cents
     
-    // Initial amount (before tax - Stripe will add tax)
-    // Note: Stripe Tax will recalculate the amount after adding tax
-    const initialAmount = productAmount + shippingAmount
+    // Calculate tax manually (Payment Intents don't support automatic_tax parameter)
+    // Using Stripe Tax Calculation API to get accurate tax rates
+    let taxAmount = 0
+    let taxDetails = []
+    
+    try {
+      // Use Stripe's Tax Calculation API to calculate tax
+      const calculation = await stripe.tax.calculations.create({
+        currency: 'usd',
+        line_items: [
+          {
+            amount: productAmount,
+            reference: 'product',
+          },
+          {
+            amount: shippingAmount,
+            reference: 'shipping',
+          },
+        ],
+        customer_details: {
+          address: {
+            line1: shippingAddress.line1,
+            line2: shippingAddress.line2 || '',
+            city: shippingAddress.city,
+            state: shippingAddress.state,
+            postal_code: shippingAddress.zip || shippingAddress.postal_code || '',
+            country: shippingAddress.country,
+          },
+          address_source: 'shipping',
+        },
+      })
+      
+      // Extract tax from calculation
+      taxAmount = calculation.tax_amount_exclusive / 100 // Convert to dollars
+      taxDetails = calculation.tax_breakdown.map(tax => ({
+        amount: tax.amount / 100,
+        rate: tax.tax_rate_details?.display_name || 'Tax',
+        percentage: tax.tax_rate_details?.percentage || 0,
+      }))
+      
+      console.log('Tax calculated via Stripe Tax API:', {
+        taxAmount,
+        taxDetails,
+        calculationId: calculation.id,
+      })
+    } catch (taxError) {
+      console.error('Stripe Tax calculation failed:', taxError.message)
+      // Fallback: Use simple state-based tax rates if Tax API fails
+      // This is a basic fallback - you should configure proper tax rates
+      const stateTaxRates = {
+        'ID': 0.06, // Idaho 6%
+        'FL': 0.06, // Florida 6%
+        'CA': 0.0725, // California 7.25%
+        // Add more states as needed
+      }
+      
+      const taxRate = shippingAddress.country === 'US' 
+        ? (stateTaxRates[shippingAddress.state] || 0)
+        : (shippingAddress.country === 'CA' ? 0.13 : 0) // Canada GST/HST
+      
+      const subtotal = (productAmount + shippingAmount) / 100
+      taxAmount = subtotal * taxRate
+      taxDetails = taxRate > 0 ? [{
+        amount: taxAmount,
+        rate: `Sales Tax (${(taxRate * 100).toFixed(2)}%)`,
+        percentage: taxRate * 100,
+      }] : []
+      
+      console.log('Using fallback tax calculation:', {
+        state: shippingAddress.state,
+        taxRate,
+        taxAmount,
+      })
+    }
+    
+    // Calculate final amount including tax
+    const taxAmountCents = Math.round(taxAmount * 100)
+    const finalAmount = productAmount + shippingAmount + taxAmountCents
 
-    // Create Payment Intent with shipping address and automatic tax
+    // Create Payment Intent with shipping address
+    // Note: Payment Intents don't support automatic_tax parameter
+    // Tax is calculated separately using Stripe Tax API
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: initialAmount,
+      amount: finalAmount,
       currency: 'usd',
       automatic_payment_methods: {
         enabled: true,
       },
-      // Include shipping address for tax calculation
+      // Include shipping address
       shipping: {
         name: shippingAddress.name || 'Customer',
         address: {
@@ -147,10 +224,6 @@ exports.handler = async (event, context) => {
           country: shippingAddress.country,
         },
       },
-      // Enable automatic tax calculation
-      automatic_tax: {
-        enabled: true,
-      },
       // Set receipt email if provided
       ...(userEmail && { receipt_email: userEmail }),
       // Metadata for order tracking
@@ -159,30 +232,14 @@ exports.handler = async (event, context) => {
         product: product,
         quantity: qty.toString(),
         shippingCost: shippingCost.toString(),
+        taxAmount: taxAmount.toFixed(2),
         shippingAddress: JSON.stringify(shippingAddress),
       },
     })
 
-    // Stripe Tax automatically calculates tax and updates the Payment Intent amount
-    // We need to retrieve the updated Payment Intent to get the final amount with tax
-    const updatedPaymentIntent = await stripe.paymentIntents.retrieve(paymentIntent.id)
-    
-    // Extract tax amount
-    const taxAmount = updatedPaymentIntent.amount_details?.amount_tax 
-      ? updatedPaymentIntent.amount_details.amount_tax / 100 
-      : 0
-
-    // Extract tax breakdown for display
-    const taxBreakdown = updatedPaymentIntent.amount_details?.breakdown?.taxes || []
-    const taxDetails = taxBreakdown.map(tax => ({
-      amount: tax.amount / 100,
-      rate: tax.rate?.display_name || 'Tax',
-      percentage: tax.rate?.percentage || 0,
-    }))
-
     console.log('Payment Intent created:', {
       paymentIntentId: paymentIntent.id,
-      amount: updatedPaymentIntent.amount / 100,
+      amount: finalAmount / 100,
       productAmount: productAmount / 100,
       shippingAmount: shippingAmount / 100,
       taxAmount: taxAmount,
@@ -203,7 +260,7 @@ exports.handler = async (event, context) => {
       body: JSON.stringify({
         clientSecret: paymentIntent.client_secret,
         paymentIntentId: paymentIntent.id,
-        amount: updatedPaymentIntent.amount, // Final amount including tax (in cents)
+        amount: finalAmount, // Final amount including tax (in cents)
         productAmount: productAmount, // Product amount (in cents)
         shippingAmount: shippingAmount, // Shipping amount (in cents)
         taxAmount: taxAmount, // Tax amount (in dollars)
@@ -225,13 +282,8 @@ exports.handler = async (event, context) => {
     let errorDetails = null
     
     if (error.type === 'StripeInvalidRequestError') {
-      if (error.message?.includes('automatic_tax')) {
-        errorMessage = 'Stripe Tax is not enabled in your Stripe account. Please enable it in Stripe Dashboard → Tax settings.'
-        errorDetails = 'To enable: Go to Stripe Dashboard → Settings → Tax, and enable Stripe Tax'
-      } else {
-        errorMessage = `Stripe error: ${error.message}`
-        errorDetails = error.code
-      }
+      errorMessage = `Stripe error: ${error.message}`
+      errorDetails = error.code
     } else if (error.message) {
       errorMessage = error.message
     }
