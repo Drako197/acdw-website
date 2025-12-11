@@ -10,15 +10,29 @@ const DEFAULT_RATE_LIMITS = {
 let rateLimitStore = null
 
 const initStore = () => {
-    if (!rateLimitStore) {
-        try {
+    if (rateLimitStore) return rateLimitStore
+
+    try {
+        const siteID = process.env.SITE_ID || process.env.NETLIFY_SITE_ID
+        const token = process.env.NETLIFY_TOKEN || process.env.NETLIFY_API_TOKEN
+
+        if (siteID && token) {
+            // Use explicit config
+            rateLimitStore = getStore({ name: 'rate-limits', siteID, token })
+        } else if (token) {
+            // Try with just token
+            rateLimitStore = getStore({ name: 'rate-limits', token })
+        } else {
+            // Try automatic detection (might fail)
             rateLimitStore = getStore('rate-limits')
-        } catch (error) {
-            console.warn('Failed to initialize rate limit store:', error.message)
-            return null
         }
+
+        console.log('Rate limit store initialized')
+        return rateLimitStore
+    } catch (error) {
+        console.warn(' Failed to initialize rate limit store:', error.message)
+        return null
     }
-    return rateLimitStore
 }
 
 const getRateLimitKey = (ip, type) => {
