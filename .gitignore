@@ -30,7 +30,7 @@ dist-ssr
 .env
 .env.local
 .env.*.local
-
-#Non - Essential pages
 **/*.md
-*.md
+# Allow workflow documentation
+!DEV-BRANCH-WORKFLOW.md
+!NETLIFY-BRANCH-DEPLOY-SETUP.md
