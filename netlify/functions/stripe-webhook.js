@@ -229,6 +229,16 @@ exports.handler = async (event, context) => {
         const shipping = fullPaymentIntent.shipping
         if (!shipping || !shipping.address) {
           console.warn('No shipping address found for PaymentIntent:', paymentIntent.id)
+          console.warn('PaymentIntent shipping:', shipping)
+          console.warn('PaymentIntent metadata:', fullPaymentIntent.metadata)
+          break
+        }
+        
+        // Validate shipping address has required fields
+        if (!shipping.address.line1 || !shipping.address.city || 
+            !shipping.address.state || !shipping.address.postal_code) {
+          console.error('Incomplete shipping address for PaymentIntent:', paymentIntent.id)
+          console.error('Shipping address:', shipping.address)
           break
         }
         

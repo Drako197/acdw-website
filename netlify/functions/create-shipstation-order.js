@@ -254,13 +254,48 @@ exports.handler = async (event, context) => {
     const orderData = JSON.parse(event.body)
 
     // Validate required fields
-    if (!orderData.orderNumber || !orderData.customerEmail || !orderData.shippingAddress) {
+    const missingFields = []
+    
+    if (!orderData.orderNumber) {
+      missingFields.push('orderNumber')
+    }
+    
+    // Email is optional (guest checkout might not have email)
+    // But we'll use a placeholder if missing
+    if (!orderData.customerEmail || orderData.customerEmail.trim() === '') {
+      orderData.customerEmail = 'no-email@acdrainwiz.com' // Placeholder for guest checkout
+    }
+    
+    // Validate shipping address exists and has required fields
+    if (!orderData.shippingAddress) {
+      missingFields.push('shippingAddress')
+    } else {
+      // Check for required shipping address fields
+      if (!orderData.shippingAddress.street1 || !orderData.shippingAddress.city || 
+          !orderData.shippingAddress.state || !orderData.shippingAddress.postalCode) {
+        missingFields.push('shippingAddress (incomplete: missing street1, city, state, or postalCode)')
+      }
+    }
+    
+    if (missingFields.length > 0) {
+      console.error('Missing required fields:', missingFields)
+      console.error('Order data received:', {
+        orderNumber: orderData.orderNumber,
+        customerEmail: orderData.customerEmail,
+        hasShippingAddress: !!orderData.shippingAddress,
+        shippingAddress: orderData.shippingAddress,
+      })
       return {
         statusCode: 400,
         headers,
         body: JSON.stringify({ 
           error: 'Missing required fields',
-          required: ['orderNumber', 'customerEmail', 'shippingAddress']
+          required: missingFields,
+          received: {
+            orderNumber: orderData.orderNumber || null,
+            customerEmail: orderData.customerEmail || null,
+            hasShippingAddress: !!orderData.shippingAddress,
+          }
         }),
       }
     }
