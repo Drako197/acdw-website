@@ -80,6 +80,35 @@ exports.handler = async (event, context) => {
       }
     }
 
+    // Validate email (required for ShipStation notifications)
+    if (!shippingAddress.email || !shippingAddress.email.trim()) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Email address is required for shipment notifications' }),
+      }
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const trimmedEmail = shippingAddress.email.trim().toLowerCase()
+    if (!emailRegex.test(trimmedEmail)) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Please enter a valid email address' }),
+      }
+    }
+
+    // Validate email length (ShipStation requirement: 50 characters max)
+    if (trimmedEmail.length > 50) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Email address must be 50 characters or less (required for shipment notifications)' }),
+      }
+    }
+
     // Validate quantity
     const qty = parseInt(quantity)
     if (isNaN(qty) || qty < 1 || qty > 500) {
@@ -224,8 +253,8 @@ exports.handler = async (event, context) => {
           country: shippingAddress.country,
         },
       },
-      // Set receipt email if provided
-      ...(userEmail && { receipt_email: userEmail }),
+      // Set receipt email (always use email from shipping address)
+      receipt_email: trimmedEmail,
       // Metadata for order tracking
       metadata: {
         userId: userId || '',
@@ -234,6 +263,7 @@ exports.handler = async (event, context) => {
         shippingCost: shippingCost.toString(),
         taxAmount: taxAmount.toFixed(2),
         taxDetails: JSON.stringify(taxDetails), // Store tax breakdown for success page
+        customerEmail: trimmedEmail, // Store email in metadata for webhook
         shippingAddress: JSON.stringify(shippingAddress),
       },
     })

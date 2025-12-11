@@ -216,11 +216,22 @@ exports.handler = async (event, context) => {
         })
         
         // Get customer email
+        // Email should always be in receipt_email (set from checkout form)
+        // Fallback to metadata if receipt_email not set (legacy support)
         const customerEmail = fullPaymentIntent.receipt_email || 
+                             fullPaymentIntent.metadata?.customerEmail ||
                              (fullPaymentIntent.customer && typeof fullPaymentIntent.customer === 'object' 
                                ? fullPaymentIntent.customer.email 
                                : null) ||
                              null
+        
+        // Validate email is present (should always be present now)
+        if (!customerEmail || customerEmail.trim() === '') {
+          console.error('No customer email found for PaymentIntent:', paymentIntent.id)
+          console.error('PaymentIntent receipt_email:', fullPaymentIntent.receipt_email)
+          console.error('PaymentIntent metadata:', fullPaymentIntent.metadata)
+          // Don't break - continue with order creation, but log error
+        }
         
         // Check if this is a guest checkout (no userId in metadata means guest)
         const isGuest = fullPaymentIntent.metadata?.isGuest === 'true' || !fullPaymentIntent.metadata?.userId

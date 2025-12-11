@@ -80,6 +80,35 @@ exports.handler = async (event, context) => {
       }
     }
 
+    // Validate email (required for ShipStation notifications)
+    if (!shippingAddress.email || !shippingAddress.email.trim()) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Email address is required for shipment notifications' }),
+      }
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const trimmedEmail = shippingAddress.email.trim().toLowerCase()
+    if (!emailRegex.test(trimmedEmail)) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Please enter a valid email address' }),
+      }
+    }
+
+    // Validate email length (ShipStation requirement: 50 characters max)
+    if (trimmedEmail.length > 50) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Email address must be 50 characters or less (required for shipment notifications)' }),
+      }
+    }
+
     // Validate quantity
     const qty = parseInt(quantity)
     if (isNaN(qty) || qty < 1 || qty > 500) {
@@ -234,12 +263,15 @@ exports.handler = async (event, context) => {
           country: shippingAddress.country,
         },
       },
-      // Update metadata with new tax information
+      // Update receipt email if email changed
+      receipt_email: trimmedEmail,
+      // Update metadata with new tax information and email
       metadata: {
         ...currentPaymentIntent.metadata, // Preserve existing metadata
         taxAmount: taxAmount.toFixed(2),
         taxDetails: JSON.stringify(taxDetails),
         shippingCost: shippingCost.toString(),
+        customerEmail: trimmedEmail, // Update email in metadata
       },
     })
 

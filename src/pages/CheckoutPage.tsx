@@ -3,9 +3,11 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 import { PaymentElementWrapper } from '../components/checkout/PaymentElement'
+import { validateEmail } from '../utils/emailValidation'
 
 interface ShippingAddress {
   name: string
+  email: string
   line1: string
   line2: string
   city: string
@@ -33,6 +35,7 @@ export function CheckoutPage() {
   // Shipping address state
   const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
     name: user?.name || '',
+    email: user?.email || '', // Pre-fill email for logged-in users
     line1: '',
     line2: '',
     city: '',
@@ -134,9 +137,26 @@ export function CheckoutPage() {
     if (!cart || !shippingCost) return
     
     // Validate address is complete
-    if (!shippingAddress.name.trim() || !shippingAddress.line1.trim() || 
-        !shippingAddress.city.trim() || !shippingAddress.state.trim() || 
-        !shippingAddress.zip.trim() || !shippingAddress.country.trim()) {
+    if (!shippingAddress.name.trim() || !shippingAddress.email.trim() || 
+        !shippingAddress.line1.trim() || !shippingAddress.city.trim() || 
+        !shippingAddress.state.trim() || !shippingAddress.zip.trim() || 
+        !shippingAddress.country.trim()) {
+      return
+    }
+    
+    // Validate email format and length
+    const emailError = validateEmail(shippingAddress.email)
+    if (emailError) {
+      setErrors(prev => ({ ...prev, email: emailError }))
+      return
+    }
+    
+    // Validate email length for ShipStation (50 character limit)
+    if (shippingAddress.email.length > 50) {
+      setErrors(prev => ({ 
+        ...prev, 
+        email: 'Email must be 50 characters or less (required for shipment notifications)' 
+      }))
       return
     }
     
@@ -145,6 +165,7 @@ export function CheckoutPage() {
     try {
       const sanitizedAddress: ShippingAddress = {
         name: sanitizeInput(shippingAddress.name),
+        email: shippingAddress.email.trim().toLowerCase(), // Email doesn't need sanitization, just trim and lowercase
         line1: sanitizeInput(shippingAddress.line1),
         line2: sanitizeInput(shippingAddress.line2),
         city: sanitizeInput(shippingAddress.city),
@@ -195,9 +216,24 @@ export function CheckoutPage() {
     if (!paymentIntentId || !cart || !shippingCost) return
     
     // Validate address is complete
-    if (!shippingAddress.name.trim() || !shippingAddress.line1.trim() || 
-        !shippingAddress.city.trim() || !shippingAddress.state.trim() || 
-        !shippingAddress.zip.trim() || !shippingAddress.country.trim()) {
+    if (!shippingAddress.name.trim() || !shippingAddress.email.trim() || 
+        !shippingAddress.line1.trim() || !shippingAddress.city.trim() || 
+        !shippingAddress.state.trim() || !shippingAddress.zip.trim() || 
+        !shippingAddress.country.trim()) {
+      return
+    }
+    
+    // Validate email format and length
+    const emailError = validateEmail(shippingAddress.email)
+    if (emailError) {
+      // Don't show error on every keystroke, just log it
+      console.warn('Email validation failed during update:', emailError)
+      return
+    }
+    
+    if (shippingAddress.email.length > 50) {
+      // Don't show error on every keystroke, just log it
+      console.warn('Email too long during update')
       return
     }
     
@@ -206,6 +242,7 @@ export function CheckoutPage() {
     try {
       const sanitizedAddress: ShippingAddress = {
         name: sanitizeInput(shippingAddress.name),
+        email: shippingAddress.email.trim().toLowerCase(), // Email doesn't need sanitization, just trim and lowercase
         line1: sanitizeInput(shippingAddress.line1),
         line2: sanitizeInput(shippingAddress.line2),
         city: sanitizeInput(shippingAddress.city),
@@ -252,9 +289,10 @@ export function CheckoutPage() {
   // Debounced effect: Create Payment Intent when address is complete
   useEffect(() => {
     if (!clientSecret && cart && shippingCost && 
-        shippingAddress.name.trim() && shippingAddress.line1.trim() && 
-        shippingAddress.city.trim() && shippingAddress.state.trim() && 
-        shippingAddress.zip.trim() && shippingAddress.country.trim()) {
+        shippingAddress.name.trim() && shippingAddress.email.trim() && 
+        shippingAddress.line1.trim() && shippingAddress.city.trim() && 
+        shippingAddress.state.trim() && shippingAddress.zip.trim() && 
+        shippingAddress.country.trim()) {
       // Clear any existing timer
       if (updateTimerRef.current) {
         clearTimeout(updateTimerRef.current)
@@ -276,9 +314,10 @@ export function CheckoutPage() {
   // Debounced effect: Update Payment Intent when address changes (after initial creation)
   useEffect(() => {
     if (clientSecret && paymentIntentId && cart && shippingCost &&
-        shippingAddress.name.trim() && shippingAddress.line1.trim() && 
-        shippingAddress.city.trim() && shippingAddress.state.trim() && 
-        shippingAddress.zip.trim() && shippingAddress.country.trim()) {
+        shippingAddress.name.trim() && shippingAddress.email.trim() && 
+        shippingAddress.line1.trim() && shippingAddress.city.trim() && 
+        shippingAddress.state.trim() && shippingAddress.zip.trim() && 
+        shippingAddress.country.trim()) {
       // Clear any existing timer
       if (updateTimerRef.current) {
         clearTimeout(updateTimerRef.current)
@@ -530,6 +569,33 @@ export function CheckoutPage() {
                   {errors.name && (
                     <p className="stripe-form-error">{errors.name}</p>
                   )}
+                </div>
+
+                {/* Email Address */}
+                <div>
+                  <label className="stripe-form-label">
+                    Email Address <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    value={shippingAddress.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    className={`stripe-form-input ${errors.email ? 'stripe-form-input-error' : ''}`}
+                    placeholder="your.email@example.com"
+                    maxLength={50}
+                  />
+                  {errors.email && (
+                    <p className="stripe-form-error">{errors.email}</p>
+                  )}
+                  {shippingAddress.email.length > 45 && shippingAddress.email.length <= 50 && !errors.email && (
+                    <p className="text-sm text-yellow-600 mt-1">
+                      ⚠️ Email is close to the 50 character limit
+                    </p>
+                  )}
+                  <p className="text-xs text-gray-500 mt-1">
+                    Required for shipment notifications
+                  </p>
                 </div>
 
                 {/* Street Address */}

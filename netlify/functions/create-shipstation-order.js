@@ -260,10 +260,27 @@ exports.handler = async (event, context) => {
       missingFields.push('orderNumber')
     }
     
-    // Email is optional (guest checkout might not have email)
-    // But we'll use a placeholder if missing
+    // Validate email is present (should always be present now)
     if (!orderData.customerEmail || orderData.customerEmail.trim() === '') {
-      orderData.customerEmail = 'no-email@acdrainwiz.com' // Placeholder for guest checkout
+      console.error('Missing customer email in order data')
+      missingFields.push('customerEmail')
+    } else {
+      // Validate email length (ShipStation requirement: 50 characters max)
+      const trimmedEmail = orderData.customerEmail.trim()
+      if (trimmedEmail.length > 50) {
+        console.error('Email exceeds ShipStation 50 character limit:', trimmedEmail.length)
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ 
+            error: 'Email address exceeds ShipStation limit',
+            details: 'Email must be 50 characters or less for shipment notifications',
+            emailLength: trimmedEmail.length,
+          }),
+        }
+      }
+      // Use trimmed email
+      orderData.customerEmail = trimmedEmail
     }
     
     // Validate shipping address exists and has required fields
