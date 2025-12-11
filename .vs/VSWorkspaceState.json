@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\mcp-server\\src\\data",
+    "\\netlify",
+    "\\netlify\\functions",
+    "\\netlify\\functions\\utils"
+  ],
+  "SelectedNode": "\\netlify\\functions\\utils\\cors-config.js",
+  "PreviewInSolutionExplorer": false
+}
