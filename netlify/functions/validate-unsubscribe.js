@@ -24,6 +24,7 @@ const { validateSubmissionBehavior } = require('./utils/behavioral-analysis')
 const { validateEmailDomain } = require('./utils/email-domain-validator')
 const { validateCSRFToken } = require('./utils/csrf-validator')
 const { initBlobsStores, getUnsubscribeStore } = require('./utils/blobs-store')
+const { getSecurityHeaders } = require('./utils/cors-config')
 
 // reCAPTCHA verification
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY
@@ -65,18 +66,8 @@ const verifyRecaptcha = async (token) => {
 }
 
 exports.handler = async (event, context) => {
-  const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
-    'X-XSS-Protection': '1; mode=block',
-    'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Permissions-Policy': 'geolocation=(), microphone=(), camera=()',
-    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
-  }
+
+    const headers = getSecurityHeaders(event)
 
   // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
@@ -265,7 +256,7 @@ exports.handler = async (event, context) => {
     }
     
     // Rate limiting check (strict for unsubscribe)
-    const rateLimitResult = checkRateLimit(ip, 'strict')
+    const rateLimitResult = await checkRateLimit(ip, 'strict')
     
     if (!rateLimitResult.allowed) {
       logRateLimit(ip, 'strict', rateLimitResult.limit, rateLimitResult.remaining, true)

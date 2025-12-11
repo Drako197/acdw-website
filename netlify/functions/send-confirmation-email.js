@@ -1,13 +1,8 @@
-/**
- * Send Confirmation Email Function
- * 
- * Sends branded confirmation emails to customers after form submission
- * Uses Resend API for reliable email delivery
- */
 
 const { Resend } = require('resend')
 const { getEmailTemplate } = require('./utils/email-templates')
-
+const { getSecurityHeaders } = require('./utils/cors-config')
+const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
 const RESEND_API_KEY = process.env.RESEND_API_KEY
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'AC Drain Wiz <noreply@acdrainwiz.com>'
 
@@ -89,13 +84,8 @@ async function sendConfirmationEmail(formType, formData) {
  * This function can be called directly or from validate-form-submission.js
  */
 exports.handler = async (event, context) => {
-  // CORS headers
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Content-Type': 'application/json',
-  }
+  
+    const headers = getSecurityHeaders(event)
 
   // Handle preflight
   if (event.httpMethod === 'OPTIONS') {
@@ -113,7 +103,24 @@ exports.handler = async (event, context) => {
       headers,
       body: JSON.stringify({ error: 'Method not allowed' }),
     }
-  }
+    }
+
+    // Rate limiting
+    const ip = getClientIP(event)
+    const rateLimitResult = await checkRateLimit(ip, 'form')
+    if (!rateLimitResult.allowed) {
+        return {
+            statusCode: 429,
+            headers: {
+                ...headers,
+                ...getRateLimitHeaders(rateLimitResult)
+            },
+            body: JSON.stringify({
+                error: 'Too many form submissions. Please wait and try again.',
+                retryAfter: rateLimitResult.retryAfter
+            }),
+        }
+    }
 
   try {
     // Parse request body

@@ -1,12 +1,8 @@
-/**
- * Generate CSRF Token
- * 
- * Generates unique CSRF tokens for form submissions
- * Tokens are one-time use and expire after 15 minutes
- */
+
 
 const crypto = require('crypto')
-const { getClientIP } = require('./utils/rate-limiter')
+const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
+const { getSecurityHeaders } = require('./utils/cors-config')
 const { initBlobsStores, getCsrfTokenStore, isBlobsAvailable } = require('./utils/blobs-store')
 
 // In-memory token storage fallback
@@ -73,12 +69,8 @@ async function generateCSRFToken(ip, context = null) {
  * Netlify Function Handler
  */
 exports.handler = async (event, context) => {
-  const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
-  }
+
+    const headers = getSecurityHeaders(event)
 
   // Handle preflight
   if (event.httpMethod === 'OPTIONS') {
@@ -97,6 +89,23 @@ exports.handler = async (event, context) => {
       body: JSON.stringify({ error: 'Method not allowed' }),
     }
   }
+
+    // Rate limiting
+    const ip = getClientIP(event)
+    const rateLimitResult = await checkRateLimit(ip, 'form')
+    if (!rateLimitResult.allowed) {
+        return {
+            statusCode: 429,
+            headers: {
+                ...headers,
+                ...getRateLimitHeaders(rateLimitResult)
+            },
+            body: JSON.stringify({
+                error: 'Too many form submissions. Please wait and try again.',
+                retryAfter: rateLimitResult.retryAfter
+            }),
+        }
+    }
 
   try {
     // Get client IP
