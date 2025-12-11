@@ -56,7 +56,7 @@ export function CheckoutPage() {
   const [isUpdatingPaymentIntent, setIsUpdatingPaymentIntent] = useState(false)
   
   // Debounce timer for address updates
-  const updateTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const updateTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Show loading skeleton for 2 seconds on initial load
   useEffect(() => {
@@ -365,40 +365,6 @@ export function CheckoutPage() {
     }
   }
 
-  const validateForm = (): boolean => {
-    const newErrors: { [key: string]: string } = {}
-    
-    if (!shippingAddress.name.trim()) {
-      newErrors.name = 'Please enter your full name'
-    }
-    
-    if (!shippingAddress.line1.trim()) {
-      newErrors.line1 = 'Please enter your street address'
-    }
-    
-    if (!shippingAddress.city.trim()) {
-      newErrors.city = 'Please enter your city'
-    }
-    
-    if (!shippingAddress.state.trim()) {
-      newErrors.state = 'Please enter your state'
-    } else if (shippingAddress.country === 'US' && shippingAddress.state.length !== 2) {
-      newErrors.state = 'Please enter 2-letter state code (e.g., FL)'
-    }
-    
-    if (!shippingAddress.zip.trim()) {
-      newErrors.zip = 'Please enter your ZIP code'
-    } else if (shippingAddress.country === 'US' && !/^\d{5}(-\d{4})?$/.test(shippingAddress.zip)) {
-      newErrors.zip = 'Please enter a valid ZIP code (e.g., 33101)'
-    }
-    
-    if (!shippingAddress.country.trim()) {
-      newErrors.country = 'Please select a country'
-    }
-    
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
 
   // Handle payment success
   const handlePaymentSuccess = (paymentIntentId: string) => {

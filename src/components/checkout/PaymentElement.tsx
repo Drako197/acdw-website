@@ -6,7 +6,7 @@
  */
 
 import { useEffect, useState } from 'react'
-import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js'
+import { loadStripe, type StripeElementsOptions } from '@stripe/stripe-js'
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 
 // Get Stripe publishable key from environment
@@ -73,12 +73,17 @@ function PaymentElementInner({
     setError(null)
 
     try {
+      // Extract payment intent ID from client secret for return URL
+      // Client secret format: pi_xxx_secret_yyy
+      const paymentIntentIdMatch = clientSecret.match(/^pi_([^_]+)/)
+      const paymentIntentId = paymentIntentIdMatch ? paymentIntentIdMatch[0] : ''
+
       // Confirm payment with Stripe
       const { error: submitError, paymentIntent } = await stripe.confirmPayment({
         elements,
         clientSecret,
         confirmParams: {
-          return_url: `${window.location.origin}/checkout/success?payment_intent=${paymentIntent?.id || ''}`,
+          return_url: `${window.location.origin}/checkout/success?payment_intent=${paymentIntentId}`,
         },
         redirect: 'if_required', // Only redirect if required (e.g., 3D Secure)
       })
