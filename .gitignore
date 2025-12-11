@@ -33,3 +33,4 @@ dist-ssr
 **/*.md
 # Allow workflow documentation
 !DEV-BRANCH-WORKFLOW.md
+!NETLIFY-BRANCH-DEPLOY-SETUP.md
