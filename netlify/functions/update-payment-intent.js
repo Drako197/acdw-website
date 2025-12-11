@@ -217,6 +217,9 @@ exports.handler = async (event, context) => {
     // Update Payment Intent with new shipping address and amount
     // Note: Payment Intents don't support automatic_tax parameter
     // Tax is calculated separately using Stripe Tax API
+    // Retrieve current Payment Intent to preserve existing metadata
+    const currentPaymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
+    
     const finalPaymentIntent = await stripe.paymentIntents.update(paymentIntentId, {
       amount: finalAmount,
       // Update shipping address
@@ -230,6 +233,13 @@ exports.handler = async (event, context) => {
           postal_code: shippingAddress.zip || shippingAddress.postal_code || '',
           country: shippingAddress.country,
         },
+      },
+      // Update metadata with new tax information
+      metadata: {
+        ...currentPaymentIntent.metadata, // Preserve existing metadata
+        taxAmount: taxAmount.toFixed(2),
+        taxDetails: JSON.stringify(taxDetails),
+        shippingCost: shippingCost.toString(),
       },
     })
 

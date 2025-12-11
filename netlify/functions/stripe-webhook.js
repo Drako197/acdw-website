@@ -262,10 +262,17 @@ exports.handler = async (event, context) => {
         }
         
         // Extract tax information
-        const taxBreakdown = fullPaymentIntent.amount_details?.breakdown?.taxes || []
-        const taxAmount = taxBreakdown.length > 0
-          ? taxBreakdown.reduce((sum, tax) => sum + (tax.amount / 100), 0)
-          : (fullPaymentIntent.amount_details?.amount_tax ? fullPaymentIntent.amount_details.amount_tax / 100 : 0)
+        // Since we calculate tax manually, it's stored in metadata
+        let taxAmount = 0
+        if (fullPaymentIntent.metadata?.taxAmount) {
+          taxAmount = parseFloat(fullPaymentIntent.metadata.taxAmount) || 0
+        } else {
+          // Fallback: Try to extract from amount_details (if automatic tax was used)
+          const taxBreakdown = fullPaymentIntent.amount_details?.breakdown?.taxes || []
+          taxAmount = taxBreakdown.length > 0
+            ? taxBreakdown.reduce((sum, tax) => sum + (tax.amount / 100), 0)
+            : (fullPaymentIntent.amount_details?.amount_tax ? fullPaymentIntent.amount_details.amount_tax / 100 : 0)
+        }
         
         // Build order data for ShipStation
         const orderData = {

@@ -233,6 +233,7 @@ exports.handler = async (event, context) => {
         quantity: qty.toString(),
         shippingCost: shippingCost.toString(),
         taxAmount: taxAmount.toFixed(2),
+        taxDetails: JSON.stringify(taxDetails), // Store tax breakdown for success page
         shippingAddress: JSON.stringify(shippingAddress),
       },
     })

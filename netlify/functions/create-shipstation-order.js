@@ -5,6 +5,10 @@
  * Called by stripe-webhook.js when payment is successful
  */
 
+// Import utilities
+const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
+const { logAPIAccess, logRateLimit, EVENT_TYPES } = require('./utils/security-logger')
+
 // SKU Mapping - matches src/config/shipstation.ts
 // TODO: This should ideally be shared, but for Netlify Functions we'll duplicate it
 const SKU_MAPPING = {

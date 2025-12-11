@@ -95,16 +95,47 @@ exports.handler = async (event, context) => {
     const shipping = paymentIntent.shipping
 
     // Extract tax information
-    const taxBreakdown = paymentIntent.amount_details?.breakdown?.taxes || []
-    const taxAmount = taxBreakdown.length > 0
-      ? taxBreakdown.reduce((sum, tax) => sum + (tax.amount / 100), 0)
-      : (paymentIntent.amount_details?.amount_tax ? paymentIntent.amount_details.amount_tax / 100 : 0)
-
-    const taxDetails = taxBreakdown.map(tax => ({
-      amount: tax.amount / 100,
-      rate: tax.rate?.display_name || 'Tax',
-      percentage: tax.rate?.percentage || 0,
-    }))
+    // Since we calculate tax manually using Tax Calculation API, tax is stored in metadata
+    // Try metadata first, then fall back to amount_details if available
+    let taxAmount = 0
+    let taxDetails = []
+    
+    if (paymentIntent.metadata?.taxAmount) {
+      // Tax stored in metadata (from our manual calculation)
+      taxAmount = parseFloat(paymentIntent.metadata.taxAmount) || 0
+      // Try to parse tax details from metadata if available
+      if (paymentIntent.metadata.taxDetails) {
+        try {
+          taxDetails = JSON.parse(paymentIntent.metadata.taxDetails)
+        } catch (e) {
+          // If parsing fails, create a simple tax detail
+          taxDetails = taxAmount > 0 ? [{
+            amount: taxAmount,
+            rate: 'Sales Tax',
+            percentage: 0,
+          }] : []
+        }
+      } else {
+        // Create a simple tax detail from amount
+        taxDetails = taxAmount > 0 ? [{
+          amount: taxAmount,
+          rate: 'Sales Tax',
+          percentage: 0,
+        }] : []
+      }
+    } else {
+      // Fallback: Try to extract from amount_details (if automatic tax was used)
+      const taxBreakdown = paymentIntent.amount_details?.breakdown?.taxes || []
+      taxAmount = taxBreakdown.length > 0
+        ? taxBreakdown.reduce((sum, tax) => sum + (tax.amount / 100), 0)
+        : (paymentIntent.amount_details?.amount_tax ? paymentIntent.amount_details.amount_tax / 100 : 0)
+      
+      taxDetails = taxBreakdown.map(tax => ({
+        amount: tax.amount / 100,
+        rate: tax.rate?.display_name || 'Tax',
+        percentage: tax.rate?.percentage || 0,
+      }))
+    }
 
     // Calculate product amount (total - shipping - tax)
     // Note: We need to extract this from metadata or calculate from line items
