@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import { PaymentElementWrapper } from '../components/checkout/PaymentElement'
 
 interface ShippingAddress {
   name: string
@@ -46,6 +47,16 @@ export function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
   const [isPageLoading, setIsPageLoading] = useState(true)
+  
+  // Payment Intent state
+  const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null)
+  const [taxAmount, setTaxAmount] = useState<number>(0)
+  const [taxDetails, setTaxDetails] = useState<Array<{ amount: number; rate: string; percentage: number }>>([])
+  const [isUpdatingPaymentIntent, setIsUpdatingPaymentIntent] = useState(false)
+  
+  // Debounce timer for address updates
+  const updateTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   // Show loading skeleton for 2 seconds on initial load
   useEffect(() => {
@@ -117,6 +128,174 @@ export function CheckoutPage() {
       calculateShipping()
     }
   }, [shippingAddress.city, shippingAddress.state, shippingAddress.zip, cart])
+
+  // Create Payment Intent when address is complete and validated
+  const createPaymentIntent = useCallback(async () => {
+    if (!cart || !shippingCost) return
+    
+    // Validate address is complete
+    if (!shippingAddress.name.trim() || !shippingAddress.line1.trim() || 
+        !shippingAddress.city.trim() || !shippingAddress.state.trim() || 
+        !shippingAddress.zip.trim() || !shippingAddress.country.trim()) {
+      return
+    }
+    
+    setIsProcessing(true)
+    
+    try {
+      const sanitizedAddress: ShippingAddress = {
+        name: sanitizeInput(shippingAddress.name),
+        line1: sanitizeInput(shippingAddress.line1),
+        line2: sanitizeInput(shippingAddress.line2),
+        city: sanitizeInput(shippingAddress.city),
+        state: sanitizeInput(shippingAddress.state),
+        zip: sanitizeInput(shippingAddress.zip),
+        country: shippingAddress.country,
+      }
+      
+      const response = await fetch('/.netlify/functions/create-payment-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          priceId: cart.priceId,
+          quantity: cart.quantity,
+          product: cart.product,
+          userEmail: user?.email || '',
+          userId: user?.id || '',
+          shippingAddress: {
+            ...sanitizedAddress,
+            postal_code: sanitizedAddress.zip,
+          },
+        }),
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        setClientSecret(data.clientSecret)
+        setPaymentIntentId(data.paymentIntentId)
+        setTaxAmount(data.taxAmount || 0)
+        setTaxDetails(data.taxDetails || [])
+        setShippingCost(data.shippingCost || shippingCost)
+        console.log('Payment Intent created:', data.paymentIntentId)
+      } else {
+        const errorData = await response.json()
+        console.error('Failed to create Payment Intent:', errorData)
+        alert(`Error: ${errorData.error || 'Failed to initialize payment'}`)
+      }
+    } catch (error) {
+      console.error('Error creating Payment Intent:', error)
+      alert('Failed to initialize payment. Please try again.')
+    } finally {
+      setIsProcessing(false)
+    }
+  }, [cart, shippingAddress, shippingCost, user, isAuthenticated])
+
+  // Update Payment Intent when address changes (debounced)
+  const updatePaymentIntent = useCallback(async () => {
+    if (!paymentIntentId || !cart || !shippingCost) return
+    
+    // Validate address is complete
+    if (!shippingAddress.name.trim() || !shippingAddress.line1.trim() || 
+        !shippingAddress.city.trim() || !shippingAddress.state.trim() || 
+        !shippingAddress.zip.trim() || !shippingAddress.country.trim()) {
+      return
+    }
+    
+    setIsUpdatingPaymentIntent(true)
+    
+    try {
+      const sanitizedAddress: ShippingAddress = {
+        name: sanitizeInput(shippingAddress.name),
+        line1: sanitizeInput(shippingAddress.line1),
+        line2: sanitizeInput(shippingAddress.line2),
+        city: sanitizeInput(shippingAddress.city),
+        state: sanitizeInput(shippingAddress.state),
+        zip: sanitizeInput(shippingAddress.zip),
+        country: shippingAddress.country,
+      }
+      
+      const response = await fetch('/.netlify/functions/update-payment-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          paymentIntentId,
+          shippingAddress: {
+            ...sanitizedAddress,
+            postal_code: sanitizedAddress.zip,
+          },
+          product: cart.product,
+          quantity: cart.quantity,
+          priceId: cart.priceId,
+        }),
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        setClientSecret(data.clientSecret) // Update client secret
+        setTaxAmount(data.taxAmount || 0)
+        setTaxDetails(data.taxDetails || [])
+        setShippingCost(data.shippingCost || shippingCost)
+        console.log('Payment Intent updated:', paymentIntentId)
+      } else {
+        const errorData = await response.json()
+        console.error('Failed to update Payment Intent:', errorData)
+        // Don't show alert on every update - just log
+      }
+    } catch (error) {
+      console.error('Error updating Payment Intent:', error)
+      // Don't show alert on every update - just log
+    } finally {
+      setIsUpdatingPaymentIntent(false)
+    }
+  }, [paymentIntentId, cart, shippingAddress, shippingCost])
+
+  // Debounced effect: Create Payment Intent when address is complete
+  useEffect(() => {
+    if (!clientSecret && cart && shippingCost && 
+        shippingAddress.name.trim() && shippingAddress.line1.trim() && 
+        shippingAddress.city.trim() && shippingAddress.state.trim() && 
+        shippingAddress.zip.trim() && shippingAddress.country.trim()) {
+      // Clear any existing timer
+      if (updateTimerRef.current) {
+        clearTimeout(updateTimerRef.current)
+      }
+      
+      // Wait 500ms after user stops typing before creating Payment Intent
+      updateTimerRef.current = setTimeout(() => {
+        createPaymentIntent()
+      }, 500)
+      
+      return () => {
+        if (updateTimerRef.current) {
+          clearTimeout(updateTimerRef.current)
+        }
+      }
+    }
+  }, [cart, shippingCost, shippingAddress, clientSecret, createPaymentIntent])
+
+  // Debounced effect: Update Payment Intent when address changes (after initial creation)
+  useEffect(() => {
+    if (clientSecret && paymentIntentId && cart && shippingCost &&
+        shippingAddress.name.trim() && shippingAddress.line1.trim() && 
+        shippingAddress.city.trim() && shippingAddress.state.trim() && 
+        shippingAddress.zip.trim() && shippingAddress.country.trim()) {
+      // Clear any existing timer
+      if (updateTimerRef.current) {
+        clearTimeout(updateTimerRef.current)
+      }
+      
+      // Wait 500ms after user stops typing before updating Payment Intent
+      updateTimerRef.current = setTimeout(() => {
+        updatePaymentIntent()
+      }, 500)
+      
+      return () => {
+        if (updateTimerRef.current) {
+          clearTimeout(updateTimerRef.current)
+        }
+      }
+    }
+  }, [clientSecret, paymentIntentId, cart, shippingCost, shippingAddress, updatePaymentIntent])
 
   // Basic client-side sanitization to prevent XSS
   // Only sanitize dangerous characters on final submission, not during typing
@@ -221,83 +400,18 @@ export function CheckoutPage() {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleProceedToPayment = async () => {
-    if (!cart) {
-      return
-    }
-    
-    // Sanitize all address fields before submission
-    const sanitizedAddress: ShippingAddress = {
-      name: sanitizeInput(shippingAddress.name),
-      line1: sanitizeInput(shippingAddress.line1),
-      line2: sanitizeInput(shippingAddress.line2),
-      city: sanitizeInput(shippingAddress.city),
-      state: sanitizeInput(shippingAddress.state),
-      zip: sanitizeInput(shippingAddress.zip),
-      country: shippingAddress.country, // Country doesn't need sanitization
-    }
-    
-    // Update state with sanitized values for validation
-    setShippingAddress(sanitizedAddress)
-    
-    // Validate form first (uses state, which we just updated)
-    if (!validateForm()) {
-      return
-    }
-    
-    // Check if shipping is calculated (use sanitized address)
-    if (shippingCost === null) {
-      // Show error for fields that would trigger shipping calculation
-      const newErrors: { [key: string]: string } = {}
-      if (!sanitizedAddress.city.trim()) {
-        newErrors.city = 'Please enter your city to calculate shipping'
-      }
-      if (!sanitizedAddress.state.trim()) {
-        newErrors.state = 'Please enter your state to calculate shipping'
-      }
-      if (!sanitizedAddress.zip.trim()) {
-        newErrors.zip = 'Please enter your ZIP to calculate shipping'
-      }
-      setErrors(prev => ({ ...prev, ...newErrors }))
-      return
-    }
-    
-    setIsProcessing(true)
-    
-    try {
-      // Create Stripe checkout session with pre-calculated shipping
-      const response = await fetch('/.netlify/functions/create-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          priceId: cart.priceId,
-          quantity: cart.quantity,
-          product: cart.product,
-          userEmail: user?.email || '',
-          userId: user?.id || '',
-          isGuest: !isAuthenticated,
-          shippingAddress: {
-            ...sanitizedAddress,
-            postal_code: sanitizedAddress.zip,
-          },
-          preCalculatedShippingCost: shippingCost,
-        }),
-      })
-      
-      if (response.ok) {
-        const data = await response.json()
-        // Redirect to Stripe Checkout
-        window.location.href = data.url
-      } else {
-        const errorData = await response.json()
-        alert(`Checkout error: ${errorData.error}`)
-        setIsProcessing(false)
-      }
-    } catch (error) {
-      console.error('Error creating checkout:', error)
-      alert('Failed to create checkout session. Please try again.')
-      setIsProcessing(false)
-    }
+  // Handle payment success
+  const handlePaymentSuccess = (paymentIntentId: string) => {
+    console.log('Payment successful:', paymentIntentId)
+    // Navigate to success page with Payment Intent ID
+    navigate(`/checkout/success?payment_intent=${paymentIntentId}`)
+  }
+
+  // Handle payment error
+  const handlePaymentError = (error: string) => {
+    console.error('Payment error:', error)
+    alert(`Payment failed: ${error}`)
+    setIsProcessing(false)
   }
 
   if (!cart) {
@@ -312,7 +426,9 @@ export function CheckoutPage() {
   }
 
   const subtotal = cart.unitPrice * cart.quantity
-  const total = shippingCost !== null ? subtotal + shippingCost : subtotal
+  const total = shippingCost !== null 
+    ? subtotal + shippingCost + taxAmount 
+    : subtotal + taxAmount
 
   return (
     <div className="stripe-checkout-page">
@@ -363,10 +479,31 @@ export function CheckoutPage() {
                     <div className="stripe-line-item-price">${shippingCost.toFixed(2)}</div>
                   </div>
                 )}
+
+                {/* Tax Line Item */}
+                {taxAmount > 0 && (
+                  <div className="stripe-line-item">
+                    <div className="stripe-line-item-details">
+                      <div className="stripe-line-item-name">
+                        {taxDetails.length > 0 
+                          ? taxDetails.map(t => t.rate).join(', ')
+                          : 'Tax'}
+                      </div>
+                      <div className="stripe-line-item-description">
+                        {taxDetails.length > 0 
+                          ? taxDetails.map(t => `${t.rate} (${t.percentage.toFixed(2)}%)`).join(', ')
+                          : 'Sales tax'}
+                      </div>
+                    </div>
+                    <div className="stripe-line-item-price">${taxAmount.toFixed(2)}</div>
+                  </div>
+                )}
                 
-                {isCalculating && (
+                {(isCalculating || isUpdatingPaymentIntent) && (
                   <div className="stripe-calculating">
-                    <span className="text-sm text-gray-500">Calculating shipping...</span>
+                    <span className="text-sm text-gray-500">
+                      {isCalculating ? 'Calculating shipping...' : 'Updating totals...'}
+                    </span>
                   </div>
                 )}
               </div>
@@ -523,22 +660,32 @@ export function CheckoutPage() {
                   )}
                 </div>
 
-                {/* Pay Button (matching Stripe's exact blue button) */}
-                <button
-                  onClick={handleProceedToPayment}
-                  disabled={isProcessing}
-                  className="stripe-pay-button"
-                  type="button"
-                >
-                  {isProcessing ? (
-                    <span className="flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                      Processing...
-                    </span>
-                  ) : (
-                    'Pay'
-                  )}
-                </button>
+                {/* Payment Element - Show when Payment Intent is ready */}
+                {clientSecret ? (
+                  <PaymentElementWrapper
+                    clientSecret={clientSecret}
+                    onPaymentSuccess={handlePaymentSuccess}
+                    onPaymentError={handlePaymentError}
+                    isProcessing={isProcessing}
+                    setIsProcessing={setIsProcessing}
+                  />
+                ) : (
+                  <>
+                    {/* Show message while waiting for Payment Intent */}
+                    {isProcessing ? (
+                      <div className="text-center py-4">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto mb-2"></div>
+                        <p className="text-sm text-gray-600">Initializing payment...</p>
+                      </div>
+                    ) : (
+                      <div className="text-center py-4">
+                        <p className="text-sm text-gray-600">
+                          Please complete your shipping address to continue
+                        </p>
+                      </div>
+                    )}
+                  </>
+                )}
 
                 <p className="stripe-footer-text">
                   Powered by <strong>Stripe</strong>

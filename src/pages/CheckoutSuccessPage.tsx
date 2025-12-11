@@ -55,12 +55,14 @@ interface ShippingAddress {
 }
 
 interface OrderDetails {
-  sessionId: string
+  sessionId?: string
+  paymentIntentId?: string
   customerEmail?: string | null
   amountTotal: number
   currency: string
   paymentStatus: string
-  subtotal: number | null
+  subtotal?: number | null
+  productAmount?: number | null
   tax: number | null
   shipping: number | null
   shippingDetails: {
@@ -79,18 +81,17 @@ export function CheckoutSuccessPage() {
   const [searchParams] = useSearchParams()
   const { user, isAuthenticated } = useAuth()
   const [sessionId, setSessionId] = useState<string | null>(null)
+  const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null)
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [customerEmail, setCustomerEmail] = useState<string | null>(null)
   
-  // Check if this was a guest checkout
-  // Only show account creation offer if user is NOT authenticated
-  // Even if URL says guest=true, don't show if user is logged in
-  // const isGuestCheckout = !isAuthenticated // Removed - using isAuthenticated directly
-  
   useEffect(() => {
     const sessionIdParam = searchParams.get('session_id')
+    const paymentIntentParam = searchParams.get('payment_intent')
+    
     if (sessionIdParam) {
+      // Handle Checkout Session (legacy flow)
       setSessionId(sessionIdParam)
       
       // Fetch order details from Stripe
@@ -126,10 +127,61 @@ export function CheckoutSuccessPage() {
         .finally(() => {
           setIsLoading(false)
         })
+    } else if (paymentIntentParam) {
+      // Handle Payment Intent (new Payment Element flow)
+      setPaymentIntentId(paymentIntentParam)
+      
+      // Fetch order details from Stripe
+      fetch(`/.netlify/functions/get-payment-intent?payment_intent=${paymentIntentParam}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+          }
+          return res.json()
+        })
+        .then((data) => {
+          if (data.error) {
+            console.error('Error fetching Payment Intent details:', data.error)
+            console.error('Full error response:', data)
+          } else {
+            console.log('Payment Intent details fetched:', data)
+            
+            // Transform Payment Intent data to match OrderDetails format
+            const transformedData: OrderDetails = {
+              paymentIntentId: data.paymentIntentId,
+              customerEmail: data.customerEmail,
+              amountTotal: data.amountTotal,
+              currency: data.currency,
+              paymentStatus: data.paymentStatus,
+              productAmount: data.productAmount,
+              tax: data.tax,
+              shipping: data.shipping,
+              shippingDetails: data.shippingDetails,
+            }
+            
+            setOrderDetails(transformedData)
+            
+            // Store customer email for account creation offer
+            if (data.customerEmail) {
+              setCustomerEmail(data.customerEmail)
+            }
+            
+            // Save shipping address to user profile if available
+            if (data.shippingDetails && user?.id) {
+              saveShippingAddressToProfile(data.shippingDetails, user.id)
+            }
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching Payment Intent details:', error)
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
     } else {
       setIsLoading(false)
     }
-  }, [searchParams])
+  }, [searchParams, user])
 
   if (isLoading) {
     return (
@@ -162,21 +214,21 @@ export function CheckoutSuccessPage() {
           </p>
 
           {/* Order Details */}
-          {sessionId && (
+          {(sessionId || paymentIntentId) && (
             <div className="checkout-success-order-info">
               <p className="checkout-success-order-label">Order ID:</p>
-              <p className="checkout-success-order-id">{sessionId}</p>
+              <p className="checkout-success-order-id">{sessionId || paymentIntentId}</p>
               {orderDetails && (
                 <div className="checkout-success-order-breakdown" style={{ marginTop: '1rem' }}>
-                  {orderDetails.subtotal !== null && (
+                  {(orderDetails.subtotal !== null || orderDetails.productAmount !== null) && (
                     <>
                       <div className="checkout-success-order-breakdown-row">
                         <span className="checkout-success-order-breakdown-label">Subtotal:</span>
                         <span className="checkout-success-order-breakdown-value">
-                          ${orderDetails.subtotal.toFixed(2)}
+                          ${(orderDetails.subtotal || orderDetails.productAmount || 0).toFixed(2)}
                         </span>
                       </div>
-                      {orderDetails.shipping !== null && (
+                      {orderDetails.shipping !== null && orderDetails.shipping > 0 && (
                         <div className="checkout-success-order-breakdown-row">
                           <span className="checkout-success-order-breakdown-label">Shipping:</span>
                           <span className="checkout-success-order-breakdown-value">
@@ -200,7 +252,7 @@ export function CheckoutSuccessPage() {
                       </div>
                     </>
                   )}
-                  {orderDetails.subtotal === null && (
+                  {(orderDetails.subtotal === null && orderDetails.productAmount === null) && (
                     <p className="checkout-success-order-amount" style={{ marginTop: '0.5rem' }}>
                       ${orderDetails.amountTotal.toFixed(2)} {orderDetails.currency.toUpperCase()}
                     </p>
