@@ -259,6 +259,7 @@ exports.handler = async (event, context) => {
       metadata: {
         userId: userId || '',
         product: product,
+        priceId: priceId, // Store priceId for SKU mapping in webhook
         quantity: qty.toString(),
         shippingCost: shippingCost.toString(),
         taxAmount: taxAmount.toFixed(2),
