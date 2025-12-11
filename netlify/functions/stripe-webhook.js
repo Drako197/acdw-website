@@ -262,10 +262,20 @@ exports.handler = async (event, context) => {
         // Note: With Payment Element, we don't have line items, so we use metadata
         const priceId = fullPaymentIntent.metadata?.priceId || null
         
+        console.log('🔍 SKU Mapping Debug:', {
+          priceId: priceId,
+          product: product,
+          hasPriceId: !!priceId,
+          priceIdInMapping: priceId ? (priceId in SKU_MAPPING) : false,
+          availablePriceIds: Object.keys(SKU_MAPPING),
+          metadata: fullPaymentIntent.metadata,
+        })
+        
         // Build order items for ShipStation
         const orderItems = []
         if (priceId && SKU_MAPPING[priceId]) {
           const mapping = SKU_MAPPING[priceId]
+          console.log('✅ Using SKU mapping:', { priceId, sku: mapping.sku, name: mapping.name })
           orderItems.push({
             sku: mapping.sku,
             name: mapping.name,
@@ -274,6 +284,11 @@ exports.handler = async (event, context) => {
           })
         } else {
           // Fallback: use product name from metadata
+          console.warn('⚠️ SKU mapping failed - using fallback:', {
+            priceId: priceId,
+            product: product,
+            reason: !priceId ? 'No priceId in metadata' : `priceId '${priceId}' not found in SKU_MAPPING`,
+          })
           orderItems.push({
             sku: `UNKNOWN-${product.toUpperCase()}`,
             name: product,

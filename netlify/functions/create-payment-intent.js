@@ -239,6 +239,25 @@ exports.handler = async (event, context) => {
     const taxAmountCents = Math.round(taxAmount * 100)
     const finalAmount = productAmount + shippingAmount + taxAmountCents
 
+    // Prepare metadata for order tracking
+    const metadata = {
+      userId: userId || '',
+      product: product,
+      priceId: priceId, // Store priceId for SKU mapping in webhook
+      quantity: qty.toString(),
+      shippingCost: shippingCost.toString(),
+      taxAmount: taxAmount.toFixed(2),
+      taxDetails: JSON.stringify(taxDetails), // Store tax breakdown for success page
+      customerEmail: trimmedEmail, // Store email in metadata for webhook
+      shippingAddress: JSON.stringify(shippingAddress),
+    }
+    
+    console.log('💾 Storing Payment Intent metadata:', {
+      priceId: metadata.priceId,
+      product: metadata.product,
+      hasPriceId: !!metadata.priceId,
+    })
+
     // Create Payment Intent with shipping address
     // Note: Payment Intents don't support automatic_tax parameter
     // Tax is calculated separately using Stripe Tax API
@@ -263,17 +282,28 @@ exports.handler = async (event, context) => {
       // Set receipt email (always use email from shipping address)
       receipt_email: trimmedEmail,
       // Metadata for order tracking
-      metadata: {
-        userId: userId || '',
-        product: product,
-        priceId: priceId, // Store priceId for SKU mapping in webhook
-        quantity: qty.toString(),
-        shippingCost: shippingCost.toString(),
-        taxAmount: taxAmount.toFixed(2),
-        taxDetails: JSON.stringify(taxDetails), // Store tax breakdown for success page
-        customerEmail: trimmedEmail, // Store email in metadata for webhook
-        shippingAddress: JSON.stringify(shippingAddress),
-      },
+      metadata: metadata,
+        amount: finalAmount,
+        currency: 'usd',
+        automatic_payment_methods: {
+          enabled: true,
+        },
+        // Include shipping address
+        shipping: {
+          name: shippingAddress.name || 'Customer',
+          address: {
+            line1: shippingAddress.line1,
+            line2: shippingAddress.line2 || '',
+            city: shippingAddress.city,
+            state: shippingAddress.state,
+            postal_code: shippingAddress.zip || shippingAddress.postal_code || '',
+            country: shippingAddress.country,
+          },
+        },
+        // Set receipt email (always use email from shipping address)
+        receipt_email: trimmedEmail,
+        // Metadata for order tracking
+        metadata: metadata,
     })
 
     console.log('Payment Intent created:', {
