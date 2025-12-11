@@ -30,4 +30,7 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+
+#Non - Essential pages
 **/*.md
+*.md
