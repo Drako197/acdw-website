@@ -1,5 +1,10 @@
 import { useEffect } from 'react'
 
+/**
+ * Reusable hook for reCAPTCHA v3 integration
+ * 
+ * Loads reCAPTCHA script and provides token generation function
+ */
 export const useRecaptcha = () => {
   const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || ''
   const isConfigured = RECAPTCHA_SITE_KEY && RECAPTCHA_SITE_KEY !== 'RECAPTCHA_SITE_KEY'

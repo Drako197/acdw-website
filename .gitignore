@@ -35,4 +35,5 @@ dist-ssr
 **/*.md
 *.md
 scripts/
-.vs/
+
+S

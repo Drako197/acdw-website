@@ -1,12 +1,6 @@
-/**
- * Test Resend Email Function
- * 
- * Call this function directly to test if Resend is configured correctly
- * URL: https://acdrainwiz.com/.netlify/functions/test-resend-email
- */
 
 const { Resend } = require('resend')
-
+const { getSecurityHeaders } = require('./utils/cors-config')  
 const RESEND_API_KEY = process.env.RESEND_API_KEY
 const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || 'support@acdrainwiz.com'
 const FROM_EMAIL = process.env.FROM_EMAIL || 'AC Drain Wiz <unsubscribe@acdrainwiz.com>'

@@ -1,0 +1,174 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Lucas\\acdw.com marketing site\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\utils\\rate-limiter.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:netlify\\functions\\utils\\rate-limiter.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\send-confirmation-email.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:netlify\\functions\\send-confirmation-email.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\send-unsubscribe-notification.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:netlify\\functions\\send-unsubscribe-notification.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\validate-unsubscribe.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:netlify\\functions\\validate-unsubscribe.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\test-resend-email.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:netlify\\functions\\test-resend-email.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\init-blobs-stores.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:netlify\\functions\\init-blobs-stores.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\generate-csrf-token.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:netlify\\functions\\generate-csrf-token.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\upload-image.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:netlify\\functions\\upload-image.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\validate-form-submission.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:netlify\\functions\\validate-form-submission.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "test-resend-email.js",
+              "DocumentMoniker": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\test-resend-email.js",
+              "RelativeDocumentMoniker": "netlify\\functions\\test-resend-email.js",
+              "ToolTip": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\test-resend-email.js",
+              "RelativeToolTip": "netlify\\functions\\test-resend-email.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-11T19:25:03.692Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "init-blobs-stores.js",
+              "DocumentMoniker": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\init-blobs-stores.js",
+              "RelativeDocumentMoniker": "netlify\\functions\\init-blobs-stores.js",
+              "ToolTip": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\init-blobs-stores.js",
+              "RelativeToolTip": "netlify\\functions\\init-blobs-stores.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-11T19:23:41.709Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "send-unsubscribe-notification.js",
+              "DocumentMoniker": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\send-unsubscribe-notification.js",
+              "RelativeDocumentMoniker": "netlify\\functions\\send-unsubscribe-notification.js",
+              "ToolTip": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\send-unsubscribe-notification.js",
+              "RelativeToolTip": "netlify\\functions\\send-unsubscribe-notification.js",
+              "ViewState": "AgIAAHsAAAAAAAAAAAAAAAIAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-11T19:22:36.917Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "send-confirmation-email.js",
+              "DocumentMoniker": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\send-confirmation-email.js",
+              "RelativeDocumentMoniker": "netlify\\functions\\send-confirmation-email.js",
+              "ToolTip": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\send-confirmation-email.js",
+              "RelativeToolTip": "netlify\\functions\\send-confirmation-email.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAG0AAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-11T19:19:56.078Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "validate-unsubscribe.js",
+              "DocumentMoniker": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\validate-unsubscribe.js",
+              "RelativeDocumentMoniker": "netlify\\functions\\validate-unsubscribe.js",
+              "ToolTip": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\validate-unsubscribe.js",
+              "RelativeToolTip": "netlify\\functions\\validate-unsubscribe.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIBAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-11T19:18:51.118Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "generate-csrf-token.js",
+              "DocumentMoniker": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\generate-csrf-token.js",
+              "RelativeDocumentMoniker": "netlify\\functions\\generate-csrf-token.js",
+              "ToolTip": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\generate-csrf-token.js",
+              "RelativeToolTip": "netlify\\functions\\generate-csrf-token.js",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAAFsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-11T19:12:10.918Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "rate-limiter.js",
+              "DocumentMoniker": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\utils\\rate-limiter.js",
+              "RelativeDocumentMoniker": "netlify\\functions\\utils\\rate-limiter.js",
+              "ToolTip": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\utils\\rate-limiter.js",
+              "RelativeToolTip": "netlify\\functions\\utils\\rate-limiter.js",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAACIAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-11T19:09:34.098Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "validate-form-submission.js",
+              "DocumentMoniker": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\validate-form-submission.js",
+              "RelativeDocumentMoniker": "netlify\\functions\\validate-form-submission.js",
+              "ToolTip": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\validate-form-submission.js",
+              "RelativeToolTip": "netlify\\functions\\validate-form-submission.js",
+              "ViewState": "AgIAAMEAAAAAAAAAAAAlwPQAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-11T19:03:59.34Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "upload-image.js",
+              "DocumentMoniker": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\upload-image.js",
+              "RelativeDocumentMoniker": "netlify\\functions\\upload-image.js",
+              "ToolTip": "C:\\Users\\Lucas\\acdw.com marketing site\\netlify\\functions\\upload-image.js",
+              "RelativeToolTip": "netlify\\functions\\upload-image.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-11T19:03:33.734Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -211,19 +211,12 @@ exports.handler = async (event, context) => {
         calculationId: calculation.id,
       })
     } catch (taxError) {
-      console.error('Stripe Tax calculation failed:', {
-        message: taxError.message,
-        state: shippingAddress.state,
-        city: shippingAddress.city,
-        zip: shippingAddress.zip,
-        error: taxError
-      })
+      console.error('Stripe Tax calculation failed:', taxError.message)
       // Fallback: Use simple state-based tax rates if Tax API fails
       const stateTaxRates = {
         'ID': 0.06, // Idaho 6%
         'FL': 0.06, // Florida 6%
         'CA': 0.0725, // California 7.25%
-        'TN': 0.07, // Tennessee 7% (state rate, local rates may vary)
         // Add more states as needed
       }
       
