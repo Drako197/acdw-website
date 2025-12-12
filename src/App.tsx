@@ -30,6 +30,7 @@ import { CheckoutSuccessPage } from './pages/CheckoutSuccessPage'
 import { CheckoutCancelPage } from './pages/CheckoutCancelPage'
 import { MiniProductPage } from './pages/MiniProductPage'
 import { CheckoutPage } from './pages/CheckoutPage'
+import { SensorSetupPage } from './pages/SensorSetupPage'
 
 function AppContent() {
   const location = useLocation()
@@ -72,6 +73,7 @@ function AppContent() {
               <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
               <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
               <Route path="/products/mini" element={<MiniProductPage />} />
+              <Route path="/sensor-setup" element={<SensorSetupPage />} />
             </Routes>
           </main>
           {!hideHeaderFooter && <Footer />}
