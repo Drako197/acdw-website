@@ -1,70 +1,20 @@
 import { useState } from 'react'
-import { EyeIcon, EyeSlashIcon, CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
 interface Step4WiFiLoginProps {
   onComplete: (data: { wifiConnected: boolean; loggedIn: boolean }) => void
 }
 
 export function Step4WiFiLogin({ onComplete }: Step4WiFiLoginProps) {
-  const [currentSubStep, setCurrentSubStep] = useState<'connect' | 'wifi' | 'login'>('connect')
-  const [showPassword, setShowPassword] = useState(false)
-  const [wifiPassword, setWifiPassword] = useState('')
-  const [selectedNetwork, setSelectedNetwork] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isConnecting, setIsConnecting] = useState(false)
-  const [isLoggingIn, setIsLoggingIn] = useState(false)
-  const [error, setError] = useState('')
+  const [step1Complete, setStep1Complete] = useState(false)
+  const [step2Complete, setStep2Complete] = useState(false)
+  const [step3Complete, setStep3Complete] = useState(false)
 
-  // Mock networks - in real app, this would come from the sensor's captive portal
-  const availableNetworks = [
-    { name: 'HomeNetwork_2.4G', signal: 85 },
-    { name: 'HomeNetwork_5G', signal: 75 },
-    { name: 'NeighborWiFi', signal: 45 }
-  ]
+  const allStepsComplete = step1Complete && step2Complete && step3Complete
 
-  const handleConnectToSensor = () => {
-    // In real app, this would guide user to device Wi-Fi settings
-    setCurrentSubStep('wifi')
-    onComplete({ wifiConnected: true, loggedIn: false })
-  }
-
-  const handleSelectNetwork = (networkName: string) => {
-    setSelectedNetwork(networkName)
-  }
-
-  const handleConnectToWiFi = async () => {
-    if (!selectedNetwork || !wifiPassword) {
-      setError('Please select a network and enter the password')
-      return
-    }
-
-    setIsConnecting(true)
-    setError('')
-
-    // Simulate connection - in real app, this would call the sensor's API
-    setTimeout(() => {
-      setIsConnecting(false)
-      setCurrentSubStep('login')
-      onComplete({ wifiConnected: true, loggedIn: false })
-    }, 2000)
-  }
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email || !password) {
-      setError('Please enter both email and password')
-      return
-    }
-
-    setIsLoggingIn(true)
-    setError('')
-
-    // Simulate login - in real app, this would authenticate with ACDW Monitor
-    setTimeout(() => {
-      setIsLoggingIn(false)
-      onComplete({ wifiConnected: true, loggedIn: true })
-    }, 2000)
+  // Update parent when all steps complete
+  if (allStepsComplete) {
+    onComplete({ wifiConnected: true, loggedIn: true })
   }
 
   return (
@@ -72,238 +22,218 @@ export function Step4WiFiLogin({ onComplete }: Step4WiFiLoginProps) {
       <div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Connect to Wi-Fi & Login</h2>
         <p className="text-gray-600">
-          Connect your sensor to the homeowner's Wi-Fi network and log in to your ACDW Monitor account.
+          Follow these steps on your device to connect the sensor to the homeowner's Wi-Fi network and log in to your account.
         </p>
       </div>
 
       {/* Sub-step 4.1: Connect to Sensor */}
-      {currentSubStep === 'connect' && (
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Step 4.1: Connect to Sensor Wi-Fi</h3>
-          
-          <div className="space-y-4">
-            <p className="text-gray-700">
-              Go to your device's Wi-Fi settings and connect to:
-            </p>
-            
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-mono text-lg font-semibold text-gray-900">ACDW Sensor (ID)</p>
-                  <p className="text-sm text-gray-600 mt-1">Sensor's pairing network</p>
-                </div>
-                <button
-                  onClick={() => navigator.clipboard.writeText('ACDW Sensor (ID)')}
-                  className="text-sm text-primary-600 hover:text-primary-700"
-                >
-                  Copy
-                </button>
-              </div>
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="flex items-start space-x-4">
+          <div className="flex-shrink-0">
+            <div className={`
+              w-10 h-10 rounded-full flex items-center justify-center font-semibold
+              ${step1Complete
+                ? 'bg-green-100 text-green-700'
+                : 'bg-gray-100 text-gray-600'
+              }
+            `}>
+              {step1Complete ? <CheckCircleIcon className="h-6 w-6" /> : '1'}
             </div>
-
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="flex items-start space-x-2">
-                <ExclamationTriangleIcon className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium text-blue-900 mb-1">Troubleshooting</p>
-                  <ul className="text-sm text-blue-800 space-y-1">
-                    <li>• Can't see the network? Make sure LED is blinking red</li>
-                    <li>• Connection keeps dropping? Move closer to the sensor</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={handleConnectToSensor}
-              className="w-full bg-primary-600 text-white py-3 px-4 rounded-md font-medium hover:bg-primary-700 transition-colors"
-            >
-              I'm connected to sensor Wi-Fi
-            </button>
           </div>
-        </div>
-      )}
-
-      {/* Sub-step 4.2: Select Home Wi-Fi */}
-      {currentSubStep === 'wifi' && (
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Step 4.2: Connect Sensor to Home Wi-Fi</h3>
-          
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Available Networks</label>
-              <div className="space-y-2">
-                {availableNetworks.map((network) => (
-                  <button
-                    key={network.name}
-                    onClick={() => handleSelectNetwork(network.name)}
-                    className={`
-                      w-full text-left p-4 rounded-lg border-2 transition-all
-                      ${selectedNetwork === network.name
-                        ? 'border-primary-600 bg-primary-50'
-                        : 'border-gray-200 hover:border-primary-300'
-                      }
-                    `}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-gray-900">{network.name}</p>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <div className="flex space-x-1">
-                            {[...Array(5)].map((_, i) => (
-                              <div
-                                key={i}
-                                className={`
-                                  w-2 h-2 rounded-full
-                                  ${i < Math.floor(network.signal / 20)
-                                    ? 'bg-green-500'
-                                    : 'bg-gray-300'
-                                  }
-                                `}
-                              />
-                            ))}
-                          </div>
-                          <span className="text-xs text-gray-600">{network.signal}% signal</span>
-                        </div>
-                      </div>
-                      {selectedNetwork === network.name && (
-                        <CheckCircleIcon className="h-5 w-5 text-primary-600" />
-                      )}
-                    </div>
-                  </button>
-                ))}
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Connect to Sensor Wi-Fi</h3>
+            
+            <div className="mb-4">
+              <p className="text-gray-700 mb-3">
+                On your device, go to Wi-Fi settings and look for a network named:
+              </p>
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+                <p className="font-mono text-lg font-semibold text-gray-900">ACDW Sensor (ID)</p>
+                <p className="text-sm text-gray-600 mt-1">This is the sensor's pairing network</p>
+              </div>
+              
+              {/* Image placeholder - replace with actual screenshot */}
+              <div className="w-full bg-gray-100 rounded-lg mb-4 flex items-center justify-center" style={{ minHeight: '300px' }}>
+                <div className="text-center">
+                  <p className="text-gray-400 mb-2">[Image: Device Wi-Fi Settings Screen]</p>
+                  <p className="text-xs text-gray-500">Shows Wi-Fi settings with "ACDW Sensor (ID)" network visible</p>
+                </div>
+              </div>
+              
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div className="flex items-start space-x-2">
+                  <ExclamationTriangleIcon className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-blue-900 mb-1">Troubleshooting</p>
+                    <ul className="text-sm text-blue-800 space-y-1">
+                      <li>• Can't see the network? Make sure LED is blinking red</li>
+                      <li>• Connection keeps dropping? Move closer to the sensor</li>
+                      <li>• Once connected, you'll be redirected automatically</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Wi-Fi Password</label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={wifiPassword}
-                  onChange={(e) => setWifiPassword(e.target.value)}
-                  placeholder="Enter Wi-Fi password"
-                  className="input w-full pr-10"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
-                </button>
-              </div>
-            </div>
-
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p className="text-sm text-red-800">{error}</p>
-              </div>
-            )}
 
             <button
-              onClick={handleConnectToWiFi}
-              disabled={isConnecting || !selectedNetwork || !wifiPassword}
+              onClick={() => setStep1Complete(!step1Complete)}
               className={`
-                w-full py-3 px-4 rounded-md font-medium transition-colors
-                ${isConnecting || !selectedNetwork || !wifiPassword
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-primary-600 text-white hover:bg-primary-700'
+                flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-colors
+                ${step1Complete
+                  ? 'bg-green-50 text-green-700 border border-green-200'
+                  : 'bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100'
                 }
               `}
             >
-              {isConnecting ? 'Connecting...' : 'Connect to Wi-Fi'}
+              <CheckCircleIcon className={`h-5 w-5 ${step1Complete ? 'text-green-600' : 'text-gray-400'}`} />
+              <span>{step1Complete ? 'Step completed' : 'I\'ve connected to the sensor Wi-Fi'}</span>
             </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Sub-step 4.2: Select Home Wi-Fi */}
+      {step1Complete && (
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-start space-x-4">
+            <div className="flex-shrink-0">
+              <div className={`
+                w-10 h-10 rounded-full flex items-center justify-center font-semibold
+                ${step2Complete
+                  ? 'bg-green-100 text-green-700'
+                  : 'bg-gray-100 text-gray-600'
+                }
+              `}>
+                {step2Complete ? <CheckCircleIcon className="h-6 w-6" /> : '2'}
+              </div>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Select Home Wi-Fi Network</h3>
+              
+              <div className="mb-4">
+                <p className="text-gray-700 mb-3">
+                  After connecting to the sensor, you'll be redirected to a setup page. Select the homeowner's Wi-Fi network from the list and enter the password.
+                </p>
+                
+                {/* Image placeholder - replace with actual screenshot */}
+                <div className="w-full bg-gray-100 rounded-lg mb-4 flex items-center justify-center" style={{ minHeight: '300px' }}>
+                  <div className="text-center">
+                    <p className="text-gray-400 mb-2">[Image: Captive Portal Wi-Fi Selection Screen]</p>
+                    <p className="text-xs text-gray-500">Shows network list with signal strength and password input field</p>
+                  </div>
+                </div>
+                
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                  <p className="text-sm text-amber-800">
+                    <strong>Note:</strong> Make sure you have the homeowner's Wi-Fi password ready. The sensor will connect to this network automatically after you enter the password.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setStep2Complete(!step2Complete)}
+                className={`
+                  flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-colors
+                  ${step2Complete
+                    ? 'bg-green-50 text-green-700 border border-green-200'
+                    : 'bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100'
+                  }
+                `}
+              >
+                <CheckCircleIcon className={`h-5 w-5 ${step2Complete ? 'text-green-600' : 'text-gray-400'}`} />
+                <span>{step2Complete ? 'Step completed' : 'I\'ve selected the Wi-Fi network and entered the password'}</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
 
       {/* Sub-step 4.3: Login */}
-      {currentSubStep === 'login' && (
+      {step2Complete && (
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Step 4.3: Login to ACDW Sensor Admin</h3>
-          
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="your.email@example.com"
-                className="input w-full"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className="input w-full pr-10"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center space-x-2">
-                <input type="checkbox" className="rounded border-gray-300 text-primary-600" />
-                <span className="text-gray-700">Remember me</span>
-              </label>
-              <a href="#" className="text-primary-600 hover:text-primary-700">
-                Forgot password?
-              </a>
-            </div>
-
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p className="text-sm text-red-800">{error}</p>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isLoggingIn || !email || !password}
-              className={`
-                w-full py-3 px-4 rounded-md font-medium transition-colors
-                ${isLoggingIn || !email || !password
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-primary-600 text-white hover:bg-primary-700'
+          <div className="flex items-start space-x-4">
+            <div className="flex-shrink-0">
+              <div className={`
+                w-10 h-10 rounded-full flex items-center justify-center font-semibold
+                ${step3Complete
+                  ? 'bg-green-100 text-green-700'
+                  : 'bg-gray-100 text-gray-600'
                 }
-              `}
-            >
-              {isLoggingIn ? 'Logging in...' : 'Login'}
-            </button>
-
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-800">
-                Don't have an account?{' '}
-                <a
-                  href="https://monitor.acdrainwiz.com/sign-up"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-700 hover:text-blue-900 underline"
-                >
-                  Sign up at monitor.acdrainwiz.com
-                </a>
-              </p>
+              `}>
+                {step3Complete ? <CheckCircleIcon className="h-6 w-6" /> : '3'}
+              </div>
             </div>
-          </form>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Login to ACDW Sensor Admin</h3>
+              
+              <div className="mb-4">
+                <p className="text-gray-700 mb-3">
+                  After the sensor connects to the home Wi-Fi, you'll see a login screen. Enter your ACDW Monitor account credentials.
+                </p>
+                
+                {/* Image placeholder - replace with actual screenshot */}
+                <div className="w-full bg-gray-100 rounded-lg mb-4 flex items-center justify-center" style={{ minHeight: '300px' }}>
+                  <div className="text-center">
+                    <p className="text-gray-400 mb-2">[Image: ACDW Monitor Login Screen]</p>
+                    <p className="text-xs text-gray-500">Shows email and password fields with login button</p>
+                  </div>
+                </div>
+                
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                  <p className="text-sm text-blue-800">
+                    <strong>What happens next:</strong> Once you log in successfully, the sensor will automatically register to your contractor account. You'll then be able to assign it to a customer in the next step.
+                  </p>
+                </div>
+
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                  <div className="flex items-start space-x-2">
+                    <ExclamationTriangleIcon className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-amber-900 mb-1">Don't have an account?</p>
+                      <p className="text-sm text-amber-800">
+                        <a
+                          href="https://monitor.acdrainwiz.com/sign-up"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-amber-700 hover:text-amber-900 underline"
+                        >
+                          Sign up at monitor.acdrainwiz.com
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setStep3Complete(!step3Complete)}
+                className={`
+                  flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-colors
+                  ${step3Complete
+                    ? 'bg-green-50 text-green-700 border border-green-200'
+                    : 'bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100'
+                  }
+                `}
+              >
+                <CheckCircleIcon className={`h-5 w-5 ${step3Complete ? 'text-green-600' : 'text-gray-400'}`} />
+                <span>{step3Complete ? 'Step completed' : 'I\'ve logged in successfully'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Completion Status */}
+      {allStepsComplete && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="flex items-center space-x-2">
+            <CheckCircleIcon className="h-5 w-5 text-green-600" />
+            <p className="text-sm font-medium text-green-800">
+              Wi-Fi connection and login complete! The sensor has been registered to your account. Proceed to device registration.
+            </p>
+          </div>
         </div>
       )}
     </div>
   )
 }
-
