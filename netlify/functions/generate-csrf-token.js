@@ -92,7 +92,7 @@ exports.handler = async (event, context) => {
 
     // Rate limiting
     const ip = getClientIP(event)
-    const rateLimitResult = await checkRateLimit(ip, 'form')
+    const rateLimitResult = await checkRateLimit(ip, 'form', context)
     if (!rateLimitResult.allowed) {
         return {
             statusCode: 429,

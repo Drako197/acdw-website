@@ -9,10 +9,11 @@ const DEFAULT_RATE_LIMITS = {
 
 let rateLimitStore = null
 
-const initStore = () => {
+const initStore = (context) => {
     if (!rateLimitStore) {
         try {
-            rateLimitStore = getStore('rate-limits')
+
+            rateLimitStore = getStore({ name: 'rate-limits', context })
         } catch (error) {
             console.warn('Failed to initialize rate limit store:', error.message)
             return null
@@ -26,11 +27,12 @@ const getRateLimitKey = (ip, type) => {
     return `${type}:${sanitizedIP}`
 }
 
-const checkRateLimit = async (ip, type = 'api') => {
+const checkRateLimit = async (ip, type = 'api', context = null) => {
+
     const config = DEFAULT_RATE_LIMITS[type] || DEFAULT_RATE_LIMITS.api
     const now = Date.now()
     const windowStart = now - config.windowMs
-    const store = initStore()
+    const store = initStore(context)
 
     if (!store) {
         return {
