@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
 interface Step4WiFiLoginProps {
@@ -13,9 +13,11 @@ export function Step4WiFiLogin({ onComplete }: Step4WiFiLoginProps) {
   const allStepsComplete = step1Complete && step2Complete && step3Complete
 
   // Update parent when all steps complete
-  if (allStepsComplete) {
-    onComplete({ wifiConnected: true, loggedIn: true })
-  }
+  useEffect(() => {
+    if (allStepsComplete) {
+      onComplete({ wifiConnected: true, loggedIn: true })
+    }
+  }, [allStepsComplete, onComplete])
 
   return (
     <div className="space-y-6">
