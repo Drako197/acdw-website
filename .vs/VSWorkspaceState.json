@@ -2,8 +2,13 @@
   "ExpandedNodes": [
     "",
     "\\netlify",
-    "\\netlify\\functions",
-    "\\netlify\\functions\\utils"
+    "\\netlify\\edge-functions",
+    "\\src",
+    "\\src\\components",
+    "\\src\\components\\home",
+    "\\src\\hooks",
+    "\\src\\pages"
   ],
+  "SelectedNode": "\\.gitignore",
   "PreviewInSolutionExplorer": false
 }
