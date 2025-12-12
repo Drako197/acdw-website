@@ -1442,7 +1442,7 @@ export function Hero() {
                         state: formData.get('state'),
                         zip: formData.get('zip'),
                         consent: formData.get('consent') ? 'yes' : 'no',
-                        hasRecaptcha: !!recaptchaToken
+                          hasRecaptcha: recaptchaResult.success
                       })
                       // Simulate network delay
                       await new Promise(resolve => setTimeout(resolve, 1000))
