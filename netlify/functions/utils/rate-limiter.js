@@ -13,7 +13,10 @@ const initStore = (context) => {
     if (!rateLimitStore) {
         try {
 
-            rateLimitStore = getStore({ name: 'rate-limits', context })
+            rateLimitStore = getStore({
+                name: 'rate-limits',
+                context: context
+            })
         } catch (error) {
             console.warn('Failed to initialize rate limit store:', error.message)
             return null
