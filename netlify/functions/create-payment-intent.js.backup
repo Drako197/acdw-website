@@ -1,10 +1,10 @@
 /**
- * Update Stripe Payment Intent
+ * Create Stripe Payment Intent
  * 
- * Updates a Payment Intent when shipping address changes
- * Recalculates shipping and tax in real-time
+ * Creates a Payment Intent for embedded Payment Element checkout
+ * Includes shipping address and automatic tax calculation
  * 
- * SECURITY: Validates inputs and recalculates shipping server-side
+ * SECURITY: Validates user authentication, role, and price before creating Payment Intent
  */
 
 // Import utilities
@@ -39,10 +39,10 @@ exports.handler = async (event, context) => {
     // Get client IP
     const ip = getClientIP(event)
     
-    // Check rate limit (stricter for updates - prevent abuse)
+    // Check rate limit
     const rateLimitResult = await checkRateLimit(ip, 'api')
     if (!rateLimitResult.allowed) {
-      logRateLimit(ip, 'api', '/.netlify/functions/update-payment-intent')
+      logRateLimit(ip, 'api', '/.netlify/functions/create-payment-intent')
       return {
         statusCode: 429,
         headers: {
@@ -57,13 +57,13 @@ exports.handler = async (event, context) => {
     }
     
     // Log API access
-    logAPIAccess('/.netlify/functions/update-payment-intent', 'POST', ip, event.headers['user-agent'] || 'unknown', true)
+    logAPIAccess('/.netlify/functions/create-payment-intent', 'POST', ip, event.headers['user-agent'] || 'unknown', true)
     
     // Parse request body
-    const { paymentIntentId, shippingAddress, product, quantity, priceId } = JSON.parse(event.body)
+    const { priceId, quantity, product, userEmail, userId, shippingAddress } = JSON.parse(event.body)
 
     // Validate inputs
-    if (!paymentIntentId || !shippingAddress || !product || !quantity || !priceId) {
+    if (!priceId || !quantity || !product) {
       return {
         statusCode: 400,
         headers,
@@ -72,7 +72,7 @@ exports.handler = async (event, context) => {
     }
 
     // Validate shipping address
-    if (!shippingAddress.line1 || !shippingAddress.city || !shippingAddress.state || !shippingAddress.zip || !shippingAddress.country) {
+    if (!shippingAddress || !shippingAddress.line1 || !shippingAddress.city || !shippingAddress.state || !shippingAddress.zip || !shippingAddress.country) {
       return {
         statusCode: 400,
         headers,
@@ -119,18 +119,6 @@ exports.handler = async (event, context) => {
       }
     }
 
-    // Verify Payment Intent exists and belongs to this session
-    let paymentIntent
-    try {
-      paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
-    } catch (stripeError) {
-      return {
-        statusCode: 400,
-        headers,
-        body: JSON.stringify({ error: 'Invalid payment intent' }),
-      }
-    }
-
     // Verify Price ID exists in Stripe
     let price
     try {
@@ -143,8 +131,8 @@ exports.handler = async (event, context) => {
       }
     }
 
-    // Recalculate shipping cost server-side
-    // SECURITY: Always recalculate shipping server-side to prevent manipulation
+    // Calculate shipping cost server-side
+    // SECURITY: Always calculate shipping server-side to prevent manipulation
     let shippingCost
     try {
       const products = {
@@ -153,7 +141,7 @@ exports.handler = async (event, context) => {
       
       const shippingResult = await calculateShipping(shippingAddress, products)
       shippingCost = shippingResult.cost
-      console.log('Shipping recalculated:', shippingCost)
+      console.log('Shipping calculated:', shippingCost)
     } catch (shippingError) {
       console.error('Shipping calculation failed:', shippingError)
       // Use fallback based on country
@@ -205,25 +193,19 @@ exports.handler = async (event, context) => {
         percentage: tax.tax_rate_details?.percentage || 0,
       }))
       
-      console.log('Tax recalculated via Stripe Tax API:', {
+      console.log('Tax calculated via Stripe Tax API:', {
         taxAmount,
         taxDetails,
         calculationId: calculation.id,
       })
     } catch (taxError) {
-      console.error('Stripe Tax calculation failed:', {
-        message: taxError.message,
-        state: shippingAddress.state,
-        city: shippingAddress.city,
-        zip: shippingAddress.zip,
-        error: taxError
-      })
+      console.error('Stripe Tax calculation failed:', taxError.message)
       // Fallback: Use simple state-based tax rates if Tax API fails
+      // This is a basic fallback - you should configure proper tax rates
       const stateTaxRates = {
         'ID': 0.06, // Idaho 6%
         'FL': 0.06, // Florida 6%
         'CA': 0.0725, // California 7.25%
-        'TN': 0.07, // Tennessee 7% (state rate, local rates may vary)
         // Add more states as needed
       }
       
@@ -250,15 +232,16 @@ exports.handler = async (event, context) => {
     const taxAmountCents = Math.round(taxAmount * 100)
     const finalAmount = productAmount + shippingAmount + taxAmountCents
 
-    // Update Payment Intent with new shipping address and amount
+    // Create Payment Intent with shipping address
     // Note: Payment Intents don't support automatic_tax parameter
     // Tax is calculated separately using Stripe Tax API
-    // Retrieve current Payment Intent to preserve existing metadata
-    const currentPaymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
-    
-    const finalPaymentIntent = await stripe.paymentIntents.update(paymentIntentId, {
+    const paymentIntent = await stripe.paymentIntents.create({
       amount: finalAmount,
-      // Update shipping address
+      currency: 'usd',
+      automatic_payment_methods: {
+        enabled: true,
+      },
+      // Include shipping address
       shipping: {
         name: shippingAddress.name || 'Customer',
         address: {
@@ -270,20 +253,24 @@ exports.handler = async (event, context) => {
           country: shippingAddress.country,
         },
       },
-      // Update receipt email if email changed
+      // Set receipt email (always use email from shipping address)
       receipt_email: trimmedEmail,
-      // Update metadata with new tax information and email
+      // Metadata for order tracking
       metadata: {
-        ...currentPaymentIntent.metadata, // Preserve existing metadata
-        taxAmount: taxAmount.toFixed(2),
-        taxDetails: JSON.stringify(taxDetails),
+        userId: userId || '',
+        product: product,
+        priceId: priceId, // Store priceId for SKU mapping in webhook
+        quantity: qty.toString(),
         shippingCost: shippingCost.toString(),
-        customerEmail: trimmedEmail, // Update email in metadata
+        taxAmount: taxAmount.toFixed(2),
+        taxDetails: JSON.stringify(taxDetails), // Store tax breakdown for success page
+        customerEmail: trimmedEmail, // Store email in metadata for webhook
+        shippingAddress: JSON.stringify(shippingAddress),
       },
     })
 
-    console.log('Payment Intent updated:', {
-      paymentIntentId: paymentIntentId,
+    console.log('Payment Intent created:', {
+      paymentIntentId: paymentIntent.id,
       amount: finalAmount / 100,
       productAmount: productAmount / 100,
       shippingAmount: shippingAmount / 100,
@@ -303,8 +290,8 @@ exports.handler = async (event, context) => {
         ...getRateLimitHeaders(rateLimitResult)
       },
       body: JSON.stringify({
-        clientSecret: finalPaymentIntent.client_secret, // Updated client secret
-        paymentIntentId: finalPaymentIntent.id,
+        clientSecret: paymentIntent.client_secret,
+        paymentIntentId: paymentIntent.id,
         amount: finalAmount, // Final amount including tax (in cents)
         productAmount: productAmount, // Product amount (in cents)
         shippingAmount: shippingAmount, // Shipping amount (in cents)
@@ -314,7 +301,7 @@ exports.handler = async (event, context) => {
       }),
     }
   } catch (error) {
-    console.error('Error updating payment intent:', {
+    console.error('Error creating payment intent:', {
       message: error.message,
       type: error.type,
       code: error.code,
@@ -323,7 +310,7 @@ exports.handler = async (event, context) => {
     })
     
     // Provide helpful error messages
-    let errorMessage = 'Failed to update payment intent'
+    let errorMessage = 'Failed to create payment intent'
     let errorDetails = null
     
     if (error.type === 'StripeInvalidRequestError') {

@@ -35,5 +35,4 @@ dist-ssr
 **/*.md
 *.md
 scripts/
-
-S
+.vs/

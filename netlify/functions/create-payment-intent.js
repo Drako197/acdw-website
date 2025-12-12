@@ -199,13 +199,20 @@ exports.handler = async (event, context) => {
         calculationId: calculation.id,
       })
     } catch (taxError) {
-      console.error('Stripe Tax calculation failed:', taxError.message)
+      console.error('Stripe Tax calculation failed:', {
+        message: taxError.message,
+        state: shippingAddress.state,
+        city: shippingAddress.city,
+        zip: shippingAddress.zip,
+        error: taxError
+      })
       // Fallback: Use simple state-based tax rates if Tax API fails
       // This is a basic fallback - you should configure proper tax rates
       const stateTaxRates = {
         'ID': 0.06, // Idaho 6%
         'FL': 0.06, // Florida 6%
         'CA': 0.0725, // California 7.25%
+        'TN': 0.07, // Tennessee 7% (state rate, local rates may vary)
         // Add more states as needed
       }
       
@@ -232,6 +239,25 @@ exports.handler = async (event, context) => {
     const taxAmountCents = Math.round(taxAmount * 100)
     const finalAmount = productAmount + shippingAmount + taxAmountCents
 
+    // Prepare metadata for order tracking
+    const metadata = {
+      userId: userId || '',
+      product: product,
+      priceId: priceId, // Store priceId for SKU mapping in webhook
+      quantity: qty.toString(),
+      shippingCost: shippingCost.toString(),
+      taxAmount: taxAmount.toFixed(2),
+      taxDetails: JSON.stringify(taxDetails), // Store tax breakdown for success page
+      customerEmail: trimmedEmail, // Store email in metadata for webhook
+      shippingAddress: JSON.stringify(shippingAddress),
+    }
+    
+    console.log('💾 Storing Payment Intent metadata:', {
+      priceId: metadata.priceId,
+      product: metadata.product,
+      hasPriceId: !!metadata.priceId,
+    })
+
     // Create Payment Intent with shipping address
     // Note: Payment Intents don't support automatic_tax parameter
     // Tax is calculated separately using Stripe Tax API
@@ -256,17 +282,28 @@ exports.handler = async (event, context) => {
       // Set receipt email (always use email from shipping address)
       receipt_email: trimmedEmail,
       // Metadata for order tracking
-      metadata: {
-        userId: userId || '',
-        product: product,
-        priceId: priceId, // Store priceId for SKU mapping in webhook
-        quantity: qty.toString(),
-        shippingCost: shippingCost.toString(),
-        taxAmount: taxAmount.toFixed(2),
-        taxDetails: JSON.stringify(taxDetails), // Store tax breakdown for success page
-        customerEmail: trimmedEmail, // Store email in metadata for webhook
-        shippingAddress: JSON.stringify(shippingAddress),
-      },
+      metadata: metadata,
+        amount: finalAmount,
+        currency: 'usd',
+        automatic_payment_methods: {
+          enabled: true,
+        },
+        // Include shipping address
+        shipping: {
+          name: shippingAddress.name || 'Customer',
+          address: {
+            line1: shippingAddress.line1,
+            line2: shippingAddress.line2 || '',
+            city: shippingAddress.city,
+            state: shippingAddress.state,
+            postal_code: shippingAddress.zip || shippingAddress.postal_code || '',
+            country: shippingAddress.country,
+          },
+        },
+        // Set receipt email (always use email from shipping address)
+        receipt_email: trimmedEmail,
+        // Metadata for order tracking
+        metadata: metadata,
     })
 
     console.log('Payment Intent created:', {
