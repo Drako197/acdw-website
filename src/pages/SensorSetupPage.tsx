@@ -4,8 +4,7 @@ import { Step1Prerequisites } from '../components/setup/steps/Step1Prerequisites
 import { Step2ModelSelection } from '../components/setup/steps/Step2ModelSelection'
 import { Step3PhysicalInstallation } from '../components/setup/steps/Step3PhysicalInstallation'
 import { Step4WiFiLogin } from '../components/setup/steps/Step4WiFiLogin'
-import { Step5DeviceRegistration } from '../components/setup/steps/Step5DeviceRegistration'
-import { Step6Success } from '../components/setup/steps/Step6Success'
+import { Step5Success } from '../components/setup/steps/Step6Success'
 
 type SensorModel = 'battery' | 'dc' | null
 
@@ -19,21 +18,21 @@ interface SetupData {
   wifiLoginComplete: {
     wifiConnected: boolean
     loggedIn: boolean
-  } | null
-  deviceRegistration: {
-    deviceName: string
-    location: string
-    customerName: string
-    isNewCustomer: boolean
-    alerts: {
-      email: boolean
-      sms: boolean
-      dailyReport: boolean
+    deviceRegistration: {
+      deviceName: string
+      location: string
+      customerName: string
+      isNewCustomer: boolean
+      alerts: {
+        email: boolean
+        sms: boolean
+        dailyReport: boolean
+      }
     }
   } | null
 }
 
-const TOTAL_STEPS = 6
+const TOTAL_STEPS = 5
 
 export function SensorSetupPage() {
   const [currentStep, setCurrentStep] = useState(1)
@@ -66,30 +65,27 @@ export function SensorSetupPage() {
     }))
   }
 
-  const handleStep4Complete = (data: { wifiConnected: boolean; loggedIn: boolean }) => {
-    setSetupData(prev => ({
-      ...prev,
-      wifiLoginComplete: data
-    }))
-  }
-
-  const handleStep5Complete = (data: {
-    deviceName: string
-    location: string
-    customerName: string
-    isNewCustomer: boolean
-    alerts: {
-      email: boolean
-      sms: boolean
-      dailyReport: boolean
+  const handleStep4Complete = (data: {
+    wifiConnected: boolean
+    loggedIn: boolean
+    deviceRegistration: {
+      deviceName: string
+      location: string
+      customerName: string
+      isNewCustomer: boolean
+      alerts: {
+        email: boolean
+        sms: boolean
+        dailyReport: boolean
+      }
     }
   }) => {
     setSetupData(prev => ({
       ...prev,
-      deviceRegistration: data
+      wifiLoginComplete: data
     }))
     // Move to success step
-    setCurrentStep(6)
+    setCurrentStep(5)
   }
 
   const canContinueFromStep = (step: number): boolean => {
@@ -103,10 +99,9 @@ export function SensorSetupPage() {
         return setupData.physicalInstallationComplete
       case 4:
         return setupData.wifiLoginComplete?.wifiConnected === true && 
-               setupData.wifiLoginComplete?.loggedIn === true
+               setupData.wifiLoginComplete?.loggedIn === true &&
+               setupData.wifiLoginComplete?.deviceRegistration !== undefined
       case 5:
-        return setupData.deviceRegistration !== null
-      case 6:
         return false // Success step, no continue
       default:
         return false
@@ -141,13 +136,11 @@ export function SensorSetupPage() {
       case 4:
         return <Step4WiFiLogin onComplete={handleStep4Complete} />
       case 5:
-        return <Step5DeviceRegistration onComplete={handleStep5Complete} />
-      case 6:
-        return setupData.deviceRegistration ? (
-          <Step6Success deviceData={{
-            deviceName: setupData.deviceRegistration.deviceName,
-            location: setupData.deviceRegistration.location,
-            customerName: setupData.deviceRegistration.customerName
+        return setupData.wifiLoginComplete?.deviceRegistration ? (
+          <Step5Success deviceData={{
+            deviceName: setupData.wifiLoginComplete.deviceRegistration.deviceName,
+            location: setupData.wifiLoginComplete.deviceRegistration.location,
+            customerName: setupData.wifiLoginComplete.deviceRegistration.customerName
           }} />
         ) : null
       default:
@@ -164,7 +157,7 @@ export function SensorSetupPage() {
       canContinue={canContinueFromStep(currentStep) && currentStep < TOTAL_STEPS}
       onContinue={handleContinue}
       onBack={handleBack}
-      continueLabel={currentStep === 5 ? 'Register Device' : 'Continue'}
+      continueLabel="Continue"
     >
       {renderStep()}
     </SetupWizard>

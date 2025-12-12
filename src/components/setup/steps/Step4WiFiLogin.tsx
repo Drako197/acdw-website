@@ -2,20 +2,50 @@ import { useState, useEffect } from 'react'
 import { CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
 interface Step4WiFiLoginProps {
-  onComplete: (data: { wifiConnected: boolean; loggedIn: boolean }) => void
+  onComplete: (data: {
+    wifiConnected: boolean
+    loggedIn: boolean
+    deviceRegistration: {
+      deviceName: string
+      location: string
+      customerName: string
+      isNewCustomer: boolean
+      alerts: {
+        email: boolean
+        sms: boolean
+        dailyReport: boolean
+      }
+    }
+  }) => void
 }
 
 export function Step4WiFiLogin({ onComplete }: Step4WiFiLoginProps) {
   const [step1Complete, setStep1Complete] = useState(false)
   const [step2Complete, setStep2Complete] = useState(false)
   const [step3Complete, setStep3Complete] = useState(false)
+  const [step4Complete, setStep4Complete] = useState(false)
 
-  const allStepsComplete = step1Complete && step2Complete && step3Complete
+  const allStepsComplete = step1Complete && step2Complete && step3Complete && step4Complete
 
   // Update parent when all steps complete
   useEffect(() => {
     if (allStepsComplete) {
-      onComplete({ wifiConnected: true, loggedIn: true })
+      // Mock device registration data - in real app, this would come from the phone's captive portal
+      onComplete({
+        wifiConnected: true,
+        loggedIn: true,
+        deviceRegistration: {
+          deviceName: 'Sensor Device',
+          location: 'Installation Location',
+          customerName: 'Customer Name',
+          isNewCustomer: false,
+          alerts: {
+            email: true,
+            sms: true,
+            dailyReport: true
+          }
+        }
+      })
     }
   }, [allStepsComplete, onComplete])
 
@@ -183,7 +213,7 @@ export function Step4WiFiLogin({ onComplete }: Step4WiFiLoginProps) {
                 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                   <p className="text-sm text-blue-800">
-                    <strong>What happens next:</strong> Once you log in successfully, the sensor will automatically register to your contractor account. You'll then be able to assign it to a customer in the next step.
+                    <strong>What happens next:</strong> Once you log in successfully, the sensor will automatically register to your contractor account.
                   </p>
                 </div>
 
@@ -225,13 +255,81 @@ export function Step4WiFiLogin({ onComplete }: Step4WiFiLoginProps) {
         </div>
       )}
 
+      {/* Sub-step 4.4: Device Registration */}
+      {step3Complete && (
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-start space-x-4">
+            <div className="flex-shrink-0">
+              <div className={`
+                w-10 h-10 rounded-full flex items-center justify-center font-semibold
+                ${step4Complete
+                  ? 'bg-green-100 text-green-700'
+                  : 'bg-gray-100 text-gray-600'
+                }
+              `}>
+                {step4Complete ? <CheckCircleIcon className="h-6 w-6" /> : '4'}
+              </div>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Register Device</h3>
+              
+              <div className="mb-4">
+                <p className="text-gray-700 mb-3">
+                  After logging in, you'll see a device registration screen. Enter the device name, location, and assign it to a customer.
+                </p>
+                
+                {/* Image placeholder - replace with actual screenshot */}
+                <div className="w-full bg-gray-100 rounded-lg mb-4 flex items-center justify-center" style={{ minHeight: '300px' }}>
+                  <div className="text-center">
+                    <p className="text-gray-400 mb-2">[Image: Device Registration Screen]</p>
+                    <p className="text-xs text-gray-500">Shows device name, location, customer selection, and alert preferences</p>
+                  </div>
+                </div>
+                
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                  <p className="text-sm text-blue-800">
+                    <strong>What to enter:</strong>
+                  </p>
+                  <ul className="text-sm text-blue-800 mt-2 space-y-1 list-disc list-inside">
+                    <li>Device name (e.g., "Main Floor AC Unit")</li>
+                    <li>Location/address</li>
+                    <li>Customer/homeowner name (select existing or create new)</li>
+                    <li>Alert preferences (Email, SMS, Daily reports)</li>
+                  </ul>
+                </div>
+
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                  <p className="text-sm text-amber-800">
+                    <strong>Note:</strong> Alerts will be sent to your contractor account. You can share them with customers to schedule preventive visits.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setStep4Complete(!step4Complete)}
+                className={`
+                  flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-colors
+                  ${step4Complete
+                    ? 'bg-green-50 text-green-700 border border-green-200'
+                    : 'bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100'
+                  }
+                `}
+              >
+                <CheckCircleIcon className={`h-5 w-5 ${step4Complete ? 'text-green-600' : 'text-gray-400'}`} />
+                <span>{step4Complete ? 'Step completed' : 'I\'ve registered the device'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Completion Status */}
       {allStepsComplete && (
         <div className="bg-green-50 border border-green-200 rounded-lg p-4">
           <div className="flex items-center space-x-2">
             <CheckCircleIcon className="h-5 w-5 text-green-600" />
             <p className="text-sm font-medium text-green-800">
-              Wi-Fi connection and login complete! The sensor has been registered to your account. Proceed to device registration.
+              Wi-Fi connection, login, and device registration complete! The sensor is now set up and ready.
             </p>
           </div>
         </div>
