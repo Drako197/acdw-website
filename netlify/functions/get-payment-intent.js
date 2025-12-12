@@ -34,7 +34,7 @@ exports.handler = async (event, context) => {
   
   // Rate limiting check
   const ip = getClientIP(event)
-  const rateLimitResult = await checkRateLimit(ip, 'api')
+  const rateLimitResult = await checkRateLimit(ip, 'api', context)
   
   if (!rateLimitResult.allowed) {
     console.warn('🚫 Rate limit exceeded (get-payment-intent)', {

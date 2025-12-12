@@ -101,7 +101,7 @@ exports.handler = async (event, context) => {
     const ip = getClientIP(event)
     
     // Check rate limit
-    const rateLimitResult = await checkRateLimit(ip, 'api')
+    const rateLimitResult = await checkRateLimit(ip, 'api', context)
     if (!rateLimitResult.allowed) {
       logRateLimit(ip, 'api', '/.netlify/functions/get-price-id')
       return {

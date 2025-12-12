@@ -276,7 +276,7 @@ exports.handler = async (event, context) => {
 
     // Rate limiting
     const ip = getClientIP(event)
-    const rateLimitResult = await checkRateLimit(ip, 'form')
+    const rateLimitResult = await checkRateLimit(ip, 'form', context)
     if (!rateLimitResult.allowed) {
         return {
             statusCode: 429,
@@ -621,7 +621,7 @@ exports.handler = async (event, context) => {
 
     // Rate limiting check
     const rateLimitType = formType === 'upgrade' ? 'strict' : 'form'
-    const rateLimitResult = await checkRateLimit(ip, rateLimitType)
+    const rateLimitResult = await checkRateLimit(ip, rateLimitType, context)
     
     if (!rateLimitResult.allowed) {
       logRateLimit(ip, rateLimitType, rateLimitResult.limit, rateLimitResult.remaining, true)
