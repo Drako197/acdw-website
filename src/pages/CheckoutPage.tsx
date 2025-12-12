@@ -492,11 +492,11 @@ export function CheckoutPage() {
                       <div className="stripe-line-item-name">
                         {taxDetails.length > 0 
                           ? taxDetails.map(t => t.rate).join(', ')
-                          : 'Sales Tax'}
+                          : 'Tax'}
                       </div>
                       <div className="stripe-line-item-description">
                         {taxDetails.length > 0 
-                          ? taxDetails.map(t => `${t.percentage.toFixed(2)}%`).join(', ')
+                          ? taxDetails.map(t => `${t.rate} (${t.percentage.toFixed(2)}%)`).join(', ')
                           : 'Sales tax'}
                       </div>
                     </div>
