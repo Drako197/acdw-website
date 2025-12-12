@@ -35,8 +35,8 @@ import { SensorSetupPage } from './pages/SensorSetupPage'
 function AppContent() {
   const location = useLocation()
   
-  // Hide header/footer on checkout page for cleaner Stripe-like experience
-  const hideHeaderFooter = location.pathname === '/checkout'
+  // Hide header/footer on checkout and sensor setup pages for cleaner experience
+  const hideHeaderFooter = location.pathname === '/checkout' || location.pathname === '/sensor-setup'
   
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
