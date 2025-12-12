@@ -4,7 +4,7 @@ import { Step1Prerequisites } from '../components/setup/steps/Step1Prerequisites
 import { Step2ModelSelection } from '../components/setup/steps/Step2ModelSelection'
 import { Step3PhysicalInstallation } from '../components/setup/steps/Step3PhysicalInstallation'
 import { Step4WiFiLogin } from '../components/setup/steps/Step4WiFiLogin'
-import { Step5Success } from '../components/setup/steps/Step6Success'
+import { Step6Success as Step5Success } from '../components/setup/steps/Step6Success'
 
 type SensorModel = 'battery' | 'dc' | null
 
@@ -40,8 +40,7 @@ export function SensorSetupPage() {
     prerequisites: null,
     selectedModel: null,
     physicalInstallationComplete: false,
-    wifiLoginComplete: null,
-    deviceRegistration: null
+    wifiLoginComplete: null
   })
 
   const handleStep1Complete = (data: { miniInstalled: boolean; hasAccount: boolean }) => {
