@@ -122,7 +122,7 @@ export function ContactPage() {
   }
 
   const [activeFormType, setActiveFormType] = useState<ContactFormType>(getFormTypeFromURL())
-  const { getRecaptchaToken, isConfigured: isRecaptchaConfigured } = useRecaptcha()
+  const { getRecaptchaToken } = useRecaptcha()
   const { csrfToken } = useCsrfToken()
   const [formLoadTime] = useState<number>(Date.now()) // Set when component mounts for behavioral analysis
   const [formData, setFormData] = useState<FormData>({
@@ -427,15 +427,12 @@ export function ContactPage() {
       return
     }
     
-    // Get reCAPTCHA token before submitting (use specific form type for tracking)
-    // Note: reCAPTCHA actions can only contain A-Za-z/_ (no hyphens)
-    const recaptchaToken = await getRecaptchaToken(`contact_${activeFormType}`)
-    if (!recaptchaToken && isRecaptchaConfigured) {
-      // Only require token if reCAPTCHA is configured
-      setSubmitError('Security verification failed. Please refresh and try again.')
-      setIsSubmitting(false)
-      return
-    }
+      const recaptchaResult = await getRecaptchaToken(`contact_${activeFormType}`)
+      if (!recaptchaResult.success) {
+          setSubmitError(recaptchaResult.error)
+          setIsSubmitting(false)
+          return
+      }
     
     // Prepare form data for Netlify
     const formName = `contact-${activeFormType}`
@@ -454,8 +451,8 @@ export function ContactPage() {
       referralSource: formData.referralSource || '',
       consent: formData.consent ? 'yes' : 'no',
       'form-load-time': formLoadTime.toString(), // Include form load time for behavioral analysis
-      ...(recaptchaToken && { 'recaptcha-token': recaptchaToken }), // Add token if available
-      ...(csrfToken && { 'csrf-token': csrfToken }) // Add CSRF token if available
+        'recaptcha-token': recaptchaResult.token,
+        ...(csrfToken && { 'csrf-token': csrfToken }) // Add CSRF token if available
     }
     
     // Add form-specific fields

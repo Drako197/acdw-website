@@ -6,7 +6,7 @@ import { validateEmail } from '../utils/emailValidation'
 
 export function PromoPage() {
   const navigate = useNavigate()
-  const { getRecaptchaToken, isConfigured: isRecaptchaConfigured } = useRecaptcha()
+  const { getRecaptchaToken } = useRecaptcha()
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -43,14 +43,12 @@ export function PromoPage() {
       return
     }
     
-    // Get reCAPTCHA token before submitting
-    const recaptchaToken = await getRecaptchaToken('promo')
-    if (!recaptchaToken && isRecaptchaConfigured) {
-      // Only require token if reCAPTCHA is configured
-      setSubmitError('Security verification failed. Please refresh and try again.')
-      setIsSubmitting(false)
-      return
-    }
+      const recaptchaResult = await getRecaptchaToken('promo')
+      if (!recaptchaResult.success) {
+          setSubmitError(recaptchaResult.error)
+          setIsSubmitting(false)
+          return
+      }
     
     // Prepare form data for Netlify
     const form = e.target as HTMLFormElement
@@ -64,8 +62,7 @@ export function PromoPage() {
       lastName: lastName.trim(),
       email: email.trim(),
       consent: formData.get('consent') ? 'yes' : 'no',
-      ...(recaptchaToken && { 'recaptcha-token': recaptchaToken }) // Add token if available
-    }
+        'recaptcha-token': recaptchaResult.token    }
     
     // Check if we're in development mode
     const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost'
