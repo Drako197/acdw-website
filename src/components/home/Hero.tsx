@@ -11,7 +11,7 @@ import { useRecaptcha } from '../../hooks/useRecaptcha'
 export function Hero() {
   const navigate = useNavigate()
   const { user, isAuthenticated } = useAuth()
-  const { getRecaptchaToken, isConfigured: isRecaptchaConfigured } = useRecaptcha()
+  const { getRecaptchaToken } = useRecaptcha()
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false)
@@ -1314,15 +1314,12 @@ export function Hero() {
                     return
                   }
                   
-                  // Get reCAPTCHA token before submitting
-                  const recaptchaToken = await getRecaptchaToken('upgrade')
-                  if (!recaptchaToken && isRecaptchaConfigured) {
-                    // Only require token if reCAPTCHA is configured
-                    showToast('Security verification failed. Please refresh and try again.', 'error')
-                    setIsSubmitting(false)
-                    return
-                  }
-                  
+                    const recaptchaResult = await getRecaptchaToken('upgrade')
+                    if (!recaptchaResult.success) {
+                        showToast(recaptchaResult.error, 'error')
+                        setIsSubmitting(false)
+                        return
+                    }                  
                   // Clear any previous errors
                   setFieldErrors({})
                   setPhotoFileError('')
@@ -1426,11 +1423,8 @@ export function Hero() {
                     formDataToSubmit.append('consent', formData.get('consent') ? 'yes' : 'no')
                     formDataToSubmit.append('photoUrl', photoUrl) // Add photo URL instead of file
                     
-                    // Add reCAPTCHA token if available
-                    if (recaptchaToken) {
-                      formDataToSubmit.append('recaptcha-token', recaptchaToken)
-                    }
-                    
+                      formDataToSubmit.append('recaptcha-token', recaptchaResult.token)
+                      
                     let response: Response
                     
                     if (isDevelopment) {
