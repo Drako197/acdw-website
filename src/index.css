@@ -9379,7 +9379,8 @@
 }
 
 .sensor-setup-wizard-progress-bar {
-  @apply bg-primary-600 h-2 rounded-full transition-all duration-300;
+  @apply h-2 rounded-full transition-all duration-300;
+  /* Gradient is applied inline via style prop based on current step */
 }
 
 /* Content */

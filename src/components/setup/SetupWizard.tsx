@@ -20,6 +20,23 @@ export function SetupWizard({
 }: SetupWizardProps) {
   const progressPercentage = (currentStep / totalSteps) * 100
 
+  // Calculate gradient based on current step
+  // Step 1: Blue (#2563eb - primary-600)
+  // Step 2: Mix of blue and purple (transitioning)
+  // Step 3: Deep purple (#6b21a8 - purple-800)
+  const getProgressGradient = () => {
+    if (currentStep === 1) {
+      // Step 1: Solid blue
+      return 'linear-gradient(to right, #2563eb, #2563eb)'
+    } else if (currentStep === 2) {
+      // Step 2: Blue transitioning to purple mix
+      return 'linear-gradient(to right, #2563eb 0%, #5b21b6 50%, #7c3aed 100%)'
+    } else {
+      // Step 3: Full gradient from blue to deep purple
+      return 'linear-gradient(to right, #2563eb 0%, #5b21b6 50%, #6b21a8 100%)'
+    }
+  }
+
   const handleBack = () => {
     if (currentStep > 1) {
       onStepChange(currentStep - 1)
@@ -55,7 +72,10 @@ export function SetupWizard({
           <div className="sensor-setup-wizard-progress-bar-wrapper">
             <div
               className="sensor-setup-wizard-progress-bar"
-              style={{ width: `${progressPercentage}%` }}
+              style={{ 
+                width: `${progressPercentage}%`,
+                background: getProgressGradient()
+              }}
             />
           </div>
         </div>
