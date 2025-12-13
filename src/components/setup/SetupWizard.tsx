@@ -33,28 +33,28 @@ export function SetupWizard({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="sensor-setup-wizard-container">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-2">
+      <div className="sensor-setup-wizard-header">
+        <div className="sensor-setup-wizard-header-content">
+          <div className="sensor-setup-wizard-header-top">
+            <div className="sensor-setup-wizard-header-brand">
               <img 
                 src="/images/ac-drain-wiz-logo.png" 
                 alt="AC Drain Wiz" 
-                className="h-8 w-auto"
+                className="sensor-setup-wizard-header-logo"
               />
-              <h1 className="text-lg font-semibold text-gray-900">Sensor Setup</h1>
+              <h1 className="sensor-setup-wizard-header-title">Sensor Setup</h1>
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="sensor-setup-wizard-header-step-indicator">
               Step {currentStep} of {totalSteps}
             </div>
           </div>
           
           {/* Progress Bar */}
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="sensor-setup-wizard-progress-bar-wrapper">
             <div
-              className="bg-primary-600 h-2 rounded-full transition-all duration-300"
+              className="sensor-setup-wizard-progress-bar"
               style={{ width: `${progressPercentage}%` }}
             />
           </div>
@@ -62,47 +62,35 @@ export function SetupWizard({
       </div>
 
       {/* Content with Fade Transition */}
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="sensor-setup-wizard-content">
         <div 
           key={currentStep}
-          className="animate-fade-in"
+          className="sensor-setup-wizard-content-inner"
         >
           {children}
         </div>
       </div>
 
       {/* Navigation */}
-      <div className="bg-white border-t border-gray-200 sticky bottom-0 z-50">
-        <div className="container mx-auto px-4 py-4 max-w-4xl">
-          <div className="flex items-center justify-between">
+      <div className="sensor-setup-wizard-navigation">
+        <div className="sensor-setup-wizard-navigation-content">
+          <div className="sensor-setup-wizard-navigation-buttons">
             <button
               onClick={handleBack}
               disabled={currentStep === 1}
-              className={`
-                flex items-center space-x-2 px-6 py-3 rounded-md font-medium transition-colors
-                ${currentStep > 1
-                  ? 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-                  : 'text-gray-400 cursor-not-allowed'
-                }
-              `}
+              className={`sensor-setup-wizard-navigation-button sensor-setup-wizard-navigation-button-back ${currentStep > 1 ? 'sensor-setup-wizard-navigation-button-enabled' : 'sensor-setup-wizard-navigation-button-disabled'}`}
             >
-              <ChevronLeftIcon className="h-5 w-5" />
+              <ChevronLeftIcon className="sensor-setup-wizard-navigation-button-icon" />
               <span>{backLabel}</span>
             </button>
 
             <button
               onClick={handleContinue}
               disabled={currentStep >= totalSteps}
-              className={`
-                flex items-center space-x-2 px-6 py-3 rounded-md font-medium transition-colors
-                ${currentStep < totalSteps
-                  ? 'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                }
-              `}
+              className={`sensor-setup-wizard-navigation-button sensor-setup-wizard-navigation-button-continue ${currentStep < totalSteps ? 'sensor-setup-wizard-navigation-button-enabled' : 'sensor-setup-wizard-navigation-button-disabled'}`}
             >
               <span>{continueLabel}</span>
-              {currentStep < totalSteps && <ChevronRightIcon className="h-5 w-5" />}
+              {currentStep < totalSteps && <ChevronRightIcon className="sensor-setup-wizard-navigation-button-icon" />}
             </button>
           </div>
         </div>
