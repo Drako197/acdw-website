@@ -9173,3 +9173,170 @@
   @apply h-5 w-5;
 }
 
+/* Step 1: Create Account */
+.sensor-setup-account-steps {
+  @apply space-y-8;
+}
+
+.sensor-setup-account-step-card {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-account-step-content {
+  @apply flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-6;
+}
+
+.sensor-setup-account-step-number-wrapper {
+  @apply flex-shrink-0;
+}
+
+.sensor-setup-account-step-number-badge {
+  @apply w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center;
+}
+
+.sensor-setup-account-step-number {
+  @apply text-2xl font-bold text-primary-700;
+}
+
+.sensor-setup-account-step-details {
+  @apply flex-1;
+}
+
+.sensor-setup-account-step-title {
+  @apply text-xl font-semibold text-gray-900 mb-2;
+}
+
+.sensor-setup-account-step-description {
+  @apply text-gray-700 mb-4;
+}
+
+.sensor-setup-account-step-image-wrapper {
+  @apply w-full max-w-2xl mx-auto md:mx-0;
+}
+
+.sensor-setup-account-step-image {
+  @apply w-full h-auto rounded-lg shadow-lg border-4 border-gray-200;
+  max-height: 600px;
+  object-fit: contain;
+}
+
+.sensor-setup-account-quick-link {
+  @apply flex justify-center mt-8;
+}
+
+.sensor-setup-account-quick-link-button {
+  @apply bg-primary-600 text-white py-3 px-6 rounded-md font-medium hover:bg-primary-700 transition-colors;
+}
+
+/* Step 2: Section Dividers */
+.sensor-setup-section-divider {
+  @apply my-8 pt-8 border-t-2 border-gray-300;
+}
+
+.sensor-setup-section-divider-title {
+  @apply text-2xl font-bold text-gray-900 mb-6;
+}
+
+/* Step 3: Assign Customer */
+.sensor-setup-assignment-steps {
+  @apply space-y-8;
+}
+
+.sensor-setup-assignment-step-card {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-assignment-step-content {
+  @apply flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-6;
+}
+
+.sensor-setup-assignment-step-number-wrapper {
+  @apply flex-shrink-0;
+}
+
+.sensor-setup-assignment-step-number-badge {
+  @apply w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center;
+}
+
+.sensor-setup-assignment-step-number {
+  @apply text-2xl font-bold text-primary-700;
+}
+
+.sensor-setup-assignment-step-details {
+  @apply flex-1;
+}
+
+.sensor-setup-assignment-step-title {
+  @apply text-xl font-semibold text-gray-900 mb-2;
+}
+
+.sensor-setup-assignment-step-description {
+  @apply text-gray-700 mb-4;
+}
+
+.sensor-setup-assignment-step-image-wrapper {
+  @apply w-full max-w-2xl mx-auto md:mx-0;
+}
+
+.sensor-setup-assignment-step-image {
+  @apply w-full h-auto rounded-lg shadow-lg border-4 border-gray-200;
+  max-height: 600px;
+  object-fit: contain;
+}
+
+.sensor-setup-assignment-success {
+  @apply bg-green-50 border-2 border-green-200 rounded-lg p-8 text-center mt-8;
+}
+
+.sensor-setup-assignment-success-icon-wrapper {
+  @apply flex justify-center mb-4;
+}
+
+.sensor-setup-assignment-success-icon {
+  @apply h-16 w-16 text-green-600;
+}
+
+.sensor-setup-assignment-success-title {
+  @apply text-3xl font-bold text-gray-900 mb-3;
+}
+
+.sensor-setup-assignment-success-message {
+  @apply text-lg text-gray-700;
+}
+
+.sensor-setup-assignment-next-steps {
+  @apply bg-white rounded-lg border border-gray-200 p-6 mt-6;
+}
+
+.sensor-setup-assignment-next-steps-title {
+  @apply text-xl font-semibold text-gray-900 mb-4;
+}
+
+.sensor-setup-assignment-next-steps-list {
+  @apply space-y-3;
+}
+
+.sensor-setup-assignment-next-steps-item {
+  @apply flex items-start space-x-2;
+}
+
+.sensor-setup-assignment-next-steps-item-text {
+  @apply text-gray-700;
+}
+
+.sensor-setup-assignment-actions {
+  @apply flex flex-col sm:flex-row gap-3 mt-6;
+}
+
+.sensor-setup-assignment-button {
+  @apply flex-1 py-3 px-4 rounded-md font-medium transition-colors;
+}
+
+.sensor-setup-assignment-button-primary {
+  @apply bg-primary-600 text-white hover:bg-primary-700;
+}
+
+.sensor-setup-assignment-button-secondary {
+  @apply bg-white border-2 border-primary-600 text-primary-600 hover:bg-primary-50;
+}
+

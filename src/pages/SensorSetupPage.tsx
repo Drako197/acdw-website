@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import { SetupWizard } from '../components/setup/SetupWizard'
-import { Step1Preparation } from '../components/setup/steps/Step1Preparation'
-import { Step2PhysicalInstallation } from '../components/setup/steps/Step2PhysicalInstallation'
-import { Step3WiFiSetup } from '../components/setup/steps/Step3WiFiSetup'
-import { Step4Success } from '../components/setup/steps/Step4Success'
+import { Step1CreateAccount } from '../components/setup/steps/Step1CreateAccount'
+import { Step2SensorSetup } from '../components/setup/steps/Step2SensorSetup'
+import { Step3AssignCustomer } from '../components/setup/steps/Step3AssignCustomer'
 
-const TOTAL_STEPS = 4
+const TOTAL_STEPS = 3
 
 export function SensorSetupPage() {
   const [currentStep, setCurrentStep] = useState(1)
@@ -17,13 +16,11 @@ export function SensorSetupPage() {
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <Step1Preparation />
+        return <Step1CreateAccount />
       case 2:
-        return <Step2PhysicalInstallation />
+        return <Step2SensorSetup />
       case 3:
-        return <Step3WiFiSetup />
-      case 4:
-        return <Step4Success />
+        return <Step3AssignCustomer />
       default:
         return null
     }
