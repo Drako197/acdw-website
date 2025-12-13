@@ -14,7 +14,6 @@ export function Step4Success({ deviceData }: Step4SuccessProps) {
   
   // Mock sensor status - in real app, this would come from API
   const sensorStatus = {
-    led: 'green',
     online: true,
     reporting: true,
     lastReading: 12,
@@ -22,59 +21,57 @@ export function Step4Success({ deviceData }: Step4SuccessProps) {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="sensor-setup-success-container">
       {/* Step Number Badge */}
-      <div className="flex justify-center">
-        <div className="w-20 h-20 rounded-full bg-green-600 flex items-center justify-center">
-          <CheckCircleIcon className="h-12 w-12 text-white" />
+      <div className="sensor-setup-step-badge-wrapper">
+        <div className="sensor-setup-step-badge sensor-setup-step-badge-complete">
+          <CheckCircleIcon className="sensor-setup-step-badge-icon" />
         </div>
       </div>
 
       {/* Success Hero */}
-      <div className="text-center">
-        <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-green-100 mb-4">
-          <CheckCircleIcon className="h-16 w-16 text-green-600" />
+      <div className="sensor-setup-success-hero">
+        <div className="sensor-setup-success-icon-wrapper">
+          <CheckCircleIcon className="sensor-setup-success-icon" />
         </div>
-        <h2 className="text-4xl font-bold text-gray-900 mb-2">Setup Complete!</h2>
-        <p className="text-xl text-gray-600">
+        <h2 className="sensor-setup-success-title">Setup Complete!</h2>
+        <p className="sensor-setup-success-subtitle">
           Your sensor is now set up and connected
         </p>
       </div>
 
       {/* Success Image */}
-      <div className="w-full flex justify-center">
+      <div className="sensor-setup-success-image-wrapper">
         <img
           src="/images/setup/step4-success.png"
           alt="Setup complete"
-          className="w-full h-auto rounded-lg shadow-lg"
-          style={{ maxHeight: '400px', objectFit: 'contain' }}
+          className="sensor-setup-success-image"
         />
       </div>
 
       {/* Verification Checklist */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">Verification Checklist</h3>
+      <div className="sensor-setup-success-checklist">
+        <h3 className="sensor-setup-success-checklist-title">Verification Checklist</h3>
         
-        <div className="space-y-4">
-          <div className="flex items-center space-x-3">
-            <div className={`w-4 h-4 rounded-full ${sensorStatus.led === 'green' ? 'bg-green-500' : 'bg-gray-300'}`} />
-            <span className="text-gray-700">LED Status: <span className="font-medium">Solid Green</span></span>
+        <div className="sensor-setup-success-checklist-items">
+          <div className="sensor-setup-success-checklist-item">
+            <CheckCircleIcon className={`sensor-setup-success-checklist-icon ${sensorStatus.online ? 'sensor-setup-success-checklist-icon-active' : ''}`} />
+            <span className="sensor-setup-success-checklist-text">
+              Online: <span className="sensor-setup-success-checklist-text-bold">Connected</span>
+            </span>
           </div>
           
-          <div className="flex items-center space-x-3">
-            <CheckCircleIcon className={`h-5 w-5 ${sensorStatus.online ? 'text-green-500' : 'text-gray-300'}`} />
-            <span className="text-gray-700">Online: <span className="font-medium">Connected</span></span>
+          <div className="sensor-setup-success-checklist-item">
+            <CheckCircleIcon className={`sensor-setup-success-checklist-icon ${sensorStatus.reporting ? 'sensor-setup-success-checklist-icon-active' : ''}`} />
+            <span className="sensor-setup-success-checklist-text">
+              Reporting: <span className="sensor-setup-success-checklist-text-bold">Active</span>
+            </span>
           </div>
           
-          <div className="flex items-center space-x-3">
-            <CheckCircleIcon className={`h-5 w-5 ${sensorStatus.reporting ? 'text-green-500' : 'text-gray-300'}`} />
-            <span className="text-gray-700">Reporting: <span className="font-medium">Active</span></span>
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            <CheckCircleIcon className="h-5 w-5 text-green-500" />
-            <span className="text-gray-700">
-              Last Reading: <span className="font-medium">{sensorStatus.lastReading}%</span> ({sensorStatus.readingStatus})
+          <div className="sensor-setup-success-checklist-item">
+            <CheckCircleIcon className="sensor-setup-success-checklist-icon sensor-setup-success-checklist-icon-active" />
+            <span className="sensor-setup-success-checklist-text">
+              Last Reading: <span className="sensor-setup-success-checklist-text-bold">{sensorStatus.lastReading}%</span> ({sensorStatus.readingStatus})
             </span>
           </div>
         </div>
@@ -82,29 +79,29 @@ export function Step4Success({ deviceData }: Step4SuccessProps) {
 
       {/* Device Details (if available) */}
       {deviceData && (
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">Device Details</h3>
+        <div className="sensor-setup-success-device-details">
+          <h3 className="sensor-setup-success-device-details-title">Device Details</h3>
           
-          <dl className="space-y-3">
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Name</dt>
-              <dd className="text-base text-gray-900 mt-1">{deviceData.deviceName}</dd>
+          <dl className="sensor-setup-success-device-details-list">
+            <div className="sensor-setup-success-device-details-item">
+              <dt className="sensor-setup-success-device-details-label">Name</dt>
+              <dd className="sensor-setup-success-device-details-value">{deviceData.deviceName}</dd>
             </div>
             
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Location</dt>
-              <dd className="text-base text-gray-900 mt-1">{deviceData.location}</dd>
+            <div className="sensor-setup-success-device-details-item">
+              <dt className="sensor-setup-success-device-details-label">Location</dt>
+              <dd className="sensor-setup-success-device-details-value">{deviceData.location}</dd>
             </div>
             
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Customer</dt>
-              <dd className="text-base text-gray-900 mt-1">{deviceData.customerName}</dd>
+            <div className="sensor-setup-success-device-details-item">
+              <dt className="sensor-setup-success-device-details-label">Customer</dt>
+              <dd className="sensor-setup-success-device-details-value">{deviceData.customerName}</dd>
             </div>
             
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Status</dt>
-              <dd className="text-base text-gray-900 mt-1 flex items-center space-x-2">
-                <span className="w-2 h-2 rounded-full bg-green-500"></span>
+            <div className="sensor-setup-success-device-details-item">
+              <dt className="sensor-setup-success-device-details-label">Status</dt>
+              <dd className="sensor-setup-success-device-details-value">
+                <span className="sensor-setup-success-status-indicator"></span>
                 <span>Online</span>
               </dd>
             </div>
@@ -113,40 +110,40 @@ export function Step4Success({ deviceData }: Step4SuccessProps) {
       )}
 
       {/* Next Steps */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">Next Steps</h3>
+      <div className="sensor-setup-success-next-steps">
+        <h3 className="sensor-setup-success-next-steps-title">Next Steps</h3>
         
-        <ul className="space-y-3">
-          <li className="flex items-start space-x-2">
-            <ArrowRightIcon className="h-5 w-5 text-primary-600 mt-0.5 flex-shrink-0" />
-            <span className="text-gray-700">View sensor in dashboard</span>
+        <ul className="sensor-setup-success-next-steps-list">
+          <li className="sensor-setup-success-next-steps-item">
+            <ArrowRightIcon className="sensor-setup-success-next-steps-icon" />
+            <span className="sensor-setup-success-next-steps-text">View sensor in dashboard</span>
           </li>
           
-          <li className="flex items-start space-x-2">
-            <ArrowRightIcon className="h-5 w-5 text-primary-600 mt-0.5 flex-shrink-0" />
-            <span className="text-gray-700">Set up additional sensors</span>
+          <li className="sensor-setup-success-next-steps-item">
+            <ArrowRightIcon className="sensor-setup-success-next-steps-icon" />
+            <span className="sensor-setup-success-next-steps-text">Set up additional sensors</span>
           </li>
           
-          <li className="flex items-start space-x-2">
-            <ArrowRightIcon className="h-5 w-5 text-primary-600 mt-0.5 flex-shrink-0" />
-            <span className="text-gray-700">Configure alert thresholds</span>
+          <li className="sensor-setup-success-next-steps-item">
+            <ArrowRightIcon className="sensor-setup-success-next-steps-icon" />
+            <span className="sensor-setup-success-next-steps-text">Configure alert thresholds</span>
           </li>
         </ul>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="sensor-setup-success-actions">
         <button
           onClick={() => window.open('https://monitor.acdrainwiz.com', '_blank')}
-          className="flex-1 bg-primary-600 text-white py-3 px-4 rounded-md font-medium hover:bg-primary-700 transition-colors flex items-center justify-center space-x-2"
+          className="sensor-setup-success-button sensor-setup-success-button-primary"
         >
           <span>View Dashboard</span>
-          <ArrowRightIcon className="h-5 w-5" />
+          <ArrowRightIcon className="sensor-setup-success-button-icon" />
         </button>
         
         <button
           onClick={() => navigate('/sensor-setup')}
-          className="flex-1 bg-white border-2 border-primary-600 text-primary-600 py-3 px-4 rounded-md font-medium hover:bg-primary-50 transition-colors"
+          className="sensor-setup-success-button sensor-setup-success-button-secondary"
         >
           Setup Another Sensor
         </button>
@@ -154,4 +151,3 @@ export function Step4Success({ deviceData }: Step4SuccessProps) {
     </div>
   )
 }
-

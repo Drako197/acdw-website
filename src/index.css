@@ -8714,3 +8714,462 @@
   }
 }
 
+/* ========================================
+   Sensor Setup Page Styles
+   ======================================== */
+
+/* Common Step Styles */
+.sensor-setup-step-container {
+  @apply space-y-8;
+}
+
+.sensor-setup-step-badge-wrapper {
+  @apply flex justify-center;
+}
+
+.sensor-setup-step-badge {
+  @apply w-20 h-20 rounded-full bg-primary-600 flex items-center justify-center;
+}
+
+.sensor-setup-step-badge-complete {
+  @apply bg-green-600;
+}
+
+.sensor-setup-step-badge-number {
+  @apply text-3xl font-bold text-white;
+}
+
+.sensor-setup-step-badge-icon {
+  @apply h-12 w-12 text-white;
+}
+
+.sensor-setup-step-hero-image-wrapper {
+  @apply w-full;
+}
+
+.sensor-setup-step-hero-image {
+  @apply w-full h-auto rounded-lg shadow-lg;
+  max-height: 600px;
+  object-fit: contain;
+}
+
+.sensor-setup-step-title-section {
+  @apply text-center;
+}
+
+.sensor-setup-step-title {
+  @apply text-3xl font-bold text-gray-900 mb-2;
+}
+
+.sensor-setup-step-subtitle {
+  @apply text-lg text-gray-600;
+}
+
+/* Step 1: Preparation */
+.sensor-setup-prerequisites-callout {
+  @apply bg-amber-50 border-2 border-amber-200 rounded-lg p-6;
+}
+
+.sensor-setup-prerequisites-callout-content {
+  @apply flex items-start space-x-3;
+}
+
+.sensor-setup-prerequisites-callout-icon {
+  @apply h-6 w-6 text-amber-600 flex-shrink-0 mt-0.5;
+}
+
+.sensor-setup-prerequisites-callout-text {
+  @apply flex-1;
+}
+
+.sensor-setup-prerequisites-callout-title {
+  @apply text-lg font-semibold text-amber-900 mb-3;
+}
+
+.sensor-setup-prerequisites-callout-items {
+  @apply space-y-2 text-amber-800;
+}
+
+.sensor-setup-prerequisites-callout-item {
+  @apply flex items-start space-x-2;
+}
+
+.sensor-setup-prerequisites-callout-item:not(:first-child) {
+  @apply pt-2;
+}
+
+.sensor-setup-prerequisites-callout-item-icon {
+  @apply h-5 w-5 text-amber-700 flex-shrink-0 mt-0.5;
+}
+
+.sensor-setup-prerequisites-callout-item-content {
+  @apply flex-1;
+}
+
+.sensor-setup-prerequisites-callout-item-title {
+  @apply font-medium;
+}
+
+.sensor-setup-prerequisites-callout-item-description {
+  @apply text-sm;
+}
+
+.sensor-setup-prerequisites-callout-item-link {
+  @apply text-sm text-amber-700 hover:text-amber-900 underline mt-1 inline-block;
+}
+
+.sensor-setup-model-identification {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-model-identification-title {
+  @apply text-xl font-semibold text-gray-900 mb-4;
+}
+
+.sensor-setup-model-identification-description {
+  @apply text-gray-700 mb-6;
+}
+
+.sensor-setup-model-comparison {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.sensor-setup-model-card {
+  @apply text-center;
+}
+
+.sensor-setup-model-card-image-wrapper {
+  @apply mb-4;
+}
+
+.sensor-setup-model-card-image {
+  @apply w-full h-auto rounded-lg shadow-md mx-auto;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+.sensor-setup-model-card-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.sensor-setup-model-card-description {
+  @apply text-sm text-gray-600;
+}
+
+.sensor-setup-what-you-need {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-what-you-need-title {
+  @apply text-xl font-semibold text-gray-900 mb-4 flex items-center;
+}
+
+.sensor-setup-what-you-need-icon {
+  @apply mr-2;
+}
+
+.sensor-setup-what-you-need-grid {
+  @apply grid grid-cols-2 md:grid-cols-3 gap-4;
+}
+
+.sensor-setup-what-you-need-item {
+  @apply flex items-center space-x-3;
+}
+
+.sensor-setup-what-you-need-item-icon-wrapper {
+  @apply w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0;
+}
+
+.sensor-setup-what-you-need-item-icon {
+  @apply text-2xl;
+}
+
+.sensor-setup-what-you-need-item-content {
+  @apply flex-1;
+}
+
+.sensor-setup-what-you-need-item-title {
+  @apply font-medium text-gray-900;
+}
+
+.sensor-setup-what-you-need-item-description {
+  @apply text-sm text-gray-600;
+}
+
+/* Step 2: Physical Installation */
+.sensor-setup-installation-steps {
+  @apply space-y-8;
+}
+
+.sensor-setup-installation-step-card {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-installation-step-content {
+  @apply flex items-start space-x-6;
+}
+
+.sensor-setup-installation-step-number-wrapper {
+  @apply flex-shrink-0;
+}
+
+.sensor-setup-installation-step-number-badge {
+  @apply w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center;
+}
+
+.sensor-setup-installation-step-number {
+  @apply text-2xl font-bold text-primary-700;
+}
+
+.sensor-setup-installation-step-details {
+  @apply flex-1;
+}
+
+.sensor-setup-installation-step-title {
+  @apply text-xl font-semibold text-gray-900 mb-2;
+}
+
+.sensor-setup-installation-step-description {
+  @apply text-gray-700 mb-4;
+}
+
+.sensor-setup-installation-step-image-wrapper {
+  @apply w-full;
+}
+
+.sensor-setup-installation-step-image {
+  @apply w-full h-auto rounded-lg shadow-md;
+  max-height: 500px;
+  object-fit: contain;
+}
+
+.sensor-setup-installation-note {
+  @apply bg-blue-50 border border-blue-200 rounded-lg p-4;
+}
+
+.sensor-setup-installation-note-text {
+  @apply text-sm text-blue-800;
+}
+
+/* Step 3: Wi-Fi Setup */
+.sensor-setup-wifi-steps {
+  @apply space-y-8;
+}
+
+.sensor-setup-wifi-step-card {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-wifi-step-content {
+  @apply flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-6;
+}
+
+.sensor-setup-wifi-step-number-wrapper {
+  @apply flex-shrink-0;
+}
+
+.sensor-setup-wifi-step-number-badge {
+  @apply w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center;
+}
+
+.sensor-setup-wifi-step-number {
+  @apply text-2xl font-bold text-primary-700;
+}
+
+.sensor-setup-wifi-step-details {
+  @apply flex-1;
+}
+
+.sensor-setup-wifi-step-title {
+  @apply text-xl font-semibold text-gray-900 mb-2;
+}
+
+.sensor-setup-wifi-step-description {
+  @apply text-gray-700 mb-4;
+}
+
+.sensor-setup-wifi-step-image-wrapper {
+  @apply w-full max-w-md mx-auto md:mx-0;
+}
+
+.sensor-setup-wifi-step-image {
+  @apply w-full h-auto rounded-lg shadow-lg border-4 border-gray-200;
+  max-height: 600px;
+  object-fit: contain;
+}
+
+.sensor-setup-wifi-note {
+  @apply rounded-lg p-4;
+}
+
+.sensor-setup-wifi-note-info {
+  @apply bg-blue-50 border border-blue-200;
+}
+
+.sensor-setup-wifi-note-warning {
+  @apply bg-amber-50 border border-amber-200;
+}
+
+.sensor-setup-wifi-note-text {
+  @apply text-sm mb-2;
+}
+
+.sensor-setup-wifi-note-info .sensor-setup-wifi-note-text {
+  @apply text-blue-800;
+}
+
+.sensor-setup-wifi-note-warning .sensor-setup-wifi-note-text {
+  @apply text-amber-800;
+}
+
+.sensor-setup-wifi-note-list {
+  @apply text-sm space-y-1 list-disc list-inside;
+}
+
+.sensor-setup-wifi-note-info .sensor-setup-wifi-note-list {
+  @apply text-blue-800;
+}
+
+.sensor-setup-wifi-note-link {
+  @apply text-amber-700 hover:text-amber-900 underline;
+}
+
+/* Step 4: Success */
+.sensor-setup-success-container {
+  @apply space-y-8;
+}
+
+.sensor-setup-success-hero {
+  @apply text-center;
+}
+
+.sensor-setup-success-icon-wrapper {
+  @apply inline-flex items-center justify-center w-24 h-24 rounded-full bg-green-100 mb-4;
+}
+
+.sensor-setup-success-icon {
+  @apply h-16 w-16 text-green-600;
+}
+
+.sensor-setup-success-title {
+  @apply text-4xl font-bold text-gray-900 mb-2;
+}
+
+.sensor-setup-success-subtitle {
+  @apply text-xl text-gray-600;
+}
+
+.sensor-setup-success-image-wrapper {
+  @apply w-full flex justify-center;
+}
+
+.sensor-setup-success-image {
+  @apply w-full h-auto rounded-lg shadow-lg;
+  max-height: 400px;
+  object-fit: contain;
+}
+
+.sensor-setup-success-checklist {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-success-checklist-title {
+  @apply text-xl font-semibold text-gray-900 mb-4;
+}
+
+.sensor-setup-success-checklist-items {
+  @apply space-y-4;
+}
+
+.sensor-setup-success-checklist-item {
+  @apply flex items-center space-x-3;
+}
+
+.sensor-setup-success-checklist-icon {
+  @apply h-5 w-5;
+}
+
+.sensor-setup-success-checklist-icon-active {
+  @apply text-green-500;
+}
+
+.sensor-setup-success-checklist-text {
+  @apply text-gray-700;
+}
+
+.sensor-setup-success-checklist-text-bold {
+  @apply font-medium;
+}
+
+.sensor-setup-success-device-details {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-success-device-details-title {
+  @apply text-xl font-semibold text-gray-900 mb-4;
+}
+
+.sensor-setup-success-device-details-list {
+  @apply space-y-3;
+}
+
+.sensor-setup-success-device-details-item {
+  @apply space-y-1;
+}
+
+.sensor-setup-success-device-details-label {
+  @apply text-sm font-medium text-gray-500;
+}
+
+.sensor-setup-success-device-details-value {
+  @apply text-base text-gray-900 mt-1 flex items-center space-x-2;
+}
+
+.sensor-setup-success-status-indicator {
+  @apply w-2 h-2 rounded-full bg-green-500;
+}
+
+.sensor-setup-success-next-steps {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-success-next-steps-title {
+  @apply text-xl font-semibold text-gray-900 mb-4;
+}
+
+.sensor-setup-success-next-steps-list {
+  @apply space-y-3;
+}
+
+.sensor-setup-success-next-steps-item {
+  @apply flex items-start space-x-2;
+}
+
+.sensor-setup-success-next-steps-icon {
+  @apply h-5 w-5 text-primary-600 mt-0.5 flex-shrink-0;
+}
+
+.sensor-setup-success-next-steps-text {
+  @apply text-gray-700;
+}
+
+.sensor-setup-success-actions {
+  @apply flex flex-col sm:flex-row gap-3;
+}
+
+.sensor-setup-success-button {
+  @apply flex-1 py-3 px-4 rounded-md font-medium transition-colors;
+}
+
+.sensor-setup-success-button-primary {
+  @apply bg-primary-600 text-white hover:bg-primary-700 flex items-center justify-center space-x-2;
+}
+
+.sensor-setup-success-button-secondary {
+  @apply bg-white border-2 border-primary-600 text-primary-600 hover:bg-primary-50;
+}
+
+.sensor-setup-success-button-icon {
+  @apply h-5 w-5;
+}
+

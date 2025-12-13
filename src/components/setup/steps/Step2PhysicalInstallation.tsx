@@ -31,46 +31,45 @@ export function Step2PhysicalInstallation() {
   ]
 
   return (
-    <div className="space-y-8">
+    <div className="sensor-setup-step-container">
       {/* Step Number Badge */}
-      <div className="flex justify-center">
-        <div className="w-20 h-20 rounded-full bg-primary-600 flex items-center justify-center">
-          <span className="text-3xl font-bold text-white">2</span>
+      <div className="sensor-setup-step-badge-wrapper">
+        <div className="sensor-setup-step-badge">
+          <span className="sensor-setup-step-badge-number">2</span>
         </div>
       </div>
 
       {/* Step Title */}
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Physical Installation</h2>
-        <p className="text-lg text-gray-600">
+      <div className="sensor-setup-step-title-section">
+        <h2 className="sensor-setup-step-title">Physical Installation</h2>
+        <p className="sensor-setup-step-subtitle">
           Follow these steps to physically install your sensor
         </p>
       </div>
 
       {/* Step-by-Step Images */}
-      <div className="space-y-8">
+      <div className="sensor-setup-installation-steps">
         {steps.map((step) => (
-          <div key={step.number} className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-start space-x-6">
+          <div key={step.number} className="sensor-setup-installation-step-card">
+            <div className="sensor-setup-installation-step-content">
               {/* Step Number */}
-              <div className="flex-shrink-0">
-                <div className="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-primary-700">{step.number}</span>
+              <div className="sensor-setup-installation-step-number-wrapper">
+                <div className="sensor-setup-installation-step-number-badge">
+                  <span className="sensor-setup-installation-step-number">{step.number}</span>
                 </div>
               </div>
 
               {/* Content */}
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{step.title}</h3>
-                <p className="text-gray-700 mb-4">{step.description}</p>
+              <div className="sensor-setup-installation-step-details">
+                <h3 className="sensor-setup-installation-step-title">{step.title}</h3>
+                <p className="sensor-setup-installation-step-description">{step.description}</p>
                 
                 {/* Image */}
-                <div className="w-full">
+                <div className="sensor-setup-installation-step-image-wrapper">
                   <img
                     src={step.image}
                     alt={step.alt}
-                    className="w-full h-auto rounded-lg shadow-md"
-                    style={{ maxHeight: '500px', objectFit: 'contain' }}
+                    className="sensor-setup-installation-step-image"
                   />
                 </div>
               </div>
@@ -80,12 +79,11 @@ export function Step2PhysicalInstallation() {
       </div>
 
       {/* Completion Note */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <p className="text-sm text-blue-800">
+      <div className="sensor-setup-installation-note">
+        <p className="sensor-setup-installation-note-text">
           <strong>Once complete:</strong> The sensor LED should be blinking red. If it's not, check that the battery is inserted correctly or the DC power is connected.
         </p>
       </div>
     </div>
   )
 }
-

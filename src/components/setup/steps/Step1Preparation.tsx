@@ -2,62 +2,61 @@ import { ExclamationTriangleIcon, CheckCircleIcon } from '@heroicons/react/24/ou
 
 export function Step1Preparation() {
   return (
-    <div className="space-y-8">
+    <div className="sensor-setup-step-container">
       {/* Step Number Badge */}
-      <div className="flex justify-center">
-        <div className="w-20 h-20 rounded-full bg-primary-600 flex items-center justify-center">
-          <span className="text-3xl font-bold text-white">1</span>
+      <div className="sensor-setup-step-badge-wrapper">
+        <div className="sensor-setup-step-badge">
+          <span className="sensor-setup-step-badge-number">1</span>
         </div>
       </div>
 
       {/* Hero Image */}
-      <div className="w-full">
+      <div className="sensor-setup-step-hero-image-wrapper">
         <img
           src="/images/setup/step1-hero.png"
           alt="ACDW Sensor and Mini together"
-          className="w-full h-auto rounded-lg shadow-lg"
-          style={{ maxHeight: '600px', objectFit: 'contain' }}
+          className="sensor-setup-step-hero-image"
         />
       </div>
 
       {/* Step Title */}
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Preparation</h2>
-        <p className="text-lg text-gray-600">
+      <div className="sensor-setup-step-title-section">
+        <h2 className="sensor-setup-step-title">Preparation</h2>
+        <p className="sensor-setup-step-subtitle">
           Before you begin, make sure you have everything you need
         </p>
       </div>
 
       {/* Prerequisites Callout */}
-      <div className="bg-amber-50 border-2 border-amber-200 rounded-lg p-6">
-        <div className="flex items-start space-x-3">
-          <ExclamationTriangleIcon className="h-6 w-6 text-amber-600 flex-shrink-0 mt-0.5" />
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold text-amber-900 mb-3">Prerequisites</h3>
-            <div className="space-y-2 text-amber-800">
-              <div className="flex items-start space-x-2">
-                <CheckCircleIcon className="h-5 w-5 text-amber-700 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-medium">ACDW Mini Installed</p>
-                  <p className="text-sm">The sensor requires an ACDW Mini to be installed first.</p>
+      <div className="sensor-setup-prerequisites-callout">
+        <div className="sensor-setup-prerequisites-callout-content">
+          <ExclamationTriangleIcon className="sensor-setup-prerequisites-callout-icon" />
+          <div className="sensor-setup-prerequisites-callout-text">
+            <h3 className="sensor-setup-prerequisites-callout-title">Prerequisites</h3>
+            <div className="sensor-setup-prerequisites-callout-items">
+              <div className="sensor-setup-prerequisites-callout-item">
+                <CheckCircleIcon className="sensor-setup-prerequisites-callout-item-icon" />
+                <div className="sensor-setup-prerequisites-callout-item-content">
+                  <p className="sensor-setup-prerequisites-callout-item-title">ACDW Mini Installed</p>
+                  <p className="sensor-setup-prerequisites-callout-item-description">The sensor requires an ACDW Mini to be installed first.</p>
                   <a
                     href="/mini-setup"
-                    className="text-sm text-amber-700 hover:text-amber-900 underline mt-1 inline-block"
+                    className="sensor-setup-prerequisites-callout-item-link"
                   >
                     View Mini Setup Guide →
                   </a>
                 </div>
               </div>
-              <div className="flex items-start space-x-2 pt-2">
-                <CheckCircleIcon className="h-5 w-5 text-amber-700 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-medium">ACDW Sensor Admin Account</p>
-                  <p className="text-sm">You need an active contractor account to register and manage sensors.</p>
+              <div className="sensor-setup-prerequisites-callout-item">
+                <CheckCircleIcon className="sensor-setup-prerequisites-callout-item-icon" />
+                <div className="sensor-setup-prerequisites-callout-item-content">
+                  <p className="sensor-setup-prerequisites-callout-item-title">ACDW Sensor Admin Account</p>
+                  <p className="sensor-setup-prerequisites-callout-item-description">You need an active contractor account to register and manage sensors.</p>
                   <a
                     href="https://monitor.acdrainwiz.com/sign-up"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-amber-700 hover:text-amber-900 underline mt-1 inline-block"
+                    className="sensor-setup-prerequisites-callout-item-link"
                   >
                     Sign up at monitor.acdrainwiz.com →
                   </a>
@@ -69,41 +68,39 @@ export function Step1Preparation() {
       </div>
 
       {/* Model Identification */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">Identify Your Sensor Model</h3>
-        <p className="text-gray-700 mb-6">
+      <div className="sensor-setup-model-identification">
+        <h3 className="sensor-setup-model-identification-title">Identify Your Sensor Model</h3>
+        <p className="sensor-setup-model-identification-description">
           Check your sensor box to identify which model you have. The setup process is the same for both.
         </p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="sensor-setup-model-comparison">
           {/* Battery Model */}
-          <div className="text-center">
-            <div className="mb-4">
+          <div className="sensor-setup-model-card">
+            <div className="sensor-setup-model-card-image-wrapper">
               <img
                 src="/images/setup/model-battery.png"
                 alt="Battery-Only Model"
-                className="w-full h-auto rounded-lg shadow-md mx-auto"
-                style={{ maxHeight: '300px', objectFit: 'contain' }}
+                className="sensor-setup-model-card-image"
               />
             </div>
-            <h4 className="font-semibold text-gray-900 mb-2">Battery-Only Model</h4>
-            <p className="text-sm text-gray-600">
+            <h4 className="sensor-setup-model-card-title">Battery-Only Model</h4>
+            <p className="sensor-setup-model-card-description">
               No connection cable included
             </p>
           </div>
 
           {/* DC Model */}
-          <div className="text-center">
-            <div className="mb-4">
+          <div className="sensor-setup-model-card">
+            <div className="sensor-setup-model-card-image-wrapper">
               <img
                 src="/images/setup/model-dc.png"
                 alt="DC + Battery Model"
-                className="w-full h-auto rounded-lg shadow-md mx-auto"
-                style={{ maxHeight: '300px', objectFit: 'contain' }}
+                className="sensor-setup-model-card-image"
               />
             </div>
-            <h4 className="font-semibold text-gray-900 mb-2">DC + Battery Model</h4>
-            <p className="text-sm text-gray-600">
+            <h4 className="sensor-setup-model-card-title">DC + Battery Model</h4>
+            <p className="sensor-setup-model-card-description">
               Includes connection cable
             </p>
           </div>
@@ -111,46 +108,46 @@ export function Step1Preparation() {
       </div>
 
       {/* What You'll Need */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-          <span className="mr-2">📦</span>
+      <div className="sensor-setup-what-you-need">
+        <h3 className="sensor-setup-what-you-need-title">
+          <span className="sensor-setup-what-you-need-icon">📦</span>
           What You'll Need
         </h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span className="text-2xl">🔋</span>
+        <div className="sensor-setup-what-you-need-grid">
+          <div className="sensor-setup-what-you-need-item">
+            <div className="sensor-setup-what-you-need-item-icon-wrapper">
+              <span className="sensor-setup-what-you-need-item-icon">🔋</span>
             </div>
-            <div>
-              <p className="font-medium text-gray-900">ACDW Sensor</p>
-              <p className="text-sm text-gray-600">Unboxed</p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span className="text-2xl">🔌</span>
-            </div>
-            <div>
-              <p className="font-medium text-gray-900">Battery or DC Cable</p>
-              <p className="text-sm text-gray-600">Depending on model</p>
+            <div className="sensor-setup-what-you-need-item-content">
+              <p className="sensor-setup-what-you-need-item-title">ACDW Sensor</p>
+              <p className="sensor-setup-what-you-need-item-description">Unboxed</p>
             </div>
           </div>
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span className="text-2xl">📱</span>
+          <div className="sensor-setup-what-you-need-item">
+            <div className="sensor-setup-what-you-need-item-icon-wrapper">
+              <span className="sensor-setup-what-you-need-item-icon">🔌</span>
             </div>
-            <div>
-              <p className="font-medium text-gray-900">Smartphone/Tablet</p>
-              <p className="text-sm text-gray-600">For setup</p>
+            <div className="sensor-setup-what-you-need-item-content">
+              <p className="sensor-setup-what-you-need-item-title">Battery or DC Cable</p>
+              <p className="sensor-setup-what-you-need-item-description">Depending on model</p>
             </div>
           </div>
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span className="text-2xl">📶</span>
+          <div className="sensor-setup-what-you-need-item">
+            <div className="sensor-setup-what-you-need-item-icon-wrapper">
+              <span className="sensor-setup-what-you-need-item-icon">📱</span>
             </div>
-            <div>
-              <p className="font-medium text-gray-900">Wi-Fi Password</p>
-              <p className="text-sm text-gray-600">Homeowner's network</p>
+            <div className="sensor-setup-what-you-need-item-content">
+              <p className="sensor-setup-what-you-need-item-title">Smartphone/Tablet</p>
+              <p className="sensor-setup-what-you-need-item-description">For setup</p>
+            </div>
+          </div>
+          <div className="sensor-setup-what-you-need-item">
+            <div className="sensor-setup-what-you-need-item-icon-wrapper">
+              <span className="sensor-setup-what-you-need-item-icon">📶</span>
+            </div>
+            <div className="sensor-setup-what-you-need-item-content">
+              <p className="sensor-setup-what-you-need-item-title">Wi-Fi Password</p>
+              <p className="sensor-setup-what-you-need-item-description">Homeowner's network</p>
             </div>
           </div>
         </div>
@@ -158,4 +155,3 @@ export function Step1Preparation() {
     </div>
   )
 }
-
