@@ -6,10 +6,6 @@ interface SetupWizardProps {
   currentStep: number
   onStepChange: (step: number) => void
   children: ReactNode
-  canGoBack?: boolean
-  canContinue?: boolean
-  onContinue?: () => void
-  onBack?: () => void
   continueLabel?: string
   backLabel?: string
 }
@@ -19,10 +15,6 @@ export function SetupWizard({
   currentStep,
   onStepChange,
   children,
-  canGoBack = true,
-  canContinue = true,
-  onContinue,
-  onBack,
   continueLabel = 'Continue',
   backLabel = 'Back'
 }: SetupWizardProps) {
@@ -30,18 +22,12 @@ export function SetupWizard({
 
   const handleBack = () => {
     if (currentStep > 1) {
-      if (onBack) {
-        onBack()
-      } else {
-        onStepChange(currentStep - 1)
-      }
+      onStepChange(currentStep - 1)
     }
   }
 
   const handleContinue = () => {
-    if (onContinue) {
-      onContinue()
-    } else if (currentStep < totalSteps) {
+    if (currentStep < totalSteps) {
       onStepChange(currentStep + 1)
     }
   }
@@ -75,21 +61,26 @@ export function SetupWizard({
         </div>
       </div>
 
-      {/* Content */}
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
-        {children}
+      {/* Content with Fade Transition */}
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div 
+          key={currentStep}
+          className="animate-fade-in"
+        >
+          {children}
+        </div>
       </div>
 
       {/* Navigation */}
       <div className="bg-white border-t border-gray-200 sticky bottom-0 z-50">
-        <div className="container mx-auto px-4 py-4 max-w-2xl">
+        <div className="container mx-auto px-4 py-4 max-w-4xl">
           <div className="flex items-center justify-between">
             <button
               onClick={handleBack}
-              disabled={!canGoBack || currentStep === 1}
+              disabled={currentStep === 1}
               className={`
                 flex items-center space-x-2 px-6 py-3 rounded-md font-medium transition-colors
-                ${canGoBack && currentStep > 1
+                ${currentStep > 1
                   ? 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
                   : 'text-gray-400 cursor-not-allowed'
                 }
@@ -101,10 +92,10 @@ export function SetupWizard({
 
             <button
               onClick={handleContinue}
-              disabled={!canContinue}
+              disabled={currentStep >= totalSteps}
               className={`
                 flex items-center space-x-2 px-6 py-3 rounded-md font-medium transition-colors
-                ${canContinue
+                ${currentStep < totalSteps
                   ? 'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }
@@ -119,4 +110,3 @@ export function SetupWizard({
     </div>
   )
 }
-
