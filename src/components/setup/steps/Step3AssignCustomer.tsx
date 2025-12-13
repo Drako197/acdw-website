@@ -100,13 +100,13 @@ export function Step3AssignCustomer() {
         <h3 className="sensor-setup-assignment-next-steps-title">What's Next?</h3>
         <ul className="sensor-setup-assignment-next-steps-list">
           <li className="sensor-setup-assignment-next-steps-item">
-            <span className="sensor-setup-assignment-next-steps-item-text">View sensor in your dashboard</span>
-          </li>
-          <li className="sensor-setup-assignment-next-steps-item">
-            <span className="sensor-setup-assignment-next-steps-item-text">Configure alert thresholds</span>
+            <span className="sensor-setup-assignment-next-steps-item-text">Configure alert thresholds in your dashboard</span>
           </li>
           <li className="sensor-setup-assignment-next-steps-item">
             <span className="sensor-setup-assignment-next-steps-item-text">Set up additional sensors</span>
+          </li>
+          <li className="sensor-setup-assignment-next-steps-item">
+            <span className="sensor-setup-assignment-next-steps-item-text">Need help? Contact our support team</span>
           </li>
         </ul>
       </div>
@@ -114,10 +114,10 @@ export function Step3AssignCustomer() {
       {/* Action Buttons */}
       <div className="sensor-setup-assignment-actions">
         <button
-          onClick={() => window.open('https://monitor.acdrainwiz.com', '_blank')}
+          onClick={() => navigate('/contact?type=support')}
           className="sensor-setup-assignment-button sensor-setup-assignment-button-primary"
         >
-          View Dashboard
+          Contact Support
         </button>
         
         <button
