@@ -9420,11 +9420,11 @@
 }
 
 .sensor-setup-prerequisite-modal-checkbox-wrapper {
-  @apply mb-4;
+  @apply mt-4 pt-4 border-t border-gray-200;
 }
 
 .sensor-setup-prerequisite-modal-checkbox-label {
-  @apply flex items-start space-x-3 cursor-pointer;
+  @apply flex items-start space-x-3 cursor-pointer p-4 border-2 border-gray-200 rounded-lg hover:border-gray-300 transition-colors;
 }
 
 .sensor-setup-prerequisite-modal-checkbox {

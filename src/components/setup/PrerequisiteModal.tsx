@@ -114,6 +114,16 @@ export function PrerequisiteModal({ isOpen, onClose }: PrerequisiteModalProps) {
             </div>
           </div>
 
+          {/* Action Button */}
+          <div className="sensor-setup-prerequisite-modal-actions">
+            <button
+              onClick={handleUnderstand}
+              className="sensor-setup-prerequisite-modal-button sensor-setup-prerequisite-modal-button-primary"
+            >
+              Ok I understand
+            </button>
+          </div>
+
           {/* Checkbox */}
           <div className="sensor-setup-prerequisite-modal-checkbox-wrapper">
             <label className="sensor-setup-prerequisite-modal-checkbox-label">
@@ -124,19 +134,9 @@ export function PrerequisiteModal({ isOpen, onClose }: PrerequisiteModalProps) {
                 className="sensor-setup-prerequisite-modal-checkbox"
               />
               <span className="sensor-setup-prerequisite-modal-checkbox-text">
-                I have already created my account and my customer profile
+                I have already created my account and my customer profile, dont show this anymore.
               </span>
             </label>
-          </div>
-
-          {/* Action Button */}
-          <div className="sensor-setup-prerequisite-modal-actions">
-            <button
-              onClick={handleUnderstand}
-              className="sensor-setup-prerequisite-modal-button sensor-setup-prerequisite-modal-button-primary"
-            >
-              Ok I understand
-            </button>
           </div>
         </div>
       </div>
