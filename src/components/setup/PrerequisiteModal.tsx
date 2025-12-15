@@ -9,9 +9,10 @@ interface PrerequisiteModalProps {
 export function PrerequisiteModal({ isOpen, onClose }: PrerequisiteModalProps) {
   const [isVisible, setIsVisible] = useState(false)
 
-  const handleUnderstand = () => {
+  const handleDismiss = (reason: 'dont-show' | 'account-created') => {
     // Store in sessionStorage so it doesn't show again this session
-    sessionStorage.setItem('sensor-setup-prerequisite-acknowledged', 'true')
+    sessionStorage.setItem('sensor-setup-prerequisite-dismissed', 'true')
+    sessionStorage.setItem('sensor-setup-prerequisite-dismiss-reason', reason)
     onClose()
   }
 
@@ -37,13 +38,14 @@ export function PrerequisiteModal({ isOpen, onClose }: PrerequisiteModalProps) {
 
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        handleUnderstand()
+        handleDismiss('dont-show')
       }
     }
 
     document.addEventListener('keydown', handleEscape)
     return () => document.removeEventListener('keydown', handleEscape)
-  }, [isOpen, handleUnderstand])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen])
 
   if (!isOpen) return null
 
@@ -53,9 +55,9 @@ export function PrerequisiteModal({ isOpen, onClose }: PrerequisiteModalProps) {
         className={`sensor-setup-prerequisite-modal ${isVisible ? 'sensor-setup-prerequisite-modal-visible' : ''}`}
       >
         <div className="sensor-setup-prerequisite-modal-content">
-          {/* Close button (optional - can remove if you want to force acknowledgment) */}
+          {/* Close button */}
           <button
-            onClick={handleUnderstand}
+            onClick={() => handleDismiss('dont-show')}
             className="sensor-setup-prerequisite-modal-close"
             aria-label="Close"
           >
@@ -109,13 +111,21 @@ export function PrerequisiteModal({ isOpen, onClose }: PrerequisiteModalProps) {
             </div>
           </div>
 
-          {/* Action Button */}
-          <button
-            onClick={handleUnderstand}
-            className="sensor-setup-prerequisite-modal-button"
-          >
-            I Understand
-          </button>
+          {/* Action Buttons */}
+          <div className="sensor-setup-prerequisite-modal-actions">
+            <button
+              onClick={() => handleDismiss('account-created')}
+              className="sensor-setup-prerequisite-modal-button sensor-setup-prerequisite-modal-button-primary"
+            >
+              Thanks, I have created my account
+            </button>
+            <button
+              onClick={() => handleDismiss('dont-show')}
+              className="sensor-setup-prerequisite-modal-button sensor-setup-prerequisite-modal-button-secondary"
+            >
+              Do not display this anymore
+            </button>
+          </div>
         </div>
       </div>
     </div>

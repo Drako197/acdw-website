@@ -5,9 +5,9 @@ export function Step1CreateAccount() {
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    // Check if user has already acknowledged the prerequisite in this session
-    const acknowledged = sessionStorage.getItem('sensor-setup-prerequisite-acknowledged')
-    if (!acknowledged) {
+    // Check if user has dismissed the modal for this session
+    const dismissed = sessionStorage.getItem('sensor-setup-prerequisite-dismissed')
+    if (!dismissed) {
       // Small delay to ensure smooth modal appearance
       const timer = setTimeout(() => {
         setShowModal(true)

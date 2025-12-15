@@ -9419,8 +9419,20 @@
   @apply inline-flex items-center text-primary-600 hover:text-primary-700 font-medium transition-colors;
 }
 
+.sensor-setup-prerequisite-modal-actions {
+  @apply flex flex-col sm:flex-row gap-3;
+}
+
 .sensor-setup-prerequisite-modal-button {
-  @apply w-full bg-primary-600 text-white py-3 px-6 rounded-md font-semibold text-lg hover:bg-primary-700 active:bg-primary-800 transition-colors;
+  @apply flex-1 py-3 px-6 rounded-md font-semibold text-lg transition-colors;
+}
+
+.sensor-setup-prerequisite-modal-button-primary {
+  @apply bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800;
+}
+
+.sensor-setup-prerequisite-modal-button-secondary {
+  @apply bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400;
 }
 
 /* Setup Wizard Container */
