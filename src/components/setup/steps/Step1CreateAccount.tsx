@@ -12,7 +12,7 @@ export function Step1CreateAccount() {
     {
       number: 2,
       title: 'Verify Your Email',
-      description: 'Check your email inbox for a verification link from AC Drain Wiz. Click the link to verify your email address and activate your account.',
+      description: 'Check your email inbox for an email verification code from AC Drain Wiz. Copy and paste the code into the verification screen input to verify your email address and activate your account.',
       image: '/images/setup/step1-2-verify-email.png',
       alt: 'Email verification message'
     },
@@ -26,7 +26,7 @@ export function Step1CreateAccount() {
     {
       number: 4,
       title: 'Create Client',
-      description: 'Create a client profile for the customer where you\'ll be installing the sensor. Enter their name and contact information.',
+      description: 'Create a profile for the customer where you\'ll be installing one or more AC Drain Wiz Sensors. Enter their name and contact information. Note: If your customer has more than one address where you will be installing the AC Drain Wiz Sensor, you will have the ability to add multiple addresses which will be associated to your customer.',
       image: '/images/setup/step1-4-create-client.png',
       alt: 'Client creation form'
     }
@@ -45,7 +45,7 @@ export function Step1CreateAccount() {
       <div className="sensor-setup-step-title-section">
         <h2 className="sensor-setup-step-title">Create Account</h2>
         <p className="sensor-setup-step-subtitle">
-          Set up your account before installing the sensor at a customer's home
+          Set up your account before installing your first AC Drain Wiz Sensor at a customer's home
         </p>
       </div>
 
@@ -56,8 +56,7 @@ export function Step1CreateAccount() {
           <div className="sensor-setup-prerequisites-callout-text">
             <h3 className="sensor-setup-prerequisites-callout-title">Important</h3>
             <p className="sensor-setup-prerequisites-callout-item-description">
-              This account setup must be completed before you visit the customer's home to install the sensor. 
-              Having your account and client profile ready will make the installation process much smoother.
+              Your account setup must be completed before you visit the customer's home to install one or more AC Drain Wiz Sensors. Having your account and customer profile ready will make the installation process much smoother.
             </p>
           </div>
         </div>
@@ -92,18 +91,6 @@ export function Step1CreateAccount() {
             </div>
           </div>
         ))}
-      </div>
-
-      {/* Quick Link */}
-      <div className="sensor-setup-account-quick-link">
-        <a
-          href="https://monitor.acdrainwiz.com/sign-up"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="sensor-setup-account-quick-link-button"
-        >
-          Go to Sign Up Page →
-        </a>
       </div>
     </div>
   )
