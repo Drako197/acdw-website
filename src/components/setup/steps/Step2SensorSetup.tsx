@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { 
+  ExclamationTriangleIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  CheckCircleIcon,
   Battery100Icon,
   BoltIcon,
   DevicePhoneMobileIcon,
@@ -11,7 +11,6 @@ import {
 
 export function Step2SensorSetup() {
   const [expandedSection, setExpandedSection] = useState<'physical' | 'wifi'>('physical')
-  const [physicalComplete, setPhysicalComplete] = useState(false)
 
   const toggleSection = (section: 'physical' | 'wifi') => {
     // Normal accordion behavior: clicking the same section toggles it
@@ -26,11 +25,6 @@ export function Step2SensorSetup() {
     }
   }
 
-  const handlePhysicalComplete = () => {
-    setPhysicalComplete(true)
-    // Optionally auto-expand WiFi when Physical is complete
-    setExpandedSection('wifi')
-  }
   const physicalSteps = [
     {
       number: 1,
@@ -103,6 +97,44 @@ export function Step2SensorSetup() {
         </p>
       </div>
 
+      {/* Prerequisites Callout */}
+      <div className="sensor-setup-prerequisites-callout">
+        <div className="sensor-setup-prerequisites-callout-content">
+          <ExclamationTriangleIcon className="sensor-setup-prerequisites-callout-icon" />
+          <div className="sensor-setup-prerequisites-callout-text">
+            <h3 className="sensor-setup-prerequisites-callout-title">Prerequisite</h3>
+            <p className="sensor-setup-prerequisites-callout-item-description">
+              The ACDW Mini must already be installed before setting up the sensor. 
+              <a
+                href="/mini-setup"
+                className="sensor-setup-prerequisites-callout-item-link"
+              >
+                View Mini Setup Guide →
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Prerequisites Callout */}
+      <div className="sensor-setup-prerequisites-callout">
+        <div className="sensor-setup-prerequisites-callout-content">
+          <ExclamationTriangleIcon className="sensor-setup-prerequisites-callout-icon" />
+          <div className="sensor-setup-prerequisites-callout-text">
+            <h3 className="sensor-setup-prerequisites-callout-title">Prerequisite</h3>
+            <p className="sensor-setup-prerequisites-callout-item-description">
+              The ACDW Mini must already be installed before setting up the sensor. 
+              <a
+                href="/mini-setup"
+                className="sensor-setup-prerequisites-callout-item-link"
+              >
+                View Mini Setup Guide →
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* What You'll Need */}
       <div className="sensor-setup-what-you-need">
         <h3 className="sensor-setup-what-you-need-title">What You'll Need</h3>
@@ -147,22 +179,15 @@ export function Step2SensorSetup() {
       </div>
 
       {/* Physical Setup Accordion Section */}
-      <div className={`sensor-setup-accordion-section ${expandedSection === 'physical' ? 'sensor-setup-accordion-section-expanded' : 'sensor-setup-accordion-section-collapsed'} ${physicalComplete ? 'sensor-setup-accordion-section-complete' : ''}`}>
+      <div className={`sensor-setup-accordion-section ${expandedSection === 'physical' ? 'sensor-setup-accordion-section-expanded' : 'sensor-setup-accordion-section-collapsed'}`}>
         <button
           onClick={() => toggleSection('physical')}
           className="sensor-setup-accordion-header"
         >
           <div className="sensor-setup-accordion-header-content">
             <div className="sensor-setup-accordion-header-left">
-              {physicalComplete ? (
-                <CheckCircleIcon className="sensor-setup-accordion-status-icon sensor-setup-accordion-status-icon-complete" />
-              ) : (
-                <div className="sensor-setup-accordion-status-icon sensor-setup-accordion-status-icon-pending" />
-              )}
+              <div className="sensor-setup-accordion-status-icon sensor-setup-accordion-status-icon-pending" />
               <h3 className="sensor-setup-accordion-title">Physical Setup</h3>
-              {physicalComplete && (
-                <span className="sensor-setup-accordion-badge sensor-setup-accordion-badge-complete">Complete</span>
-              )}
             </div>
             <div className="sensor-setup-accordion-header-right">
               {expandedSection === 'physical' ? (
@@ -240,26 +265,13 @@ export function Step2SensorSetup() {
                 </div>
               </div>
             </div>
-
-            {/* Mark Complete Button */}
-            {!physicalComplete && (
-              <div className="sensor-setup-accordion-action">
-                <button
-                  onClick={handlePhysicalComplete}
-                  className="sensor-setup-accordion-complete-button"
-                >
-                  <CheckCircleIcon className="sensor-setup-accordion-complete-button-icon" />
-                  <span>Mark Physical Setup Complete</span>
-                </button>
-              </div>
-            )}
           </div>
         )}
 
         {expandedSection !== 'physical' && (
           <div className="sensor-setup-accordion-preview">
             <p className="sensor-setup-accordion-preview-text">
-              {physicalComplete ? 'Physical setup complete ✓' : `${physicalSteps.length} steps to complete`}
+              {physicalSteps.length} steps to complete
             </p>
           </div>
         )}
