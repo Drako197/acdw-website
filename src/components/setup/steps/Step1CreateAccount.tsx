@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { PrerequisiteModal } from '../PrerequisiteModal'
 
 export function Step1CreateAccount() {
@@ -69,18 +68,15 @@ export function Step1CreateAccount() {
         <p className="sensor-setup-step-subtitle">
           Set up your account before installing your first AC Drain Wiz Sensor at a customer's home
         </p>
-      </div>
-
-      {/* Important Note */}
-      <div className="sensor-setup-prerequisites-callout">
-        <div className="sensor-setup-prerequisites-callout-content">
-          <ExclamationTriangleIcon className="sensor-setup-prerequisites-callout-icon" />
-          <div className="sensor-setup-prerequisites-callout-text">
-            <h3 className="sensor-setup-prerequisites-callout-title">Important</h3>
-            <p className="sensor-setup-prerequisites-callout-item-description">
-              Your account setup must be completed before you visit the customer's home to install one or more AC Drain Wiz Sensors. Having your account and customer profile ready will make the installation process much smoother.
-            </p>
-          </div>
+        <div className="sensor-setup-step-signup-link-wrapper">
+          <a
+            href="https://monitor.acdrainwiz.com/sign-up"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="sensor-setup-step-signup-link"
+          >
+            Go to Sign Up Page →
+          </a>
         </div>
       </div>
 

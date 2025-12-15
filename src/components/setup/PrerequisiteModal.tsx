@@ -97,6 +97,16 @@ export function PrerequisiteModal({ isOpen, onClose }: PrerequisiteModalProps) {
             <p className="sensor-setup-prerequisite-modal-text sensor-setup-prerequisite-modal-text-emphasis">
               Having your account and customer profile ready will make the installation process much smoother and faster.
             </p>
+            <div className="sensor-setup-prerequisite-modal-signup-link-wrapper">
+              <a
+                href="https://monitor.acdrainwiz.com/sign-up"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sensor-setup-prerequisite-modal-signup-link"
+              >
+                Go to Sign Up Page →
+              </a>
+            </div>
           </div>
 
           {/* Action Button */}

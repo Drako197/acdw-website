@@ -8765,6 +8765,14 @@
   @apply text-lg text-gray-600;
 }
 
+.sensor-setup-step-signup-link-wrapper {
+  @apply mt-4;
+}
+
+.sensor-setup-step-signup-link {
+  @apply inline-flex items-center text-primary-600 hover:text-primary-700 font-medium transition-colors;
+}
+
 /* Step 1: Preparation */
 .sensor-setup-prerequisites-callout {
   @apply bg-amber-50 border-2 border-amber-200 rounded-lg p-6;
@@ -9401,6 +9409,14 @@
 
 .sensor-setup-prerequisite-modal-list-item {
   @apply text-gray-700;
+}
+
+.sensor-setup-prerequisite-modal-signup-link-wrapper {
+  @apply mt-4 text-center;
+}
+
+.sensor-setup-prerequisite-modal-signup-link {
+  @apply inline-flex items-center text-primary-600 hover:text-primary-700 font-medium transition-colors;
 }
 
 .sensor-setup-prerequisite-modal-button {
