@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import { 
-  ExclamationTriangleIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
+  Battery100Icon,
+  BoltIcon,
+  DevicePhoneMobileIcon,
+  WifiIcon
 } from '@heroicons/react/24/outline'
 
 export function Step2SensorSetup() {
@@ -11,12 +14,12 @@ export function Step2SensorSetup() {
   const [physicalComplete, setPhysicalComplete] = useState(false)
 
   const toggleSection = (section: 'physical' | 'wifi') => {
-    // If clicking the already expanded section, keep it expanded (or could collapse it)
-    // If clicking the collapsed section, expand it (and collapse the other)
+    // Normal accordion behavior: clicking the same section toggles it
+    // If clicking a different section, expand it (and collapse the current one)
     if (expandedSection === section) {
-      // Optionally allow collapsing by clicking again, or keep it expanded
-      // For now, we'll keep it expanded when clicking the same section
-      return
+      // Toggle: if clicking the expanded section, collapse it by switching to the other
+      // This maintains the "only one open at a time" behavior
+      setExpandedSection(section === 'physical' ? 'wifi' : 'physical')
     } else {
       // Expand the clicked section (other will automatically collapse)
       setExpandedSection(section)
@@ -100,35 +103,13 @@ export function Step2SensorSetup() {
         </p>
       </div>
 
-      {/* Prerequisites Callout */}
-      <div className="sensor-setup-prerequisites-callout">
-        <div className="sensor-setup-prerequisites-callout-content">
-          <ExclamationTriangleIcon className="sensor-setup-prerequisites-callout-icon" />
-          <div className="sensor-setup-prerequisites-callout-text">
-            <h3 className="sensor-setup-prerequisites-callout-title">Prerequisite</h3>
-            <p className="sensor-setup-prerequisites-callout-item-description">
-              The ACDW Mini must already be installed before setting up the sensor. 
-              <a
-                href="/mini-setup"
-                className="sensor-setup-prerequisites-callout-item-link"
-              >
-                View Mini Setup Guide →
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
-
       {/* What You'll Need */}
       <div className="sensor-setup-what-you-need">
-        <h3 className="sensor-setup-what-you-need-title">
-          <span className="sensor-setup-what-you-need-icon">📦</span>
-          What You'll Need
-        </h3>
+        <h3 className="sensor-setup-what-you-need-title">What You'll Need</h3>
         <div className="sensor-setup-what-you-need-grid">
           <div className="sensor-setup-what-you-need-item">
             <div className="sensor-setup-what-you-need-item-icon-wrapper">
-              <span className="sensor-setup-what-you-need-item-icon">🔋</span>
+              <Battery100Icon className="sensor-setup-what-you-need-item-icon" />
             </div>
             <div className="sensor-setup-what-you-need-item-content">
               <p className="sensor-setup-what-you-need-item-title">ACDW Sensor</p>
@@ -137,7 +118,7 @@ export function Step2SensorSetup() {
           </div>
           <div className="sensor-setup-what-you-need-item">
             <div className="sensor-setup-what-you-need-item-icon-wrapper">
-              <span className="sensor-setup-what-you-need-item-icon">🔌</span>
+              <BoltIcon className="sensor-setup-what-you-need-item-icon" />
             </div>
             <div className="sensor-setup-what-you-need-item-content">
               <p className="sensor-setup-what-you-need-item-title">Battery or DC Power</p>
@@ -146,7 +127,7 @@ export function Step2SensorSetup() {
           </div>
           <div className="sensor-setup-what-you-need-item">
             <div className="sensor-setup-what-you-need-item-icon-wrapper">
-              <span className="sensor-setup-what-you-need-item-icon">📱</span>
+              <DevicePhoneMobileIcon className="sensor-setup-what-you-need-item-icon" />
             </div>
             <div className="sensor-setup-what-you-need-item-content">
               <p className="sensor-setup-what-you-need-item-title">Smartphone/Tablet</p>
@@ -155,7 +136,7 @@ export function Step2SensorSetup() {
           </div>
           <div className="sensor-setup-what-you-need-item">
             <div className="sensor-setup-what-you-need-item-icon-wrapper">
-              <span className="sensor-setup-what-you-need-item-icon">📶</span>
+              <WifiIcon className="sensor-setup-what-you-need-item-icon" />
             </div>
             <div className="sensor-setup-what-you-need-item-content">
               <p className="sensor-setup-what-you-need-item-title">Wi-Fi Password</p>
