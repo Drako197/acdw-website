@@ -9420,19 +9420,19 @@
 }
 
 .sensor-setup-prerequisite-modal-actions {
-  @apply flex flex-col sm:flex-row gap-3;
+  @apply flex flex-col sm:flex-row gap-2;
 }
 
 .sensor-setup-prerequisite-modal-button {
-  @apply flex-1 py-3 px-6 rounded-md font-semibold text-lg transition-colors;
+  @apply flex-1 py-2 px-4 rounded-md font-medium text-sm transition-colors;
 }
 
 .sensor-setup-prerequisite-modal-button-primary {
-  @apply bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800;
+  @apply bg-primary-500 text-white hover:bg-primary-600;
 }
 
 .sensor-setup-prerequisite-modal-button-secondary {
-  @apply bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400;
+  @apply bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400;
 }
 
 /* Setup Wizard Container */
