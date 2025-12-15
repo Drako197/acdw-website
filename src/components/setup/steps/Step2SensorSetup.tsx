@@ -84,7 +84,7 @@ export function Step2SensorSetup() {
     <div className="sensor-setup-step-container">
       {/* Step Number Badge */}
       <div className="sensor-setup-step-badge-wrapper">
-        <div className="sensor-setup-step-badge">
+        <div className="sensor-setup-step-badge sensor-setup-step-badge-step2">
           <span className="sensor-setup-step-badge-number">2</span>
         </div>
       </div>

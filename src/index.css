@@ -9319,6 +9319,10 @@
   @apply w-20 h-20 rounded-full bg-primary-600 flex items-center justify-center;
 }
 
+.sensor-setup-step-badge-step2 {
+  background: linear-gradient(135deg, #2563eb 0%, #5b21b6 50%, #7c3aed 100%);
+}
+
 .sensor-setup-step-badge-complete {
   @apply bg-green-600;
 }
