@@ -9312,28 +9312,16 @@
   @apply text-lg text-gray-700;
 }
 
-.sensor-setup-assignment-next-steps {
-  @apply bg-white rounded-lg border border-gray-200 p-6 mt-6;
+.sensor-setup-assignment-actions-wrapper {
+  @apply mt-6;
 }
 
-.sensor-setup-assignment-next-steps-title {
-  @apply text-xl font-semibold text-gray-900 mb-4;
-}
-
-.sensor-setup-assignment-next-steps-list {
-  @apply space-y-3;
-}
-
-.sensor-setup-assignment-next-steps-item {
-  @apply flex items-start space-x-2;
-}
-
-.sensor-setup-assignment-next-steps-item-text {
-  @apply text-gray-700;
+.sensor-setup-assignment-actions-heading {
+  @apply text-xl font-semibold text-gray-900 mb-4 text-center;
 }
 
 .sensor-setup-assignment-actions {
-  @apply flex flex-col sm:flex-row gap-3 mt-6;
+  @apply flex flex-col sm:flex-row gap-3;
 }
 
 .sensor-setup-assignment-button {

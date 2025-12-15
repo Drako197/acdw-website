@@ -95,24 +95,10 @@ export function Step3AssignCustomer() {
         </p>
       </div>
 
-      {/* Next Steps */}
-      <div className="sensor-setup-assignment-next-steps">
-        <h3 className="sensor-setup-assignment-next-steps-title">What's Next?</h3>
-        <ul className="sensor-setup-assignment-next-steps-list">
-          <li className="sensor-setup-assignment-next-steps-item">
-            <span className="sensor-setup-assignment-next-steps-item-text">Configure alert thresholds in your dashboard</span>
-          </li>
-          <li className="sensor-setup-assignment-next-steps-item">
-            <span className="sensor-setup-assignment-next-steps-item-text">Set up additional sensors</span>
-          </li>
-          <li className="sensor-setup-assignment-next-steps-item">
-            <span className="sensor-setup-assignment-next-steps-item-text">Need help? Contact our support team</span>
-          </li>
-        </ul>
-      </div>
-
       {/* Action Buttons */}
-      <div className="sensor-setup-assignment-actions">
+      <div className="sensor-setup-assignment-actions-wrapper">
+        <h3 className="sensor-setup-assignment-actions-heading">What's Next?</h3>
+        <div className="sensor-setup-assignment-actions">
         <button
           onClick={() => navigate('/contact?type=support')}
           className="sensor-setup-assignment-button sensor-setup-assignment-button-primary"
@@ -126,6 +112,7 @@ export function Step3AssignCustomer() {
         >
           Setup Another Sensor
         </button>
+        </div>
       </div>
     </div>
   )
