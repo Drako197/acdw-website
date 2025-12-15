@@ -66,6 +66,8 @@ export function Footer() {
               </h3>
               <ul className="footer-link-list">
                 <li><Link to="/support" className="footer-link">Get Help</Link></li>
+                <li><Link to="/support/installation-scenarios" className="footer-link">Recommended Installation Scenarios</Link></li>
+                <li><Link to="/sensor-setup" className="footer-link">Sensor Setup Guide</Link></li>
                 <li><a href="https://monitor.acdrainwiz.com/login" className="footer-link" target="_blank" rel="noopener noreferrer">Sensor Monitoring</a></li>
               </ul>
             </div>
