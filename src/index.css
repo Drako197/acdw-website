@@ -9319,6 +9319,15 @@
   @apply w-20 h-20 rounded-full bg-primary-600 flex items-center justify-center;
 }
 
+.sensor-setup-step-badge-step2 {
+  background: linear-gradient(135deg, #2563eb 0%, #5b21b6 50%, #7c3aed 100%);
+}
+
+.sensor-setup-step-badge-step3 {
+  @apply bg-purple-800;
+  background-color: #6b21a8;
+}
+
 .sensor-setup-step-badge-complete {
   @apply bg-green-600;
 }
@@ -9363,15 +9372,15 @@
 
 /* Step 1: Preparation */
 .sensor-setup-prerequisites-callout {
-  @apply bg-amber-50 border-2 border-amber-200 rounded-lg p-6;
+  @apply bg-amber-50 border border-amber-200 rounded-lg px-4 py-3;
 }
 
 .sensor-setup-prerequisites-callout-content {
-  @apply flex items-start space-x-3;
+  @apply flex items-start space-x-2;
 }
 
 .sensor-setup-prerequisites-callout-icon {
-  @apply h-6 w-6 text-amber-600 flex-shrink-0 mt-0.5;
+  @apply h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5;
 }
 
 .sensor-setup-prerequisites-callout-text {
@@ -9379,7 +9388,7 @@
 }
 
 .sensor-setup-prerequisites-callout-title {
-  @apply text-lg font-semibold text-amber-900 mb-3;
+  @apply text-sm font-semibold text-amber-900 mb-1;
 }
 
 .sensor-setup-prerequisites-callout-items {
@@ -9407,7 +9416,7 @@
 }
 
 .sensor-setup-prerequisites-callout-item-description {
-  @apply text-sm;
+  @apply text-sm leading-relaxed;
 }
 
 .sensor-setup-prerequisites-callout-item-link {
@@ -9457,11 +9466,7 @@
 }
 
 .sensor-setup-what-you-need-title {
-  @apply text-xl font-semibold text-gray-900 mb-4 flex items-center;
-}
-
-.sensor-setup-what-you-need-icon {
-  @apply mr-2;
+  @apply text-xl font-semibold text-gray-900 mb-4;
 }
 
 .sensor-setup-what-you-need-grid {
@@ -9473,11 +9478,11 @@
 }
 
 .sensor-setup-what-you-need-item-icon-wrapper {
-  @apply w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0;
+  @apply flex-shrink-0;
 }
 
 .sensor-setup-what-you-need-item-icon {
-  @apply text-2xl;
+  @apply h-6 w-6 text-blue-600;
 }
 
 .sensor-setup-what-you-need-item-content {
@@ -9499,6 +9504,10 @@
 
 .sensor-setup-installation-step-card {
   @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-installation-step-card:first-child {
+  @apply mt-8;
 }
 
 .sensor-setup-installation-step-content {
@@ -9554,6 +9563,10 @@
 
 .sensor-setup-wifi-step-card {
   @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-wifi-step-card:first-child {
+  @apply mt-8;
 }
 
 .sensor-setup-wifi-step-content {
@@ -9804,6 +9817,10 @@
 
 .sensor-setup-account-step-description {
   @apply text-gray-700 mb-4;
+}
+
+.sensor-setup-account-step-link {
+  @apply text-blue-600 hover:text-blue-700 underline;
 }
 
 .sensor-setup-account-step-image-wrapper {

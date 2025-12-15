@@ -3,31 +3,28 @@ import {
   ExclamationTriangleIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  CheckCircleIcon
+  Battery100Icon,
+  BoltIcon,
+  DevicePhoneMobileIcon,
+  WifiIcon
 } from '@heroicons/react/24/outline'
 
 export function Step2SensorSetup() {
   const [expandedSection, setExpandedSection] = useState<'physical' | 'wifi'>('physical')
-  const [physicalComplete, setPhysicalComplete] = useState(false)
 
   const toggleSection = (section: 'physical' | 'wifi') => {
-    // If clicking the already expanded section, keep it expanded (or could collapse it)
-    // If clicking the collapsed section, expand it (and collapse the other)
+    // Normal accordion behavior: clicking the same section toggles it
+    // If clicking a different section, expand it (and collapse the current one)
     if (expandedSection === section) {
-      // Optionally allow collapsing by clicking again, or keep it expanded
-      // For now, we'll keep it expanded when clicking the same section
-      return
+      // Toggle: if clicking the expanded section, collapse it by switching to the other
+      // This maintains the "only one open at a time" behavior
+      setExpandedSection(section === 'physical' ? 'wifi' : 'physical')
     } else {
       // Expand the clicked section (other will automatically collapse)
       setExpandedSection(section)
     }
   }
 
-  const handlePhysicalComplete = () => {
-    setPhysicalComplete(true)
-    // Optionally auto-expand WiFi when Physical is complete
-    setExpandedSection('wifi')
-  }
   const physicalSteps = [
     {
       number: 1,
@@ -87,7 +84,7 @@ export function Step2SensorSetup() {
     <div className="sensor-setup-step-container">
       {/* Step Number Badge */}
       <div className="sensor-setup-step-badge-wrapper">
-        <div className="sensor-setup-step-badge">
+        <div className="sensor-setup-step-badge sensor-setup-step-badge-step2">
           <span className="sensor-setup-step-badge-number">2</span>
         </div>
       </div>
@@ -121,14 +118,11 @@ export function Step2SensorSetup() {
 
       {/* What You'll Need */}
       <div className="sensor-setup-what-you-need">
-        <h3 className="sensor-setup-what-you-need-title">
-          <span className="sensor-setup-what-you-need-icon">📦</span>
-          What You'll Need
-        </h3>
+        <h3 className="sensor-setup-what-you-need-title">What You'll Need</h3>
         <div className="sensor-setup-what-you-need-grid">
           <div className="sensor-setup-what-you-need-item">
             <div className="sensor-setup-what-you-need-item-icon-wrapper">
-              <span className="sensor-setup-what-you-need-item-icon">🔋</span>
+              <Battery100Icon className="sensor-setup-what-you-need-item-icon" />
             </div>
             <div className="sensor-setup-what-you-need-item-content">
               <p className="sensor-setup-what-you-need-item-title">ACDW Sensor</p>
@@ -137,7 +131,7 @@ export function Step2SensorSetup() {
           </div>
           <div className="sensor-setup-what-you-need-item">
             <div className="sensor-setup-what-you-need-item-icon-wrapper">
-              <span className="sensor-setup-what-you-need-item-icon">🔌</span>
+              <BoltIcon className="sensor-setup-what-you-need-item-icon" />
             </div>
             <div className="sensor-setup-what-you-need-item-content">
               <p className="sensor-setup-what-you-need-item-title">Battery or DC Power</p>
@@ -146,7 +140,7 @@ export function Step2SensorSetup() {
           </div>
           <div className="sensor-setup-what-you-need-item">
             <div className="sensor-setup-what-you-need-item-icon-wrapper">
-              <span className="sensor-setup-what-you-need-item-icon">📱</span>
+              <DevicePhoneMobileIcon className="sensor-setup-what-you-need-item-icon" />
             </div>
             <div className="sensor-setup-what-you-need-item-content">
               <p className="sensor-setup-what-you-need-item-title">Smartphone/Tablet</p>
@@ -155,7 +149,7 @@ export function Step2SensorSetup() {
           </div>
           <div className="sensor-setup-what-you-need-item">
             <div className="sensor-setup-what-you-need-item-icon-wrapper">
-              <span className="sensor-setup-what-you-need-item-icon">📶</span>
+              <WifiIcon className="sensor-setup-what-you-need-item-icon" />
             </div>
             <div className="sensor-setup-what-you-need-item-content">
               <p className="sensor-setup-what-you-need-item-title">Wi-Fi Password</p>
@@ -166,22 +160,15 @@ export function Step2SensorSetup() {
       </div>
 
       {/* Physical Setup Accordion Section */}
-      <div className={`sensor-setup-accordion-section ${expandedSection === 'physical' ? 'sensor-setup-accordion-section-expanded' : 'sensor-setup-accordion-section-collapsed'} ${physicalComplete ? 'sensor-setup-accordion-section-complete' : ''}`}>
+      <div className={`sensor-setup-accordion-section ${expandedSection === 'physical' ? 'sensor-setup-accordion-section-expanded' : 'sensor-setup-accordion-section-collapsed'}`}>
         <button
           onClick={() => toggleSection('physical')}
           className="sensor-setup-accordion-header"
         >
           <div className="sensor-setup-accordion-header-content">
             <div className="sensor-setup-accordion-header-left">
-              {physicalComplete ? (
-                <CheckCircleIcon className="sensor-setup-accordion-status-icon sensor-setup-accordion-status-icon-complete" />
-              ) : (
-                <div className="sensor-setup-accordion-status-icon sensor-setup-accordion-status-icon-pending" />
-              )}
+              <div className="sensor-setup-accordion-status-icon sensor-setup-accordion-status-icon-pending" />
               <h3 className="sensor-setup-accordion-title">Physical Setup</h3>
-              {physicalComplete && (
-                <span className="sensor-setup-accordion-badge sensor-setup-accordion-badge-complete">Complete</span>
-              )}
             </div>
             <div className="sensor-setup-accordion-header-right">
               {expandedSection === 'physical' ? (
@@ -211,74 +198,65 @@ export function Step2SensorSetup() {
                       <h3 className="sensor-setup-installation-step-title">{step.title}</h3>
                       <p className="sensor-setup-installation-step-description">{step.description}</p>
                       
-                      {/* Image */}
-                      <div className="sensor-setup-installation-step-image-wrapper">
-                        <img
-                          src={step.image}
-                          alt={step.alt}
-                          className="sensor-setup-installation-step-image"
-                        />
-                      </div>
+                      {/* Image - Skip for step 2 (model identification) */}
+                      {step.number !== 2 && (
+                        <div className="sensor-setup-installation-step-image-wrapper">
+                          <img
+                            src={step.image}
+                            alt={step.alt}
+                            className="sensor-setup-installation-step-image"
+                          />
+                        </div>
+                      )}
+
+                      {/* Model Comparison - Only for step 2 */}
+                      {step.number === 2 && (
+                        <div className="sensor-setup-model-identification">
+                          <div className="sensor-setup-model-comparison">
+                            {/* Battery Model */}
+                            <div className="sensor-setup-model-card">
+                              <div className="sensor-setup-model-card-image-wrapper">
+                                <img
+                                  src="/images/setup/model-battery.png"
+                                  alt="Battery-Only Model"
+                                  className="sensor-setup-model-card-image"
+                                />
+                              </div>
+                              <h4 className="sensor-setup-model-card-title">Battery-Only Model</h4>
+                              <p className="sensor-setup-model-card-description">
+                                No connection cable
+                              </p>
+                            </div>
+
+                            {/* DC Model */}
+                            <div className="sensor-setup-model-card">
+                              <div className="sensor-setup-model-card-image-wrapper">
+                                <img
+                                  src="/images/setup/model-dc.png"
+                                  alt="DC + Battery Model"
+                                  className="sensor-setup-model-card-image"
+                                />
+                              </div>
+                              <h4 className="sensor-setup-model-card-title">DC + Battery Model</h4>
+                              <p className="sensor-setup-model-card-description">
+                                DC cable attached to sensor unit
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-
-            {/* Model Comparison */}
-            <div className="sensor-setup-model-identification">
-              <div className="sensor-setup-model-comparison">
-                {/* Battery Model */}
-                <div className="sensor-setup-model-card">
-                  <div className="sensor-setup-model-card-image-wrapper">
-                    <img
-                      src="/images/setup/model-battery.png"
-                      alt="Battery-Only Model"
-                      className="sensor-setup-model-card-image"
-                    />
-                  </div>
-                  <h4 className="sensor-setup-model-card-title">Battery-Only Model</h4>
-                  <p className="sensor-setup-model-card-description">
-                    No connection cable
-                  </p>
-                </div>
-
-                {/* DC Model */}
-                <div className="sensor-setup-model-card">
-                  <div className="sensor-setup-model-card-image-wrapper">
-                    <img
-                      src="/images/setup/model-dc.png"
-                      alt="DC + Battery Model"
-                      className="sensor-setup-model-card-image"
-                    />
-                  </div>
-                  <h4 className="sensor-setup-model-card-title">DC + Battery Model</h4>
-                  <p className="sensor-setup-model-card-description">
-                    DC cable attached to sensor unit
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Mark Complete Button */}
-            {!physicalComplete && (
-              <div className="sensor-setup-accordion-action">
-                <button
-                  onClick={handlePhysicalComplete}
-                  className="sensor-setup-accordion-complete-button"
-                >
-                  <CheckCircleIcon className="sensor-setup-accordion-complete-button-icon" />
-                  <span>Mark Physical Setup Complete</span>
-                </button>
-              </div>
-            )}
           </div>
         )}
 
         {expandedSection !== 'physical' && (
           <div className="sensor-setup-accordion-preview">
             <p className="sensor-setup-accordion-preview-text">
-              {physicalComplete ? 'Physical setup complete ✓' : `${physicalSteps.length} steps to complete`}
+              {physicalSteps.length} steps to complete
             </p>
           </div>
         )}
