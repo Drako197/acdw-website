@@ -9833,6 +9833,107 @@
   @apply text-2xl font-bold text-gray-900 mb-6;
 }
 
+/* Step 2 Accordion Styles */
+.sensor-setup-accordion-section {
+  @apply bg-white rounded-lg border-2 border-gray-200 mb-6 overflow-hidden transition-all duration-300;
+}
+
+.sensor-setup-accordion-section-expanded {
+  @apply border-blue-500 shadow-md;
+}
+
+.sensor-setup-accordion-section-collapsed {
+  @apply border-gray-200;
+}
+
+.sensor-setup-accordion-section-complete {
+  @apply border-green-500;
+}
+
+.sensor-setup-accordion-header {
+  @apply w-full px-6 py-4 text-left hover:bg-gray-50 transition-colors;
+}
+
+.sensor-setup-accordion-header-content {
+  @apply flex items-center justify-between;
+}
+
+.sensor-setup-accordion-header-left {
+  @apply flex items-center gap-3;
+}
+
+.sensor-setup-accordion-header-right {
+  @apply flex items-center;
+}
+
+.sensor-setup-accordion-status-icon {
+  @apply h-6 w-6 flex-shrink-0;
+}
+
+.sensor-setup-accordion-status-icon-complete {
+  @apply text-green-600;
+}
+
+.sensor-setup-accordion-status-icon-pending {
+  @apply h-2 w-2 rounded-full bg-gray-400;
+}
+
+.sensor-setup-accordion-title {
+  @apply text-xl font-bold text-gray-900;
+}
+
+.sensor-setup-accordion-badge {
+  @apply px-3 py-1 rounded-full text-xs font-semibold;
+}
+
+.sensor-setup-accordion-badge-complete {
+  @apply bg-green-100 text-green-800;
+}
+
+.sensor-setup-accordion-badge-ready {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.sensor-setup-accordion-chevron {
+  @apply h-5 w-5 text-gray-500;
+}
+
+.sensor-setup-accordion-content {
+  @apply px-6 pb-6 border-t border-gray-200;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 5000px;
+  }
+}
+
+.sensor-setup-accordion-preview {
+  @apply px-6 py-3 border-t border-gray-200 bg-gray-50;
+}
+
+.sensor-setup-accordion-preview-text {
+  @apply text-sm text-gray-600;
+}
+
+.sensor-setup-accordion-action {
+  @apply mt-6 pt-6 border-t border-gray-200;
+}
+
+.sensor-setup-accordion-complete-button {
+  @apply flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold mx-auto;
+}
+
+.sensor-setup-accordion-complete-button-icon {
+  @apply h-5 w-5;
+}
+
 /* Step 3: Assign Customer */
 .sensor-setup-assignment-steps {
   @apply space-y-8;

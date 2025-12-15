@@ -1,6 +1,33 @@
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { useState } from 'react'
+import { 
+  ExclamationTriangleIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  CheckCircleIcon
+} from '@heroicons/react/24/outline'
 
 export function Step2SensorSetup() {
+  const [expandedSection, setExpandedSection] = useState<'physical' | 'wifi'>('physical')
+  const [physicalComplete, setPhysicalComplete] = useState(false)
+
+  const toggleSection = (section: 'physical' | 'wifi') => {
+    // If clicking the already expanded section, keep it expanded (or could collapse it)
+    // If clicking the collapsed section, expand it (and collapse the other)
+    if (expandedSection === section) {
+      // Optionally allow collapsing by clicking again, or keep it expanded
+      // For now, we'll keep it expanded when clicking the same section
+      return
+    } else {
+      // Expand the clicked section (other will automatically collapse)
+      setExpandedSection(section)
+    }
+  }
+
+  const handlePhysicalComplete = () => {
+    setPhysicalComplete(true)
+    // Optionally auto-expand WiFi when Physical is complete
+    setExpandedSection('wifi')
+  }
   const physicalSteps = [
     {
       number: 1,
@@ -92,109 +119,188 @@ export function Step2SensorSetup() {
         </div>
       </div>
 
-      {/* Physical Setup Section */}
-      <div className="sensor-setup-section-divider">
-        <h3 className="sensor-setup-section-divider-title">Physical Setup</h3>
-      </div>
-
-      <div className="sensor-setup-installation-steps">
-        {physicalSteps.map((step) => (
-          <div key={step.number} className="sensor-setup-installation-step-card">
-            <div className="sensor-setup-installation-step-content">
-              {/* Step Number */}
-              <div className="sensor-setup-installation-step-number-wrapper">
-                <div className="sensor-setup-installation-step-number-badge">
-                  <span className="sensor-setup-installation-step-number">{step.number}</span>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="sensor-setup-installation-step-details">
-                <h3 className="sensor-setup-installation-step-title">{step.title}</h3>
-                <p className="sensor-setup-installation-step-description">{step.description}</p>
-                
-                {/* Image */}
-                <div className="sensor-setup-installation-step-image-wrapper">
-                  <img
-                    src={step.image}
-                    alt={step.alt}
-                    className="sensor-setup-installation-step-image"
-                  />
-                </div>
-              </div>
+      {/* Physical Setup Accordion Section */}
+      <div className={`sensor-setup-accordion-section ${expandedSection === 'physical' ? 'sensor-setup-accordion-section-expanded' : 'sensor-setup-accordion-section-collapsed'} ${physicalComplete ? 'sensor-setup-accordion-section-complete' : ''}`}>
+        <button
+          onClick={() => toggleSection('physical')}
+          className="sensor-setup-accordion-header"
+        >
+          <div className="sensor-setup-accordion-header-content">
+            <div className="sensor-setup-accordion-header-left">
+              {physicalComplete ? (
+                <CheckCircleIcon className="sensor-setup-accordion-status-icon sensor-setup-accordion-status-icon-complete" />
+              ) : (
+                <div className="sensor-setup-accordion-status-icon sensor-setup-accordion-status-icon-pending" />
+              )}
+              <h3 className="sensor-setup-accordion-title">Physical Setup</h3>
+              {physicalComplete && (
+                <span className="sensor-setup-accordion-badge sensor-setup-accordion-badge-complete">Complete</span>
+              )}
+            </div>
+            <div className="sensor-setup-accordion-header-right">
+              {expandedSection === 'physical' ? (
+                <ChevronUpIcon className="sensor-setup-accordion-chevron" />
+              ) : (
+                <ChevronDownIcon className="sensor-setup-accordion-chevron" />
+              )}
             </div>
           </div>
-        ))}
-      </div>
+        </button>
 
-      {/* Model Comparison (if step 2) */}
-      <div className="sensor-setup-model-identification">
-        <div className="sensor-setup-model-comparison">
-          {/* Battery Model */}
-          <div className="sensor-setup-model-card">
-            <div className="sensor-setup-model-card-image-wrapper">
-              <img
-                src="/images/setup/model-battery.png"
-                alt="Battery-Only Model"
-                className="sensor-setup-model-card-image"
-              />
+        {expandedSection === 'physical' && (
+          <div className="sensor-setup-accordion-content">
+            <div className="sensor-setup-installation-steps">
+              {physicalSteps.map((step) => (
+                <div key={step.number} className="sensor-setup-installation-step-card">
+                  <div className="sensor-setup-installation-step-content">
+                    {/* Step Number */}
+                    <div className="sensor-setup-installation-step-number-wrapper">
+                      <div className="sensor-setup-installation-step-number-badge">
+                        <span className="sensor-setup-installation-step-number">{step.number}</span>
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="sensor-setup-installation-step-details">
+                      <h3 className="sensor-setup-installation-step-title">{step.title}</h3>
+                      <p className="sensor-setup-installation-step-description">{step.description}</p>
+                      
+                      {/* Image */}
+                      <div className="sensor-setup-installation-step-image-wrapper">
+                        <img
+                          src={step.image}
+                          alt={step.alt}
+                          className="sensor-setup-installation-step-image"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-            <h4 className="sensor-setup-model-card-title">Battery-Only Model</h4>
-            <p className="sensor-setup-model-card-description">
-              No connection cable
+
+            {/* Model Comparison */}
+            <div className="sensor-setup-model-identification">
+              <div className="sensor-setup-model-comparison">
+                {/* Battery Model */}
+                <div className="sensor-setup-model-card">
+                  <div className="sensor-setup-model-card-image-wrapper">
+                    <img
+                      src="/images/setup/model-battery.png"
+                      alt="Battery-Only Model"
+                      className="sensor-setup-model-card-image"
+                    />
+                  </div>
+                  <h4 className="sensor-setup-model-card-title">Battery-Only Model</h4>
+                  <p className="sensor-setup-model-card-description">
+                    No connection cable
+                  </p>
+                </div>
+
+                {/* DC Model */}
+                <div className="sensor-setup-model-card">
+                  <div className="sensor-setup-model-card-image-wrapper">
+                    <img
+                      src="/images/setup/model-dc.png"
+                      alt="DC + Battery Model"
+                      className="sensor-setup-model-card-image"
+                    />
+                  </div>
+                  <h4 className="sensor-setup-model-card-title">DC + Battery Model</h4>
+                  <p className="sensor-setup-model-card-description">
+                    DC cable attached to sensor unit
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Mark Complete Button */}
+            {!physicalComplete && (
+              <div className="sensor-setup-accordion-action">
+                <button
+                  onClick={handlePhysicalComplete}
+                  className="sensor-setup-accordion-complete-button"
+                >
+                  <CheckCircleIcon className="sensor-setup-accordion-complete-button-icon" />
+                  <span>Mark Physical Setup Complete</span>
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {expandedSection !== 'physical' && (
+          <div className="sensor-setup-accordion-preview">
+            <p className="sensor-setup-accordion-preview-text">
+              {physicalComplete ? 'Physical setup complete ✓' : `${physicalSteps.length} steps to complete`}
             </p>
           </div>
+        )}
+      </div>
 
-          {/* DC Model */}
-          <div className="sensor-setup-model-card">
-            <div className="sensor-setup-model-card-image-wrapper">
-              <img
-                src="/images/setup/model-dc.png"
-                alt="DC + Battery Model"
-                className="sensor-setup-model-card-image"
-              />
+      {/* WiFi Connection Accordion Section */}
+      <div className={`sensor-setup-accordion-section ${expandedSection === 'wifi' ? 'sensor-setup-accordion-section-expanded' : 'sensor-setup-accordion-section-collapsed'}`}>
+        <button
+          onClick={() => toggleSection('wifi')}
+          className="sensor-setup-accordion-header"
+        >
+          <div className="sensor-setup-accordion-header-content">
+            <div className="sensor-setup-accordion-header-left">
+              <div className="sensor-setup-accordion-status-icon sensor-setup-accordion-status-icon-pending" />
+              <h3 className="sensor-setup-accordion-title">WiFi Connection</h3>
+              <span className="sensor-setup-accordion-badge sensor-setup-accordion-badge-ready">Ready</span>
             </div>
-            <h4 className="sensor-setup-model-card-title">DC + Battery Model</h4>
-            <p className="sensor-setup-model-card-description">
-              DC cable attached to sensor unit
+            <div className="sensor-setup-accordion-header-right">
+              {expandedSection === 'wifi' ? (
+                <ChevronUpIcon className="sensor-setup-accordion-chevron" />
+              ) : (
+                <ChevronDownIcon className="sensor-setup-accordion-chevron" />
+              )}
+            </div>
+          </div>
+        </button>
+
+        {expandedSection === 'wifi' && (
+          <div className="sensor-setup-accordion-content">
+            <div className="sensor-setup-wifi-steps">
+              {wifiSteps.map((step) => (
+                <div key={step.number} className="sensor-setup-wifi-step-card">
+                  <div className="sensor-setup-wifi-step-content">
+                    {/* Step Number */}
+                    <div className="sensor-setup-wifi-step-number-wrapper">
+                      <div className="sensor-setup-wifi-step-number-badge">
+                        <span className="sensor-setup-wifi-step-number">{step.number}</span>
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="sensor-setup-wifi-step-details">
+                      <h3 className="sensor-setup-wifi-step-title">{step.title}</h3>
+                      <p className="sensor-setup-wifi-step-description">{step.description}</p>
+                      
+                      {/* Phone Screenshot Image */}
+                      <div className="sensor-setup-wifi-step-image-wrapper">
+                        <img
+                          src={step.image}
+                          alt={step.alt}
+                          className="sensor-setup-wifi-step-image"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {expandedSection !== 'wifi' && (
+          <div className="sensor-setup-accordion-preview">
+            <p className="sensor-setup-accordion-preview-text">
+              {wifiSteps.length} steps to connect your sensor to WiFi
             </p>
           </div>
-        </div>
-      </div>
-
-      {/* WiFi Connection Section */}
-      <div className="sensor-setup-section-divider">
-        <h3 className="sensor-setup-section-divider-title">WiFi Connection</h3>
-      </div>
-
-      <div className="sensor-setup-wifi-steps">
-        {wifiSteps.map((step) => (
-          <div key={step.number} className="sensor-setup-wifi-step-card">
-            <div className="sensor-setup-wifi-step-content">
-              {/* Step Number */}
-              <div className="sensor-setup-wifi-step-number-wrapper">
-                <div className="sensor-setup-wifi-step-number-badge">
-                  <span className="sensor-setup-wifi-step-number">{step.number}</span>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="sensor-setup-wifi-step-details">
-                <h3 className="sensor-setup-wifi-step-title">{step.title}</h3>
-                <p className="sensor-setup-wifi-step-description">{step.description}</p>
-                
-                {/* Phone Screenshot Image */}
-                <div className="sensor-setup-wifi-step-image-wrapper">
-                  <img
-                    src={step.image}
-                    alt={step.alt}
-                    className="sensor-setup-wifi-step-image"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+        )}
       </div>
 
       {/* What You'll Need */}
