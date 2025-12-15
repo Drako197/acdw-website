@@ -99,19 +99,32 @@ export function Step3AssignCustomer() {
       <div className="sensor-setup-assignment-actions-wrapper">
         <h3 className="sensor-setup-assignment-actions-heading">What's Next?</h3>
         <div className="sensor-setup-assignment-actions">
-        <button
-          onClick={() => navigate('/contact?type=support')}
-          className="sensor-setup-assignment-button sensor-setup-assignment-button-primary"
-        >
-          Contact Support
-        </button>
-        
-        <button
-          onClick={() => navigate('/sensor-setup')}
-          className="sensor-setup-assignment-button sensor-setup-assignment-button-secondary"
-        >
-          Setup Another Sensor
-        </button>
+          <button
+            onClick={() => navigate('/contact?type=support')}
+            className="sensor-setup-assignment-button sensor-setup-assignment-button-primary"
+          >
+            Contact Support
+          </button>
+          
+          <button
+            onClick={() => {
+              // Clear session storage to restart setup
+              sessionStorage.removeItem('sensor-setup-prerequisite-dismissed')
+              sessionStorage.removeItem('sensor-setup-prerequisite-dismiss-reason')
+              // Navigate to restart the setup
+              window.location.href = '/sensor-setup'
+            }}
+            className="sensor-setup-assignment-button sensor-setup-assignment-button-secondary"
+          >
+            Setup Another Sensor
+          </button>
+          
+          <button
+            onClick={() => navigate('/')}
+            className="sensor-setup-assignment-button sensor-setup-assignment-button-tertiary"
+          >
+            Back to Home
+          </button>
         </div>
       </div>
     </div>

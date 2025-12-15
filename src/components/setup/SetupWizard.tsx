@@ -91,30 +91,32 @@ export function SetupWizard({
         </div>
       </div>
 
-      {/* Navigation */}
-      <div className="sensor-setup-wizard-navigation">
-        <div className="sensor-setup-wizard-navigation-content">
-          <div className="sensor-setup-wizard-navigation-buttons">
-            <button
-              onClick={handleBack}
-              disabled={currentStep === 1}
-              className={`sensor-setup-wizard-navigation-button sensor-setup-wizard-navigation-button-back ${currentStep > 1 ? 'sensor-setup-wizard-navigation-button-enabled' : 'sensor-setup-wizard-navigation-button-disabled'}`}
-            >
-              <ChevronLeftIcon className="sensor-setup-wizard-navigation-button-icon" />
-              <span>{backLabel}</span>
-            </button>
+      {/* Navigation - Hidden on final step */}
+      {currentStep < totalSteps && (
+        <div className="sensor-setup-wizard-navigation">
+          <div className="sensor-setup-wizard-navigation-content">
+            <div className="sensor-setup-wizard-navigation-buttons">
+              <button
+                onClick={handleBack}
+                disabled={currentStep === 1}
+                className={`sensor-setup-wizard-navigation-button sensor-setup-wizard-navigation-button-back ${currentStep > 1 ? 'sensor-setup-wizard-navigation-button-enabled' : 'sensor-setup-wizard-navigation-button-disabled'}`}
+              >
+                <ChevronLeftIcon className="sensor-setup-wizard-navigation-button-icon" />
+                <span>{backLabel}</span>
+              </button>
 
-            <button
-              onClick={handleContinue}
-              disabled={currentStep >= totalSteps}
-              className={`sensor-setup-wizard-navigation-button sensor-setup-wizard-navigation-button-continue ${currentStep < totalSteps ? 'sensor-setup-wizard-navigation-button-enabled' : 'sensor-setup-wizard-navigation-button-disabled'}`}
-            >
-              <span>{continueLabel}</span>
-              {currentStep < totalSteps && <ChevronRightIcon className="sensor-setup-wizard-navigation-button-icon" />}
-            </button>
+              <button
+                onClick={handleContinue}
+                disabled={currentStep >= totalSteps}
+                className={`sensor-setup-wizard-navigation-button sensor-setup-wizard-navigation-button-continue ${currentStep < totalSteps ? 'sensor-setup-wizard-navigation-button-enabled' : 'sensor-setup-wizard-navigation-button-disabled'}`}
+              >
+                <span>{continueLabel}</span>
+                {currentStep < totalSteps && <ChevronRightIcon className="sensor-setup-wizard-navigation-button-icon" />}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
