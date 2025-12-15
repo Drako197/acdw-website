@@ -5,15 +5,6 @@
 [build.environment]
   NODE_VERSION = "20"
 
-# Block direct POSTs to root URL (force all form submissions through validation function)
-# This prevents bots from bypassing security by POSTing directly to Netlify Forms
-[[redirects]]
-  from = "/"
-  to = "/.netlify/functions/validate-form-submission"
-  status = 307
-  force = true
-  conditions = {Method = ["POST"]}
-
 # SPA routing - catch all GET requests
 [[redirects]]
   from = "/*"
