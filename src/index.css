@@ -9497,6 +9497,10 @@
   @apply bg-white rounded-lg border border-gray-200 p-6;
 }
 
+.sensor-setup-installation-step-card:first-child {
+  @apply mt-8;
+}
+
 .sensor-setup-installation-step-content {
   @apply flex items-start space-x-6;
 }
@@ -9550,6 +9554,10 @@
 
 .sensor-setup-wifi-step-card {
   @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-wifi-step-card:first-child {
+  @apply mt-8;
 }
 
 .sensor-setup-wifi-step-content {
