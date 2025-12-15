@@ -116,25 +116,6 @@ export function Step2SensorSetup() {
         </div>
       </div>
 
-      {/* Prerequisites Callout */}
-      <div className="sensor-setup-prerequisites-callout">
-        <div className="sensor-setup-prerequisites-callout-content">
-          <ExclamationTriangleIcon className="sensor-setup-prerequisites-callout-icon" />
-          <div className="sensor-setup-prerequisites-callout-text">
-            <h3 className="sensor-setup-prerequisites-callout-title">Prerequisite</h3>
-            <p className="sensor-setup-prerequisites-callout-item-description">
-              The ACDW Mini must already be installed before setting up the sensor. 
-              <a
-                href="/mini-setup"
-                className="sensor-setup-prerequisites-callout-item-link"
-              >
-                View Mini Setup Guide →
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
-
       {/* What You'll Need */}
       <div className="sensor-setup-what-you-need">
         <h3 className="sensor-setup-what-you-need-title">What You'll Need</h3>
@@ -217,53 +198,57 @@ export function Step2SensorSetup() {
                       <h3 className="sensor-setup-installation-step-title">{step.title}</h3>
                       <p className="sensor-setup-installation-step-description">{step.description}</p>
                       
-                      {/* Image */}
-                      <div className="sensor-setup-installation-step-image-wrapper">
-                        <img
-                          src={step.image}
-                          alt={step.alt}
-                          className="sensor-setup-installation-step-image"
-                        />
-                      </div>
+                      {/* Image - Skip for step 2 (model identification) */}
+                      {step.number !== 2 && (
+                        <div className="sensor-setup-installation-step-image-wrapper">
+                          <img
+                            src={step.image}
+                            alt={step.alt}
+                            className="sensor-setup-installation-step-image"
+                          />
+                        </div>
+                      )}
+
+                      {/* Model Comparison - Only for step 2 */}
+                      {step.number === 2 && (
+                        <div className="sensor-setup-model-identification">
+                          <div className="sensor-setup-model-comparison">
+                            {/* Battery Model */}
+                            <div className="sensor-setup-model-card">
+                              <div className="sensor-setup-model-card-image-wrapper">
+                                <img
+                                  src="/images/setup/model-battery.png"
+                                  alt="Battery-Only Model"
+                                  className="sensor-setup-model-card-image"
+                                />
+                              </div>
+                              <h4 className="sensor-setup-model-card-title">Battery-Only Model</h4>
+                              <p className="sensor-setup-model-card-description">
+                                No connection cable
+                              </p>
+                            </div>
+
+                            {/* DC Model */}
+                            <div className="sensor-setup-model-card">
+                              <div className="sensor-setup-model-card-image-wrapper">
+                                <img
+                                  src="/images/setup/model-dc.png"
+                                  alt="DC + Battery Model"
+                                  className="sensor-setup-model-card-image"
+                                />
+                              </div>
+                              <h4 className="sensor-setup-model-card-title">DC + Battery Model</h4>
+                              <p className="sensor-setup-model-card-description">
+                                DC cable attached to sensor unit
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               ))}
-            </div>
-
-            {/* Model Comparison */}
-            <div className="sensor-setup-model-identification">
-              <div className="sensor-setup-model-comparison">
-                {/* Battery Model */}
-                <div className="sensor-setup-model-card">
-                  <div className="sensor-setup-model-card-image-wrapper">
-                    <img
-                      src="/images/setup/model-battery.png"
-                      alt="Battery-Only Model"
-                      className="sensor-setup-model-card-image"
-                    />
-                  </div>
-                  <h4 className="sensor-setup-model-card-title">Battery-Only Model</h4>
-                  <p className="sensor-setup-model-card-description">
-                    No connection cable
-                  </p>
-                </div>
-
-                {/* DC Model */}
-                <div className="sensor-setup-model-card">
-                  <div className="sensor-setup-model-card-image-wrapper">
-                    <img
-                      src="/images/setup/model-dc.png"
-                      alt="DC + Battery Model"
-                      className="sensor-setup-model-card-image"
-                    />
-                  </div>
-                  <h4 className="sensor-setup-model-card-title">DC + Battery Model</h4>
-                  <p className="sensor-setup-model-card-description">
-                    DC cable attached to sensor unit
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         )}
