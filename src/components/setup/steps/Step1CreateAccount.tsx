@@ -19,7 +19,20 @@ export function Step1CreateAccount() {
     {
       number: 1,
       title: 'Create User Account',
-      description: 'Go to monitor.acdrainwiz.com/sign-up and fill out the registration form with your first name, last name, email, and password.',
+      description: (
+        <>
+          Go to the{' '}
+          <a
+            href="https://monitor.acdrainwiz.com/sign-up"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="sensor-setup-account-step-link"
+          >
+            sign up page
+          </a>
+          {' '}and fill out the registration form with your first name, last name, email, and password to get started.
+        </>
+      ),
       image: '/images/setup/step1-1-signup.png',
       alt: 'ACDW Monitor sign-up form'
     },
@@ -68,16 +81,6 @@ export function Step1CreateAccount() {
         <p className="sensor-setup-step-subtitle">
           Set up your account before installing your first AC Drain Wiz Sensor at a customer's home
         </p>
-        <div className="sensor-setup-step-signup-link-wrapper">
-          <a
-            href="https://monitor.acdrainwiz.com/sign-up"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="sensor-setup-step-signup-link"
-          >
-            Go to Sign Up Page →
-          </a>
-        </div>
       </div>
 
       {/* Account Setup Steps */}
@@ -95,7 +98,9 @@ export function Step1CreateAccount() {
               {/* Content */}
               <div className="sensor-setup-account-step-details">
                 <h3 className="sensor-setup-account-step-title">{substep.title}</h3>
-                <p className="sensor-setup-account-step-description">{substep.description}</p>
+                <p className="sensor-setup-account-step-description">
+                  {substep.description}
+                </p>
                 
                 {/* Screenshot Image */}
                 <div className="sensor-setup-account-step-image-wrapper">
