@@ -9340,6 +9340,73 @@
   @apply bg-white border-2 border-primary-600 text-primary-600 hover:bg-primary-50;
 }
 
+/* Prerequisite Modal */
+.sensor-setup-prerequisite-modal-overlay {
+  @apply fixed inset-0 z-[100] flex items-center justify-center;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.sensor-setup-prerequisite-modal {
+  @apply bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4;
+  transform: scale(0.95);
+  opacity: 0;
+  transition: all 0.3s ease-out;
+}
+
+.sensor-setup-prerequisite-modal-visible {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.sensor-setup-prerequisite-modal-content {
+  @apply relative p-8;
+}
+
+.sensor-setup-prerequisite-modal-close {
+  @apply absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 transition-colors;
+}
+
+.sensor-setup-prerequisite-modal-close-icon {
+  @apply h-6 w-6;
+}
+
+.sensor-setup-prerequisite-modal-icon-wrapper {
+  @apply flex justify-center mb-6;
+}
+
+.sensor-setup-prerequisite-modal-icon {
+  @apply h-16 w-16 text-amber-600;
+}
+
+.sensor-setup-prerequisite-modal-title {
+  @apply text-2xl font-bold text-gray-900 text-center mb-6;
+}
+
+.sensor-setup-prerequisite-modal-message {
+  @apply mb-8;
+}
+
+.sensor-setup-prerequisite-modal-text {
+  @apply text-gray-700 mb-4 leading-relaxed;
+}
+
+.sensor-setup-prerequisite-modal-text-emphasis {
+  @apply font-semibold text-gray-900;
+}
+
+.sensor-setup-prerequisite-modal-list {
+  @apply list-disc list-inside space-y-2 mb-4 ml-4;
+}
+
+.sensor-setup-prerequisite-modal-list-item {
+  @apply text-gray-700;
+}
+
+.sensor-setup-prerequisite-modal-button {
+  @apply w-full bg-primary-600 text-white py-3 px-6 rounded-md font-semibold text-lg hover:bg-primary-700 active:bg-primary-800 transition-colors;
+}
+
 /* Setup Wizard Container */
 .sensor-setup-wizard-container {
   @apply min-h-screen bg-gray-50;

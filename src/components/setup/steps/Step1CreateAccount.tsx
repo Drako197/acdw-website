@@ -1,6 +1,21 @@
+import { useState, useEffect } from 'react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { PrerequisiteModal } from '../PrerequisiteModal'
 
 export function Step1CreateAccount() {
+  const [showModal, setShowModal] = useState(false)
+
+  useEffect(() => {
+    // Check if user has already acknowledged the prerequisite in this session
+    const acknowledged = sessionStorage.getItem('sensor-setup-prerequisite-acknowledged')
+    if (!acknowledged) {
+      // Small delay to ensure smooth modal appearance
+      const timer = setTimeout(() => {
+        setShowModal(true)
+      }, 300)
+      return () => clearTimeout(timer)
+    }
+  }, [])
   const substeps = [
     {
       number: 1,
@@ -33,8 +48,15 @@ export function Step1CreateAccount() {
   ]
 
   return (
-    <div className="sensor-setup-step-container">
-      {/* Step Number Badge */}
+    <>
+      {/* Prerequisite Modal */}
+      <PrerequisiteModal 
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+      />
+
+      <div className="sensor-setup-step-container">
+        {/* Step Number Badge */}
       <div className="sensor-setup-step-badge-wrapper">
         <div className="sensor-setup-step-badge">
           <span className="sensor-setup-step-badge-number">1</span>
@@ -93,6 +115,7 @@ export function Step1CreateAccount() {
         ))}
       </div>
     </div>
+    </>
   )
 }
 
