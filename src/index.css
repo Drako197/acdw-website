@@ -9419,20 +9419,32 @@
   @apply inline-flex items-center text-primary-600 hover:text-primary-700 font-medium transition-colors;
 }
 
+.sensor-setup-prerequisite-modal-checkbox-wrapper {
+  @apply mb-4;
+}
+
+.sensor-setup-prerequisite-modal-checkbox-label {
+  @apply flex items-start space-x-3 cursor-pointer;
+}
+
+.sensor-setup-prerequisite-modal-checkbox {
+  @apply mt-1 h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded flex-shrink-0;
+}
+
+.sensor-setup-prerequisite-modal-checkbox-text {
+  @apply text-sm text-gray-700;
+}
+
 .sensor-setup-prerequisite-modal-actions {
-  @apply flex flex-col sm:flex-row gap-2;
+  @apply flex justify-center;
 }
 
 .sensor-setup-prerequisite-modal-button {
-  @apply flex-1 py-2 px-4 rounded-md font-medium text-sm transition-colors;
+  @apply py-2 px-6 rounded-md font-medium text-sm transition-colors;
 }
 
 .sensor-setup-prerequisite-modal-button-primary {
   @apply bg-primary-500 text-white hover:bg-primary-600;
-}
-
-.sensor-setup-prerequisite-modal-button-secondary {
-  @apply bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400;
 }
 
 /* Setup Wizard Container */

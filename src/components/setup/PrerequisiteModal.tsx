@@ -8,11 +8,14 @@ interface PrerequisiteModalProps {
 
 export function PrerequisiteModal({ isOpen, onClose }: PrerequisiteModalProps) {
   const [isVisible, setIsVisible] = useState(false)
+  const [accountCreated, setAccountCreated] = useState(false)
 
-  const handleDismiss = (reason: 'dont-show' | 'account-created') => {
+  const handleUnderstand = () => {
     // Store in sessionStorage so it doesn't show again this session
     sessionStorage.setItem('sensor-setup-prerequisite-dismissed', 'true')
-    sessionStorage.setItem('sensor-setup-prerequisite-dismiss-reason', reason)
+    if (accountCreated) {
+      sessionStorage.setItem('sensor-setup-prerequisite-dismiss-reason', 'account-created')
+    }
     onClose()
   }
 
@@ -38,7 +41,7 @@ export function PrerequisiteModal({ isOpen, onClose }: PrerequisiteModalProps) {
 
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        handleDismiss('dont-show')
+        handleUnderstand()
       }
     }
 
@@ -57,7 +60,7 @@ export function PrerequisiteModal({ isOpen, onClose }: PrerequisiteModalProps) {
         <div className="sensor-setup-prerequisite-modal-content">
           {/* Close button */}
           <button
-            onClick={() => handleDismiss('dont-show')}
+            onClick={handleUnderstand}
             className="sensor-setup-prerequisite-modal-close"
             aria-label="Close"
           >
@@ -111,19 +114,28 @@ export function PrerequisiteModal({ isOpen, onClose }: PrerequisiteModalProps) {
             </div>
           </div>
 
-          {/* Action Buttons */}
+          {/* Checkbox */}
+          <div className="sensor-setup-prerequisite-modal-checkbox-wrapper">
+            <label className="sensor-setup-prerequisite-modal-checkbox-label">
+              <input
+                type="checkbox"
+                checked={accountCreated}
+                onChange={(e) => setAccountCreated(e.target.checked)}
+                className="sensor-setup-prerequisite-modal-checkbox"
+              />
+              <span className="sensor-setup-prerequisite-modal-checkbox-text">
+                I have already created my account and my customer profile
+              </span>
+            </label>
+          </div>
+
+          {/* Action Button */}
           <div className="sensor-setup-prerequisite-modal-actions">
             <button
-              onClick={() => handleDismiss('account-created')}
+              onClick={handleUnderstand}
               className="sensor-setup-prerequisite-modal-button sensor-setup-prerequisite-modal-button-primary"
             >
-              Thanks, I have created my account
-            </button>
-            <button
-              onClick={() => handleDismiss('dont-show')}
-              className="sensor-setup-prerequisite-modal-button sensor-setup-prerequisite-modal-button-secondary"
-            >
-              Do not display this anymore
+              Ok I understand
             </button>
           </div>
         </div>
