@@ -87,7 +87,7 @@ export function PrerequisiteModal({ isOpen, onClose }: PrerequisiteModalProps) {
             </p>
             <ul className="sensor-setup-prerequisite-modal-list">
               <li className="sensor-setup-prerequisite-modal-list-item">
-                Creating your user account
+                Creating your Sensor Monitoring Account
               </li>
               <li className="sensor-setup-prerequisite-modal-list-item">
                 Verifying your email
