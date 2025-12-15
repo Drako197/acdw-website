@@ -39,8 +39,8 @@ export function Step3AssignCustomer() {
     <div className="sensor-setup-step-container">
       {/* Step Number Badge */}
       <div className="sensor-setup-step-badge-wrapper">
-        <div className="sensor-setup-step-badge sensor-setup-step-badge-complete">
-          <CheckCircleIcon className="sensor-setup-step-badge-icon" />
+        <div className="sensor-setup-step-badge sensor-setup-step-badge-step3">
+          <span className="sensor-setup-step-badge-number">3</span>
         </div>
       </div>
 

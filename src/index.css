@@ -9323,6 +9323,11 @@
   background: linear-gradient(135deg, #2563eb 0%, #5b21b6 50%, #7c3aed 100%);
 }
 
+.sensor-setup-step-badge-step3 {
+  @apply bg-purple-800;
+  background-color: #6b21a8;
+}
+
 .sensor-setup-step-badge-complete {
   @apply bg-green-600;
 }
