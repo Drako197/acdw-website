@@ -119,6 +119,52 @@ export function Step2SensorSetup() {
         </div>
       </div>
 
+      {/* What You'll Need */}
+      <div className="sensor-setup-what-you-need">
+        <h3 className="sensor-setup-what-you-need-title">
+          <span className="sensor-setup-what-you-need-icon">📦</span>
+          What You'll Need
+        </h3>
+        <div className="sensor-setup-what-you-need-grid">
+          <div className="sensor-setup-what-you-need-item">
+            <div className="sensor-setup-what-you-need-item-icon-wrapper">
+              <span className="sensor-setup-what-you-need-item-icon">🔋</span>
+            </div>
+            <div className="sensor-setup-what-you-need-item-content">
+              <p className="sensor-setup-what-you-need-item-title">ACDW Sensor</p>
+              <p className="sensor-setup-what-you-need-item-description">Unboxed</p>
+            </div>
+          </div>
+          <div className="sensor-setup-what-you-need-item">
+            <div className="sensor-setup-what-you-need-item-icon-wrapper">
+              <span className="sensor-setup-what-you-need-item-icon">🔌</span>
+            </div>
+            <div className="sensor-setup-what-you-need-item-content">
+              <p className="sensor-setup-what-you-need-item-title">Battery or DC Power</p>
+              <p className="sensor-setup-what-you-need-item-description">DC cable attached for DC model</p>
+            </div>
+          </div>
+          <div className="sensor-setup-what-you-need-item">
+            <div className="sensor-setup-what-you-need-item-icon-wrapper">
+              <span className="sensor-setup-what-you-need-item-icon">📱</span>
+            </div>
+            <div className="sensor-setup-what-you-need-item-content">
+              <p className="sensor-setup-what-you-need-item-title">Smartphone/Tablet</p>
+              <p className="sensor-setup-what-you-need-item-description">For setup</p>
+            </div>
+          </div>
+          <div className="sensor-setup-what-you-need-item">
+            <div className="sensor-setup-what-you-need-item-icon-wrapper">
+              <span className="sensor-setup-what-you-need-item-icon">📶</span>
+            </div>
+            <div className="sensor-setup-what-you-need-item-content">
+              <p className="sensor-setup-what-you-need-item-title">Wi-Fi Password</p>
+              <p className="sensor-setup-what-you-need-item-description">Homeowner's network</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Physical Setup Accordion Section */}
       <div className={`sensor-setup-accordion-section ${expandedSection === 'physical' ? 'sensor-setup-accordion-section-expanded' : 'sensor-setup-accordion-section-collapsed'} ${physicalComplete ? 'sensor-setup-accordion-section-complete' : ''}`}>
         <button
@@ -301,52 +347,6 @@ export function Step2SensorSetup() {
             </p>
           </div>
         )}
-      </div>
-
-      {/* What You'll Need */}
-      <div className="sensor-setup-what-you-need">
-        <h3 className="sensor-setup-what-you-need-title">
-          <span className="sensor-setup-what-you-need-icon">📦</span>
-          What You'll Need
-        </h3>
-        <div className="sensor-setup-what-you-need-grid">
-          <div className="sensor-setup-what-you-need-item">
-            <div className="sensor-setup-what-you-need-item-icon-wrapper">
-              <span className="sensor-setup-what-you-need-item-icon">🔋</span>
-            </div>
-            <div className="sensor-setup-what-you-need-item-content">
-              <p className="sensor-setup-what-you-need-item-title">ACDW Sensor</p>
-              <p className="sensor-setup-what-you-need-item-description">Unboxed</p>
-            </div>
-          </div>
-          <div className="sensor-setup-what-you-need-item">
-            <div className="sensor-setup-what-you-need-item-icon-wrapper">
-              <span className="sensor-setup-what-you-need-item-icon">🔌</span>
-            </div>
-            <div className="sensor-setup-what-you-need-item-content">
-              <p className="sensor-setup-what-you-need-item-title">Battery or DC Power</p>
-              <p className="sensor-setup-what-you-need-item-description">DC cable attached for DC model</p>
-            </div>
-          </div>
-          <div className="sensor-setup-what-you-need-item">
-            <div className="sensor-setup-what-you-need-item-icon-wrapper">
-              <span className="sensor-setup-what-you-need-item-icon">📱</span>
-            </div>
-            <div className="sensor-setup-what-you-need-item-content">
-              <p className="sensor-setup-what-you-need-item-title">Smartphone/Tablet</p>
-              <p className="sensor-setup-what-you-need-item-description">For setup</p>
-            </div>
-          </div>
-          <div className="sensor-setup-what-you-need-item">
-            <div className="sensor-setup-what-you-need-item-icon-wrapper">
-              <span className="sensor-setup-what-you-need-item-icon">📶</span>
-            </div>
-            <div className="sensor-setup-what-you-need-item-content">
-              <p className="sensor-setup-what-you-need-item-title">Wi-Fi Password</p>
-              <p className="sensor-setup-what-you-need-item-description">Homeowner's network</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   )
