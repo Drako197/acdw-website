@@ -19,7 +19,7 @@ export function Step2SensorSetup() {
     {
       number: 3,
       title: 'Power Up the Sensor',
-      description: 'For battery models: Insert the battery and close the battery door. For DC models: Connect the DC cable to the AC power source, then insert the backup battery.',
+      description: 'For battery models: Insert the battery and close the battery door. For DC models: Insert the backup battery. Once you have completed verification that the sensor is active and you have connected it to the local Wifi network, then connect the DC cable to the AC power source insert.',
       image: '/images/setup/step2-3-power.png',
       alt: 'Powering up the sensor'
     },
