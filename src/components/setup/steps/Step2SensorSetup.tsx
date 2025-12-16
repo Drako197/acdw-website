@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   ExclamationTriangleIcon,
   ChevronDownIcon,
@@ -9,8 +9,13 @@ import {
   WifiIcon
 } from '@heroicons/react/24/outline'
 
-export function Step2SensorSetup() {
+interface Step2SensorSetupProps {
+  onWifiInteraction?: () => void
+}
+
+export function Step2SensorSetup({ onWifiInteraction }: Step2SensorSetupProps) {
   const [expandedSection, setExpandedSection] = useState<'physical' | 'wifi'>('physical')
+  const [wifiHasBeenOpened, setWifiHasBeenOpened] = useState(false)
 
   const toggleSection = (section: 'physical' | 'wifi') => {
     // Normal accordion behavior: clicking the same section toggles it
@@ -23,7 +28,25 @@ export function Step2SensorSetup() {
       // Expand the clicked section (other will automatically collapse)
       setExpandedSection(section)
     }
+
+    // Track when WiFi section is opened for the first time
+    if (section === 'wifi' && !wifiHasBeenOpened) {
+      setWifiHasBeenOpened(true)
+      if (onWifiInteraction) {
+        onWifiInteraction()
+      }
+    }
   }
+
+  // Also trigger when WiFi section becomes expanded (in case it's opened programmatically)
+  useEffect(() => {
+    if (expandedSection === 'wifi' && !wifiHasBeenOpened) {
+      setWifiHasBeenOpened(true)
+      if (onWifiInteraction) {
+        onWifiInteraction()
+      }
+    }
+  }, [expandedSection, wifiHasBeenOpened, onWifiInteraction])
 
   const physicalSteps = [
     {

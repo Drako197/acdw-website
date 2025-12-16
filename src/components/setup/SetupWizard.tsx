@@ -9,6 +9,7 @@ interface SetupWizardProps {
   children: ReactNode
   continueLabel?: string
   backLabel?: string
+  isContinueDisabled?: boolean
 }
 
 export function SetupWizard({
@@ -17,7 +18,8 @@ export function SetupWizard({
   onStepChange,
   children,
   continueLabel = 'Continue',
-  backLabel = 'Back'
+  backLabel = 'Back',
+  isContinueDisabled = false
 }: SetupWizardProps) {
   // Scroll to top when step changes
   useEffect(() => {
@@ -122,7 +124,8 @@ export function SetupWizard({
             {currentStep < totalSteps && (
               <button
                 onClick={handleContinue}
-                className="sensor-setup-wizard-navigation-button sensor-setup-wizard-navigation-button-continue sensor-setup-wizard-navigation-button-enabled"
+                disabled={isContinueDisabled}
+                className={`sensor-setup-wizard-navigation-button sensor-setup-wizard-navigation-button-continue ${isContinueDisabled ? 'sensor-setup-wizard-navigation-button-disabled' : 'sensor-setup-wizard-navigation-button-enabled'}`}
               >
                 <span>{continueLabel}</span>
                 <ChevronRightIcon className="sensor-setup-wizard-navigation-button-icon" />
