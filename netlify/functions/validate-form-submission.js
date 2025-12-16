@@ -673,11 +673,6 @@ exports.handler = async (event, context) => {
         }
       }
       
-      // ============================================
-      // PHASE 4: Enhanced reCAPTCHA
-      // ============================================
-      // Check score (0.0 = bot, 1.0 = human)
-      // Stricter threshold for unsubscribe form: 0.7, others: 0.5
       const scoreThreshold = formType === 'unsubscribe' 
         ? parseFloat(process.env.RECAPTCHA_SCORE_THRESHOLD || '0.7')
         : parseFloat(process.env.RECAPTCHA_SCORE_THRESHOLD || '0.5')
@@ -694,35 +689,34 @@ exports.handler = async (event, context) => {
         }
       }
       
-      // Verify reCAPTCHA action matches form type (if action is provided)
       if (recaptchaResult.action) {
-        // reCAPTCHA actions use underscores (contact_general) while form names use hyphens (contact-general)
-        const expectedAction = formType === 'unsubscribe' ? 'unsubscribe' : formType.replace(/-/g, '_')
+
+          const expectedAction = formType === 'unsubscribe' ? 'unsubscribe' : formType.replace(/-/g, '_')
         if (recaptchaResult.action !== expectedAction && recaptchaResult.action !== 'submit') {
-          // Allow 'submit' as generic action, but log specific action mismatches
-          logBotDetected(formType, 'invalid-recaptcha-action', ip, userAgent, {
+
+            logBotDetected(formType, 'invalid-recaptcha-action', ip, userAgent, {
             expected: expectedAction,
             received: recaptchaResult.action,
             formName
           })
-          // Don't block - just log (some forms may use generic 'submit' action)
+
         }
       }
       
       logRecaptcha(true, recaptchaResult.score, recaptchaResult.action, ip, userAgent)
     } else if (RECAPTCHA_SECRET_KEY) {
-      // Token missing but reCAPTCHA is configured
-      console.warn('⚠️ reCAPTCHA token missing (but configured)', {
+
+        console.warn(' reCAPTCHA token missing (but configured)', {
         formType,
         ip,
         userAgent,
-        email: email ? email.substring(0, 3) + '***' : 'none' // SECURITY: Only log first 3 chars
+        email: email ? email.substring(0, 3) + '***' : 'none' 
       })
-      // Graceful degradation - allow but log
+
     }
 
-    // 1. Check honeypot fields (if filled, it's a bot)
-    if (botField || honeypot1 || honeypot2) {
+
+      if (botField || honeypot1 || honeypot2) {
       logBotDetected(formType, 'honeypot', ip, userAgent, {
         botField: !!botField,
         honeypot1: !!honeypot1,
@@ -738,15 +732,13 @@ exports.handler = async (event, context) => {
       }
     }
 
-    // 2. Validate email format
-    const emailValidation = validateEmail(email)
+
+      const emailValidation = validateEmail(email)
     if (!emailValidation.valid) {
       errors.push(emailValidation.error)
     } else if (email && !isWebhookEndpoint(path) && !isCheckoutEndpoint(path)) {
-      // ============================================
-      // PHASE 6: Email Domain Validation
-      // ============================================
-      try {
+
+        try {
         const domainValidation = await validateEmailDomain(email, ip, userAgent, formType)
         if (!domainValidation.valid) {
           logBotDetected(formType, 'email-domain-validation-failed', ip, userAgent, {
@@ -757,14 +749,12 @@ exports.handler = async (event, context) => {
           errors.push(domainValidation.details?.message || domainValidation.reason)
         }
       } catch (emailValidationError) {
-        // Fail open - allow if check fails
-        console.error('Email domain validation error:', emailValidationError.message)
+
+            console.error('Email domain validation error:', emailValidationError.message)
       }
     }
 
-    // 3. Validate form-specific fields (using original formData for validation)
-    // Validation happens on original data, but we'll forward sanitized data
-    const formErrors = validateFormFields(formType, formData)
+      const formErrors = validateFormFields(formType, formData)
     errors.push(...formErrors)
     
     // SECURITY: Additional validation for unsubscribe form - dropdown value validation
