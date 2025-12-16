@@ -43,7 +43,7 @@ export function Step2SensorSetup() {
     {
       number: 3,
       title: 'Power Up the Sensor',
-      description: 'For battery models: Insert the battery and close the battery door. For DC models: Insert the backup battery. Once you have completed verification that the sensor is active and you have connected it to the local Wifi network, then connect the DC cable to the AC power source insert.',
+      description: 'For battery models: Insert the battery and close the battery door. For DC models: Insert the backup battery, then connect the DC cable to the AC power source insert once you have completed the verification of the LED status and complete the wifi set up.',
       image: '/images/setup/step2-3-power.png',
       alt: 'Powering up the sensor'
     },
@@ -272,7 +272,6 @@ export function Step2SensorSetup() {
             <div className="sensor-setup-accordion-header-left">
               <div className="sensor-setup-accordion-status-icon sensor-setup-accordion-status-icon-pending" />
               <h3 className="sensor-setup-accordion-title">WiFi Connection</h3>
-              <span className="sensor-setup-accordion-badge sensor-setup-accordion-badge-ready">Ready</span>
             </div>
             <div className="sensor-setup-accordion-header-right">
               {expandedSection === 'wifi' ? (
