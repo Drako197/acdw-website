@@ -1,5 +1,6 @@
-import { type ReactNode } from 'react'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import { type ReactNode, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { ChevronLeftIcon, ChevronRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline'
 
 interface SetupWizardProps {
   totalSteps: number
@@ -18,23 +19,24 @@ export function SetupWizard({
   continueLabel = 'Continue',
   backLabel = 'Back'
 }: SetupWizardProps) {
-  const progressPercentage = (currentStep / totalSteps) * 100
+  // Scroll to top when step changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [currentStep])
 
-  // Calculate gradient based on current step
-  // Step 1: Blue (#2563eb - primary-600)
-  // Step 2: Mix of blue and purple (transitioning)
-  // Step 3: Deep purple (#6b21a8 - purple-800)
-  const getProgressGradient = () => {
-    if (currentStep === 1) {
-      // Step 1: Solid blue
-      return 'linear-gradient(to right, #2563eb, #2563eb)'
-    } else if (currentStep === 2) {
-      // Step 2: Blue transitioning to purple mix
-      return 'linear-gradient(to right, #2563eb 0%, #5b21b6 50%, #7c3aed 100%)'
-    } else {
-      // Step 3: Full gradient from blue to deep purple
-      return 'linear-gradient(to right, #2563eb 0%, #5b21b6 50%, #6b21a8 100%)'
+  // Get color for each progress bar based on step
+  const getStepColor = (step: number) => {
+    if (step <= currentStep) {
+      // Completed or current step
+      if (step === 1) {
+        return '#2563eb' // Blue
+      } else if (step === 2) {
+        return '#5b21b6' // Purple mix
+      } else {
+        return '#6b21a8' // Deep purple
+      }
     }
+    return '#e5e7eb' // Gray for incomplete steps
   }
 
   const handleBack = () => {
@@ -54,13 +56,23 @@ export function SetupWizard({
       {/* Header */}
       <div className="sensor-setup-wizard-header">
         <div className="sensor-setup-wizard-header-content">
+          {/* Back to Support Link */}
+          <div className="sensor-setup-wizard-header-back-link">
+            <Link to="/support" className="sensor-setup-wizard-header-back-link-content">
+              <ArrowLeftIcon className="sensor-setup-wizard-header-back-link-icon" />
+              <span>Back to Support</span>
+            </Link>
+          </div>
+
           <div className="sensor-setup-wizard-header-top">
             <div className="sensor-setup-wizard-header-brand">
-              <img 
-                src="/images/ac-drain-wiz-logo.png" 
-                alt="AC Drain Wiz" 
-                className="sensor-setup-wizard-header-logo"
-              />
+              <Link to="/" className="sensor-setup-wizard-header-logo-link">
+                <img 
+                  src="/images/ac-drain-wiz-logo.png" 
+                  alt="AC Drain Wiz" 
+                  className="sensor-setup-wizard-header-logo"
+                />
+              </Link>
               <h1 className="sensor-setup-wizard-header-title">Sensor Setup</h1>
             </div>
             <div className="sensor-setup-wizard-header-step-indicator">
@@ -68,15 +80,17 @@ export function SetupWizard({
             </div>
           </div>
           
-          {/* Progress Bar */}
-          <div className="sensor-setup-wizard-progress-bar-wrapper">
-            <div
-              className="sensor-setup-wizard-progress-bar"
-              style={{ 
-                width: `${progressPercentage}%`,
-                background: getProgressGradient()
-              }}
-            />
+          {/* Progress Bars - 3 separate bars matching content width */}
+          <div className="sensor-setup-wizard-progress-bars-container">
+            {[1, 2, 3].map((step) => (
+              <div
+                key={step}
+                className="sensor-setup-wizard-progress-bar"
+                style={{ 
+                  backgroundColor: getStepColor(step)
+                }}
+              />
+            ))}
           </div>
         </div>
       </div>

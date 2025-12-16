@@ -10156,7 +10156,19 @@
 }
 
 .sensor-setup-wizard-header-content {
-  @apply container mx-auto px-4 py-4;
+  @apply container mx-auto px-4 py-4 max-w-4xl;
+}
+
+.sensor-setup-wizard-header-back-link {
+  @apply mb-4;
+}
+
+.sensor-setup-wizard-header-back-link-content {
+  @apply flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors;
+}
+
+.sensor-setup-wizard-header-back-link-icon {
+  @apply h-4 w-4;
 }
 
 .sensor-setup-wizard-header-top {
@@ -10165,6 +10177,10 @@
 
 .sensor-setup-wizard-header-brand {
   @apply flex items-center space-x-2;
+}
+
+.sensor-setup-wizard-header-logo-link {
+  @apply flex items-center;
 }
 
 .sensor-setup-wizard-header-logo {
@@ -10179,13 +10195,13 @@
   @apply text-sm text-gray-600;
 }
 
-.sensor-setup-wizard-progress-bar-wrapper {
-  @apply w-full bg-gray-200 rounded-full h-2;
+.sensor-setup-wizard-progress-bars-container {
+  @apply flex gap-2 w-full;
 }
 
 .sensor-setup-wizard-progress-bar {
-  @apply h-2 rounded-full transition-all duration-300;
-  /* Gradient is applied inline via style prop based on current step */
+  @apply h-2 rounded-full transition-all duration-300 flex-1;
+  /* Color is applied inline via style prop based on current step */
 }
 
 /* Content */
