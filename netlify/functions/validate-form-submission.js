@@ -334,7 +334,7 @@ exports.handler = async (event, context) => {
       'contact-sales',
       'contact-installer',
       'contact-demo',
-      'email-preferences',
+      'ep-x7k9m2',
       'unsubscribe',
       'promo-signup',
       'core-upgrade',

@@ -77,8 +77,8 @@ export function EmailPreferencesPage() {
         }
 
         const submissionData: Record<string, string> = {
-            'form-name': 'email-preferences',
-            'form-type': 'email-preferences',
+            'form-name': 'ep-x7k9m2',
+            'form-type': 'ep-x7k9m2',
             email: email.trim(),
             productUpdates: preferences.productUpdates ? 'yes' : 'no',
             promotions: preferences.promotions ? 'yes' : 'no',
@@ -170,16 +170,15 @@ export function EmailPreferencesPage() {
                     <div className="email-preferences-form-container">
                         <form
                             onSubmit={handleSubmit}
-                            name="email-preferences"
+                            name="ep-x7k9m2"
                             method="POST"
                             data-netlify="true"
                             netlify-honeypot="bot-field"
                             data-netlify-recaptcha="true"
                             noValidate
                         >
-                            <input type="hidden" name="form-name" value="email-preferences" />
-                            <input type="hidden" name="form-type" value="email-preferences" />
-
+                            <input type="hidden" name="form-name" value="ep-x7k9m2" />
+                            <input type="hidden" name="form-type" value="ep-x7k9m2" />
                             <div style={{ display: 'none' }}>
                                 <label>
                                     Don't fill this out if you're human: <input name="bot-field" tabIndex={-1} autoComplete="off" />
