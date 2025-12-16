@@ -86,7 +86,7 @@ export function EmailPreferencesPage() {
             orderUpdates: preferences.orderUpdates ? 'yes' : 'no',
             supportEmails: preferences.supportEmails ? 'yes' : 'no',
             'form-load-time': formLoadTime.toString(),
-            'recaptcha-token': recaptchaResult.token
+            'g-recaptcha-response': recaptchaResult.token
         }
 
         const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost'
@@ -171,7 +171,10 @@ export function EmailPreferencesPage() {
                         <form
                             onSubmit={handleSubmit}
                             name="email-preferences"
-                            data-netlify-honeypot="bot-field"
+                            method="POST"
+                            data-netlify="true"
+                            netlify-honeypot="bot-field"
+                            data-netlify-recaptcha="true"
                             noValidate
                         >
                             <input type="hidden" name="form-name" value="email-preferences" />
