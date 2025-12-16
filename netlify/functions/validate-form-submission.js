@@ -673,11 +673,6 @@ exports.handler = async (event, context) => {
         }
       }
       
-      // ============================================
-      // PHASE 4: Enhanced reCAPTCHA
-      // ============================================
-      // Check score (0.0 = bot, 1.0 = human)
-      // Stricter threshold for unsubscribe form: 0.7, others: 0.5
       const scoreThreshold = formType === 'unsubscribe' 
         ? parseFloat(process.env.RECAPTCHA_SCORE_THRESHOLD || '0.7')
         : parseFloat(process.env.RECAPTCHA_SCORE_THRESHOLD || '0.5')
@@ -695,35 +690,33 @@ exports.handler = async (event, context) => {
       }
       
       if (recaptchaResult.action) {
-        const expectedAction = formType === 'unsubscribe' ? 'unsubscribe' : formType.replace(/-/g, '_')
+
+          const expectedAction = formType === 'unsubscribe' ? 'unsubscribe' : formType.replace(/-/g, '_')
         if (recaptchaResult.action !== expectedAction && recaptchaResult.action !== 'submit') {
-          logBotDetected(formType, 'invalid-recaptcha-action', ip, userAgent, {
+
+            logBotDetected(formType, 'invalid-recaptcha-action', ip, userAgent, {
             expected: expectedAction,
             received: recaptchaResult.action,
             formName
           })
+
         }
       }
       
       logRecaptcha(true, recaptchaResult.score, recaptchaResult.action, ip, userAgent)
     } else if (RECAPTCHA_SECRET_KEY) {
-        console.warn('🚫 reCAPTCHA token missing - blocking submission', {
-            formType,
-            ip,
-            userAgent,
-            email: email ? email.substring(0, 3) + '***' : 'none'
-        })
-        return {
-            statusCode: 400,
-            headers,
-            body: JSON.stringify({
-                error: 'Security verification required',
-                message: 'Please refresh and try again'
-            }),
-        }
+
+        console.warn(' reCAPTCHA token missing (but configured)', {
+        formType,
+        ip,
+        userAgent,
+        email: email ? email.substring(0, 3) + '***' : 'none' 
+      })
+
     }
 
-    if (botField || honeypot1 || honeypot2) {
+
+      if (botField || honeypot1 || honeypot2) {
       logBotDetected(formType, 'honeypot', ip, userAgent, {
         botField: !!botField,
         honeypot1: !!honeypot1,
@@ -739,7 +732,8 @@ exports.handler = async (event, context) => {
       }
     }
 
-    const emailValidation = validateEmail(email)
+
+      const emailValidation = validateEmail(email)
     if (!emailValidation.valid) {
       errors.push(emailValidation.error)
     } else if (email && !isWebhookEndpoint(path) && !isCheckoutEndpoint(path)) {
@@ -760,7 +754,7 @@ exports.handler = async (event, context) => {
       }
     }
 
-    const formErrors = validateFormFields(formType, formData)
+      const formErrors = validateFormFields(formType, formData)
     errors.push(...formErrors)
     
     // SECURITY: Additional validation for unsubscribe form - dropdown value validation

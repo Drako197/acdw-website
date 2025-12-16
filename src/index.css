@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fade in animation for setup wizard steps */
+@keyframes setupFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: setupFadeIn 0.4s ease-in-out;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -5214,6 +5230,594 @@
   @apply h-4 w-4 mr-2;
 }
 
+.support-action-button-large {
+  @apply px-6 py-3 text-base;
+}
+
+/* Support Hub Page Classes */
+.support-hub-container {
+  @apply min-h-screen bg-gray-50;
+}
+
+.support-hub-header {
+  @apply text-center mb-12;
+}
+
+.support-hub-title {
+  @apply text-4xl font-bold text-gray-900 mb-4;
+}
+
+.support-hub-subtitle {
+  @apply text-lg text-gray-600 max-w-3xl mx-auto mb-8;
+}
+
+.support-hub-search {
+  @apply max-w-2xl mx-auto;
+}
+
+.support-hub-search-wrapper {
+  @apply relative;
+}
+
+.support-hub-search-icon {
+  @apply absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400;
+}
+
+.support-hub-search-input {
+  @apply w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+}
+
+.support-hub-cards {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6 mb-12;
+}
+
+.support-hub-card {
+  @apply bg-white rounded-lg shadow-md p-8 hover:shadow-lg transition-all duration-200 flex flex-col;
+}
+
+.support-hub-card-primary {
+  @apply border-2 border-transparent hover:border-blue-500;
+}
+
+.support-hub-card-icon-wrapper {
+  @apply mb-4;
+}
+
+.support-hub-card-icon {
+  @apply h-12 w-12 text-blue-600;
+}
+
+.support-hub-card-title {
+  @apply text-2xl font-bold text-gray-900 mb-3;
+}
+
+.support-hub-card-description {
+  @apply text-gray-600 mb-6 flex-grow;
+}
+
+.support-hub-card-link {
+  @apply flex items-center text-blue-600 font-semibold hover:text-blue-700;
+}
+
+.support-hub-card-arrow {
+  @apply h-5 w-5 ml-2;
+}
+
+.support-hub-quick-links {
+  @apply bg-white rounded-lg shadow-md p-8;
+}
+
+.support-hub-quick-links-title {
+  @apply text-2xl font-bold text-gray-900 mb-6 text-center;
+}
+
+.support-hub-quick-links-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4;
+}
+
+.support-hub-quick-link {
+  @apply flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors;
+}
+
+.support-hub-quick-link-icon {
+  @apply h-6 w-6 text-blue-600 flex-shrink-0;
+}
+
+/* Support Section Pages (Shared Styles) */
+.support-section-container {
+  @apply min-h-screen bg-gray-50;
+}
+
+.support-section-breadcrumb {
+  @apply flex items-center text-sm text-gray-600 mb-6;
+}
+
+.support-section-breadcrumb-link {
+  @apply text-blue-600 hover:text-blue-700;
+}
+
+.support-section-breadcrumb-separator {
+  @apply mx-2 text-gray-400;
+}
+
+.support-section-breadcrumb-current {
+  @apply text-gray-900 font-medium;
+}
+
+.support-section-header {
+  @apply mb-12;
+}
+
+.support-section-back-link {
+  @apply inline-flex items-center text-blue-600 hover:text-blue-700 mb-6 transition-colors;
+}
+
+.support-section-back-icon {
+  @apply h-5 w-5 mr-2;
+}
+
+.support-section-header-content {
+  @apply flex items-start gap-4;
+}
+
+.support-section-header-icon {
+  @apply h-10 w-10 text-blue-600 flex-shrink-0;
+}
+
+.support-section-title {
+  @apply text-4xl font-bold text-gray-900 mb-3;
+}
+
+.support-section-subtitle {
+  @apply text-lg text-gray-600;
+}
+
+.support-section-content {
+  @apply max-w-4xl mx-auto space-y-12;
+}
+
+.support-section-section-title {
+  @apply text-2xl font-bold text-gray-900 mb-4;
+}
+
+.support-section-section-description {
+  @apply text-gray-600 mb-6;
+}
+
+.support-section-link {
+  @apply text-blue-600 hover:text-blue-700 underline;
+}
+
+/* Installation Setup Page */
+.support-section-main-guides {
+  @apply mb-8;
+}
+
+.support-section-resource-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.support-section-resource-card {
+  @apply bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow;
+}
+
+.support-section-resource-card-featured {
+  @apply border-2 border-blue-500 bg-blue-50;
+}
+
+.support-section-resource-card-header {
+  @apply flex items-center justify-between mb-4;
+}
+
+.support-section-resource-icon {
+  @apply h-8 w-8 text-blue-600;
+}
+
+.support-section-resource-badge {
+  @apply px-3 py-1 bg-blue-600 text-white text-xs font-semibold rounded-full;
+}
+
+.support-section-resource-title {
+  @apply text-xl font-semibold text-gray-900 mb-2;
+}
+
+.support-section-resource-description {
+  @apply text-gray-600 mb-4;
+}
+
+.support-section-resource-link {
+  @apply text-blue-600 font-semibold hover:text-blue-700;
+}
+
+.support-section-resource-button {
+  @apply text-blue-600 text-sm font-medium hover:text-blue-700;
+}
+
+.support-section-installation-steps {
+  @apply bg-white rounded-lg shadow-md p-8;
+}
+
+.support-section-step-list {
+  @apply space-y-6;
+}
+
+.support-section-step-item {
+  @apply flex items-start gap-4;
+}
+
+.support-section-step-number {
+  @apply flex-shrink-0 w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-lg font-bold;
+}
+
+.support-section-step-title {
+  @apply text-gray-900 mb-2 block;
+}
+
+.support-section-step-description {
+  @apply text-gray-600 text-sm;
+}
+
+.support-section-info-box {
+  @apply bg-blue-50 border-l-4 border-blue-500 rounded-lg p-6;
+}
+
+.support-section-info-box-content {
+  @apply flex items-start gap-4;
+}
+
+.support-section-info-box-icon {
+  @apply h-6 w-6 text-blue-600 flex-shrink-0 mt-1;
+}
+
+.support-section-info-box-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.support-section-info-box-text {
+  @apply text-gray-700;
+}
+
+.support-section-info-box-link {
+  @apply text-blue-600 hover:text-blue-700 font-medium;
+}
+
+.support-section-related {
+  @apply bg-white rounded-lg shadow-md p-8;
+}
+
+.support-section-related-links {
+  @apply flex flex-wrap gap-4;
+}
+
+.support-section-related-link {
+  @apply px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium;
+}
+
+/* Product Support Page */
+.support-section-faq {
+  @apply bg-white rounded-lg shadow-md p-8;
+}
+
+.support-section-faq-list {
+  @apply space-y-6;
+}
+
+.support-section-faq-item {
+  @apply border-b border-gray-200 pb-6 last:border-b-0 last:pb-0;
+}
+
+.support-section-faq-question {
+  @apply text-lg font-semibold text-gray-900 mb-2;
+}
+
+.support-section-faq-answer {
+  @apply text-gray-600;
+}
+
+.support-section-troubleshooting {
+  @apply bg-white rounded-lg shadow-md p-8;
+}
+
+.support-section-troubleshooting-list {
+  @apply space-y-4;
+}
+
+.support-section-cta-box {
+  @apply bg-gray-50 rounded-lg p-6;
+}
+
+.support-section-cta-text {
+  @apply text-gray-700 mb-4;
+}
+
+/* Warranty & Returns Page */
+.support-section-warranty {
+  @apply bg-white rounded-lg shadow-md p-8 mb-8;
+}
+
+.support-section-warranty-highlight {
+  @apply bg-green-50 border border-green-200 rounded-lg p-6 mb-6 flex items-start gap-4;
+}
+
+.support-section-warranty-highlight-icon {
+  @apply h-6 w-6 text-green-600 flex-shrink-0 mt-1;
+}
+
+.support-section-warranty-highlight-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.support-section-warranty-highlight-text {
+  @apply text-sm text-gray-700;
+}
+
+.support-section-warranty-details {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.support-section-warranty-details-section {
+  @apply space-y-3;
+}
+
+.support-section-warranty-details-title {
+  @apply font-semibold text-gray-900;
+}
+
+.support-section-warranty-details-list {
+  @apply space-y-2 text-gray-600 list-disc list-inside ml-4;
+}
+
+.support-section-returns {
+  @apply bg-white rounded-lg shadow-md p-8;
+}
+
+.support-section-returns-card {
+  @apply border border-gray-200 rounded-lg p-6 mb-6;
+}
+
+.support-section-returns-card-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.support-section-returns-card-text {
+  @apply text-sm text-gray-600;
+}
+
+.support-section-returns-process {
+  @apply bg-gray-50 rounded-lg p-6;
+}
+
+.support-section-returns-process-title {
+  @apply font-semibold text-gray-900 mb-4;
+}
+
+.support-section-returns-process-list {
+  @apply text-sm text-gray-700 space-y-2 list-decimal list-inside ml-4;
+}
+
+/* Contact Support Page */
+.support-section-contact-methods {
+  @apply mb-8;
+}
+
+.support-section-form-cta {
+  @apply bg-white rounded-lg shadow-md p-8 text-center;
+}
+
+.support-section-form-cta-content {
+  @apply max-w-2xl mx-auto;
+}
+
+.support-section-form-cta-title {
+  @apply text-2xl font-bold text-gray-900 mb-3;
+}
+
+.support-section-form-cta-text {
+  @apply text-gray-600 mb-6;
+}
+
+/* Recommended Installation Scenarios Page Classes */
+.support-installation-scenarios-container {
+  @apply min-h-screen bg-gray-50;
+}
+
+.support-installation-scenarios-header {
+  @apply mb-12;
+}
+
+.support-installation-scenarios-back-link {
+  @apply inline-flex items-center text-blue-600 hover:text-blue-700 mb-6 transition-colors;
+}
+
+.support-installation-scenarios-back-icon {
+  @apply h-5 w-5 mr-2;
+}
+
+.support-installation-scenarios-title {
+  @apply text-4xl font-bold text-gray-900 mb-4;
+}
+
+.support-installation-scenarios-subtitle {
+  @apply text-lg text-gray-600 max-w-3xl;
+}
+
+.support-installation-scenarios-intro {
+  @apply bg-white rounded-lg shadow-md p-6 mb-8;
+}
+
+.support-installation-scenarios-intro-text {
+  @apply text-gray-700 leading-relaxed;
+}
+
+.support-installation-scenario-card {
+  @apply bg-white rounded-lg shadow-md overflow-hidden mb-8;
+}
+
+.support-installation-scenario-card-standard {
+  @apply border-l-4 border-blue-500;
+}
+
+.support-installation-scenario-card-recommended {
+  @apply border-l-4 border-green-500;
+}
+
+.support-installation-scenario-header {
+  @apply bg-gray-50 px-6 py-4 border-b border-gray-200;
+}
+
+.support-installation-scenario-header-content {
+  @apply flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4;
+}
+
+.support-installation-scenario-badge {
+  @apply inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold;
+}
+
+.support-installation-scenario-badge-standard {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.support-installation-scenario-badge-recommended {
+  @apply bg-green-100 text-green-800;
+}
+
+.support-installation-scenario-badge-icon {
+  @apply h-5 w-5;
+}
+
+.support-installation-scenario-title {
+  @apply text-2xl font-bold text-gray-900;
+}
+
+.support-installation-scenario-content {
+  @apply px-6 py-6;
+}
+
+.support-installation-scenario-image-wrapper {
+  @apply mb-6 rounded-lg overflow-hidden bg-gray-100;
+}
+
+.support-installation-scenario-image {
+  @apply w-full h-auto object-contain;
+}
+
+.support-installation-scenario-description {
+  @apply space-y-4;
+}
+
+.support-installation-scenario-description-title {
+  @apply text-xl font-semibold text-gray-900 mb-3;
+}
+
+.support-installation-scenario-list {
+  @apply space-y-3 mb-4;
+}
+
+.support-installation-scenario-list-item {
+  @apply flex items-start text-gray-700;
+}
+
+.support-installation-scenario-list-item::before {
+  content: '•';
+  @apply text-blue-600 font-bold mr-3 text-xl leading-none;
+}
+
+.support-installation-scenario-note {
+  @apply bg-blue-50 border-l-4 border-blue-400 p-4 rounded;
+}
+
+.support-installation-scenario-note-text {
+  @apply text-sm text-gray-700 italic;
+}
+
+.support-installation-scenario-best-practice {
+  @apply bg-green-50 border-l-4 border-green-500 p-4 rounded mt-4;
+}
+
+.support-installation-scenario-best-practice-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.support-installation-scenario-best-practice-text {
+  @apply text-gray-700 leading-relaxed;
+}
+
+.support-installation-scenarios-recommendations {
+  @apply mb-12;
+}
+
+.support-installation-scenarios-recommendations-title {
+  @apply text-3xl font-bold text-gray-900 mb-8 text-center;
+}
+
+.support-installation-scenarios-recommendations-grid {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-6;
+}
+
+.support-installation-scenarios-recommendation-card {
+  @apply bg-white rounded-lg shadow-md p-6 border-t-4;
+}
+
+.support-installation-scenarios-recommendation-card-high-risk {
+  @apply border-orange-500;
+}
+
+.support-installation-scenarios-recommendation-card-low-risk {
+  @apply border-green-500;
+}
+
+.support-installation-scenarios-recommendation-header {
+  @apply flex items-start gap-3 mb-4;
+}
+
+.support-installation-scenarios-recommendation-icon {
+  @apply h-6 w-6 flex-shrink-0 mt-1;
+}
+
+.support-installation-scenarios-recommendation-icon-high-risk {
+  @apply text-orange-600;
+}
+
+.support-installation-scenarios-recommendation-icon-low-risk {
+  @apply text-green-600;
+}
+
+.support-installation-scenarios-recommendation-title {
+  @apply text-xl font-semibold text-gray-900;
+}
+
+.support-installation-scenarios-recommendation-subtitle {
+  @apply text-gray-600 mb-4;
+}
+
+.support-installation-scenarios-recommendation-list {
+  @apply space-y-3;
+}
+
+.support-installation-scenarios-recommendation-list-item {
+  @apply flex items-start gap-3 text-gray-700;
+}
+
+.support-installation-scenarios-recommendation-list-icon {
+  @apply h-5 w-5 flex-shrink-0 mt-0.5 text-blue-600;
+}
+
+.support-installation-scenarios-resources {
+  @apply bg-white rounded-lg shadow-md p-6 text-center;
+}
+
+.support-installation-scenarios-resources-title {
+  @apply text-2xl font-bold text-gray-900 mb-4;
+}
+
+.support-installation-scenarios-resources-links {
+  @apply flex flex-wrap justify-center gap-4;
+}
+
+.support-installation-scenarios-resource-link {
+  @apply px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium;
+}
+
 /* Compliance Page Classes */
 .compliance-page-container {
   @apply min-h-screen bg-gray-50;
@@ -8696,5 +9300,953 @@
   .stripe-form-container {
     @apply max-w-full;
   }
+}
+
+/* ========================================
+   Sensor Setup Page Styles
+   ======================================== */
+
+/* Common Step Styles */
+.sensor-setup-step-container {
+  @apply space-y-8;
+}
+
+.sensor-setup-step-badge-wrapper {
+  @apply flex justify-center;
+}
+
+.sensor-setup-step-badge {
+  @apply w-20 h-20 rounded-full bg-primary-600 flex items-center justify-center;
+}
+
+.sensor-setup-step-badge-step2 {
+  background: linear-gradient(135deg, #2563eb 0%, #5b21b6 50%, #7c3aed 100%);
+}
+
+.sensor-setup-step-badge-step3 {
+  @apply bg-purple-800;
+  background-color: #6b21a8;
+}
+
+.sensor-setup-step-badge-complete {
+  @apply bg-green-600;
+}
+
+.sensor-setup-step-badge-number {
+  @apply text-3xl font-bold text-white;
+}
+
+.sensor-setup-step-badge-icon {
+  @apply h-12 w-12 text-white;
+}
+
+.sensor-setup-step-hero-image-wrapper {
+  @apply w-full;
+}
+
+.sensor-setup-step-hero-image {
+  @apply w-full h-auto rounded-lg shadow-lg;
+  max-height: 600px;
+  object-fit: contain;
+}
+
+.sensor-setup-step-title-section {
+  @apply text-center;
+}
+
+.sensor-setup-step-title {
+  @apply text-3xl font-bold text-gray-900 mb-2;
+}
+
+.sensor-setup-step-subtitle {
+  @apply text-lg text-gray-600;
+}
+
+.sensor-setup-step-signup-link-wrapper {
+  @apply mt-4;
+}
+
+.sensor-setup-step-signup-link {
+  @apply inline-flex items-center text-primary-600 hover:text-primary-700 font-medium transition-colors;
+}
+
+/* Step 1: Preparation */
+.sensor-setup-prerequisites-callout {
+  @apply bg-amber-50 border border-amber-200 rounded-lg px-4 py-3;
+}
+
+.sensor-setup-prerequisites-callout-content {
+  @apply flex items-start space-x-2;
+}
+
+.sensor-setup-prerequisites-callout-icon {
+  @apply h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5;
+}
+
+.sensor-setup-prerequisites-callout-text {
+  @apply flex-1;
+}
+
+.sensor-setup-prerequisites-callout-title {
+  @apply text-sm font-semibold text-amber-900 mb-1;
+}
+
+.sensor-setup-prerequisites-callout-items {
+  @apply space-y-2 text-amber-800;
+}
+
+.sensor-setup-prerequisites-callout-item {
+  @apply flex items-start space-x-2;
+}
+
+.sensor-setup-prerequisites-callout-item:not(:first-child) {
+  @apply pt-2;
+}
+
+.sensor-setup-prerequisites-callout-item-icon {
+  @apply h-5 w-5 text-amber-700 flex-shrink-0 mt-0.5;
+}
+
+.sensor-setup-prerequisites-callout-item-content {
+  @apply flex-1;
+}
+
+.sensor-setup-prerequisites-callout-item-title {
+  @apply font-medium;
+}
+
+.sensor-setup-prerequisites-callout-item-description {
+  @apply text-sm leading-relaxed;
+}
+
+.sensor-setup-prerequisites-callout-item-link {
+  @apply text-sm text-amber-700 hover:text-amber-900 underline mt-1 inline-block;
+}
+
+.sensor-setup-model-identification {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-model-identification-title {
+  @apply text-xl font-semibold text-gray-900 mb-4;
+}
+
+.sensor-setup-model-identification-description {
+  @apply text-gray-700 mb-6;
+}
+
+.sensor-setup-model-comparison {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.sensor-setup-model-card {
+  @apply text-center;
+}
+
+.sensor-setup-model-card-image-wrapper {
+  @apply mb-4;
+}
+
+.sensor-setup-model-card-image {
+  @apply w-full h-auto rounded-lg shadow-md mx-auto;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+.sensor-setup-model-card-title {
+  @apply font-semibold text-gray-900 mb-2;
+}
+
+.sensor-setup-model-card-description {
+  @apply text-sm text-gray-600;
+}
+
+.sensor-setup-what-you-need {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-what-you-need-title {
+  @apply text-xl font-semibold text-gray-900 mb-4;
+}
+
+.sensor-setup-what-you-need-grid {
+  @apply grid grid-cols-2 md:grid-cols-3 gap-4;
+}
+
+.sensor-setup-what-you-need-item {
+  @apply flex items-center space-x-3;
+}
+
+.sensor-setup-what-you-need-item-icon-wrapper {
+  @apply flex-shrink-0;
+}
+
+.sensor-setup-what-you-need-item-icon {
+  @apply h-6 w-6 text-blue-600;
+}
+
+.sensor-setup-what-you-need-item-content {
+  @apply flex-1;
+}
+
+.sensor-setup-what-you-need-item-title {
+  @apply font-medium text-gray-900;
+}
+
+.sensor-setup-what-you-need-item-description {
+  @apply text-sm text-gray-600;
+}
+
+/* Step 2: Physical Installation */
+.sensor-setup-installation-steps {
+  @apply space-y-8;
+}
+
+.sensor-setup-installation-step-card {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-installation-step-card:first-child {
+  @apply mt-8;
+}
+
+.sensor-setup-installation-step-content {
+  @apply flex items-start space-x-6;
+}
+
+.sensor-setup-installation-step-number-wrapper {
+  @apply flex-shrink-0;
+}
+
+.sensor-setup-installation-step-number-badge {
+  @apply w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center;
+}
+
+.sensor-setup-installation-step-number {
+  @apply text-2xl font-bold text-primary-700;
+}
+
+.sensor-setup-installation-step-details {
+  @apply flex-1;
+}
+
+.sensor-setup-installation-step-title {
+  @apply text-xl font-semibold text-gray-900 mb-2;
+}
+
+.sensor-setup-installation-step-description {
+  @apply text-gray-700 mb-4;
+}
+
+.sensor-setup-installation-step-image-wrapper {
+  @apply w-full;
+}
+
+.sensor-setup-installation-step-image {
+  @apply w-full h-auto rounded-lg shadow-md;
+  max-height: 500px;
+  object-fit: contain;
+}
+
+.sensor-setup-installation-note {
+  @apply bg-blue-50 border border-blue-200 rounded-lg p-4;
+}
+
+.sensor-setup-installation-note-text {
+  @apply text-sm text-blue-800;
+}
+
+/* Step 3: Wi-Fi Setup */
+.sensor-setup-wifi-steps {
+  @apply space-y-8;
+}
+
+.sensor-setup-wifi-step-card {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-wifi-step-card:first-child {
+  @apply mt-8;
+}
+
+.sensor-setup-wifi-step-content {
+  @apply flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-6;
+}
+
+.sensor-setup-wifi-step-number-wrapper {
+  @apply flex-shrink-0;
+}
+
+.sensor-setup-wifi-step-number-badge {
+  @apply w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center;
+}
+
+.sensor-setup-wifi-step-number {
+  @apply text-2xl font-bold text-primary-700;
+}
+
+.sensor-setup-wifi-step-details {
+  @apply flex-1;
+}
+
+.sensor-setup-wifi-step-title {
+  @apply text-xl font-semibold text-gray-900 mb-2;
+}
+
+.sensor-setup-wifi-step-description {
+  @apply text-gray-700 mb-4;
+}
+
+.sensor-setup-wifi-step-image-wrapper {
+  @apply w-full max-w-md mx-auto md:mx-0;
+}
+
+.sensor-setup-wifi-step-image {
+  @apply w-full h-auto rounded-lg shadow-lg border-4 border-gray-200;
+  max-height: 600px;
+  object-fit: contain;
+}
+
+.sensor-setup-wifi-note {
+  @apply rounded-lg p-4;
+}
+
+.sensor-setup-wifi-note-info {
+  @apply bg-blue-50 border border-blue-200;
+}
+
+.sensor-setup-wifi-note-warning {
+  @apply bg-amber-50 border border-amber-200;
+}
+
+.sensor-setup-wifi-note-text {
+  @apply text-sm mb-2;
+}
+
+.sensor-setup-wifi-note-info .sensor-setup-wifi-note-text {
+  @apply text-blue-800;
+}
+
+.sensor-setup-wifi-note-warning .sensor-setup-wifi-note-text {
+  @apply text-amber-800;
+}
+
+.sensor-setup-wifi-note-list {
+  @apply text-sm space-y-1 list-disc list-inside;
+}
+
+.sensor-setup-wifi-note-info .sensor-setup-wifi-note-list {
+  @apply text-blue-800;
+}
+
+.sensor-setup-wifi-note-link {
+  @apply text-amber-700 hover:text-amber-900 underline;
+}
+
+/* Step 4: Success */
+.sensor-setup-success-container {
+  @apply space-y-8;
+}
+
+.sensor-setup-success-hero {
+  @apply text-center;
+}
+
+.sensor-setup-success-icon-wrapper {
+  @apply inline-flex items-center justify-center w-24 h-24 rounded-full bg-green-100 mb-4;
+}
+
+.sensor-setup-success-icon {
+  @apply h-16 w-16 text-green-600;
+}
+
+.sensor-setup-success-title {
+  @apply text-4xl font-bold text-gray-900 mb-2;
+}
+
+.sensor-setup-success-subtitle {
+  @apply text-xl text-gray-600;
+}
+
+.sensor-setup-success-image-wrapper {
+  @apply w-full flex justify-center;
+}
+
+.sensor-setup-success-image {
+  @apply w-full h-auto rounded-lg shadow-lg;
+  max-height: 400px;
+  object-fit: contain;
+}
+
+.sensor-setup-success-checklist {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-success-checklist-title {
+  @apply text-xl font-semibold text-gray-900 mb-4;
+}
+
+.sensor-setup-success-checklist-items {
+  @apply space-y-4;
+}
+
+.sensor-setup-success-checklist-item {
+  @apply flex items-center space-x-3;
+}
+
+.sensor-setup-success-checklist-icon {
+  @apply h-5 w-5;
+}
+
+.sensor-setup-success-checklist-icon-active {
+  @apply text-green-500;
+}
+
+.sensor-setup-success-checklist-text {
+  @apply text-gray-700;
+}
+
+.sensor-setup-success-checklist-text-bold {
+  @apply font-medium;
+}
+
+.sensor-setup-success-device-details {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-success-device-details-title {
+  @apply text-xl font-semibold text-gray-900 mb-4;
+}
+
+.sensor-setup-success-device-details-list {
+  @apply space-y-3;
+}
+
+.sensor-setup-success-device-details-item {
+  @apply space-y-1;
+}
+
+.sensor-setup-success-device-details-label {
+  @apply text-sm font-medium text-gray-500;
+}
+
+.sensor-setup-success-device-details-value {
+  @apply text-base text-gray-900 mt-1 flex items-center space-x-2;
+}
+
+.sensor-setup-success-status-indicator {
+  @apply w-2 h-2 rounded-full bg-green-500;
+}
+
+.sensor-setup-success-next-steps {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-success-next-steps-title {
+  @apply text-xl font-semibold text-gray-900 mb-4;
+}
+
+.sensor-setup-success-next-steps-list {
+  @apply space-y-3;
+}
+
+.sensor-setup-success-next-steps-item {
+  @apply flex items-start space-x-2;
+}
+
+.sensor-setup-success-next-steps-icon {
+  @apply h-5 w-5 text-primary-600 mt-0.5 flex-shrink-0;
+}
+
+.sensor-setup-success-next-steps-text {
+  @apply text-gray-700;
+}
+
+.sensor-setup-success-actions {
+  @apply flex flex-col sm:flex-row gap-3;
+}
+
+.sensor-setup-success-button {
+  @apply flex-1 py-3 px-4 rounded-md font-medium transition-colors;
+}
+
+.sensor-setup-success-button-primary {
+  @apply bg-primary-600 text-white hover:bg-primary-700 flex items-center justify-center space-x-2;
+}
+
+.sensor-setup-success-button-secondary {
+  @apply bg-white border-2 border-primary-600 text-primary-600 hover:bg-primary-50;
+}
+
+.sensor-setup-success-button-icon {
+  @apply h-5 w-5;
+}
+
+/* Step 1: Create Account */
+.sensor-setup-account-steps {
+  @apply space-y-8;
+}
+
+.sensor-setup-account-step-card {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-account-step-content {
+  @apply flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-6;
+}
+
+.sensor-setup-account-step-number-wrapper {
+  @apply flex-shrink-0;
+}
+
+.sensor-setup-account-step-number-badge {
+  @apply w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center;
+}
+
+.sensor-setup-account-step-number {
+  @apply text-2xl font-bold text-primary-700;
+}
+
+.sensor-setup-account-step-details {
+  @apply flex-1;
+}
+
+.sensor-setup-account-step-title {
+  @apply text-xl font-semibold text-gray-900 mb-2;
+}
+
+.sensor-setup-account-step-description {
+  @apply text-gray-700 mb-4;
+}
+
+.sensor-setup-account-step-link {
+  @apply text-blue-600 hover:text-blue-700 underline;
+}
+
+.sensor-setup-account-step-image-wrapper {
+  @apply w-full max-w-2xl mx-auto md:mx-0;
+}
+
+.sensor-setup-account-step-image {
+  @apply w-full h-auto rounded-lg shadow-lg border-4 border-gray-200;
+  max-height: 600px;
+  object-fit: contain;
+}
+
+.sensor-setup-account-quick-link {
+  @apply flex justify-center mt-8;
+}
+
+.sensor-setup-account-quick-link-button {
+  @apply bg-primary-600 text-white py-3 px-6 rounded-md font-medium hover:bg-primary-700 transition-colors;
+}
+
+/* Step 2: Section Dividers */
+.sensor-setup-section-divider {
+  @apply my-8 pt-8 border-t-2 border-gray-300;
+}
+
+.sensor-setup-section-divider-title {
+  @apply text-2xl font-bold text-gray-900 mb-6;
+}
+
+/* Step 2 Accordion Styles */
+.sensor-setup-accordion-section {
+  @apply bg-white rounded-lg border-2 border-gray-200 mb-6 overflow-hidden transition-all duration-300;
+}
+
+.sensor-setup-accordion-section-expanded {
+  @apply border-blue-500 shadow-md;
+}
+
+.sensor-setup-accordion-section-collapsed {
+  @apply border-gray-200;
+}
+
+.sensor-setup-accordion-section-complete {
+  @apply border-green-500;
+}
+
+.sensor-setup-accordion-header {
+  @apply w-full px-6 py-4 text-left hover:bg-gray-50 transition-colors;
+}
+
+.sensor-setup-accordion-header-content {
+  @apply flex items-center justify-between;
+}
+
+.sensor-setup-accordion-header-left {
+  @apply flex items-center gap-3;
+}
+
+.sensor-setup-accordion-header-right {
+  @apply flex items-center;
+}
+
+.sensor-setup-accordion-status-icon {
+  @apply h-6 w-6 flex-shrink-0;
+}
+
+.sensor-setup-accordion-status-icon-complete {
+  @apply text-green-600;
+}
+
+.sensor-setup-accordion-status-icon-pending {
+  @apply h-2 w-2 rounded-full bg-gray-400;
+}
+
+.sensor-setup-accordion-title {
+  @apply text-xl font-bold text-gray-900;
+}
+
+.sensor-setup-accordion-badge {
+  @apply px-3 py-1 rounded-full text-xs font-semibold;
+}
+
+.sensor-setup-accordion-badge-complete {
+  @apply bg-green-100 text-green-800;
+}
+
+.sensor-setup-accordion-badge-ready {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.sensor-setup-accordion-chevron {
+  @apply h-5 w-5 text-gray-500;
+}
+
+.sensor-setup-accordion-content {
+  @apply px-6 pb-6 border-t border-gray-200;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 5000px;
+  }
+}
+
+.sensor-setup-accordion-preview {
+  @apply px-6 py-3 border-t border-gray-200 bg-gray-50;
+}
+
+.sensor-setup-accordion-preview-text {
+  @apply text-sm text-gray-600;
+}
+
+.sensor-setup-accordion-action {
+  @apply mt-6 pt-6 border-t border-gray-200;
+}
+
+.sensor-setup-accordion-complete-button {
+  @apply flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold mx-auto;
+}
+
+.sensor-setup-accordion-complete-button-icon {
+  @apply h-5 w-5;
+}
+
+/* Step 3: Assign Customer */
+.sensor-setup-assignment-steps {
+  @apply space-y-8;
+}
+
+.sensor-setup-assignment-step-card {
+  @apply bg-white rounded-lg border border-gray-200 p-6;
+}
+
+.sensor-setup-assignment-step-content {
+  @apply flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-6;
+}
+
+.sensor-setup-assignment-step-number-wrapper {
+  @apply flex-shrink-0;
+}
+
+.sensor-setup-assignment-step-number-badge {
+  @apply w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center;
+}
+
+.sensor-setup-assignment-step-number {
+  @apply text-2xl font-bold text-primary-700;
+}
+
+.sensor-setup-assignment-step-details {
+  @apply flex-1;
+}
+
+.sensor-setup-assignment-step-title {
+  @apply text-xl font-semibold text-gray-900 mb-2;
+}
+
+.sensor-setup-assignment-step-description {
+  @apply text-gray-700 mb-4;
+}
+
+.sensor-setup-assignment-step-image-wrapper {
+  @apply w-full max-w-2xl mx-auto md:mx-0;
+}
+
+.sensor-setup-assignment-step-image {
+  @apply w-full h-auto rounded-lg shadow-lg border-4 border-gray-200;
+  max-height: 600px;
+  object-fit: contain;
+}
+
+.sensor-setup-assignment-success {
+  @apply bg-green-50 border-2 border-green-200 rounded-lg p-8 text-center mt-8;
+}
+
+.sensor-setup-assignment-success-icon-wrapper {
+  @apply flex justify-center mb-4;
+}
+
+.sensor-setup-assignment-success-icon {
+  @apply h-16 w-16 text-green-600;
+}
+
+.sensor-setup-assignment-success-title {
+  @apply text-3xl font-bold text-gray-900 mb-3;
+}
+
+.sensor-setup-assignment-success-message {
+  @apply text-lg text-gray-700;
+}
+
+.sensor-setup-assignment-actions-wrapper {
+  @apply mt-6;
+}
+
+.sensor-setup-assignment-actions-heading {
+  @apply text-xl font-semibold text-gray-900 mb-4 text-center;
+}
+
+.sensor-setup-assignment-actions {
+  @apply flex flex-col sm:flex-row gap-3;
+}
+
+.sensor-setup-assignment-button {
+  @apply flex-1 py-3 px-4 rounded-md font-medium transition-colors;
+}
+
+.sensor-setup-assignment-button-primary {
+  @apply bg-primary-600 text-white hover:bg-primary-700;
+}
+
+.sensor-setup-assignment-button-secondary {
+  @apply bg-white border-2 border-primary-600 text-primary-600 hover:bg-primary-50;
+}
+
+.sensor-setup-assignment-button-tertiary {
+  @apply bg-gray-100 border border-gray-300 text-gray-700 hover:bg-gray-200 hover:border-gray-400;
+}
+
+/* Prerequisite Modal */
+.sensor-setup-prerequisite-modal-overlay {
+  @apply fixed inset-0 z-[100] flex items-center justify-center;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.sensor-setup-prerequisite-modal {
+  @apply bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4;
+  transform: scale(0.95);
+  opacity: 0;
+  transition: all 0.3s ease-out;
+}
+
+.sensor-setup-prerequisite-modal-visible {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.sensor-setup-prerequisite-modal-content {
+  @apply relative p-8;
+}
+
+.sensor-setup-prerequisite-modal-close {
+  @apply absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 transition-colors;
+}
+
+.sensor-setup-prerequisite-modal-close-icon {
+  @apply h-6 w-6;
+}
+
+.sensor-setup-prerequisite-modal-icon-wrapper {
+  @apply flex justify-center mb-6;
+}
+
+.sensor-setup-prerequisite-modal-icon {
+  @apply h-16 w-16 text-amber-600;
+}
+
+.sensor-setup-prerequisite-modal-title {
+  @apply text-2xl font-bold text-gray-900 text-center mb-6;
+}
+
+.sensor-setup-prerequisite-modal-message {
+  @apply mb-8;
+}
+
+.sensor-setup-prerequisite-modal-text {
+  @apply text-gray-700 mb-4 leading-relaxed;
+}
+
+.sensor-setup-prerequisite-modal-text-emphasis {
+  @apply font-semibold text-gray-900;
+}
+
+.sensor-setup-prerequisite-modal-list {
+  @apply list-disc list-inside space-y-2 mb-4 ml-4;
+}
+
+.sensor-setup-prerequisite-modal-list-item {
+  @apply text-gray-700;
+}
+
+.sensor-setup-prerequisite-modal-signup-link-wrapper {
+  @apply mt-4 text-center;
+}
+
+.sensor-setup-prerequisite-modal-signup-link {
+  @apply inline-flex items-center text-primary-600 hover:text-primary-700 font-medium transition-colors;
+}
+
+.sensor-setup-prerequisite-modal-checkbox-wrapper {
+  @apply mt-4 pt-4 border-t border-gray-200;
+}
+
+.sensor-setup-prerequisite-modal-checkbox-label {
+  @apply flex items-start space-x-3 cursor-pointer p-4 border-2 border-gray-200 rounded-lg hover:border-gray-300 transition-colors;
+}
+
+.sensor-setup-prerequisite-modal-checkbox {
+  @apply mt-1 h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded flex-shrink-0;
+}
+
+.sensor-setup-prerequisite-modal-checkbox-text {
+  @apply text-sm text-gray-700;
+}
+
+.sensor-setup-prerequisite-modal-actions {
+  @apply flex justify-center;
+}
+
+.sensor-setup-prerequisite-modal-button {
+  @apply py-2 px-6 rounded-md font-medium text-sm transition-colors;
+}
+
+.sensor-setup-prerequisite-modal-button-primary {
+  @apply bg-primary-500 text-white hover:bg-primary-600;
+}
+
+/* Setup Wizard Container */
+.sensor-setup-wizard-container {
+  @apply min-h-screen bg-gray-50;
+}
+
+/* Header */
+.sensor-setup-wizard-header {
+  @apply bg-white border-b border-gray-200 sticky top-0 z-50;
+}
+
+.sensor-setup-wizard-header-content {
+  @apply container mx-auto px-4 py-4;
+}
+
+.sensor-setup-wizard-header-top {
+  @apply flex items-center justify-between mb-4;
+}
+
+.sensor-setup-wizard-header-brand {
+  @apply flex items-center space-x-2;
+}
+
+.sensor-setup-wizard-header-logo {
+  @apply h-8 w-auto;
+}
+
+.sensor-setup-wizard-header-title {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.sensor-setup-wizard-header-step-indicator {
+  @apply text-sm text-gray-600;
+}
+
+.sensor-setup-wizard-progress-bar-wrapper {
+  @apply w-full bg-gray-200 rounded-full h-2;
+}
+
+.sensor-setup-wizard-progress-bar {
+  @apply h-2 rounded-full transition-all duration-300;
+  /* Gradient is applied inline via style prop based on current step */
+}
+
+/* Content */
+.sensor-setup-wizard-content {
+  @apply container mx-auto px-4 py-8 max-w-4xl;
+}
+
+.sensor-setup-wizard-content-inner {
+  @apply animate-fade-in;
+}
+
+/* Navigation */
+.sensor-setup-wizard-navigation {
+  @apply bg-white border-t border-gray-200 sticky bottom-0 z-50;
+}
+
+.sensor-setup-wizard-navigation-content {
+  @apply container mx-auto px-4 py-4 max-w-4xl;
+}
+
+.sensor-setup-wizard-navigation-buttons {
+  @apply flex items-center justify-between;
+}
+
+.sensor-setup-wizard-navigation-button {
+  @apply flex items-center space-x-2 px-6 py-3 rounded-md font-medium transition-colors;
+}
+
+.sensor-setup-wizard-navigation-button-back {
+  /* Base styles for back button */
+}
+
+.sensor-setup-wizard-navigation-button-continue {
+  /* Base styles for continue button */
+}
+
+.sensor-setup-wizard-navigation-button-enabled {
+  /* Enabled state styles */
+}
+
+.sensor-setup-wizard-navigation-button-back.sensor-setup-wizard-navigation-button-enabled {
+  @apply text-gray-700 hover:text-gray-900 hover:bg-gray-100;
+}
+
+.sensor-setup-wizard-navigation-button-continue.sensor-setup-wizard-navigation-button-enabled {
+  @apply bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800;
+}
+
+.sensor-setup-wizard-navigation-button-disabled {
+  /* Disabled state styles */
+}
+
+.sensor-setup-wizard-navigation-button-back.sensor-setup-wizard-navigation-button-disabled {
+  @apply text-gray-400 cursor-not-allowed;
+}
+
+.sensor-setup-wizard-navigation-button-continue.sensor-setup-wizard-navigation-button-disabled {
+  @apply bg-gray-300 text-gray-500 cursor-not-allowed;
+}
+
+.sensor-setup-wizard-navigation-button-icon {
+  @apply h-5 w-5;
 }
 

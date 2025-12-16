@@ -11,7 +11,11 @@ import { CustomerSelectionPage } from './pages/CustomerSelectionPage'
 import { ProductsPage } from './pages/ProductsPage'
 import { ContactPage } from './pages/ContactPage'
 import { AboutPage } from './pages/AboutPage'
-import { SupportPage } from './pages/SupportPage'
+import { SupportHubPage } from './pages/SupportHubPage'
+import { InstallationSetupPage } from './pages/InstallationSetupPage'
+import { ProductSupportPage } from './pages/ProductSupportPage'
+import { WarrantyReturnsPage } from './pages/WarrantyReturnsPage'
+import { ContactSupportPage } from './pages/ContactSupportPage'
 import { CompliancePage } from './pages/CompliancePage'
 import { SignInPage } from './pages/SignInPage'
 import { SignUpPage } from './pages/SignUpPage'
@@ -30,12 +34,14 @@ import { CheckoutSuccessPage } from './pages/CheckoutSuccessPage'
 import { CheckoutCancelPage } from './pages/CheckoutCancelPage'
 import { MiniProductPage } from './pages/MiniProductPage'
 import { CheckoutPage } from './pages/CheckoutPage'
+import { SensorSetupPage } from './pages/SensorSetupPage'
+import { RecommendedInstallationScenariosPage } from './pages/RecommendedInstallationScenariosPage'
 
 function AppContent() {
   const location = useLocation()
   
-  // Hide header/footer on checkout page for cleaner Stripe-like experience
-  const hideHeaderFooter = location.pathname === '/checkout'
+  // Hide header/footer on checkout and sensor setup pages for cleaner experience
+  const hideHeaderFooter = location.pathname === '/checkout' || location.pathname === '/sensor-setup'
   
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -52,7 +58,11 @@ function AppContent() {
                     <Route path="/checkout" element={<CheckoutPage />} />
                     <Route path="/contact" element={<ContactPage />} />
                     <Route path="/about" element={<AboutPage />} />
-                    <Route path="/support" element={<SupportPage />} />
+                    <Route path="/support" element={<SupportHubPage />} />
+                    <Route path="/support/installation-setup" element={<InstallationSetupPage />} />
+                    <Route path="/support/product-support" element={<ProductSupportPage />} />
+                    <Route path="/support/warranty-returns" element={<WarrantyReturnsPage />} />
+                    <Route path="/support/contact" element={<ContactSupportPage />} />
                     <Route path="/compliance" element={<CompliancePage />} />
                     <Route path="/auth/signin" element={<SignInPage />} />
               <Route path="/auth/signup" element={<SignUpPage />} />
@@ -72,6 +82,8 @@ function AppContent() {
               <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
               <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
               <Route path="/products/mini" element={<MiniProductPage />} />
+                    <Route path="/sensor-setup" element={<SensorSetupPage />} />
+                    <Route path="/support/installation-scenarios" element={<RecommendedInstallationScenariosPage />} />
             </Routes>
           </main>
           {!hideHeaderFooter && <Footer />}
