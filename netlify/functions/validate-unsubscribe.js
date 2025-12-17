@@ -1,11 +1,5 @@
-/**
- * Validate Unsubscribe Form Submission
- * 
- * Server-side validation to prevent bot submissions
- * Validates before forwarding to Netlify Forms
- */
 
-// Import security utilities
+
 const { checkRateLimit, getRateLimitHeaders, getClientIP } = require('./utils/rate-limiter')
 const { sanitizeFormData } = require('./utils/input-sanitizer')
 const { 
@@ -16,22 +10,17 @@ const {
   logInjectionAttempt,
   EVENT_TYPES 
 } = require('./utils/security-logger')
-
-// Import enhanced bot defense utilities
 const { validateRequestFingerprint } = require('./utils/request-fingerprint')
 const { validateIP, addToBlacklist } = require('./utils/ip-reputation')
 const { validateSubmissionBehavior } = require('./utils/behavioral-analysis')
 const { validateEmailDomain } = require('./utils/email-domain-validator')
-const { validateCSRFToken } = require('./utils/csrf-validator')
 const { initBlobsStores, getUnsubscribeStore } = require('./utils/blobs-store')
 const { getSecurityHeaders } = require('./utils/cors-config')
 
-// reCAPTCHA verification
+
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY
 
-/**
- * Verify reCAPTCHA token with Google
- */
+
 const verifyRecaptcha = async (token) => {
   if (!RECAPTCHA_SECRET_KEY) {
     console.warn('reCAPTCHA secret key not configured - skipping verification')
@@ -69,7 +58,6 @@ exports.handler = async (event, context) => {
 
     const headers = getSecurityHeaders(event)
 
-  // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 200,
@@ -78,7 +66,6 @@ exports.handler = async (event, context) => {
     }
   }
 
-  // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
@@ -88,10 +75,8 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    // Initialize Blobs stores (required for unsubscribe storage)
     initBlobsStores(context)
     
-    // Parse form data (Netlify Forms sends as URL-encoded)
     const formData = new URLSearchParams(event.body)
     const email = formData.get('email') || ''
     const reason = formData.get('reason') || ''
@@ -101,13 +86,11 @@ exports.handler = async (event, context) => {
     const url = formData.get('url') || ''
     const recaptchaToken = formData.get('recaptcha-token') || ''
 
-    // Get request metadata for logging
     const ip = getClientIP(event)
     const userAgent = event.headers['user-agent'] || 'unknown'
     const origin = event.headers['origin'] || event.headers['referer'] || 'unknown'
     const path = event.path || ''
     
-    // Define allowed reason values (must match dropdown in form)
     const ALLOWED_REASONS = [
       '', // Empty is allowed (optional field)
       'too-many-emails',
@@ -118,9 +101,6 @@ exports.handler = async (event, context) => {
       'other'
     ]
     
-    // ============================================
-    // PHASE 1: Request Fingerprinting
-    // ============================================
     try {
       const fingerprintCheck = validateRequestFingerprint(event, ip, userAgent)
       if (fingerprintCheck.isBot) {
