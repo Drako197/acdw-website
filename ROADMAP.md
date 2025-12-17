@@ -1,6 +1,6 @@
 # AC Drain Wiz Website - Development Roadmap
 
-**Last Updated:** January 2025  
+**Last Updated:** December 16, 2025  
 **Project:** AC Drain Wiz E-commerce & Support Website  
 **Repository:** https://github.com/acdrainwiz/acdw-website
 
@@ -83,13 +83,14 @@ The AC Drain Wiz website is a comprehensive e-commerce and support platform serv
 - ✅ Password reset functionality
 
 ### Support & Documentation
-- ✅ Support Hub (hub-and-spoke navigation)
-- ✅ Installation & Setup guides
-- ✅ Product Support FAQs
-- ✅ Warranty & Returns information
-- ✅ Sensor Setup Wizard (3-step flow)
-- ✅ Recommended Installation Scenarios page
-- ✅ Contact support forms
+- ✅ Support Hub (hub-and-spoke navigation model)
+- ✅ Installation & Setup guides page
+- ✅ Product Support FAQs page
+- ✅ Warranty & Returns information page
+- ✅ Contact Support page
+- ✅ Sensor Setup Wizard (3-step interactive flow with accordions)
+- ✅ Recommended Installation Scenarios page (with visual guides)
+- ✅ Contact support forms with validation
 
 ### User Experience
 - ✅ Responsive design (mobile-first)
@@ -103,7 +104,7 @@ The AC Drain Wiz website is a comprehensive e-commerce and support platform serv
 
 ## 🎉 Recent Work Completed
 
-### Sensor Setup Flow (January 2025)
+### Sensor Setup Flow (December 2025)
 - ✅ Created 3-step sensor setup wizard
   - Step 1: Create Account (with prerequisite modal)
   - Step 2: Physical Setup & WiFi Connection (accordion-based)
@@ -116,6 +117,13 @@ The AC Drain Wiz website is a comprehensive e-commerce and support platform serv
 - ✅ Model identification section (Battery vs DC models)
 - ✅ Prerequisite callout with modal
 - ✅ Accordion sections for Physical Setup and WiFi Connection
+- ✅ Step 2 UX enhancements:
+  - Both accordions start closed on page load
+  - Pulsating outline animation on Physical Setup accordion (guides user to start there)
+  - Continue button disabled until WiFi Connection accordion is opened
+  - Smart scroll behavior: scrolls to notification message (not page top) when WiFi clicked first
+  - Continue button opens WiFi accordion and scrolls to content when Physical Setup is open
+  - Notification message with auto-dismiss (5 seconds) when user attempts wrong order
 
 ### Support Center Reorganization
 - ✅ Implemented hub-and-spoke navigation model
@@ -139,20 +147,13 @@ The AC Drain Wiz website is a comprehensive e-commerce and support platform serv
 
 ## 🚧 In-Progress Work
 
-### Sensor Setup - Step 2 WiFi Interaction (Current)
-- ⏳ **Status:** In Development
-- **Feature:** Disable Continue button on Step 2 until WiFi Connection accordion is opened
-- **Implementation:**
-  - Added `onWifiInteraction` callback prop to `Step2SensorSetup`
-  - Added `isContinueDisabled` prop to `SetupWizard`
-  - State management in `SensorSetupPage` to track WiFi interaction
-  - **Next Steps:** Testing and refinement
+_No active in-progress work at this time. All recent features have been completed and are ready for testing._
 
 ---
 
 ## 📅 Planned Features
 
-### Short-Term (Q1 2025)
+### Short-Term (Q1 2026)
 
 #### Dashboard Enhancements
 - [ ] Connect Dashboard to real order data (Stripe API)
@@ -173,7 +174,7 @@ The AC Drain Wiz website is a comprehensive e-commerce and support platform serv
 - [ ] Enhanced product specifications
 - [ ] Installation video integration
 
-### Medium-Term (Q2 2025)
+### Medium-Term (Q2 2026)
 
 #### Advanced Features
 - [ ] Customer management for contractors
@@ -189,7 +190,7 @@ The AC Drain Wiz website is a comprehensive e-commerce and support platform serv
 - [ ] Inventory management
 - [ ] Reporting and analytics
 
-### Long-Term (Q3-Q4 2025)
+### Long-Term (Q3-Q4 2026)
 
 #### Platform Expansion
 - [ ] Mobile app (React Native consideration)

@@ -10,6 +10,7 @@ interface SetupWizardProps {
   continueLabel?: string
   backLabel?: string
   isContinueDisabled?: boolean
+  onContinueClick?: () => boolean // Returns true if handled, false to proceed normally
 }
 
 export function SetupWizard({
@@ -19,7 +20,8 @@ export function SetupWizard({
   children,
   continueLabel = 'Continue',
   backLabel = 'Back',
-  isContinueDisabled = false
+  isContinueDisabled = false,
+  onContinueClick
 }: SetupWizardProps) {
   // Scroll to top when step changes
   useEffect(() => {
@@ -48,6 +50,13 @@ export function SetupWizard({
   }
 
   const handleContinue = () => {
+    // Check if there's a custom Continue handler (e.g., for Step 2)
+    if (onContinueClick && onContinueClick()) {
+      // Handler took care of it, don't proceed to next step
+      return
+    }
+    
+    // Normal behavior: proceed to next step
     if (currentStep < totalSteps) {
       onStepChange(currentStep + 1)
     }
