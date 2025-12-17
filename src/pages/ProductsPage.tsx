@@ -15,8 +15,6 @@ import {
 
 export function ProductsPage() {
   const navigate = useNavigate()
-  const { isAuthenticated, user } = useAuth()
-  const isContractor = isAuthenticated && user?.role === 'hvac_pro'
   const [openFaq, setOpenFaq] = useState<number | null>(null)
 
   const products = [
