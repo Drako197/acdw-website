@@ -16,7 +16,6 @@ const { validateRequestFingerprint } = require('./utils/request-fingerprint')
 const { validateIP, addToBlacklist } = require('./utils/ip-reputation')
 const { validateSubmissionBehavior } = require('./utils/behavioral-analysis')
 const { validateEmailDomain } = require('./utils/email-domain-validator')
-const { validateCSRFToken } = require('./utils/csrf-validator')
 const { initBlobsStores } = require('./utils/blobs-store')
 
 
@@ -73,14 +72,12 @@ const validateEmail = (email) => {
 const validateFormFields = (formType, formData) => {
   const errors = []
   
-  // Handle contact form subtypes (contact-general, contact-support, contact-sales, contact-installer, contact-demo)
   if (formType.startsWith('contact-')) {
     const contactSubType = formType.replace('contact-', '')
     const firstName = formData.get('firstName')?.trim() || ''
     const lastName = formData.get('lastName')?.trim() || ''
     const message = formData.get('message')?.trim() || ''
     
-    // Common fields for all contact forms
     if (!firstName) errors.push('First name is required')
     if (!lastName) errors.push('Last name is required')
     if (!message) errors.push('Message is required')
@@ -88,10 +85,8 @@ const validateFormFields = (formType, formData) => {
       errors.push('Message must be 2000 characters or less')
     }
     
-    // Form-specific required fields
     switch (contactSubType) {
       case 'support':
-        // Support form requires: product, issueType
         const product = formData.get('product')?.trim() || ''
         const issueType = formData.get('issueType')?.trim() || ''
         if (!product) errors.push('Product is required')
@@ -210,7 +205,6 @@ const validateFormFields = (formType, formData) => {
               errors.push('Invalid reason selected - suspicious pattern detected')
               console.warn('🚨 Bot attack detected: Malformed email in unsubscribe reason field', {
                 reason: unsubscribeReason,
-                ip: getClientIP ? getClientIP(event) : 'unknown'
               })
             } else {
               errors.push('Invalid reason selected')
@@ -232,10 +226,8 @@ const validateFormFields = (formType, formData) => {
 }
 
 exports.handler = async (event, context) => {
-  // Initialize Blobs stores within handler context (required for Blobs to work)
-  // This must be called inside the handler where Netlify context is available
-  // Wrap in try-catch to prevent function crash if Blobs fails
-  let blobsInit = { initialized: false }
+
+    let blobsInit = { initialized: false }
   try {
     blobsInit = initBlobsStores(context)
   } catch (blobsError) {
@@ -291,14 +283,11 @@ exports.handler = async (event, context) => {
     }
     
     const path = event.path || ''
+
+      const contentType = event.headers['content-type'] || event.headers['Content-Type'] || ''
     
-    // Parse form data - all forms now use application/x-www-form-urlencoded
-    // File uploads are handled separately via upload-file function
-    const contentType = event.headers['content-type'] || event.headers['Content-Type'] || ''
-    
-    // Multipart should not be used anymore - files should be uploaded separately
-    if (contentType.includes('multipart/form-data')) {
-      console.warn('⚠️ Multipart form data received - this should not happen with new flow')
+      if (contentType.includes('multipart/form-data')) {
+      console.warn(' Multipart form data received - this should not happen with new flow')
       return {
         statusCode: 400,
         headers,
@@ -309,15 +298,15 @@ exports.handler = async (event, context) => {
       }
     }
     
-    // Parse as URLSearchParams (standard form data)
-    const formData = new URLSearchParams(event.body)
+
+      const formData = new URLSearchParams(event.body)
     
-    // Get form name and type
-    const formName = formData.get('form-name') || ''
+
+      const formName = formData.get('form-name') || ''
     const formType = formData.get('form-type') || 'contact'
     
-    // SECURITY: Form name whitelist validation (only allow known form names)
-    const ALLOWED_FORM_NAMES = [
+
+      const ALLOWED_FORM_NAMES = [
       'contact-general',
       'contact-support',
       'contact-sales',
@@ -330,10 +319,9 @@ exports.handler = async (event, context) => {
       'hero-email'
     ]
     
-    // Only validate form name if this is a form submission (not a webhook or checkout endpoint)
     if (!isWebhookEndpoint(path) && !isCheckoutEndpoint(path)) {
       if (formName && !ALLOWED_FORM_NAMES.includes(formName)) {
-        console.warn('❌ Invalid form name rejected:', {
+        console.warn(' Invalid form name rejected:', {
           formName,
           ip: getClientIP(event),
           userAgent: event.headers['user-agent'] || 'unknown',
@@ -354,7 +342,6 @@ exports.handler = async (event, context) => {
       }
     }
     
-    // SECURITY: Origin/Referer validation (exempt webhooks and checkout endpoints)
     if (!isWebhookEndpoint(path) && !isCheckoutEndpoint(path)) {
       const ALLOWED_ORIGINS = [
         'https://www.acdrainwiz.com',
@@ -852,7 +839,8 @@ exports.handler = async (event, context) => {
     const forwardResponse = await fetch(netlifyFormUrl, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-Internal-Secret': process.env.INTERNAL_FORWARD_SECRET || '',
       },
       body: sanitizedFormBody.toString(), // Forward sanitized form data
     })

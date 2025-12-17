@@ -14,7 +14,6 @@ import {
 } from '@heroicons/react/24/outline'
 import { validateEmail } from '../utils/emailValidation'
 import { useRecaptcha } from '../hooks/useRecaptcha'
-import { useCsrfToken } from '../hooks/useCsrfToken'
 
 type ContactFormType = 'general' | 'support' | 'sales' | 'installer' | 'demo'
 
@@ -123,8 +122,7 @@ export function ContactPage() {
 
   const [activeFormType, setActiveFormType] = useState<ContactFormType>(getFormTypeFromURL())
   const { getRecaptchaToken } = useRecaptcha()
-  const { csrfToken } = useCsrfToken()
-  const [formLoadTime] = useState<number>(Date.now()) // Set when component mounts for behavioral analysis
+    const [formLoadTime] = useState<number>(Date.now()) // Set when component mounts for behavioral analysis
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
@@ -452,7 +450,6 @@ export function ContactPage() {
       consent: formData.consent ? 'yes' : 'no',
       'form-load-time': formLoadTime.toString(), // Include form load time for behavioral analysis
         'recaptcha-token': recaptchaResult.token,
-        ...(csrfToken && { 'csrf-token': csrfToken }) // Add CSRF token if available
     }
     
     // Add form-specific fields

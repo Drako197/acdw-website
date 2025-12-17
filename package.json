@@ -16,6 +16,7 @@
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.2.2",
     "@netlify/blobs": "^10.4.3",
+    "@netlify/edge-functions": "^3.0.3",
     "@stripe/react-stripe-js": "^5.4.1",
     "@stripe/stripe-js": "^8.5.3",
     "@types/react-router-dom": "^5.3.3",
