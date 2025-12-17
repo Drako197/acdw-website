@@ -3,12 +3,11 @@
     "",
     "\\netlify",
     "\\netlify\\edge-functions",
+    "\\netlify\\functions",
     "\\src",
-    "\\src\\components",
     "\\src\\components\\home",
-    "\\src\\hooks",
     "\\src\\pages"
   ],
-  "SelectedNode": "\\.gitignore",
+  "SelectedNode": "\\netlify\\functions\\validate-form-submission.js",
   "PreviewInSolutionExplorer": false
 }
