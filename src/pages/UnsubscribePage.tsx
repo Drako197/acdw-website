@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { EnvelopeIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { isValidEmail, validateEmail } from '../utils/emailValidation'
-import { useCsrfToken } from '../hooks/useCsrfToken'
 
 export function UnsubscribePage() {
   const navigate = useNavigate()
@@ -72,8 +71,6 @@ export function UnsubscribePage() {
   const [submitError, setSubmitError] = useState('')
   const [showConfirmation, setShowConfirmation] = useState(false)
   
-  // CSRF token and form load time for enhanced security
-  const { csrfToken } = useCsrfToken()
   const [formLoadTime] = useState(Date.now()) // Track when form was loaded
 
   const handleConfirmUnsubscribe = () => {
@@ -184,7 +181,6 @@ export function UnsubscribePage() {
       feedback: feedback || '',
       'form-load-time': formLoadTime.toString(), // Include form load time for behavioral analysis
       ...(recaptchaToken && { 'recaptcha-token': recaptchaToken }), // Add token if available
-      ...(csrfToken && { 'csrf-token': csrfToken }) // Add CSRF token if available
     }
     
     // Check if we're in development mode

@@ -1,4 +1,5 @@
 import type { Context } from "@netlify/edge-functions";
+declare const Deno: { env: { get(key: string): string | undefined } };
 
 export default async (request: Request, context: Context) => {
     if (request.method !== "POST") {
@@ -8,6 +9,13 @@ export default async (request: Request, context: Context) => {
     const url = new URL(request.url);
 
     if (url.pathname !== "/") {
+        return context.next();
+    }
+    const internalSecret = request.headers.get("X-Internal-Secret");
+    const expectedSecret = Deno.env.get("INTERNAL_FORWARD_SECRET");
+
+    if (internalSecret && expectedSecret && internalSecret === expectedSecret) {
+        console.log(`[Edge] Verified internal forward - passing through to Netlify Forms`);
         return context.next();
     }
 
