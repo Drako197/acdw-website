@@ -8362,155 +8362,144 @@
 /* Hero Section - Option 1: Split Layout with Full-Width Background */
 .mini-product-hero-fullwidth {
   @apply relative;
-  min-height: 85vh;
-  @apply flex items-center;
+  @apply bg-black;
+  @apply flex flex-col;
 }
 
-.mini-product-hero-background {
-  position: absolute;
-  inset: 0px;
-  background-size: contain;
-  background-position: top;
-  background-position-y: 120px;
-  background-repeat: no-repeat;
-  background-image: url('/images/acdw-mini-hero2-background.png');
-  z-index: 0;
-  background-color: black;
+/* Inline Hero Image Container - Now in normal flow */
+.mini-product-hero-image-container {
+  @apply relative;
+  @apply w-full;
+  @apply flex items-center justify-center;
+  @apply z-0;
+  @apply overflow-hidden;
+  @apply pt-8 md:pt-12;
+  @apply pb-12 md:pb-16;
 }
 
-/* Gradient overlay removed - background image should display at full brightness */
+.mini-product-hero-image {
+  height: auto;
+  width: 140%;
+  max-width: 100rem;
+  object-fit: contain;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
 
-/* Base overlay styles */
+/* Content overlay - positioned after image */
 .mini-product-hero-overlay {
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  padding-top: 20rem;
-  padding-bottom: 6rem;
+  @apply relative;
+  @apply z-10;
+  @apply w-full;
+  @apply pb-6;
+  margin-top: -20px;
 }
 
-/* ============================================
-   BREAKPOINT 1: Small Mobile (max-width: 479px)
-   ============================================ */
+/* Responsive adjustments for inline image */
 @media screen and (max-width: 479px) {
-  .mini-product-hero-fullwidth {
-    min-height: 65vh;
+  .mini-product-hero-image-container {
+    @apply pt-6 pb-0;
   }
   
   .mini-product-hero-overlay {
-    padding-top: 23rem;
+    margin-top: -20px;
   }
   
-  .mini-product-hero-background {
-    background-position-x: 0px;
-    background-size: 100% auto !important;
-    background-color: #000;
-    background-position-y: 50px !important;
+  .mini-product-hero-content-wrapper {
+    @apply pt-0;
   }
 }
 
-/* ============================================
-   BREAKPOINT 2: Mobile (480px - 767px)
-   ============================================ */
 @media screen and (min-width: 480px) and (max-width: 767px) {
-  .mini-product-hero-fullwidth {
-    min-height: 65vh;
+  .mini-product-hero-image-container {
+    @apply pt-8 pb-0;
   }
   
   .mini-product-hero-overlay {
-    padding-top: 25rem;
+    margin-top: -20px;
   }
   
-  .mini-product-hero-background {
-    background-position-x: 0px;
-    background-size: 100% auto !important;
-    background-color: #000;
-    background-position-y: 50px !important;
+  .mini-product-hero-content-wrapper {
+    @apply pt-0;
   }
 }
 
-/* ============================================
-   BREAKPOINT 3: Tablet Portrait (768px - 1023px)
-   ============================================ */
 @media screen and (min-width: 768px) and (max-width: 1023px) {
-  .mini-product-hero-fullwidth {
-    min-height: 65vh;
+  .mini-product-hero-image-container {
+    @apply pt-10 pb-0;
   }
   
   .mini-product-hero-overlay {
-    padding-top: 35rem;
+    margin-top: -20px;
   }
   
-  .mini-product-hero-background {
-    background-position-x: 0px;
-    background-size: 100% auto !important;
-    background-color: #000;
+  .mini-product-hero-content-wrapper {
+    @apply pt-0;
   }
 }
 
-/* ============================================
-   BREAKPOINT 4: Tablet Landscape / Small Desktop (1024px - 1366px)
-   ============================================ */
 @media screen and (min-width: 1024px) and (max-width: 1366px) {
-  .mini-product-hero-fullwidth {
-    min-height: 65vh;
-    display: flex;
-    align-items: center;
+  .mini-product-hero-image-container {
+    @apply pt-12 pb-0;
   }
   
   .mini-product-hero-overlay {
-    padding-top: 45rem;
+    margin-top: -20px;
+  }
+  
+  .mini-product-hero-content-wrapper {
+    @apply pt-0;
   }
 }
 
-/* ============================================
-   BREAKPOINT 5: Large Desktop (1367px - 1599px)
-   ============================================ */
 @media screen and (min-width: 1367px) and (max-width: 1599px) {
-  .mini-product-hero-fullwidth {
-    min-height: 75vh;
-    display: flex;
-    align-items: center;
+  .mini-product-hero-image-container {
+    @apply pt-12 pb-0;
   }
   
   .mini-product-hero-overlay {
-    padding-top: 55rem;
+    margin-top: -20px;
+  }
+  
+  .mini-product-hero-content-wrapper {
+    @apply pt-0;
   }
 }
 
-/* ============================================
-   BREAKPOINT 6: Extra Large Desktop (1600px - 1920px)
-   ============================================ */
 @media screen and (min-width: 1600px) and (max-width: 1920px) {
-  .mini-product-hero-fullwidth {
-    min-height: 85vh;
-    display: flex;
-    align-items: center;
+  .mini-product-hero-image-container {
+    @apply pt-12 pb-0;
   }
   
   .mini-product-hero-overlay {
-    padding-top: 65rem;
+    margin-top: -20px;
+  }
+  
+  .mini-product-hero-content-wrapper {
+    @apply pt-0;
   }
 }
 
-/* ============================================
-   BREAKPOINT 7: Ultra Large Desktop (1921px and above)
-   ============================================ */
 @media screen and (min-width: 1921px) {
-  .mini-product-hero-fullwidth {
-    min-height: 95vh;
-    display: flex;
-    align-items: center;
+  .mini-product-hero-image-container {
+    @apply pt-12 pb-0;
   }
   
   .mini-product-hero-overlay {
-    padding-top: 75rem;
+    margin-top: -20px;
+  }
+  
+  .mini-product-hero-content-wrapper {
+    @apply pt-0;
   }
 }
 
 .mini-product-hero-content-wrapper {
   @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   @apply grid lg:grid-cols-2 gap-8 lg:gap-12 items-center;
+  @apply pt-12 md:pt-16;
 }
 
 /* Left Side - Product Info */
@@ -8982,6 +8971,284 @@
 
 .mini-product-gallery-image {
   @apply w-full h-full object-cover;
+}
+
+/* Hero Trust Metric */
+.mini-product-hero-trust-metric {
+  @apply mt-6 pt-6 border-t border-white/20;
+}
+
+.mini-product-hero-trust-text {
+  @apply text-sm md:text-base text-white/80;
+  @apply font-medium;
+}
+
+/* How It Works Section */
+.mini-product-how-it-works {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.mini-product-how-it-works-content {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.mini-product-how-it-works-subtitle {
+  @apply text-lg md:text-xl text-gray-600 text-center mb-12 max-w-3xl mx-auto;
+}
+
+.mini-product-how-it-works-steps {
+  @apply grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16;
+}
+
+.mini-product-how-it-works-step {
+  @apply relative flex flex-col items-center text-center;
+}
+
+.mini-product-how-it-works-step-number {
+  @apply absolute -top-4 left-1/2 transform -translate-x-1/2;
+  @apply w-8 h-8 rounded-full bg-primary-600 text-white;
+  @apply flex items-center justify-center font-bold text-sm;
+  @apply z-10;
+}
+
+.mini-product-how-it-works-step-content {
+  @apply bg-gray-50 rounded-2xl p-6 pt-10 w-full;
+  @apply hover:bg-gray-100 transition-colors;
+  @apply border-2 border-transparent hover:border-primary-200;
+}
+
+.mini-product-how-it-works-step-icon {
+  @apply h-12 w-12 mx-auto mb-4 text-primary-600;
+}
+
+.mini-product-how-it-works-step-title {
+  @apply text-xl font-semibold text-gray-900 mb-3;
+}
+
+.mini-product-how-it-works-step-description {
+  @apply text-gray-600 leading-relaxed;
+}
+
+/* Installation Video Placeholder */
+.mini-product-installation-video {
+  @apply mt-12;
+}
+
+.mini-product-installation-video-placeholder {
+  @apply relative w-full max-w-4xl mx-auto;
+  @apply aspect-video bg-gray-900 rounded-2xl overflow-hidden;
+  @apply flex items-center justify-center;
+  @apply cursor-pointer hover:bg-gray-800 transition-colors;
+}
+
+.mini-product-installation-video-placeholder-content {
+  @apply text-center text-white z-10;
+}
+
+.mini-product-installation-video-play-icon {
+  @apply h-16 w-16 mx-auto mb-4;
+  @apply text-white opacity-90;
+}
+
+.mini-product-installation-video-title {
+  @apply text-2xl font-bold mb-2;
+}
+
+.mini-product-installation-video-description {
+  @apply text-white/80 text-lg;
+}
+
+/* Testimonials Section */
+.mini-product-testimonials {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.mini-product-testimonials-content {
+  @apply max-w-5xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Testimonials Carousel */
+.mini-product-testimonials-carousel {
+  @apply relative;
+}
+
+.mini-product-testimonials-carousel-container {
+  @apply relative flex items-center justify-center;
+  @apply min-h-[400px] md:min-h-[450px];
+  @apply px-12 md:px-0;
+}
+
+.mini-product-testimonials-nav-button {
+  @apply absolute z-10;
+  @apply w-10 h-10 md:w-14 md:h-14;
+  @apply rounded-full bg-white;
+  @apply shadow-lg border border-gray-200;
+  @apply flex items-center justify-center;
+  @apply text-gray-700 hover:text-primary-600;
+  @apply hover:bg-gray-50;
+  @apply transition-all;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+}
+
+.mini-product-testimonials-nav-button-prev {
+  @apply left-2 md:-left-6;
+}
+
+.mini-product-testimonials-nav-button-next {
+  @apply right-2 md:-right-6;
+}
+
+.mini-product-testimonials-nav-icon {
+  @apply h-5 w-5 md:h-7 md:w-7;
+}
+
+.mini-product-testimonials-carousel-card-wrapper {
+  @apply relative w-full;
+  @apply flex items-center justify-center;
+}
+
+.mini-product-testimonial-card {
+  @apply bg-white rounded-2xl;
+  @apply shadow-lg border border-gray-200;
+  @apply overflow-hidden;
+  @apply w-full max-w-3xl;
+  @apply transition-all duration-500 ease-in-out;
+  @apply mx-2 md:mx-0;
+}
+
+.mini-product-testimonial-card-active {
+  @apply opacity-100 translate-x-0;
+  @apply block;
+}
+
+.mini-product-testimonial-card-hidden {
+  @apply opacity-0 absolute;
+  @apply pointer-events-none;
+  @apply transform translate-x-8;
+}
+
+.mini-product-testimonial-image-wrapper {
+  @apply w-full;
+  @apply pt-8 pb-4;
+  @apply flex items-center justify-center;
+  @apply bg-transparent;
+}
+
+.mini-product-testimonial-image {
+  @apply w-24 h-24 md:w-32 md:h-32;
+  @apply rounded-full;
+  @apply object-cover;
+  @apply border-4 border-gray-200;
+  @apply shadow-md;
+}
+
+.mini-product-testimonial-content {
+  @apply p-6 md:p-8;
+  @apply px-8 md:px-8;
+}
+
+.mini-product-testimonial-rating {
+  @apply flex gap-1 mb-4;
+}
+
+.mini-product-testimonial-star {
+  @apply h-5 w-5 text-yellow-400 fill-current;
+}
+
+.mini-product-testimonial-text {
+  @apply text-gray-700 leading-relaxed mb-6;
+  @apply text-base md:text-lg;
+  @apply italic;
+}
+
+.mini-product-testimonial-author {
+  @apply flex flex-col;
+  @apply pt-4 border-t border-gray-200;
+}
+
+.mini-product-testimonial-name {
+  @apply font-semibold text-gray-900;
+  @apply text-base;
+}
+
+.mini-product-testimonial-role {
+  @apply text-sm text-gray-600 mt-1;
+}
+
+/* Carousel Indicators */
+.mini-product-testimonials-indicators {
+  @apply flex justify-center gap-2 mt-8;
+}
+
+.mini-product-testimonials-indicator {
+  @apply w-2 h-2 md:w-3 md:h-3;
+  @apply rounded-full;
+  @apply bg-gray-300;
+  @apply transition-all;
+  @apply hover:bg-gray-400;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+}
+
+.mini-product-testimonials-indicator-active {
+  @apply bg-primary-600;
+  @apply w-8 md:w-10;
+  @apply rounded-full;
+}
+
+/* FAQ Section */
+.mini-product-faq {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.mini-product-faq-content {
+  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.mini-product-faq-subtitle {
+  @apply text-center text-gray-600 mb-12;
+  @apply text-base md:text-lg;
+}
+
+.mini-product-faq-contact-link {
+  @apply text-primary-600 font-semibold;
+  @apply hover:text-primary-700 underline;
+  @apply transition-colors;
+}
+
+.mini-product-faq-list {
+  @apply space-y-4;
+}
+
+.mini-product-faq-item {
+  @apply border border-gray-200 rounded-lg;
+  @apply overflow-hidden;
+  @apply bg-white;
+}
+
+.mini-product-faq-question {
+  @apply w-full text-left;
+  @apply px-6 py-4 md:px-8 md:py-5;
+  @apply flex items-center justify-between;
+  @apply text-base md:text-lg font-semibold text-gray-900;
+  @apply hover:bg-gray-50 transition-colors;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-inset;
+}
+
+.mini-product-faq-icon {
+  @apply h-5 w-5 text-gray-500 flex-shrink-0 ml-4;
+  @apply transition-transform;
+}
+
+.mini-product-faq-answer {
+  @apply px-6 py-4 md:px-8 md:py-5;
+  @apply bg-gray-50;
+  @apply border-t border-gray-200;
+  @apply text-gray-700 leading-relaxed;
+  @apply animate-fade-in;
+}
+
+.mini-product-faq-answer p {
+  @apply mb-0;
 }
 
 /* Responsive Adjustments */
