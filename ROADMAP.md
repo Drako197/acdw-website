@@ -211,15 +211,6 @@ _No active in-progress work at this time. All recent features have been complete
    - **Action Required:** Connect to Stripe API to fetch real order data
    - **Lines:** 27-33
 
-2. **Functions API Migration**
-   - **Status:** Planned (see `Fix.plan.md` in cursor plans)
-   - **Issue:** Functions currently use CommonJS (API v1), need to migrate to ES modules (API v2) for Blobs support
-   - **Files Affected:**
-     - `netlify/functions/validate-form-submission.js`
-     - `netlify/functions/generate-csrf-token.js`
-     - `netlify/functions/init-blobs-stores.js`
-     - All utility files in `netlify/functions/utils/`
-
 ### Medium Priority
 
 3. **Error Handling Improvements**

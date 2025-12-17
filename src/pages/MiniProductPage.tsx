@@ -19,7 +19,13 @@ import {
   WrenchScrewdriverIcon,
   ClockIcon,
   ArrowLeftIcon,
-  SparklesIcon
+  SparklesIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  PlayIcon,
+  StarIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon
 } from '@heroicons/react/24/outline'
 
 export function MiniProductPage() {
@@ -27,6 +33,8 @@ export function MiniProductPage() {
   const { user, isAuthenticated } = useAuth()
   const [quantity, setQuantity] = useState(1)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [currentTestimonial, setCurrentTestimonial] = useState(0)
 
   // Check for quantity in URL params (from redirect after login)
   useEffect(() => {
@@ -89,6 +97,122 @@ export function MiniProductPage() {
     'IMC 307.2.1.1'
   ]
 
+  // Testimonials from acdrainwiz.bwpsites.com
+  const testimonials = [
+    {
+      name: 'Joey',
+      role: 'AC Technician',
+      text: 'I love the AC DRAIN WIZ! After installing it and using it in one of my customers homes and seeing how much sludge came out after I did my service the normal way I was shocked! I would recommend the AC DRAIN to every homeowner out there!',
+      rating: 5,
+      image: '/images/testimonials/joey-testimonial.jpg'
+    },
+    {
+      name: 'Charles C.',
+      role: 'Homeowner',
+      text: 'I highly recommend AC Drain Wiz. It is such an amazing product. I\'m surprised no one thought of it before. Thank you, AC Drain Wiz. It is comforting not to have sleepless, hot nights anymore.',
+      rating: 5,
+      image: '/images/testimonials/charles-testimonial.jpg'
+    },
+    {
+      name: 'Jaclyn S.',
+      role: 'Homeowner',
+      text: 'The AC DRAIN WIZ is an amazing addition to my AC unit and has completely changed the unit which was becoming backed up almost every 3 months! The AC DRAIN WIZ really transformed the unit and it\'s now functioning better than ever! I\'m no longer looking forward to the summer in stifling south Florida with dread knowing that this device will allow prompt and effective resolution to any issue! Great product!!!',
+      rating: 5,
+      image: '/images/testimonials/jaclyn-s-testimonial.jpg'
+    },
+    {
+      name: 'Jeff B.',
+      role: 'FL General Contractor & Homeowner',
+      text: 'I have a newer home that we have been living in for about 10 years. The only issue we have ever experienced has been a recurring problem with the condensate line backing up. I had no way of vacuuming it out without taking apart a big section of the pvc, and I never would dare to try to flush it out with a water hose. Now, with AC Drain Wiz, I can quickly and easily hook up a hose and flush out the whole line. It has been great to be able to do this as preventative maintenance, rather than waiting for the AC to stop running and having a big mess and headache. AC Drain Wiz is an easy, affordable necessity. As a contractor, I plan on using it on all my projects.',
+      rating: 5,
+      image: '/images/testimonials/jeff-b-testimonial.jpg'
+    }
+  ]
+
+  const handleTestimonialNext = () => {
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
+  }
+
+  const handleTestimonialPrev = () => {
+    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  }
+
+  const handleTestimonialSelect = (index: number) => {
+    setCurrentTestimonial(index)
+  }
+
+  // How It Works steps
+  const howItWorksSteps = [
+    {
+      number: 1,
+      title: 'Install in 5 Minutes',
+      description: 'One-time installation takes just 5 minutes. No cutting, no complex tools required.',
+      icon: WrenchScrewdriverIcon
+    },
+    {
+      number: 2,
+      title: 'Monitor Water Flow',
+      description: 'Clear body design lets you visually inspect water flow and detect issues at a glance.',
+      icon: CheckIcon
+    },
+    {
+      number: 3,
+      title: 'Clear Clogs Instantly',
+      description: 'When needed, access your drain line instantly—no cutting, no emergency calls.',
+      icon: ClockIcon
+    },
+    {
+      number: 4,
+      title: 'Prevent Water Damage',
+      description: 'Proactive maintenance prevents costly water damage and keeps your AC running smoothly.',
+      icon: ShieldCheckIcon
+    }
+  ]
+
+  // FAQ data
+  const faqs = [
+    {
+      question: 'Do I need a professional to install it?',
+      answer: 'No! The AC Drain Wiz Mini was designed for easy DIY installation. Most homeowners can install it themselves in just 5 minutes with standard tools. However, if you prefer professional installation, many HVAC contractors are familiar with the product.'
+    },
+    {
+      question: 'What tools do I need for installation?',
+      answer: 'You only need standard HVAC service tools—no specialized equipment required. The installation process is straightforward and typically requires basic cutting and connection tools that most DIYers already have.'
+    },
+    {
+      question: 'Will this work with my AC system?',
+      answer: 'The Mini is compatible with most residential AC systems that use 3/4" PVC drain lines, which is the standard size for most residential condensate lines. If you\'re unsure about your drain line size, check with your HVAC contractor or measure your existing drain line.'
+    },
+    {
+      question: 'What if my drain line is a different size?',
+      answer: 'The Mini is designed for 3/4" PVC drain lines, which covers the vast majority of residential AC systems. If your system uses a different size, please contact our support team to discuss options.'
+    },
+    {
+      question: 'How often do I need to clean it?',
+      answer: 'The frequency depends on your specific conditions, but the Mini makes maintenance so easy that many homeowners check and clean it during regular AC maintenance (typically every 3-6 months). The clear body design lets you see when cleaning is needed.'
+    },
+    {
+      question: 'What maintenance is required?',
+      answer: 'The Mini requires minimal maintenance. Simply use the access port to flush or vacuum the drain line when needed. The clear body design makes it easy to see when maintenance is required, and the one-time installation means you never need to cut the line again.'
+    },
+    {
+      question: 'What\'s the warranty?',
+      answer: 'AC Drain Wiz Mini comes with a comprehensive warranty. Please check our warranty policy page for full details, or contact our support team for specific warranty information.'
+    },
+    {
+      question: 'Can I return it if it doesn\'t fit?',
+      answer: 'Yes! We offer a return policy for products that don\'t fit your specific installation. Please review our return policy or contact our support team for assistance with returns or exchanges.'
+    },
+    {
+      question: 'Do you offer bulk pricing?',
+      answer: 'Yes! We offer bulk pricing for contractors and property managers. If you\'re an HVAC professional, sign in to access contractor pricing. For property managers or large orders, please contact our sales team for custom pricing.'
+    },
+    {
+      question: 'How long does shipping take?',
+      answer: 'Shipping times vary by location, but most orders ship within 1-2 business days. We offer free shipping on orders over $50. You\'ll receive a tracking number once your order ships.'
+    }
+  ]
+
   const price = 99.99
   const totalPrice = price * quantity
 
@@ -114,8 +238,14 @@ export function MiniProductPage() {
 
       {/* Hero Section - Option 1: Split Layout with Full-Width Background */}
       <section className="mini-product-hero-fullwidth">
-        {/* Background Image */}
-        <div className="mini-product-hero-background"></div>
+        {/* Inline Hero Image */}
+        <div className="mini-product-hero-image-container">
+          <img
+            src="/images/acdw-mini-hero1-background.png"
+            alt="AC Drain Wiz Mini"
+            className="mini-product-hero-image"
+          />
+        </div>
         
         {/* Content Overlay */}
         <div className="mini-product-hero-overlay">
@@ -123,12 +253,14 @@ export function MiniProductPage() {
             {/* Left Side - Product Info */}
             <div className="mini-product-hero-info">
               <h1 className="mini-product-hero-title">
-                Nothing Else Like It
+                Stop Water Damage Before It Starts
               </h1>
               <p className="mini-product-hero-subtitle">
-                Prevent costly water damage with our flagship compact maintenance solution. 
-                Proactive cleaning, clear visibility, and code-compliant access—all in one compact design.
+                AC drain clogs cause thousands in water damage. The Mini gives you instant access to clear blockages in 5 minutes—no cutting, no mess, no emergency calls.
               </p>
+              <div className="mini-product-hero-trust-metric">
+                <span className="mini-product-hero-trust-text">Trusted by homeowners & AC contractors nationwide</span>
+              </div>
             </div>
 
             {/* Right Side - Purchase Card */}
@@ -290,6 +422,125 @@ export function MiniProductPage() {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section className="mini-product-how-it-works">
+        <div className="mini-product-how-it-works-content">
+          <h2 className="mini-product-section-title">How It Works</h2>
+          <p className="mini-product-how-it-works-subtitle">
+            Get instant access to your AC drain line in four simple steps
+          </p>
+          
+          <div className="mini-product-how-it-works-steps">
+            {howItWorksSteps.map((step, index) => (
+              <div key={index} className="mini-product-how-it-works-step">
+                <div className="mini-product-how-it-works-step-number">
+                  {step.number}
+                </div>
+                <div className="mini-product-how-it-works-step-content">
+                  <step.icon className="mini-product-how-it-works-step-icon" />
+                  <h3 className="mini-product-how-it-works-step-title">{step.title}</h3>
+                  <p className="mini-product-how-it-works-step-description">{step.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Installation Video Placeholder */}
+          <div className="mini-product-installation-video">
+            <div className="mini-product-installation-video-placeholder">
+              <div className="mini-product-installation-video-placeholder-content">
+                <PlayIcon className="mini-product-installation-video-play-icon" />
+                <h3 className="mini-product-installation-video-title">Watch Installation Video</h3>
+                <p className="mini-product-installation-video-description">
+                  See how easy it is to install the AC Drain Wiz Mini in just 5 minutes
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="mini-product-testimonials">
+        <div className="mini-product-testimonials-content">
+          <h2 className="mini-product-section-title">Customers Love the AC Drain Wiz Mini</h2>
+          
+          {/* Testimonial Carousel */}
+          <div className="mini-product-testimonials-carousel">
+            <div className="mini-product-testimonials-carousel-container">
+              {/* Previous Button */}
+              <button
+                onClick={handleTestimonialPrev}
+                className="mini-product-testimonials-nav-button mini-product-testimonials-nav-button-prev"
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeftIcon className="mini-product-testimonials-nav-icon" />
+              </button>
+
+              {/* Testimonial Card */}
+              <div className="mini-product-testimonials-carousel-card-wrapper">
+                {testimonials.map((testimonial, index) => (
+                  <div
+                    key={index}
+                    className={`mini-product-testimonial-card ${
+                      index === currentTestimonial ? 'mini-product-testimonial-card-active' : 'mini-product-testimonial-card-hidden'
+                    }`}
+                  >
+                    <div className="mini-product-testimonial-image-wrapper">
+                      <img
+                        src={testimonial.image}
+                        alt={`${testimonial.name}, ${testimonial.role}`}
+                        className="mini-product-testimonial-image"
+                        onError={(e) => {
+                          // Fallback to placeholder if image doesn't exist
+                          const target = e.target as HTMLImageElement
+                          target.src = '/images/testimonials/placeholder.jpg'
+                        }}
+                      />
+                    </div>
+                    <div className="mini-product-testimonial-content">
+                      <div className="mini-product-testimonial-rating">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <StarIcon key={i} className="mini-product-testimonial-star" />
+                        ))}
+                      </div>
+                      <p className="mini-product-testimonial-text">"{testimonial.text}"</p>
+                      <div className="mini-product-testimonial-author">
+                        <span className="mini-product-testimonial-name">{testimonial.name}</span>
+                        <span className="mini-product-testimonial-role">{testimonial.role}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={handleTestimonialNext}
+                className="mini-product-testimonials-nav-button mini-product-testimonials-nav-button-next"
+                aria-label="Next testimonial"
+              >
+                <ChevronRightIcon className="mini-product-testimonials-nav-icon" />
+              </button>
+            </div>
+
+            {/* Carousel Indicators */}
+            <div className="mini-product-testimonials-indicators">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleTestimonialSelect(index)}
+                  className={`mini-product-testimonials-indicator ${
+                    index === currentTestimonial ? 'mini-product-testimonials-indicator-active' : ''
+                  }`}
+                  aria-label={`Go to testimonial ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Quick Features Section */}
       <section className="mini-product-features">
         <div className="mini-product-features-content">
@@ -334,6 +585,45 @@ export function MiniProductPage() {
             {complianceCodes.map((code, index) => (
               <div key={index} className="mini-product-compliance-badge">
                 {code}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="mini-product-faq">
+        <div className="mini-product-faq-content">
+          <h2 className="mini-product-section-title">Frequently Asked Questions</h2>
+          <p className="mini-product-faq-subtitle">
+            Have questions? We've got answers. Can't find what you're looking for?{' '}
+            <button
+              onClick={() => navigate('/contact?type=support')}
+              className="mini-product-faq-contact-link"
+            >
+              Contact our support team
+            </button>
+          </p>
+          <div className="mini-product-faq-list">
+            {faqs.map((faq, index) => (
+              <div key={index} className="mini-product-faq-item">
+                <button
+                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                  className="mini-product-faq-question"
+                  aria-expanded={openFaq === index}
+                >
+                  <span>{faq.question}</span>
+                  {openFaq === index ? (
+                    <ChevronUpIcon className="mini-product-faq-icon" />
+                  ) : (
+                    <ChevronDownIcon className="mini-product-faq-icon" />
+                  )}
+                </button>
+                {openFaq === index && (
+                  <div className="mini-product-faq-answer">
+                    <p>{faq.answer}</p>
+                  </div>
+                )}
               </div>
             ))}
           </div>

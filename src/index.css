@@ -4539,205 +4539,147 @@
   @apply text-lg md:text-xl text-gray-600 max-w-3xl mx-auto;
 }
 
-/* Products Stacked Layout */
-.unified-products-stacked {
-  @apply space-y-16;
+/* Products Card Grid Layout - Apple Style */
+.unified-products-card-grid {
+  @apply space-y-12 md:space-y-16;
 }
 
-.unified-product-stacked-item {
-  @apply flex flex-col md:flex-row gap-6 items-stretch;
-}
-
-.unified-product-stacked-left {
-  @apply flex-row;
-}
-
-.unified-product-stacked-right {
-  @apply flex-row-reverse;
-}
-
-/* Product Shot Card */
-.unified-product-shot-card {
+.unified-product-card {
   @apply bg-white rounded-2xl shadow-lg overflow-hidden;
-  flex: 2;
-  min-width: 0;
+  @apply flex flex-col;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.unified-product-shot-container {
-  @apply relative w-full h-full;
-  min-height: 400px;
+.unified-product-card:hover {
+  @apply shadow-xl;
+  transform: translateY(-2px);
 }
 
-.unified-product-shot-gradient {
-  @apply absolute inset-0 rounded-2xl;
-  border: 3px solid white;
+/* Product Image Section - Full width on all screen sizes */
+.unified-product-card-image-wrapper {
+  @apply w-full flex-shrink-0;
+  @apply bg-gray-100;
 }
 
-/* Gradient placeholders for each product */
-.unified-product-shot-gradient-mini {
+.unified-product-card-image {
+  @apply w-full h-64 md:h-80;
+  @apply flex items-center justify-center;
+  @apply object-cover;
+}
+
+/* Gradient placeholders for each product (will be replaced with actual images) */
+.unified-product-card-image-mini {
   background: linear-gradient(135deg, #0077C5 0%, #00B8F5 50%, #4FC3F7 100%);
 }
 
-.unified-product-shot-gradient-sensor {
+.unified-product-card-image-sensor {
   background: linear-gradient(135deg, #7B1FA2 0%, #9C27B0 50%, #BA68C8 100%);
 }
 
-.unified-product-shot-gradient-minisensor {
+.unified-product-card-image-minisensor {
   background: linear-gradient(135deg, #1565C0 0%, #1976D2 50%, #42A5F5 100%);
 }
 
-/* Product Information Card */
-.unified-product-info-card {
-  @apply bg-white rounded-2xl shadow-lg p-8;
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
+/* Product Content Section - Full width */
+.unified-product-card-content {
+  @apply w-full flex flex-col;
+  @apply p-6 md:p-8;
 }
 
-.unified-product-info-header {
-  @apply mb-6;
-}
-
-.unified-product-info-title-section {
+/* Card Header */
+.unified-product-card-header {
   @apply mb-4;
 }
 
-.unified-product-info-title {
-  @apply text-3xl font-bold text-gray-900 mb-3;
+.unified-product-card-title {
+  @apply text-2xl md:text-3xl font-bold text-gray-900 mb-3;
 }
 
-.unified-product-info-badges {
-  @apply flex flex-wrap gap-2 mb-3;
+.unified-product-card-badges {
+  @apply flex flex-wrap gap-2 mb-4;
 }
 
-.unified-product-info-status {
+.unified-product-card-status {
   @apply px-3 py-1 rounded-full text-sm font-medium;
 }
 
-.unified-product-info-badge-contractor {
+.products-card-status-available {
+  @apply bg-green-100 text-green-800;
+}
+
+.unified-product-card-badge-contractor {
   @apply px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium;
 }
 
-.unified-product-info-description {
-  @apply text-gray-600 text-base leading-relaxed;
+/* Card Description */
+.unified-product-card-description {
+  @apply text-gray-600 text-base leading-relaxed mb-6;
 }
 
-/* Product Drawers (styled like tabs with underlines) */
-.unified-product-tabs {
-  @apply mb-6 flex-1 flex flex-col space-y-1;
-  overflow-y: auto;
+/* Card Benefits */
+.unified-product-card-benefits {
+  @apply mb-6 flex-1;
 }
 
-.unified-product-drawer-button {
-  @apply w-full px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors;
-  @apply flex items-center justify-between text-left;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  outline: none;
-  cursor: pointer;
-}
-
-.unified-product-drawer-button:focus {
-  @apply outline-none;
-}
-
-.unified-product-drawer-button-active {
-  @apply text-blue-600;
-  border-bottom: 2px solid #2563eb;
-}
-
-.unified-product-drawer-button-content {
-  @apply flex items-center gap-2;
-}
-
-.unified-product-drawer-badge {
-  @apply px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600 rounded-full;
-}
-
-.unified-product-drawer-button-active .unified-product-drawer-badge {
-  @apply bg-blue-100 text-blue-600;
-}
-
-.unified-product-drawer-content {
-  @apply px-4 py-3 border-b border-gray-200;
-  animation: slideDown 0.2s ease-out;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.unified-product-tab-content-list {
+.unified-product-card-benefits-list {
   @apply space-y-3;
 }
 
-.unified-product-tab-content-item {
-  @apply flex items-start gap-3 text-sm text-gray-600;
+.unified-product-card-benefit-item {
+  @apply flex items-start gap-3 text-sm md:text-base text-gray-700;
 }
 
-.unified-product-tab-content-icon {
-  @apply h-5 w-5 text-green-500 flex-shrink-0 mt-0.5;
+.unified-product-card-benefit-icon {
+  @apply h-5 w-5 text-green-600 flex-shrink-0 mt-0.5;
 }
 
-.unified-product-tab-content-specs {
-  @apply space-y-3;
+/* Card CTA */
+.unified-product-card-cta {
+  @apply pt-4 border-t border-gray-200;
 }
 
-.unified-product-tab-content-spec-item {
-  @apply flex items-center gap-3 text-sm text-gray-600;
+.unified-product-card-cta-button {
+  @apply w-full flex items-center justify-center gap-2 px-6 py-3 md:py-4;
+  @apply bg-blue-600 text-white font-semibold rounded-lg;
+  @apply hover:bg-blue-700 active:bg-blue-800 transition-colors;
+  @apply text-base md:text-lg;
+  min-height: 44px; /* Touch target minimum */
 }
 
-.unified-product-tab-content-spec-icon {
-  @apply h-5 w-5 text-blue-500 flex-shrink-0;
-}
-
-.unified-product-tab-content-pricing {
-  @apply space-y-2;
-}
-
-.unified-product-tab-content-pricing-item {
-  @apply text-sm text-gray-600;
-}
-
-.unified-product-tab-content-pricing-note {
-  @apply text-xs text-gray-500 italic;
-}
-
-.unified-product-tab-content-compliance {
-  @apply p-2;
-}
-
-.unified-product-tab-content-compliance-badges {
-  @apply flex flex-wrap gap-2;
-}
-
-.unified-product-tab-content-compliance-badge {
-  @apply px-3 py-1 bg-gray-100 text-gray-700 rounded text-xs font-mono;
-}
-
-.unified-product-info-cta {
-  @apply pt-6 border-t border-gray-200;
-}
-
-.unified-product-info-cta-button {
-  @apply w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors;
-}
-
-.unified-product-info-cta-icon {
+.unified-product-card-cta-icon {
   @apply h-5 w-5;
 }
 
-.unified-product-info-cta-button-disabled {
+.unified-product-card-cta-button-disabled {
   @apply w-full px-6 py-3 bg-gray-300 text-gray-500 font-semibold rounded-lg cursor-not-allowed;
+  min-height: 44px;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .unified-product-card-image {
+    @apply h-56;
+  }
+  
+  .unified-product-card-content {
+    @apply p-6;
+  }
+  
+  .unified-product-card-title {
+    @apply text-2xl;
+  }
+  
+  .unified-product-card-description {
+    @apply text-sm;
+  }
+  
+  .unified-product-card-benefit-item {
+    @apply text-sm;
+  }
+  
+  .unified-product-card-cta-button {
+    @apply text-base py-3;
+  }
 }
 
 .unified-product-card {
@@ -8362,155 +8304,144 @@
 /* Hero Section - Option 1: Split Layout with Full-Width Background */
 .mini-product-hero-fullwidth {
   @apply relative;
-  min-height: 85vh;
-  @apply flex items-center;
+  @apply bg-black;
+  @apply flex flex-col;
 }
 
-.mini-product-hero-background {
-  position: absolute;
-  inset: 0px;
-  background-size: contain;
-  background-position: top;
-  background-position-y: 120px;
-  background-repeat: no-repeat;
-  background-image: url('/images/acdw-mini-hero2-background.png');
-  z-index: 0;
-  background-color: black;
+/* Inline Hero Image Container - Now in normal flow */
+.mini-product-hero-image-container {
+  @apply relative;
+  @apply w-full;
+  @apply flex items-center justify-center;
+  @apply z-0;
+  @apply overflow-hidden;
+  @apply pt-8 md:pt-12;
+  @apply pb-12 md:pb-16;
 }
 
-/* Gradient overlay removed - background image should display at full brightness */
+.mini-product-hero-image {
+  height: auto;
+  width: 140%;
+  max-width: 100rem;
+  object-fit: contain;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
 
-/* Base overlay styles */
+/* Content overlay - positioned after image */
 .mini-product-hero-overlay {
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  padding-top: 20rem;
-  padding-bottom: 6rem;
+  @apply relative;
+  @apply z-10;
+  @apply w-full;
+  @apply pb-6;
+  margin-top: -20px;
 }
 
-/* ============================================
-   BREAKPOINT 1: Small Mobile (max-width: 479px)
-   ============================================ */
+/* Responsive adjustments for inline image */
 @media screen and (max-width: 479px) {
-  .mini-product-hero-fullwidth {
-    min-height: 65vh;
+  .mini-product-hero-image-container {
+    @apply pt-6 pb-0;
   }
   
   .mini-product-hero-overlay {
-    padding-top: 23rem;
+    margin-top: -20px;
   }
   
-  .mini-product-hero-background {
-    background-position-x: 0px;
-    background-size: 100% auto !important;
-    background-color: #000;
-    background-position-y: 50px !important;
+  .mini-product-hero-content-wrapper {
+    @apply pt-0;
   }
 }
 
-/* ============================================
-   BREAKPOINT 2: Mobile (480px - 767px)
-   ============================================ */
 @media screen and (min-width: 480px) and (max-width: 767px) {
-  .mini-product-hero-fullwidth {
-    min-height: 65vh;
+  .mini-product-hero-image-container {
+    @apply pt-8 pb-0;
   }
   
   .mini-product-hero-overlay {
-    padding-top: 25rem;
+    margin-top: -20px;
   }
   
-  .mini-product-hero-background {
-    background-position-x: 0px;
-    background-size: 100% auto !important;
-    background-color: #000;
-    background-position-y: 50px !important;
+  .mini-product-hero-content-wrapper {
+    @apply pt-0;
   }
 }
 
-/* ============================================
-   BREAKPOINT 3: Tablet Portrait (768px - 1023px)
-   ============================================ */
 @media screen and (min-width: 768px) and (max-width: 1023px) {
-  .mini-product-hero-fullwidth {
-    min-height: 65vh;
+  .mini-product-hero-image-container {
+    @apply pt-10 pb-0;
   }
   
   .mini-product-hero-overlay {
-    padding-top: 35rem;
+    margin-top: -20px;
   }
   
-  .mini-product-hero-background {
-    background-position-x: 0px;
-    background-size: 100% auto !important;
-    background-color: #000;
+  .mini-product-hero-content-wrapper {
+    @apply pt-0;
   }
 }
 
-/* ============================================
-   BREAKPOINT 4: Tablet Landscape / Small Desktop (1024px - 1366px)
-   ============================================ */
 @media screen and (min-width: 1024px) and (max-width: 1366px) {
-  .mini-product-hero-fullwidth {
-    min-height: 65vh;
-    display: flex;
-    align-items: center;
+  .mini-product-hero-image-container {
+    @apply pt-12 pb-0;
   }
   
   .mini-product-hero-overlay {
-    padding-top: 45rem;
+    margin-top: -20px;
+  }
+  
+  .mini-product-hero-content-wrapper {
+    @apply pt-0;
   }
 }
 
-/* ============================================
-   BREAKPOINT 5: Large Desktop (1367px - 1599px)
-   ============================================ */
 @media screen and (min-width: 1367px) and (max-width: 1599px) {
-  .mini-product-hero-fullwidth {
-    min-height: 75vh;
-    display: flex;
-    align-items: center;
+  .mini-product-hero-image-container {
+    @apply pt-12 pb-0;
   }
   
   .mini-product-hero-overlay {
-    padding-top: 55rem;
+    margin-top: -20px;
+  }
+  
+  .mini-product-hero-content-wrapper {
+    @apply pt-0;
   }
 }
 
-/* ============================================
-   BREAKPOINT 6: Extra Large Desktop (1600px - 1920px)
-   ============================================ */
 @media screen and (min-width: 1600px) and (max-width: 1920px) {
-  .mini-product-hero-fullwidth {
-    min-height: 85vh;
-    display: flex;
-    align-items: center;
+  .mini-product-hero-image-container {
+    @apply pt-12 pb-0;
   }
   
   .mini-product-hero-overlay {
-    padding-top: 65rem;
+    margin-top: -20px;
+  }
+  
+  .mini-product-hero-content-wrapper {
+    @apply pt-0;
   }
 }
 
-/* ============================================
-   BREAKPOINT 7: Ultra Large Desktop (1921px and above)
-   ============================================ */
 @media screen and (min-width: 1921px) {
-  .mini-product-hero-fullwidth {
-    min-height: 95vh;
-    display: flex;
-    align-items: center;
+  .mini-product-hero-image-container {
+    @apply pt-12 pb-0;
   }
   
   .mini-product-hero-overlay {
-    padding-top: 75rem;
+    margin-top: -20px;
+  }
+  
+  .mini-product-hero-content-wrapper {
+    @apply pt-0;
   }
 }
 
 .mini-product-hero-content-wrapper {
   @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   @apply grid lg:grid-cols-2 gap-8 lg:gap-12 items-center;
+  @apply pt-12 md:pt-16;
 }
 
 /* Left Side - Product Info */
@@ -8984,6 +8915,284 @@
   @apply w-full h-full object-cover;
 }
 
+/* Hero Trust Metric */
+.mini-product-hero-trust-metric {
+  @apply mt-6 pt-6 border-t border-white/20;
+}
+
+.mini-product-hero-trust-text {
+  @apply text-sm md:text-base text-white/80;
+  @apply font-medium;
+}
+
+/* How It Works Section */
+.mini-product-how-it-works {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.mini-product-how-it-works-content {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.mini-product-how-it-works-subtitle {
+  @apply text-lg md:text-xl text-gray-600 text-center mb-12 max-w-3xl mx-auto;
+}
+
+.mini-product-how-it-works-steps {
+  @apply grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16;
+}
+
+.mini-product-how-it-works-step {
+  @apply relative flex flex-col items-center text-center;
+}
+
+.mini-product-how-it-works-step-number {
+  @apply absolute -top-4 left-1/2 transform -translate-x-1/2;
+  @apply w-8 h-8 rounded-full bg-primary-600 text-white;
+  @apply flex items-center justify-center font-bold text-sm;
+  @apply z-10;
+}
+
+.mini-product-how-it-works-step-content {
+  @apply bg-gray-50 rounded-2xl p-6 pt-10 w-full;
+  @apply hover:bg-gray-100 transition-colors;
+  @apply border-2 border-transparent hover:border-primary-200;
+}
+
+.mini-product-how-it-works-step-icon {
+  @apply h-12 w-12 mx-auto mb-4 text-primary-600;
+}
+
+.mini-product-how-it-works-step-title {
+  @apply text-xl font-semibold text-gray-900 mb-3;
+}
+
+.mini-product-how-it-works-step-description {
+  @apply text-gray-600 leading-relaxed;
+}
+
+/* Installation Video Placeholder */
+.mini-product-installation-video {
+  @apply mt-12;
+}
+
+.mini-product-installation-video-placeholder {
+  @apply relative w-full max-w-4xl mx-auto;
+  @apply aspect-video bg-gray-900 rounded-2xl overflow-hidden;
+  @apply flex items-center justify-center;
+  @apply cursor-pointer hover:bg-gray-800 transition-colors;
+}
+
+.mini-product-installation-video-placeholder-content {
+  @apply text-center text-white z-10;
+}
+
+.mini-product-installation-video-play-icon {
+  @apply h-16 w-16 mx-auto mb-4;
+  @apply text-white opacity-90;
+}
+
+.mini-product-installation-video-title {
+  @apply text-2xl font-bold mb-2;
+}
+
+.mini-product-installation-video-description {
+  @apply text-white/80 text-lg;
+}
+
+/* Testimonials Section */
+.mini-product-testimonials {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.mini-product-testimonials-content {
+  @apply max-w-5xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Testimonials Carousel */
+.mini-product-testimonials-carousel {
+  @apply relative;
+}
+
+.mini-product-testimonials-carousel-container {
+  @apply relative flex items-center justify-center;
+  @apply min-h-[400px] md:min-h-[450px];
+  @apply px-12 md:px-0;
+}
+
+.mini-product-testimonials-nav-button {
+  @apply absolute z-10;
+  @apply w-10 h-10 md:w-14 md:h-14;
+  @apply rounded-full bg-white;
+  @apply shadow-lg border border-gray-200;
+  @apply flex items-center justify-center;
+  @apply text-gray-700 hover:text-primary-600;
+  @apply hover:bg-gray-50;
+  @apply transition-all;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+}
+
+.mini-product-testimonials-nav-button-prev {
+  @apply left-2 md:-left-6;
+}
+
+.mini-product-testimonials-nav-button-next {
+  @apply right-2 md:-right-6;
+}
+
+.mini-product-testimonials-nav-icon {
+  @apply h-5 w-5 md:h-7 md:w-7;
+}
+
+.mini-product-testimonials-carousel-card-wrapper {
+  @apply relative w-full;
+  @apply flex items-center justify-center;
+}
+
+.mini-product-testimonial-card {
+  @apply bg-white rounded-2xl;
+  @apply shadow-lg border border-gray-200;
+  @apply overflow-hidden;
+  @apply w-full max-w-3xl;
+  @apply transition-all duration-500 ease-in-out;
+  @apply mx-2 md:mx-0;
+}
+
+.mini-product-testimonial-card-active {
+  @apply opacity-100 translate-x-0;
+  @apply block;
+}
+
+.mini-product-testimonial-card-hidden {
+  @apply opacity-0 absolute;
+  @apply pointer-events-none;
+  @apply transform translate-x-8;
+}
+
+.mini-product-testimonial-image-wrapper {
+  @apply w-full;
+  @apply pt-8 pb-4;
+  @apply flex items-center justify-center;
+  @apply bg-transparent;
+}
+
+.mini-product-testimonial-image {
+  @apply w-24 h-24 md:w-32 md:h-32;
+  @apply rounded-full;
+  @apply object-cover;
+  @apply border-4 border-gray-200;
+  @apply shadow-md;
+}
+
+.mini-product-testimonial-content {
+  @apply p-6 md:p-8;
+  @apply px-8 md:px-8;
+}
+
+.mini-product-testimonial-rating {
+  @apply flex gap-1 mb-4;
+}
+
+.mini-product-testimonial-star {
+  @apply h-5 w-5 text-yellow-400 fill-current;
+}
+
+.mini-product-testimonial-text {
+  @apply text-gray-700 leading-relaxed mb-6;
+  @apply text-base md:text-lg;
+  @apply italic;
+}
+
+.mini-product-testimonial-author {
+  @apply flex flex-col;
+  @apply pt-4 border-t border-gray-200;
+}
+
+.mini-product-testimonial-name {
+  @apply font-semibold text-gray-900;
+  @apply text-base;
+}
+
+.mini-product-testimonial-role {
+  @apply text-sm text-gray-600 mt-1;
+}
+
+/* Carousel Indicators */
+.mini-product-testimonials-indicators {
+  @apply flex justify-center gap-2 mt-8;
+}
+
+.mini-product-testimonials-indicator {
+  @apply w-2 h-2 md:w-3 md:h-3;
+  @apply rounded-full;
+  @apply bg-gray-300;
+  @apply transition-all;
+  @apply hover:bg-gray-400;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+}
+
+.mini-product-testimonials-indicator-active {
+  @apply bg-primary-600;
+  @apply w-8 md:w-10;
+  @apply rounded-full;
+}
+
+/* FAQ Section */
+.mini-product-faq {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.mini-product-faq-content {
+  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.mini-product-faq-subtitle {
+  @apply text-center text-gray-600 mb-12;
+  @apply text-base md:text-lg;
+}
+
+.mini-product-faq-contact-link {
+  @apply text-primary-600 font-semibold;
+  @apply hover:text-primary-700 underline;
+  @apply transition-colors;
+}
+
+.mini-product-faq-list {
+  @apply space-y-4;
+}
+
+.mini-product-faq-item {
+  @apply border border-gray-200 rounded-lg;
+  @apply overflow-hidden;
+  @apply bg-white;
+}
+
+.mini-product-faq-question {
+  @apply w-full text-left;
+  @apply px-6 py-4 md:px-8 md:py-5;
+  @apply flex items-center justify-between;
+  @apply text-base md:text-lg font-semibold text-gray-900;
+  @apply hover:bg-gray-50 transition-colors;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-inset;
+}
+
+.mini-product-faq-icon {
+  @apply h-5 w-5 text-gray-500 flex-shrink-0 ml-4;
+  @apply transition-transform;
+}
+
+.mini-product-faq-answer {
+  @apply px-6 py-4 md:px-8 md:py-5;
+  @apply bg-gray-50;
+  @apply border-t border-gray-200;
+  @apply text-gray-700 leading-relaxed;
+  @apply animate-fade-in;
+}
+
+.mini-product-faq-answer p {
+  @apply mb-0;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 1024px) {
   .mini-product-purchase-section {
@@ -9001,6 +9210,473 @@
   }
   
   .mini-product-features-grid {
+    @apply grid-cols-1;
+  }
+}
+
+/* ========================================
+   SENSOR PRODUCT PAGE - Similar to Mini but Contractor-Focused
+   ======================================== */
+
+.sensor-product-page {
+  @apply min-h-screen bg-white;
+}
+
+/* Back Navigation */
+.sensor-product-back-nav {
+  @apply sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200;
+}
+
+.sensor-product-back-button {
+  @apply flex items-center gap-2 px-6 py-4 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors;
+}
+
+.sensor-product-back-icon {
+  @apply h-5 w-5;
+}
+
+/* Hero Section */
+.sensor-product-hero-fullwidth {
+  @apply relative bg-black flex flex-col;
+}
+
+.sensor-product-hero-image-container {
+  @apply relative w-full flex items-center justify-center z-0 overflow-hidden pt-8 md:pt-12 pb-12 md:pb-16;
+}
+
+.sensor-product-hero-image {
+  height: auto;
+  width: 140%;
+  max-width: 100rem;
+  object-fit: contain;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.sensor-product-hero-overlay {
+  @apply relative z-10 w-full pb-6;
+  margin-top: -20px;
+}
+
+.sensor-product-hero-content-wrapper {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  @apply flex flex-col lg:flex-row gap-8 lg:gap-12 items-start;
+  margin-top: 50px;
+}
+
+.sensor-product-hero-info {
+  @apply flex-1;
+}
+
+.sensor-product-hero-title {
+  @apply text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight;
+}
+
+.sensor-product-hero-subtitle {
+  @apply text-lg md:text-xl text-gray-300 leading-relaxed mb-6;
+}
+
+/* Purchase Card */
+.sensor-product-purchase-card-hero {
+  @apply w-full lg:w-96 flex-shrink-0;
+}
+
+.sensor-product-purchase-card-content {
+  @apply bg-white rounded-2xl shadow-xl p-6 md:p-8;
+  @apply border border-gray-200;
+}
+
+.sensor-product-purchase-title {
+  @apply text-2xl font-bold text-gray-900 mb-6;
+}
+
+.sensor-product-purchase-cta-section {
+  @apply space-y-4;
+}
+
+.sensor-product-purchase-message {
+  @apply text-sm text-gray-600 mb-4;
+}
+
+.sensor-product-purchase-button-primary {
+  @apply w-full py-3 px-6 bg-primary-600 text-white font-semibold rounded-lg;
+  @apply hover:bg-primary-700 transition-colors;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
+
+.sensor-product-purchase-button-secondary {
+  @apply w-full py-3 px-6 bg-white border-2 border-primary-600 text-primary-600 font-semibold rounded-lg;
+  @apply hover:bg-primary-50 transition-colors;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
+
+.sensor-product-trust-section-inline {
+  @apply flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200;
+}
+
+.sensor-product-trust-badge {
+  @apply flex items-center gap-2 text-xs text-gray-600;
+}
+
+.sensor-product-trust-icon {
+  @apply h-4 w-4 text-primary-600;
+}
+
+/* Value Propositions by Customer Type */
+.sensor-product-value-props {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.sensor-product-value-props-content {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-section-title {
+  @apply text-3xl md:text-4xl font-bold text-gray-900 text-center mb-4;
+}
+
+.sensor-product-section-subtitle {
+  @apply text-center text-gray-600 mb-12 text-lg max-w-3xl mx-auto;
+}
+
+.sensor-product-value-props-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8;
+}
+
+.sensor-product-value-prop-card {
+  @apply bg-white rounded-xl shadow-lg p-8 border border-gray-200;
+  @apply flex flex-col;
+}
+
+.sensor-product-value-prop-icon-wrapper {
+  @apply w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center mb-6;
+}
+
+.sensor-product-value-prop-icon {
+  @apply h-8 w-8 text-primary-600;
+}
+
+.sensor-product-value-prop-title {
+  @apply text-2xl font-bold text-gray-900 mb-4;
+}
+
+.sensor-product-value-prop-description {
+  @apply text-gray-600 mb-6;
+}
+
+.sensor-product-value-prop-benefits {
+  @apply space-y-3 mb-8 flex-1;
+}
+
+.sensor-product-value-prop-benefit {
+  @apply flex items-start gap-3 text-gray-700;
+}
+
+.sensor-product-value-prop-check {
+  @apply h-5 w-5 text-green-600 flex-shrink-0 mt-0.5;
+}
+
+.sensor-product-value-prop-cta {
+  @apply w-full py-3 px-6 bg-primary-600 text-white font-semibold rounded-lg;
+  @apply hover:bg-primary-700 transition-colors mt-auto;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
+
+/* Real-Time Visibility */
+.sensor-product-visibility {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.sensor-product-visibility-content {
+  @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-visibility-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-8;
+}
+
+.sensor-product-visibility-card {
+  @apply bg-gray-50 rounded-lg p-6 border border-gray-200;
+}
+
+.sensor-product-visibility-icon {
+  @apply h-12 w-12 text-primary-600 mb-4;
+}
+
+.sensor-product-visibility-title {
+  @apply text-xl font-bold text-gray-900 mb-3;
+}
+
+.sensor-product-visibility-description {
+  @apply text-gray-600;
+}
+
+/* Smart Alerts */
+.sensor-product-alerts {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.sensor-product-alerts-content {
+  @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-alerts-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
+}
+
+.sensor-product-alert-card {
+  @apply bg-white rounded-lg p-6 border border-gray-200 text-center;
+}
+
+.sensor-product-alert-icon {
+  @apply h-12 w-12 text-primary-600 mx-auto mb-4;
+}
+
+.sensor-product-alert-title {
+  @apply text-lg font-bold text-gray-900 mb-2;
+}
+
+.sensor-product-alert-description {
+  @apply text-sm text-gray-600;
+}
+
+/* Fleet Monitoring */
+.sensor-product-fleet {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.sensor-product-fleet-content {
+  @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-fleet-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+.sensor-product-fleet-card {
+  @apply bg-gray-50 rounded-lg p-6 border border-gray-200;
+}
+
+.sensor-product-fleet-icon {
+  @apply h-10 w-10 text-primary-600 mb-4;
+}
+
+.sensor-product-fleet-title {
+  @apply text-lg font-bold text-gray-900 mb-3;
+}
+
+.sensor-product-fleet-description {
+  @apply text-gray-600 text-sm;
+}
+
+/* Service Call & Alerts Management */
+.sensor-product-service {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.sensor-product-service-content {
+  @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-service-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-8;
+}
+
+.sensor-product-service-card {
+  @apply bg-white rounded-lg p-8 border border-gray-200;
+}
+
+.sensor-product-service-icon {
+  @apply h-12 w-12 text-primary-600 mb-6;
+}
+
+.sensor-product-service-title {
+  @apply text-2xl font-bold text-gray-900 mb-6;
+}
+
+.sensor-product-service-list {
+  @apply space-y-3;
+}
+
+.sensor-product-service-list li {
+  @apply flex items-start gap-3 text-gray-700;
+}
+
+.sensor-product-service-list li::before {
+  content: '•';
+  @apply text-primary-600 font-bold text-xl;
+}
+
+/* Maintenance Optimization */
+.sensor-product-maintenance {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.sensor-product-maintenance-content {
+  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-maintenance-features {
+  @apply space-y-4;
+}
+
+.sensor-product-maintenance-feature {
+  @apply flex items-start gap-4 text-gray-700;
+}
+
+.sensor-product-maintenance-check {
+  @apply h-6 w-6 text-green-600 flex-shrink-0 mt-0.5;
+}
+
+/* How It Works */
+.sensor-product-how-it-works {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.sensor-product-how-it-works-content {
+  @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-how-it-works-steps {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12;
+}
+
+.sensor-product-how-it-works-step {
+  @apply flex flex-col items-center text-center;
+}
+
+.sensor-product-how-it-works-step-number {
+  @apply w-16 h-16 rounded-full bg-primary-600 text-white flex items-center justify-center text-2xl font-bold mb-4;
+}
+
+.sensor-product-how-it-works-step-content {
+  @apply flex flex-col items-center;
+}
+
+.sensor-product-how-it-works-step-icon {
+  @apply h-10 w-10 text-primary-600 mb-4;
+}
+
+.sensor-product-how-it-works-step-title {
+  @apply text-xl font-bold text-gray-900 mb-3;
+}
+
+.sensor-product-how-it-works-step-description {
+  @apply text-gray-600;
+}
+
+.sensor-product-installation-video {
+  @apply mt-12;
+}
+
+.sensor-product-installation-video-placeholder {
+  @apply bg-gray-800 rounded-lg p-16 text-center;
+}
+
+.sensor-product-installation-video-placeholder-content {
+  @apply flex flex-col items-center;
+}
+
+.sensor-product-installation-video-play-icon {
+  @apply h-16 w-16 text-white mb-4;
+}
+
+.sensor-product-installation-video-title {
+  @apply text-2xl font-bold text-white mb-2;
+}
+
+.sensor-product-installation-video-description {
+  @apply text-gray-300;
+}
+
+/* Specifications */
+.sensor-product-specs {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.sensor-product-specs-content {
+  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-specs-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.sensor-product-spec-item {
+  @apply flex justify-between items-center py-4 border-b border-gray-200;
+}
+
+.sensor-product-spec-label {
+  @apply text-gray-600 font-medium;
+}
+
+.sensor-product-spec-value {
+  @apply text-gray-900 font-semibold;
+}
+
+/* FAQ */
+.sensor-product-faq {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.sensor-product-faq-content {
+  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-faq-subtitle {
+  @apply text-center text-gray-600 mb-12 text-base md:text-lg;
+}
+
+.sensor-product-faq-contact-link {
+  @apply text-primary-600 font-semibold hover:text-primary-700 underline transition-colors;
+}
+
+.sensor-product-faq-list {
+  @apply space-y-4;
+}
+
+.sensor-product-faq-item {
+  @apply border border-gray-200 rounded-lg overflow-hidden bg-white;
+}
+
+.sensor-product-faq-question {
+  @apply w-full text-left px-6 py-4 md:px-8 md:py-5;
+  @apply flex items-center justify-between;
+  @apply text-base md:text-lg font-semibold text-gray-900;
+  @apply hover:bg-gray-50 transition-colors;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-inset;
+}
+
+.sensor-product-faq-icon {
+  @apply h-5 w-5 text-gray-500 flex-shrink-0 ml-4 transition-transform;
+}
+
+.sensor-product-faq-answer {
+  @apply px-6 py-4 md:px-8 md:py-5 bg-gray-50 border-t border-gray-200;
+  @apply text-gray-700 leading-relaxed animate-fade-in;
+}
+
+.sensor-product-faq-answer p {
+  @apply mb-0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .sensor-product-hero-title {
+    @apply text-3xl;
+  }
+  
+  .sensor-product-hero-subtitle {
+    @apply text-base;
+  }
+  
+  .sensor-product-value-props-grid {
+    @apply grid-cols-1;
+  }
+  
+  .sensor-product-how-it-works-steps {
     @apply grid-cols-1;
   }
 }

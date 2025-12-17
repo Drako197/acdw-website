@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
 import { 
   CheckIcon, 
   ClockIcon, 
@@ -15,14 +14,7 @@ import {
 
 export function ProductsPage() {
   const navigate = useNavigate()
-  const { isAuthenticated, user } = useAuth()
-  const isContractor = isAuthenticated && user?.role === 'hvac_pro'
   const [openFaq, setOpenFaq] = useState<number | null>(null)
-  const [openProductTab, setOpenProductTab] = useState<{ [key: string]: string | null }>({
-    mini: 'benefits', // Default first drawer open
-    sensor: 'benefits', // Default first drawer open
-    'mini-sensor': 'benefits' // Default first drawer open
-  })
 
   const products = [
     {
@@ -203,25 +195,15 @@ export function ProductsPage() {
     }
   ]
 
-  const handleProductCTA = (productId: string, isContractorOnly: boolean) => {
-    // Mini product: Direct to product page for purchase
-    if (productId === 'mini' && !isContractorOnly) {
+  const handleProductCTA = (productId: string) => {
+    // All products navigate to their detail pages
+    if (productId === 'mini') {
       navigate('/products/mini')
-      return
-    }
-    
-    if (isContractorOnly) {
-      if (!isAuthenticated) {
-        navigate('/auth/signin')
-      } else {
-        if (productId === 'mini-sensor') {
-          navigate('/products?product=mini&product=sensor')
-        } else {
-          navigate(`/products?product=${productId}`)
-        }
-      }
-    } else {
-      navigate(`/products?product=${productId}`)
+    } else if (productId === 'sensor') {
+      navigate('/products/sensor')
+    } else if (productId === 'mini-sensor') {
+      // For bundle, navigate to sensor page (which can handle bundle info)
+      navigate('/products/sensor')
     }
   }
 
@@ -229,12 +211,6 @@ export function ProductsPage() {
     setOpenFaq(openFaq === index ? null : index)
   }
 
-  const toggleProductTab = (productId: string, tabName: string) => {
-    setOpenProductTab(prev => ({
-      ...prev,
-      [productId]: prev[productId] === tabName ? null : tabName
-    }))
-  }
 
   return (
     <div className="unified-products-page">
@@ -251,7 +227,7 @@ export function ProductsPage() {
         </div>
       </div>
 
-      {/* Products Section */}
+      {/* Products Section - Apple-Style Card Grid */}
       <div className="unified-products-section">
         <div className="unified-products-content">
           <div className="unified-section-header">
@@ -261,171 +237,57 @@ export function ProductsPage() {
             </p>
           </div>
 
-          <div className="unified-products-stacked">
-            {products.map((product, index) => (
-              <div key={product.id} className={`unified-product-stacked-item ${index % 2 === 0 ? 'unified-product-stacked-left' : 'unified-product-stacked-right'}`}>
-                {/* Product Shot Card */}
-                <div className="unified-product-shot-card">
-                  <div className="unified-product-shot-container">
-                    <div className={`unified-product-shot-gradient unified-product-shot-gradient-${product.id === 'mini-sensor' ? 'minisensor' : product.id}`}>
-                      {/* Gradient placeholder for product image */}
-                    </div>
+          <div className="unified-products-card-grid">
+            {products.map((product) => (
+              <div key={product.id} className="unified-product-card">
+                {/* Product Image */}
+                <div className="unified-product-card-image-wrapper">
+                  <div className={`unified-product-card-image unified-product-card-image-${product.id === 'mini-sensor' ? 'minisensor' : product.id}`}>
+                    {/* Product image placeholder - will be replaced with actual images */}
                   </div>
                 </div>
 
-                {/* Product Information Card */}
-                <div className="unified-product-info-card">
-                  <div className="unified-product-info-header">
-                    <div className="unified-product-info-title-section">
-                      <h3 className="unified-product-info-title">{product.name}</h3>
-                      <div className="unified-product-info-badges">
-                        <span className={`unified-product-info-status ${product.statusColorClass}`}>
-                          {product.statusText}
+                {/* Product Content */}
+                <div className="unified-product-card-content">
+                  {/* Header */}
+                  <div className="unified-product-card-header">
+                    <h3 className="unified-product-card-title">{product.name}</h3>
+                    <div className="unified-product-card-badges">
+                      <span className={`unified-product-card-status ${product.statusColorClass}`}>
+                        {product.statusText}
+                      </span>
+                      {product.contractorOnly && (
+                        <span className="unified-product-card-badge-contractor">
+                          Contractor Only
                         </span>
-                        {product.contractorOnly && (
-                          <span className="unified-product-info-badge-contractor">
-                            Contractor Only
-                          </span>
-                        )}
-                      </div>
+                      )}
                     </div>
-                    <p className="unified-product-info-description">{product.description}</p>
                   </div>
 
-                  {/* Drawers for Product Details */}
-                  <div className="unified-product-tabs">
-                    <button
-                      onClick={() => toggleProductTab(product.id, 'benefits')}
-                      className={`unified-product-drawer-button ${openProductTab[product.id] === 'benefits' ? 'unified-product-drawer-button-active' : ''}`}
-                    >
-                      <div className="unified-product-drawer-button-content">
-                        <span>Key Benefits</span>
-                        <span className="unified-product-drawer-badge hidden">5</span>
-                      </div>
-                    </button>
-                    {openProductTab[product.id] === 'benefits' && (
-                      <div className="unified-product-drawer-content">
-                        <ul className="unified-product-tab-content-list">
-                          {product.keyBenefits.map((benefit, index) => (
-                            <li key={index} className="unified-product-tab-content-item">
-                              <CheckIcon className="unified-product-tab-content-icon" />
-                              <span>{benefit}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+                  {/* Description */}
+                  <p className="unified-product-card-description">{product.description}</p>
 
-                    <button
-                      onClick={() => toggleProductTab(product.id, 'specs')}
-                      className={`unified-product-drawer-button ${openProductTab[product.id] === 'specs' ? 'unified-product-drawer-button-active' : ''}`}
-                    >
-                      <div className="unified-product-drawer-button-content">
-                        <span>Specifications</span>
-                        <span className="unified-product-drawer-badge hidden">3</span>
-                      </div>
-                    </button>
-                    {openProductTab[product.id] === 'specs' && (
-                      <div className="unified-product-drawer-content">
-                        <div className="unified-product-tab-content-specs">
-                          <div className="unified-product-tab-content-spec-item">
-                            <WrenchScrewdriverIcon className="unified-product-tab-content-spec-icon" />
-                            <span><strong>Compatibility:</strong> {product.compatibility}</span>
-                          </div>
-                          <div className="unified-product-tab-content-spec-item">
-                            <ClockIcon className="unified-product-tab-content-spec-icon" />
-                            <span><strong>Installation:</strong> {product.installationTime}</span>
-                          </div>
-                          {product.size && (
-                            <div className="unified-product-tab-content-spec-item">
-                              <WrenchScrewdriverIcon className="unified-product-tab-content-spec-icon" />
-                              <span><strong>Size:</strong> {product.size}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    <button
-                      onClick={() => toggleProductTab(product.id, 'pricing')}
-                      className={`unified-product-drawer-button ${openProductTab[product.id] === 'pricing' ? 'unified-product-drawer-button-active' : ''}`}
-                    >
-                      <div className="unified-product-drawer-button-content">
-                        <span>Pricing</span>
-                        <span className="unified-product-drawer-badge hidden">1</span>
-                      </div>
-                    </button>
-                    {openProductTab[product.id] === 'pricing' && (
-                      <div className="unified-product-drawer-content">
-                        <div className="unified-product-tab-content-pricing">
-                          <div className="unified-product-tab-content-pricing-item">
-                            <strong>MSRP:</strong> {product.pricing.msrp}
-                          </div>
-                          {isContractor && (
-                            <>
-                              <div className="unified-product-tab-content-pricing-item">
-                                <strong>Contractor:</strong> {product.pricing.contractor}
-                              </div>
-                              <div className="unified-product-tab-content-pricing-item">
-                                <strong>Property Manager:</strong> {product.pricing['property-manager']}
-                              </div>
-                            </>
-                          )}
-                          {!isContractor && product.contractorOnly && (
-                            <div className="unified-product-tab-content-pricing-note">
-                              Sign in for contractor pricing
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    <button
-                      onClick={() => toggleProductTab(product.id, 'compliance')}
-                      className={`unified-product-drawer-button ${openProductTab[product.id] === 'compliance' ? 'unified-product-drawer-button-active' : ''}`}
-                    >
-                      <div className="unified-product-drawer-button-content">
-                        <span>Compliance</span>
-                        <span className="unified-product-drawer-badge hidden">{product.compliance.length}</span>
-                      </div>
-                    </button>
-                    {openProductTab[product.id] === 'compliance' && (
-                      <div className="unified-product-drawer-content">
-                        <div className="unified-product-tab-content-compliance">
-                          <div className="unified-product-tab-content-compliance-badges">
-                            {product.compliance.map((code, index) => (
-                              <span key={index} className="unified-product-tab-content-compliance-badge">
-                                {code}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                  {/* Key Benefits */}
+                  <div className="unified-product-card-benefits">
+                    <ul className="unified-product-card-benefits-list">
+                      {product.keyBenefits.slice(0, 4).map((benefit, index) => (
+                        <li key={index} className="unified-product-card-benefit-item">
+                          <CheckIcon className="unified-product-card-benefit-icon" />
+                          <span>{benefit}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
 
                   {/* CTA Button */}
-                  <div className="unified-product-info-cta">
-                    {product.status === 'GA' ? (
-                      <button 
-                        onClick={() => handleProductCTA(product.id, product.contractorOnly || false)}
-                        className="unified-product-info-cta-button"
-                      >
-                        {product.id === 'mini' && !product.contractorOnly
-                          ? 'Buy Now'
-                          : product.contractorOnly && !isAuthenticated 
-                          ? 'Sign In to Buy' 
-                          : product.id === 'mini-sensor' && !isContractor
-                          ? 'Sign In for Pricing'
-                          : 'View Details & Pricing'
-                        }
-                        <ArrowRightIcon className="unified-product-info-cta-icon" />
-                      </button>
-                    ) : (
-                      <button className="unified-product-info-cta-button-disabled">
-                        Coming Soon
-                      </button>
-                    )}
+                  <div className="unified-product-card-cta">
+                    <button 
+                      onClick={() => handleProductCTA(product.id)}
+                      className="unified-product-card-cta-button"
+                    >
+                      View Product Details
+                      <ArrowRightIcon className="unified-product-card-cta-icon" />
+                    </button>
                   </div>
                 </div>
               </div>

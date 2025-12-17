@@ -33,6 +33,7 @@ import { ProfilePage } from './pages/ProfilePage'
 import { CheckoutSuccessPage } from './pages/CheckoutSuccessPage'
 import { CheckoutCancelPage } from './pages/CheckoutCancelPage'
 import { MiniProductPage } from './pages/MiniProductPage'
+import { SensorProductPage } from './pages/SensorProductPage'
 import { CheckoutPage } from './pages/CheckoutPage'
 import { SensorSetupPage } from './pages/SensorSetupPage'
 import { RecommendedInstallationScenariosPage } from './pages/RecommendedInstallationScenariosPage'
@@ -82,6 +83,7 @@ function AppContent() {
               <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
               <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
               <Route path="/products/mini" element={<MiniProductPage />} />
+                    <Route path="/products/sensor" element={<SensorProductPage />} />
                     <Route path="/sensor-setup" element={<SensorSetupPage />} />
                     <Route path="/support/installation-scenarios" element={<RecommendedInstallationScenariosPage />} />
             </Routes>
