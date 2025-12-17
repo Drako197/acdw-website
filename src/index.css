@@ -4539,205 +4539,147 @@
   @apply text-lg md:text-xl text-gray-600 max-w-3xl mx-auto;
 }
 
-/* Products Stacked Layout */
-.unified-products-stacked {
-  @apply space-y-16;
+/* Products Card Grid Layout - Apple Style */
+.unified-products-card-grid {
+  @apply space-y-12 md:space-y-16;
 }
 
-.unified-product-stacked-item {
-  @apply flex flex-col md:flex-row gap-6 items-stretch;
-}
-
-.unified-product-stacked-left {
-  @apply flex-row;
-}
-
-.unified-product-stacked-right {
-  @apply flex-row-reverse;
-}
-
-/* Product Shot Card */
-.unified-product-shot-card {
+.unified-product-card {
   @apply bg-white rounded-2xl shadow-lg overflow-hidden;
-  flex: 2;
-  min-width: 0;
+  @apply flex flex-col;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.unified-product-shot-container {
-  @apply relative w-full h-full;
-  min-height: 400px;
+.unified-product-card:hover {
+  @apply shadow-xl;
+  transform: translateY(-2px);
 }
 
-.unified-product-shot-gradient {
-  @apply absolute inset-0 rounded-2xl;
-  border: 3px solid white;
+/* Product Image Section - Full width on all screen sizes */
+.unified-product-card-image-wrapper {
+  @apply w-full flex-shrink-0;
+  @apply bg-gray-100;
 }
 
-/* Gradient placeholders for each product */
-.unified-product-shot-gradient-mini {
+.unified-product-card-image {
+  @apply w-full h-64 md:h-80;
+  @apply flex items-center justify-center;
+  @apply object-cover;
+}
+
+/* Gradient placeholders for each product (will be replaced with actual images) */
+.unified-product-card-image-mini {
   background: linear-gradient(135deg, #0077C5 0%, #00B8F5 50%, #4FC3F7 100%);
 }
 
-.unified-product-shot-gradient-sensor {
+.unified-product-card-image-sensor {
   background: linear-gradient(135deg, #7B1FA2 0%, #9C27B0 50%, #BA68C8 100%);
 }
 
-.unified-product-shot-gradient-minisensor {
+.unified-product-card-image-minisensor {
   background: linear-gradient(135deg, #1565C0 0%, #1976D2 50%, #42A5F5 100%);
 }
 
-/* Product Information Card */
-.unified-product-info-card {
-  @apply bg-white rounded-2xl shadow-lg p-8;
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
+/* Product Content Section - Full width */
+.unified-product-card-content {
+  @apply w-full flex flex-col;
+  @apply p-6 md:p-8;
 }
 
-.unified-product-info-header {
-  @apply mb-6;
-}
-
-.unified-product-info-title-section {
+/* Card Header */
+.unified-product-card-header {
   @apply mb-4;
 }
 
-.unified-product-info-title {
-  @apply text-3xl font-bold text-gray-900 mb-3;
+.unified-product-card-title {
+  @apply text-2xl md:text-3xl font-bold text-gray-900 mb-3;
 }
 
-.unified-product-info-badges {
-  @apply flex flex-wrap gap-2 mb-3;
+.unified-product-card-badges {
+  @apply flex flex-wrap gap-2 mb-4;
 }
 
-.unified-product-info-status {
+.unified-product-card-status {
   @apply px-3 py-1 rounded-full text-sm font-medium;
 }
 
-.unified-product-info-badge-contractor {
+.products-card-status-available {
+  @apply bg-green-100 text-green-800;
+}
+
+.unified-product-card-badge-contractor {
   @apply px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium;
 }
 
-.unified-product-info-description {
-  @apply text-gray-600 text-base leading-relaxed;
+/* Card Description */
+.unified-product-card-description {
+  @apply text-gray-600 text-base leading-relaxed mb-6;
 }
 
-/* Product Drawers (styled like tabs with underlines) */
-.unified-product-tabs {
-  @apply mb-6 flex-1 flex flex-col space-y-1;
-  overflow-y: auto;
+/* Card Benefits */
+.unified-product-card-benefits {
+  @apply mb-6 flex-1;
 }
 
-.unified-product-drawer-button {
-  @apply w-full px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors;
-  @apply flex items-center justify-between text-left;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  outline: none;
-  cursor: pointer;
-}
-
-.unified-product-drawer-button:focus {
-  @apply outline-none;
-}
-
-.unified-product-drawer-button-active {
-  @apply text-blue-600;
-  border-bottom: 2px solid #2563eb;
-}
-
-.unified-product-drawer-button-content {
-  @apply flex items-center gap-2;
-}
-
-.unified-product-drawer-badge {
-  @apply px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600 rounded-full;
-}
-
-.unified-product-drawer-button-active .unified-product-drawer-badge {
-  @apply bg-blue-100 text-blue-600;
-}
-
-.unified-product-drawer-content {
-  @apply px-4 py-3 border-b border-gray-200;
-  animation: slideDown 0.2s ease-out;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.unified-product-tab-content-list {
+.unified-product-card-benefits-list {
   @apply space-y-3;
 }
 
-.unified-product-tab-content-item {
-  @apply flex items-start gap-3 text-sm text-gray-600;
+.unified-product-card-benefit-item {
+  @apply flex items-start gap-3 text-sm md:text-base text-gray-700;
 }
 
-.unified-product-tab-content-icon {
-  @apply h-5 w-5 text-green-500 flex-shrink-0 mt-0.5;
+.unified-product-card-benefit-icon {
+  @apply h-5 w-5 text-green-600 flex-shrink-0 mt-0.5;
 }
 
-.unified-product-tab-content-specs {
-  @apply space-y-3;
+/* Card CTA */
+.unified-product-card-cta {
+  @apply pt-4 border-t border-gray-200;
 }
 
-.unified-product-tab-content-spec-item {
-  @apply flex items-center gap-3 text-sm text-gray-600;
+.unified-product-card-cta-button {
+  @apply w-full flex items-center justify-center gap-2 px-6 py-3 md:py-4;
+  @apply bg-blue-600 text-white font-semibold rounded-lg;
+  @apply hover:bg-blue-700 active:bg-blue-800 transition-colors;
+  @apply text-base md:text-lg;
+  min-height: 44px; /* Touch target minimum */
 }
 
-.unified-product-tab-content-spec-icon {
-  @apply h-5 w-5 text-blue-500 flex-shrink-0;
-}
-
-.unified-product-tab-content-pricing {
-  @apply space-y-2;
-}
-
-.unified-product-tab-content-pricing-item {
-  @apply text-sm text-gray-600;
-}
-
-.unified-product-tab-content-pricing-note {
-  @apply text-xs text-gray-500 italic;
-}
-
-.unified-product-tab-content-compliance {
-  @apply p-2;
-}
-
-.unified-product-tab-content-compliance-badges {
-  @apply flex flex-wrap gap-2;
-}
-
-.unified-product-tab-content-compliance-badge {
-  @apply px-3 py-1 bg-gray-100 text-gray-700 rounded text-xs font-mono;
-}
-
-.unified-product-info-cta {
-  @apply pt-6 border-t border-gray-200;
-}
-
-.unified-product-info-cta-button {
-  @apply w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors;
-}
-
-.unified-product-info-cta-icon {
+.unified-product-card-cta-icon {
   @apply h-5 w-5;
 }
 
-.unified-product-info-cta-button-disabled {
+.unified-product-card-cta-button-disabled {
   @apply w-full px-6 py-3 bg-gray-300 text-gray-500 font-semibold rounded-lg cursor-not-allowed;
+  min-height: 44px;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .unified-product-card-image {
+    @apply h-56;
+  }
+  
+  .unified-product-card-content {
+    @apply p-6;
+  }
+  
+  .unified-product-card-title {
+    @apply text-2xl;
+  }
+  
+  .unified-product-card-description {
+    @apply text-sm;
+  }
+  
+  .unified-product-card-benefit-item {
+    @apply text-sm;
+  }
+  
+  .unified-product-card-cta-button {
+    @apply text-base py-3;
+  }
 }
 
 .unified-product-card {
@@ -9268,6 +9210,473 @@
   }
   
   .mini-product-features-grid {
+    @apply grid-cols-1;
+  }
+}
+
+/* ========================================
+   SENSOR PRODUCT PAGE - Similar to Mini but Contractor-Focused
+   ======================================== */
+
+.sensor-product-page {
+  @apply min-h-screen bg-white;
+}
+
+/* Back Navigation */
+.sensor-product-back-nav {
+  @apply sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200;
+}
+
+.sensor-product-back-button {
+  @apply flex items-center gap-2 px-6 py-4 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors;
+}
+
+.sensor-product-back-icon {
+  @apply h-5 w-5;
+}
+
+/* Hero Section */
+.sensor-product-hero-fullwidth {
+  @apply relative bg-black flex flex-col;
+}
+
+.sensor-product-hero-image-container {
+  @apply relative w-full flex items-center justify-center z-0 overflow-hidden pt-8 md:pt-12 pb-12 md:pb-16;
+}
+
+.sensor-product-hero-image {
+  height: auto;
+  width: 140%;
+  max-width: 100rem;
+  object-fit: contain;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.sensor-product-hero-overlay {
+  @apply relative z-10 w-full pb-6;
+  margin-top: -20px;
+}
+
+.sensor-product-hero-content-wrapper {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  @apply flex flex-col lg:flex-row gap-8 lg:gap-12 items-start;
+  margin-top: 50px;
+}
+
+.sensor-product-hero-info {
+  @apply flex-1;
+}
+
+.sensor-product-hero-title {
+  @apply text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight;
+}
+
+.sensor-product-hero-subtitle {
+  @apply text-lg md:text-xl text-gray-300 leading-relaxed mb-6;
+}
+
+/* Purchase Card */
+.sensor-product-purchase-card-hero {
+  @apply w-full lg:w-96 flex-shrink-0;
+}
+
+.sensor-product-purchase-card-content {
+  @apply bg-white rounded-2xl shadow-xl p-6 md:p-8;
+  @apply border border-gray-200;
+}
+
+.sensor-product-purchase-title {
+  @apply text-2xl font-bold text-gray-900 mb-6;
+}
+
+.sensor-product-purchase-cta-section {
+  @apply space-y-4;
+}
+
+.sensor-product-purchase-message {
+  @apply text-sm text-gray-600 mb-4;
+}
+
+.sensor-product-purchase-button-primary {
+  @apply w-full py-3 px-6 bg-primary-600 text-white font-semibold rounded-lg;
+  @apply hover:bg-primary-700 transition-colors;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
+
+.sensor-product-purchase-button-secondary {
+  @apply w-full py-3 px-6 bg-white border-2 border-primary-600 text-primary-600 font-semibold rounded-lg;
+  @apply hover:bg-primary-50 transition-colors;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
+
+.sensor-product-trust-section-inline {
+  @apply flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200;
+}
+
+.sensor-product-trust-badge {
+  @apply flex items-center gap-2 text-xs text-gray-600;
+}
+
+.sensor-product-trust-icon {
+  @apply h-4 w-4 text-primary-600;
+}
+
+/* Value Propositions by Customer Type */
+.sensor-product-value-props {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.sensor-product-value-props-content {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-section-title {
+  @apply text-3xl md:text-4xl font-bold text-gray-900 text-center mb-4;
+}
+
+.sensor-product-section-subtitle {
+  @apply text-center text-gray-600 mb-12 text-lg max-w-3xl mx-auto;
+}
+
+.sensor-product-value-props-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8;
+}
+
+.sensor-product-value-prop-card {
+  @apply bg-white rounded-xl shadow-lg p-8 border border-gray-200;
+  @apply flex flex-col;
+}
+
+.sensor-product-value-prop-icon-wrapper {
+  @apply w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center mb-6;
+}
+
+.sensor-product-value-prop-icon {
+  @apply h-8 w-8 text-primary-600;
+}
+
+.sensor-product-value-prop-title {
+  @apply text-2xl font-bold text-gray-900 mb-4;
+}
+
+.sensor-product-value-prop-description {
+  @apply text-gray-600 mb-6;
+}
+
+.sensor-product-value-prop-benefits {
+  @apply space-y-3 mb-8 flex-1;
+}
+
+.sensor-product-value-prop-benefit {
+  @apply flex items-start gap-3 text-gray-700;
+}
+
+.sensor-product-value-prop-check {
+  @apply h-5 w-5 text-green-600 flex-shrink-0 mt-0.5;
+}
+
+.sensor-product-value-prop-cta {
+  @apply w-full py-3 px-6 bg-primary-600 text-white font-semibold rounded-lg;
+  @apply hover:bg-primary-700 transition-colors mt-auto;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
+
+/* Real-Time Visibility */
+.sensor-product-visibility {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.sensor-product-visibility-content {
+  @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-visibility-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-8;
+}
+
+.sensor-product-visibility-card {
+  @apply bg-gray-50 rounded-lg p-6 border border-gray-200;
+}
+
+.sensor-product-visibility-icon {
+  @apply h-12 w-12 text-primary-600 mb-4;
+}
+
+.sensor-product-visibility-title {
+  @apply text-xl font-bold text-gray-900 mb-3;
+}
+
+.sensor-product-visibility-description {
+  @apply text-gray-600;
+}
+
+/* Smart Alerts */
+.sensor-product-alerts {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.sensor-product-alerts-content {
+  @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-alerts-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
+}
+
+.sensor-product-alert-card {
+  @apply bg-white rounded-lg p-6 border border-gray-200 text-center;
+}
+
+.sensor-product-alert-icon {
+  @apply h-12 w-12 text-primary-600 mx-auto mb-4;
+}
+
+.sensor-product-alert-title {
+  @apply text-lg font-bold text-gray-900 mb-2;
+}
+
+.sensor-product-alert-description {
+  @apply text-sm text-gray-600;
+}
+
+/* Fleet Monitoring */
+.sensor-product-fleet {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.sensor-product-fleet-content {
+  @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-fleet-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+.sensor-product-fleet-card {
+  @apply bg-gray-50 rounded-lg p-6 border border-gray-200;
+}
+
+.sensor-product-fleet-icon {
+  @apply h-10 w-10 text-primary-600 mb-4;
+}
+
+.sensor-product-fleet-title {
+  @apply text-lg font-bold text-gray-900 mb-3;
+}
+
+.sensor-product-fleet-description {
+  @apply text-gray-600 text-sm;
+}
+
+/* Service Call & Alerts Management */
+.sensor-product-service {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.sensor-product-service-content {
+  @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-service-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-8;
+}
+
+.sensor-product-service-card {
+  @apply bg-white rounded-lg p-8 border border-gray-200;
+}
+
+.sensor-product-service-icon {
+  @apply h-12 w-12 text-primary-600 mb-6;
+}
+
+.sensor-product-service-title {
+  @apply text-2xl font-bold text-gray-900 mb-6;
+}
+
+.sensor-product-service-list {
+  @apply space-y-3;
+}
+
+.sensor-product-service-list li {
+  @apply flex items-start gap-3 text-gray-700;
+}
+
+.sensor-product-service-list li::before {
+  content: '•';
+  @apply text-primary-600 font-bold text-xl;
+}
+
+/* Maintenance Optimization */
+.sensor-product-maintenance {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.sensor-product-maintenance-content {
+  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-maintenance-features {
+  @apply space-y-4;
+}
+
+.sensor-product-maintenance-feature {
+  @apply flex items-start gap-4 text-gray-700;
+}
+
+.sensor-product-maintenance-check {
+  @apply h-6 w-6 text-green-600 flex-shrink-0 mt-0.5;
+}
+
+/* How It Works */
+.sensor-product-how-it-works {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.sensor-product-how-it-works-content {
+  @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-how-it-works-steps {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12;
+}
+
+.sensor-product-how-it-works-step {
+  @apply flex flex-col items-center text-center;
+}
+
+.sensor-product-how-it-works-step-number {
+  @apply w-16 h-16 rounded-full bg-primary-600 text-white flex items-center justify-center text-2xl font-bold mb-4;
+}
+
+.sensor-product-how-it-works-step-content {
+  @apply flex flex-col items-center;
+}
+
+.sensor-product-how-it-works-step-icon {
+  @apply h-10 w-10 text-primary-600 mb-4;
+}
+
+.sensor-product-how-it-works-step-title {
+  @apply text-xl font-bold text-gray-900 mb-3;
+}
+
+.sensor-product-how-it-works-step-description {
+  @apply text-gray-600;
+}
+
+.sensor-product-installation-video {
+  @apply mt-12;
+}
+
+.sensor-product-installation-video-placeholder {
+  @apply bg-gray-800 rounded-lg p-16 text-center;
+}
+
+.sensor-product-installation-video-placeholder-content {
+  @apply flex flex-col items-center;
+}
+
+.sensor-product-installation-video-play-icon {
+  @apply h-16 w-16 text-white mb-4;
+}
+
+.sensor-product-installation-video-title {
+  @apply text-2xl font-bold text-white mb-2;
+}
+
+.sensor-product-installation-video-description {
+  @apply text-gray-300;
+}
+
+/* Specifications */
+.sensor-product-specs {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.sensor-product-specs-content {
+  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-specs-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.sensor-product-spec-item {
+  @apply flex justify-between items-center py-4 border-b border-gray-200;
+}
+
+.sensor-product-spec-label {
+  @apply text-gray-600 font-medium;
+}
+
+.sensor-product-spec-value {
+  @apply text-gray-900 font-semibold;
+}
+
+/* FAQ */
+.sensor-product-faq {
+  @apply py-16 md:py-24 bg-gray-50;
+}
+
+.sensor-product-faq-content {
+  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.sensor-product-faq-subtitle {
+  @apply text-center text-gray-600 mb-12 text-base md:text-lg;
+}
+
+.sensor-product-faq-contact-link {
+  @apply text-primary-600 font-semibold hover:text-primary-700 underline transition-colors;
+}
+
+.sensor-product-faq-list {
+  @apply space-y-4;
+}
+
+.sensor-product-faq-item {
+  @apply border border-gray-200 rounded-lg overflow-hidden bg-white;
+}
+
+.sensor-product-faq-question {
+  @apply w-full text-left px-6 py-4 md:px-8 md:py-5;
+  @apply flex items-center justify-between;
+  @apply text-base md:text-lg font-semibold text-gray-900;
+  @apply hover:bg-gray-50 transition-colors;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-inset;
+}
+
+.sensor-product-faq-icon {
+  @apply h-5 w-5 text-gray-500 flex-shrink-0 ml-4 transition-transform;
+}
+
+.sensor-product-faq-answer {
+  @apply px-6 py-4 md:px-8 md:py-5 bg-gray-50 border-t border-gray-200;
+  @apply text-gray-700 leading-relaxed animate-fade-in;
+}
+
+.sensor-product-faq-answer p {
+  @apply mb-0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .sensor-product-hero-title {
+    @apply text-3xl;
+  }
+  
+  .sensor-product-hero-subtitle {
+    @apply text-base;
+  }
+  
+  .sensor-product-value-props-grid {
+    @apply grid-cols-1;
+  }
+  
+  .sensor-product-how-it-works-steps {
     @apply grid-cols-1;
   }
 }
