@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react'
 import { 
   ExclamationTriangleIcon,
   ChevronDownIcon,
@@ -9,21 +9,127 @@ import {
   WifiIcon
 } from '@heroicons/react/24/outline'
 
-export function Step2SensorSetup() {
-  const [expandedSection, setExpandedSection] = useState<'physical' | 'wifi'>('physical')
+interface Step2SensorSetupProps {
+  onWifiInteraction?: () => void
+}
+
+export interface Step2SensorSetupHandle {
+  handleContinueClick: () => boolean // Returns true if handled, false if should proceed normally
+}
+
+export const Step2SensorSetup = forwardRef<Step2SensorSetupHandle, Step2SensorSetupProps>(
+  ({ onWifiInteraction }, ref) => {
+  const [expandedSection, setExpandedSection] = useState<'physical' | 'wifi' | null>(null)
+  const [physicalHasBeenOpened, setPhysicalHasBeenOpened] = useState(false)
+  const [wifiHasBeenOpened, setWifiHasBeenOpened] = useState(false)
+  const [showNotification, setShowNotification] = useState(false)
+  const notificationRef = useRef<HTMLDivElement>(null)
+  const physicalAccordionContentRef = useRef<HTMLDivElement>(null)
+  const wifiAccordionContentRef = useRef<HTMLDivElement>(null)
+
+  // Expose handleContinueClick method to parent
+  useImperativeHandle(ref, () => ({
+    handleContinueClick: () => {
+      // If Physical Setup is open, open WiFi and scroll to it
+      if (expandedSection === 'physical') {
+        setExpandedSection('wifi')
+        setPhysicalHasBeenOpened(true)
+        
+        // Track WiFi interaction
+        if (!wifiHasBeenOpened) {
+          setWifiHasBeenOpened(true)
+          if (onWifiInteraction) {
+            onWifiInteraction()
+          }
+        }
+        
+        // Scroll to WiFi accordion content after a brief delay to allow DOM update
+        setTimeout(() => {
+          if (wifiAccordionContentRef.current) {
+            wifiAccordionContentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          }
+        }, 150)
+        
+        return true // Handled, don't proceed to next step
+      }
+      return false // Not handled, proceed normally
+    }
+  }))
 
   const toggleSection = (section: 'physical' | 'wifi') => {
+    // Prevent WiFi from opening if Physical hasn't been opened first
+    if (section === 'wifi' && !physicalHasBeenOpened) {
+      // Open Physical Setup accordion
+      setExpandedSection('physical')
+      setPhysicalHasBeenOpened(true)
+      // Show notification message
+      setShowNotification(true)
+      // Hide notification after 5 seconds
+      setTimeout(() => {
+        setShowNotification(false)
+      }, 5000)
+      
+      // Scroll to notification message instead of top
+      setTimeout(() => {
+        if (notificationRef.current) {
+          notificationRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      }, 100)
+      return
+    }
+
     // Normal accordion behavior: clicking the same section toggles it
     // If clicking a different section, expand it (and collapse the current one)
     if (expandedSection === section) {
-      // Toggle: if clicking the expanded section, collapse it by switching to the other
-      // This maintains the "only one open at a time" behavior
-      setExpandedSection(section === 'physical' ? 'wifi' : 'physical')
+      // Toggle: if clicking the expanded section, collapse it
+      setExpandedSection(null)
     } else {
       // Expand the clicked section (other will automatically collapse)
       setExpandedSection(section)
     }
+
+    // Track when Physical section is opened for the first time
+    if (section === 'physical' && !physicalHasBeenOpened) {
+      setPhysicalHasBeenOpened(true)
+    }
+
+    // Track when WiFi section is opened for the first time
+    if (section === 'wifi' && !wifiHasBeenOpened) {
+      setWifiHasBeenOpened(true)
+      if (onWifiInteraction) {
+        onWifiInteraction()
+      }
+    }
   }
+
+  // Also trigger when WiFi section becomes expanded (in case it's opened programmatically)
+  useEffect(() => {
+    if (expandedSection === 'wifi' && !wifiHasBeenOpened) {
+      setWifiHasBeenOpened(true)
+      if (onWifiInteraction) {
+        onWifiInteraction()
+      }
+    }
+  }, [expandedSection, wifiHasBeenOpened, onWifiInteraction])
+
+  // Scroll to accordion content when it opens
+  useEffect(() => {
+    if (expandedSection === 'physical' && physicalAccordionContentRef.current) {
+      // Small delay to allow DOM to update
+      setTimeout(() => {
+        if (physicalAccordionContentRef.current) {
+          physicalAccordionContentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 150)
+    } else if (expandedSection === 'wifi' && wifiAccordionContentRef.current) {
+      // Small delay to allow DOM to update
+      setTimeout(() => {
+        if (wifiAccordionContentRef.current) {
+          wifiAccordionContentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 150)
+    }
+  }, [expandedSection])
 
   const physicalSteps = [
     {
@@ -143,7 +249,7 @@ export function Step2SensorSetup() {
               <DevicePhoneMobileIcon className="sensor-setup-what-you-need-item-icon" />
             </div>
             <div className="sensor-setup-what-you-need-item-content">
-              <p className="sensor-setup-what-you-need-item-title">Smartphone/Tablet</p>
+              <p className="sensor-setup-what-you-need-item-title">Smartphone / Tablet</p>
               <p className="sensor-setup-what-you-need-item-description">For setup</p>
             </div>
           </div>
@@ -159,8 +265,20 @@ export function Step2SensorSetup() {
         </div>
       </div>
 
+      {/* Notification Message */}
+      {showNotification && (
+        <div ref={notificationRef} className="sensor-setup-notification">
+          <div className="sensor-setup-notification-content">
+            <ExclamationTriangleIcon className="sensor-setup-notification-icon" />
+            <p className="sensor-setup-notification-message">
+              Your sensor setup experience requires you to start with the physical setup first.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Physical Setup Accordion Section */}
-      <div className={`sensor-setup-accordion-section ${expandedSection === 'physical' ? 'sensor-setup-accordion-section-expanded' : 'sensor-setup-accordion-section-collapsed'}`}>
+      <div className={`sensor-setup-accordion-section ${expandedSection === 'physical' ? 'sensor-setup-accordion-section-expanded' : 'sensor-setup-accordion-section-collapsed'} ${!physicalHasBeenOpened ? 'sensor-setup-accordion-section-pulsating' : ''}`}>
         <button
           onClick={() => toggleSection('physical')}
           className="sensor-setup-accordion-header"
@@ -169,6 +287,9 @@ export function Step2SensorSetup() {
             <div className="sensor-setup-accordion-header-left">
               <div className="sensor-setup-accordion-status-icon sensor-setup-accordion-status-icon-pending" />
               <h3 className="sensor-setup-accordion-title">Physical Setup</h3>
+              {!physicalHasBeenOpened && (
+                <span className="sensor-setup-accordion-badge sensor-setup-accordion-badge-next-step">Next Step</span>
+              )}
             </div>
             <div className="sensor-setup-accordion-header-right">
               {expandedSection === 'physical' ? (
@@ -181,7 +302,7 @@ export function Step2SensorSetup() {
         </button>
 
         {expandedSection === 'physical' && (
-          <div className="sensor-setup-accordion-content">
+          <div ref={physicalAccordionContentRef} className="sensor-setup-accordion-content">
             <div className="sensor-setup-installation-steps">
               {physicalSteps.map((step) => (
                 <div key={step.number} className="sensor-setup-installation-step-card">
@@ -263,7 +384,7 @@ export function Step2SensorSetup() {
       </div>
 
       {/* WiFi Connection Accordion Section */}
-      <div className={`sensor-setup-accordion-section ${expandedSection === 'wifi' ? 'sensor-setup-accordion-section-expanded' : 'sensor-setup-accordion-section-collapsed'}`}>
+      <div className={`sensor-setup-accordion-section ${expandedSection === 'wifi' ? 'sensor-setup-accordion-section-expanded' : 'sensor-setup-accordion-section-collapsed'} ${physicalHasBeenOpened && !wifiHasBeenOpened ? 'sensor-setup-accordion-section-pulsating' : ''}`}>
         <button
           onClick={() => toggleSection('wifi')}
           className="sensor-setup-accordion-header"
@@ -272,6 +393,9 @@ export function Step2SensorSetup() {
             <div className="sensor-setup-accordion-header-left">
               <div className="sensor-setup-accordion-status-icon sensor-setup-accordion-status-icon-pending" />
               <h3 className="sensor-setup-accordion-title">WiFi Connection</h3>
+              {physicalHasBeenOpened && !wifiHasBeenOpened && (
+                <span className="sensor-setup-accordion-badge sensor-setup-accordion-badge-next-step">Next Step</span>
+              )}
             </div>
             <div className="sensor-setup-accordion-header-right">
               {expandedSection === 'wifi' ? (
@@ -284,7 +408,7 @@ export function Step2SensorSetup() {
         </button>
 
         {expandedSection === 'wifi' && (
-          <div className="sensor-setup-accordion-content">
+          <div ref={wifiAccordionContentRef} className="sensor-setup-accordion-content">
             <div className="sensor-setup-wifi-steps">
               {wifiSteps.map((step) => (
                 <div key={step.number} className="sensor-setup-wifi-step-card">
@@ -327,5 +451,7 @@ export function Step2SensorSetup() {
       </div>
     </div>
   )
-}
+})
+
+Step2SensorSetup.displayName = 'Step2SensorSetup'
 

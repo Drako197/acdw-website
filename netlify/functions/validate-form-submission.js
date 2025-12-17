@@ -12,21 +12,16 @@ const {
   EVENT_TYPES 
 } = require('./utils/security-logger')
 
-// Import enhanced bot defense utilities
 const { validateRequestFingerprint } = require('./utils/request-fingerprint')
 const { validateIP, addToBlacklist } = require('./utils/ip-reputation')
 const { validateSubmissionBehavior } = require('./utils/behavioral-analysis')
 const { validateEmailDomain } = require('./utils/email-domain-validator')
 const { validateCSRFToken } = require('./utils/csrf-validator')
 const { initBlobsStores } = require('./utils/blobs-store')
-// parseMultipartFormData no longer needed - files uploaded separately via upload-file function
 
-// reCAPTCHA verification
+
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY
 
-/**
- * Verify reCAPTCHA token with Google
- */
 const verifyRecaptcha = async (token) => {
   if (!RECAPTCHA_SECRET_KEY) {
     console.warn('reCAPTCHA secret key not configured - skipping verification')
@@ -60,9 +55,6 @@ const verifyRecaptcha = async (token) => {
   }
 }
 
-/**
- * Validate email format
- */
 const validateEmail = (email) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
   const trimmedEmail = email?.trim() || ''
@@ -78,9 +70,6 @@ const validateEmail = (email) => {
   return { valid: true, email: trimmedEmail }
 }
 
-/**
- * Validate form-specific fields
- */
 const validateFormFields = (formType, formData) => {
   const errors = []
   
@@ -511,48 +500,6 @@ exports.handler = async (event, context) => {
       }
     }
     
-    // ============================================
-    // PHASE 5: CSRF Token Validation
-    // ============================================
-    // Only apply to form endpoints (not webhooks/checkout)
-    if (!isWebhookEndpoint(path) && !isCheckoutEndpoint(path)) {
-      const csrfToken = formData.get('csrf-token') || event.headers['x-csrf-token'] || ''
-      
-      try {
-        const csrfValidation = await validateCSRFToken(csrfToken, ip, userAgent, formType)
-        if (!csrfValidation.valid) {
-          // If Blobs is unavailable, fail-open (allow request) to prevent blocking legitimate users
-          if (csrfValidation.reason && csrfValidation.reason.includes('Blobs unavailable')) {
-            console.warn('⚠️ CSRF validation skipped - Blobs unavailable (allowing request)', {
-              formType,
-              ip
-            })
-            // Continue with form submission
-          } else {
-            // Blobs is available but token is invalid - this is suspicious
-            logBotDetected(formType, 'csrf-validation-failed', ip, userAgent, {
-              reason: csrfValidation.reason,
-              details: csrfValidation.details,
-              formName
-            })
-            return {
-              statusCode: 400,
-              headers,
-              body: JSON.stringify({ 
-                error: csrfValidation.reason || 'Security token required',
-                message: csrfValidation.details?.message || 'Please refresh the page and try again'
-              }),
-            }
-          }
-        }
-      } catch (csrfError) {
-        // If validation fails, log but allow (fail open for legitimate users)
-        // This prevents breaking forms if KV is not configured
-        console.warn('⚠️ CSRF validation error (allowing request):', csrfError.message)
-      }
-    }
-    
-    // SECURITY: Block known bot user agents (Phase 2 - Bot Detection)
     const BOT_USER_AGENTS = [
       'curl', 'wget', 'python-requests', 'python', 'go-http-client',
       'java/', 'scrapy', 'bot', 'crawler', 'spider', 'headless',
