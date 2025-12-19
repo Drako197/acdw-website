@@ -198,33 +198,15 @@ export function Hero() {
                 onClick={() => navigate('/products/mini')}
                 className="hero-primary-button"
               >
-                Buy Now
+                Product Details
                 <ArrowRightIcon className="hero-button-icon" />
               </button>
               
               <button 
                 disabled
                 className="hero-secondary-button hero-secondary-button-disabled"
-                style={{ cursor: 'not-allowed', opacity: 0.6 }}
               >
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-                  <span>See How It Works</span>
-                  <span 
-                    style={{ 
-                      fontSize: '0.7rem', 
-                      fontWeight: '600',
-                      color: '#ffffff',
-                      backgroundColor: '#f59e0b',
-                      padding: '2px 8px',
-                      borderRadius: '12px',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.5px',
-                      lineHeight: '1.2'
-                    }}
-                  >
-                    Video Coming Soon
-                  </span>
-                </div>
+                <span className="hero-secondary-button-badge">Video Coming Soon</span>
               </button>
             </div>
             
