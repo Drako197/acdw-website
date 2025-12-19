@@ -211,6 +211,24 @@ _No active in-progress work at this time. All recent features have been complete
    - **Action Required:** Connect to Stripe API to fetch real order data
    - **Lines:** 27-33
 
+2. **Branded Email Templates - Review & Create Missing Templates**
+   - **Files:** `netlify/functions/utils/email-templates.js`, `netlify/functions/send-confirmation-email.js`
+   - **Current Status:** 
+     - ✅ Form submission confirmations exist (contact, support, sales, installer, demo, promo, upgrade, email-preferences, unsubscribe)
+     - ❌ Missing: Branded order confirmation (currently using Stripe default)
+     - ❌ Missing: Shipping notification email
+     - ❌ Missing: Order status update emails
+     - ❌ Missing: Welcome email for new accounts (optional - Clerk handles this)
+     - ❌ Missing: Branded password reset email (optional - Clerk handles this)
+     - ❌ Missing: Branded email verification email (optional - Clerk handles this)
+   - **Action Required:** 
+     - Review existing confirmation email templates for consistency and branding
+     - Create branded order confirmation email template (replace Stripe default)
+     - Create shipping notification email template (triggered by ShipStation webhook)
+     - Create order status update email templates
+     - Ensure all emails follow consistent branding and design patterns
+   - **Priority:** High (order confirmation and shipping notifications are critical for customer experience)
+
 ### Medium Priority
 
 3. **Error Handling Improvements**
