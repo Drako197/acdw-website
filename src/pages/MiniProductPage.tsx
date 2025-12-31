@@ -146,7 +146,7 @@ export function MiniProductPage() {
     {
       number: 1,
       title: 'Install in 5 Minutes',
-      description: 'One-time installation takes just 5 minutes. You'll need a PVC cutter (or hacksaw) and Oatey PVC pipe cement. Cut your drain line once during installation—then never cut again for maintenance.',
+      description: 'One-time installation takes just 5 minutes. You\'ll need a PVC cutter (or hacksaw) and Oatey PVC pipe cement. Cut your drain line once during installation—then never cut again for maintenance.',
       icon: WrenchScrewdriverIcon
     },
     {
@@ -177,7 +177,7 @@ export function MiniProductPage() {
     },
     {
       question: 'What tools do I need for installation?',
-      answer: 'You'll need a PVC pipe cutter (or hacksaw) to cut your existing drain line, and Oatey PVC pipe cement to secure the connections. These are standard tools available at any hardware store. Once installed, you'll never need to cut the line again for future maintenance.'
+      answer: 'You\'ll need a PVC pipe cutter (or hacksaw) to cut your existing drain line, and Oatey PVC pipe cement to secure the connections. These are standard tools available at any hardware store. Once installed, you\'ll never need to cut the line again for future maintenance.'
     },
     {
       question: 'Will this work with my AC system?',
