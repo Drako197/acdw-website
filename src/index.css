@@ -1199,8 +1199,9 @@
       padding: 0;
     }
 
-    /* Mobile Search Bar */
+    /* Mobile Search Bar - Hidden for now */
     .header-mobile-search-container {
+      display: none; /* Hidden until search functionality is implemented */
       padding: 1rem 1.25rem;
       border-bottom: 1px solid rgba(229, 231, 235, 0.5);
     }
@@ -1290,7 +1291,7 @@
 
     /* External Link Indicator */
     .header-mobile-nav-item-external {
-      justify-content: space-between;
+      /* Text aligns with other links, icon on right */
     }
 
     .header-mobile-nav-external-icon {
@@ -1298,6 +1299,7 @@
       height: 1.125rem;
       opacity: 0.5;
       flex-shrink: 0;
+      margin-left: auto;
     }
 
     /* Expandable Section */
@@ -4903,19 +4905,19 @@
   @apply overflow-hidden;
   position: relative;
   padding: 25px 25px 0 25px;
-}
-
-.unified-product-card-image {
-  @apply w-full;
-  height: 20rem; /* 320px - 25% increase from 16rem (256px) */
-  @apply object-contain;
-  transition: transform 0.3s ease;
+  height: 20rem; /* 320px base height on mobile */
 }
 
 @media (min-width: 768px) {
-  .unified-product-card-image {
-    height: 25rem; /* 400px - 25% increase from 20rem (320px) */
+  .unified-product-card-image-wrapper {
+    height: 25rem; /* 400px on desktop - 25% taller */
   }
+}
+
+.unified-product-card-image {
+  @apply w-full h-full;
+  @apply object-contain;
+  transition: transform 0.3s ease;
 }
 
 .unified-product-card:hover .unified-product-card-image {
@@ -5031,13 +5033,10 @@
 }
 
 /* Mobile Optimizations */
-@media (max-width: 768px) {
-  .unified-product-card-image {
-    height: 15rem; /* 240px - 25% increase from 12rem (192px) */
-  }
-  
+@media (max-width: 767px) {
   .unified-product-card-image-wrapper {
-    min-height: 15rem;
+    height: 15rem; /* 240px - smaller on mobile */
+    padding: 25px 25px 0 25px; /* Ensure no bottom padding on mobile */
   }
   
   .unified-product-card-content {
@@ -5177,7 +5176,7 @@
 }
 
 .unified-product-card-cta {
-  @apply p-6 border-t border-gray-200;
+  @apply p-6;
 }
 
 .unified-product-card-cta-button {
