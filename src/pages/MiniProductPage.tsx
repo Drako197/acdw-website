@@ -62,7 +62,7 @@ export function MiniProductPage() {
     {
       icon: WrenchScrewdriverIcon,
       title: '5-Minute Installation',
-      description: 'Tool-free setup that takes less time than a coffee break'
+      description: 'Quick installation with basic tools (PVC cutter or hacksaw, Oatey PVC cement). Cut once during installation, then never cut again for maintenance.'
     },
     {
       icon: ShieldCheckIcon,
@@ -146,7 +146,7 @@ export function MiniProductPage() {
     {
       number: 1,
       title: 'Install in 5 Minutes',
-      description: 'One-time installation takes just 5 minutes. No cutting, no complex tools required.',
+      description: 'One-time installation takes just 5 minutes. You'll need a PVC cutter (or hacksaw) and Oatey PVC pipe cement. Cut your drain line once during installation—then never cut again for maintenance.',
       icon: WrenchScrewdriverIcon
     },
     {
@@ -177,7 +177,7 @@ export function MiniProductPage() {
     },
     {
       question: 'What tools do I need for installation?',
-      answer: 'You only need standard HVAC service tools—no specialized equipment required. The installation process is straightforward and typically requires basic cutting and connection tools that most DIYers already have.'
+      answer: 'You'll need a PVC pipe cutter (or hacksaw) to cut your existing drain line, and Oatey PVC pipe cement to secure the connections. These are standard tools available at any hardware store. Once installed, you'll never need to cut the line again for future maintenance.'
     },
     {
       question: 'Will this work with my AC system?',
@@ -256,7 +256,7 @@ export function MiniProductPage() {
                 Stop Water Damage Before It Starts
               </h1>
               <p className="mini-product-hero-subtitle">
-                AC drain clogs cause thousands in water damage. The Mini gives you instant access to clear blockages in 5 minutes—no cutting, no mess, no emergency calls.
+                AC drain clogs cause thousands in water damage. The Mini gives you instant access to clear blockages in 5 minutes—no cutting required for maintenance, no mess, no emergency calls.
               </p>
               <div className="mini-product-hero-trust-metric">
                 <span className="mini-product-hero-trust-text">Trusted by homeowners & AC contractors nationwide</span>

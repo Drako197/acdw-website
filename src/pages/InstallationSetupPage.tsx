@@ -115,13 +115,13 @@ export function InstallationSetupPage() {
                 <span className="support-section-step-number">1</span>
                 <div>
                   <strong className="support-section-step-title">Cut your existing drain line</strong>
-                  <p className="support-section-step-description">Measure and cut a section of your 3/4" PVC drain line to accommodate the AC Drain Wiz unit.</p>
+                  <p className="support-section-step-description">Measure and cut a section of your 3/4" PVC drain line to accommodate the AC Drain Wiz unit. Use a PVC pipe cutter or hacksaw for a clean cut.</p>
                 </div>
               </li>
               <li className="support-section-step-item">
                 <span className="support-section-step-number">2</span>
                 <div>
-                  <strong className="support-section-step-title">Solvent-weld in place</strong>
+                  <strong className="support-section-step-title">Solvent-weld in place with Oatey PVC cement</strong>
                   <p className="support-section-step-description">Use PVC primer and cement to securely attach AC Drain Wiz to your drain line.</p>
                 </div>
               </li>
