@@ -11361,4 +11361,502 @@
   @apply h-5 w-5;
 }
 
+/* ================================================================================
+   COMBO PRODUCT PAGE STYLES
+   ================================================================================ */
+
+.combo-product-page {
+  @apply min-h-screen bg-gradient-to-b from-gray-50 to-white;
+}
+
+/* Back Navigation */
+.combo-product-back-nav {
+  @apply bg-white border-b border-gray-200;
+}
+
+.combo-product-back-button {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium;
+}
+
+.combo-product-back-icon {
+  @apply h-4 w-4;
+}
+
+/* Hero Section */
+.combo-product-hero {
+  @apply bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white py-16 md:py-24;
+}
+
+.combo-product-hero-content {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center;
+}
+
+.combo-product-hero-title {
+  @apply text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight;
+}
+
+.combo-product-hero-subtitle {
+  @apply text-lg sm:text-xl text-blue-100 mb-10 max-w-3xl mx-auto leading-relaxed;
+}
+
+.combo-product-hero-value-props {
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 max-w-4xl mx-auto text-left;
+}
+
+.combo-product-hero-value-prop {
+  @apply flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20;
+}
+
+.combo-product-hero-value-icon {
+  @apply h-6 w-6 text-green-300 flex-shrink-0 mt-0.5;
+}
+
+.combo-product-hero-value-prop span {
+  @apply text-base font-medium;
+}
+
+.combo-product-hero-ctas {
+  @apply flex flex-col sm:flex-row gap-4 justify-center items-center;
+}
+
+/* Section Styles */
+.combo-product-section-title {
+  @apply text-3xl md:text-4xl font-bold text-gray-900 mb-4 text-center;
+}
+
+.combo-product-section-subtitle {
+  @apply text-lg text-gray-600 mb-12 text-center max-w-3xl mx-auto;
+}
+
+.combo-product-section-cta {
+  @apply mt-12 text-center;
+}
+
+/* Why Combo Section */
+.combo-product-why-combo {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.combo-product-why-combo-content {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+}
+
+.combo-product-comparison-table-wrapper {
+  @apply overflow-x-auto shadow-lg rounded-xl;
+}
+
+.combo-product-comparison-table {
+  @apply w-full bg-white;
+  min-width: 600px;
+}
+
+.combo-product-comparison-table thead {
+  @apply bg-gray-50 border-b-2 border-gray-200;
+}
+
+.combo-product-comparison-table th {
+  @apply px-6 py-4 text-left text-sm font-semibold text-gray-900;
+}
+
+.combo-product-comparison-table th.combo-product-comparison-highlight {
+  @apply bg-blue-50 text-blue-900;
+}
+
+.combo-product-comparison-table tbody tr {
+  @apply border-b border-gray-100 hover:bg-gray-50 transition-colors;
+}
+
+.combo-product-comparison-table tbody tr:last-child {
+  @apply border-b-0;
+}
+
+.combo-product-comparison-table td {
+  @apply px-6 py-4 text-center;
+}
+
+.combo-product-comparison-feature {
+  @apply text-left font-medium text-gray-900;
+}
+
+.combo-product-comparison-value {
+  @apply text-sm text-gray-600;
+}
+
+.combo-product-comparison-value.combo-product-comparison-highlight {
+  @apply bg-blue-50 font-semibold;
+}
+
+.combo-product-comparison-check {
+  @apply h-6 w-6 text-green-600 mx-auto;
+}
+
+.combo-product-comparison-check-highlight {
+  @apply h-6 w-6 text-blue-600 mx-auto;
+}
+
+.combo-product-comparison-no {
+  @apply text-gray-300 text-lg;
+}
+
+/* Contractor Benefits Section */
+.combo-product-contractors {
+  @apply py-16 md:py-24 bg-gradient-to-br from-gray-50 to-blue-50;
+}
+
+.combo-product-contractors-content {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+}
+
+.combo-product-benefits-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-8;
+}
+
+.combo-product-benefit-card {
+  @apply bg-white rounded-xl shadow-md p-8 border border-gray-100 hover:shadow-xl transition-shadow;
+}
+
+.combo-product-benefit-icon {
+  @apply h-12 w-12 text-blue-600 mb-4;
+}
+
+.combo-product-benefit-title {
+  @apply text-xl font-bold text-gray-900 mb-3;
+}
+
+.combo-product-benefit-description {
+  @apply text-gray-600 mb-4 leading-relaxed;
+}
+
+.combo-product-benefit-points {
+  @apply space-y-3;
+}
+
+.combo-product-benefit-point {
+  @apply flex items-start gap-3;
+}
+
+.combo-product-benefit-point-icon {
+  @apply h-5 w-5 text-green-600 flex-shrink-0 mt-0.5;
+}
+
+.combo-product-benefit-point span {
+  @apply text-sm text-gray-700 leading-snug;
+}
+
+/* Property Manager Section */
+.combo-product-property-managers {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.combo-product-property-managers-content {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+}
+
+.combo-product-pm-benefits-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-8;
+}
+
+.combo-product-pm-benefit-card {
+  @apply bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl shadow-md p-8 border border-blue-100 hover:shadow-xl transition-shadow;
+}
+
+.combo-product-pm-benefit-icon {
+  @apply h-12 w-12 text-blue-600 mb-4;
+}
+
+.combo-product-pm-benefit-title {
+  @apply text-xl font-bold text-gray-900 mb-3;
+}
+
+.combo-product-pm-benefit-description {
+  @apply text-gray-600 mb-4 leading-relaxed;
+}
+
+.combo-product-pm-benefit-points {
+  @apply space-y-3;
+}
+
+.combo-product-pm-benefit-point {
+  @apply flex items-start gap-3;
+}
+
+.combo-product-pm-benefit-point-icon {
+  @apply h-5 w-5 text-green-600 flex-shrink-0 mt-0.5;
+}
+
+.combo-product-pm-benefit-point span {
+  @apply text-sm text-gray-700 leading-snug;
+}
+
+/* Installation Section */
+.combo-product-installation {
+  @apply py-16 md:py-24 bg-gradient-to-br from-gray-50 to-white;
+}
+
+.combo-product-installation-content {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl;
+}
+
+.combo-product-installation-phases {
+  @apply space-y-8;
+}
+
+.combo-product-installation-phase {
+  @apply bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden;
+}
+
+.combo-product-installation-phase-header {
+  @apply bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 flex items-center gap-4;
+}
+
+.combo-product-installation-phase-number {
+  @apply bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 font-bold text-lg;
+}
+
+.combo-product-installation-phase-icon {
+  @apply h-10 w-10 flex-shrink-0;
+}
+
+.combo-product-installation-phase-info {
+  @apply flex-1;
+}
+
+.combo-product-installation-phase-title {
+  @apply text-xl font-bold mb-1;
+}
+
+.combo-product-installation-phase-duration {
+  @apply text-blue-100 text-sm font-medium;
+}
+
+.combo-product-installation-phase-steps {
+  @apply p-6 space-y-3 list-decimal list-inside;
+}
+
+.combo-product-installation-phase-step {
+  @apply text-gray-700 leading-relaxed pl-2;
+}
+
+/* Monitoring Workflow */
+.combo-product-monitoring-workflow {
+  @apply mt-12 bg-gradient-to-br from-blue-50 to-white rounded-xl p-8 border border-blue-100;
+}
+
+.combo-product-monitoring-workflow-title {
+  @apply text-2xl font-bold text-gray-900 mb-6 text-center;
+}
+
+.combo-product-monitoring-workflow-steps {
+  @apply flex flex-col md:flex-row items-center justify-center gap-4 mb-6;
+}
+
+.combo-product-monitoring-workflow-step {
+  @apply flex flex-col items-center gap-2 bg-white rounded-lg p-4 shadow-sm border border-gray-100 min-w-[140px] text-center;
+}
+
+.combo-product-monitoring-workflow-icon {
+  @apply h-8 w-8 text-blue-600;
+}
+
+.combo-product-monitoring-workflow-step span {
+  @apply text-sm font-medium text-gray-900;
+}
+
+.combo-product-monitoring-workflow-arrow {
+  @apply text-2xl text-blue-400 font-bold hidden md:block;
+}
+
+.combo-product-monitoring-workflow-note {
+  @apply text-center text-sm text-gray-700 bg-yellow-50 border border-yellow-200 rounded-lg p-4;
+}
+
+/* Dashboard Section */
+.combo-product-dashboard {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.combo-product-dashboard-content {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+}
+
+.combo-product-dashboard-features-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
+}
+
+.combo-product-dashboard-feature {
+  @apply bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-6 border border-blue-100 hover:shadow-lg transition-shadow;
+}
+
+.combo-product-dashboard-feature-icon {
+  @apply h-10 w-10 text-blue-600 mb-4;
+}
+
+.combo-product-dashboard-feature-title {
+  @apply text-lg font-bold text-gray-900 mb-2;
+}
+
+.combo-product-dashboard-feature-description {
+  @apply text-sm text-gray-600 leading-relaxed;
+}
+
+/* Technical Specs Section */
+.combo-product-specs {
+  @apply py-16 md:py-24 bg-gradient-to-br from-gray-50 to-white;
+}
+
+.combo-product-specs-content {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl;
+}
+
+.combo-product-specs-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-8 mb-8;
+}
+
+.combo-product-specs-card {
+  @apply bg-white rounded-xl shadow-md p-8 border border-gray-100;
+}
+
+.combo-product-specs-card-title {
+  @apply text-xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200;
+}
+
+.combo-product-specs-list {
+  @apply space-y-4;
+}
+
+.combo-product-spec-item {
+  @apply flex justify-between items-center;
+}
+
+.combo-product-spec-label {
+  @apply text-sm font-medium text-gray-600;
+}
+
+.combo-product-spec-value {
+  @apply text-sm font-semibold text-gray-900;
+}
+
+.combo-product-specs-total {
+  @apply bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl p-6 flex items-center justify-center gap-4;
+}
+
+.combo-product-specs-total-icon {
+  @apply h-10 w-10 flex-shrink-0;
+}
+
+.combo-product-specs-total-info {
+  @apply flex flex-col sm:flex-row sm:items-center sm:gap-3;
+}
+
+.combo-product-specs-total-label {
+  @apply text-lg font-medium text-blue-100;
+}
+
+.combo-product-specs-total-value {
+  @apply text-2xl font-bold;
+}
+
+/* FAQ Section */
+.combo-product-faq {
+  @apply py-16 md:py-24 bg-white;
+}
+
+.combo-product-faq-content {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl;
+}
+
+.combo-product-faq-subtitle {
+  @apply text-center text-gray-600 mb-10;
+}
+
+.combo-product-faq-contact-link {
+  @apply text-blue-600 hover:text-blue-700 font-medium underline;
+}
+
+.combo-product-faq-list {
+  @apply space-y-4;
+}
+
+.combo-product-faq-item {
+  @apply bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow;
+}
+
+.combo-product-faq-question {
+  @apply w-full text-left px-6 py-5 flex items-center justify-between gap-4 font-semibold text-gray-900 hover:bg-gray-50 transition-colors;
+}
+
+.combo-product-faq-icon {
+  @apply h-5 w-5 text-gray-400 flex-shrink-0;
+}
+
+.combo-product-faq-answer {
+  @apply px-6 pb-5 text-gray-700 leading-relaxed border-t border-gray-100;
+  padding-top: 1rem;
+}
+
+/* Final CTA Section */
+.combo-product-final-cta {
+  @apply py-16 md:py-24 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white;
+}
+
+.combo-product-final-cta-content {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center;
+}
+
+.combo-product-final-cta-title {
+  @apply text-3xl md:text-4xl font-bold mb-4;
+}
+
+.combo-product-final-cta-subtitle {
+  @apply text-lg text-blue-100 mb-10 leading-relaxed;
+}
+
+.combo-product-final-cta-buttons {
+  @apply flex flex-col sm:flex-row gap-4 justify-center items-center mb-12;
+}
+
+.combo-product-trust-indicators {
+  @apply grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto;
+}
+
+.combo-product-trust-indicator {
+  @apply flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20;
+}
+
+.combo-product-trust-icon {
+  @apply h-5 w-5 text-green-300 flex-shrink-0;
+}
+
+.combo-product-trust-indicator span {
+  @apply text-sm font-medium;
+}
+
+/* CTA Buttons */
+.combo-product-cta-primary {
+  @apply px-8 py-4 bg-white text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+}
+
+.combo-product-cta-secondary {
+  @apply px-8 py-4 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-all border-2 border-white/20;
+}
+
+.combo-product-cta-tertiary {
+  @apply px-8 py-4 bg-transparent text-white rounded-lg font-semibold hover:bg-white/10 transition-all border-2 border-white/30;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .combo-product-hero-title {
+    @apply text-2xl;
+  }
+
+  .combo-product-section-title {
+    @apply text-2xl;
+  }
+
+  .combo-product-monitoring-workflow-arrow {
+    @apply rotate-90 block my-2;
+  }
+}
+
 

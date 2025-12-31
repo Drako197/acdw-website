@@ -45,7 +45,7 @@ export function BottomNav() {
       iconSolid: HomeIconSolid,
     },
     {
-      name: 'Shop',
+      name: 'Products',
       href: '/products',
       icon: ShoppingBagIcon,
       iconSolid: ShoppingBagIconSolid,
