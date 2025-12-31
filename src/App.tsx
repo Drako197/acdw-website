@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AuthProvider } from './contexts/AuthContext'
 import { Header } from './components/layout/Header'
 import { Footer } from './components/layout/Footer'
+import { BottomNav } from './components/layout/BottomNav'
 import { ScrollToTop } from './components/layout/ScrollToTop'
 import { HomePage } from './pages/HomePage'
 import { HomeownerHomePage } from './pages/HomeownerHomePage'
@@ -47,7 +48,7 @@ function AppContent() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {!hideHeaderFooter && <Header />}
-      <main className="flex-1">
+      <main className="flex-1 mb-16 md:mb-0">
         <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/homeowner" element={<HomeownerHomePage />} />
@@ -89,6 +90,7 @@ function AppContent() {
             </Routes>
           </main>
           {!hideHeaderFooter && <Footer />}
+          {!hideHeaderFooter && <BottomNav />}
         </div>
   )
 }

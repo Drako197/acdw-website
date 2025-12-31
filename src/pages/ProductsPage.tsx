@@ -242,9 +242,27 @@ export function ProductsPage() {
               <div key={product.id} className="unified-product-card">
                 {/* Product Image */}
                 <div className="unified-product-card-image-wrapper">
-                  <div className={`unified-product-card-image unified-product-card-image-${product.id === 'mini-sensor' ? 'minisensor' : product.id}`}>
-                    {/* Product image placeholder - will be replaced with actual images */}
-                  </div>
+                  {product.id === 'mini' && (
+                    <img 
+                      src="/images/acdw-mini-hero1-background.png" 
+                      alt="AC Drain Wiz Mini"
+                      className="unified-product-card-image"
+                    />
+                  )}
+                  {product.id === 'sensor' && (
+                    <img 
+                      src="/images/acdw-sensor-hero1-background.png" 
+                      alt="AC Drain Wiz Sensor"
+                      className="unified-product-card-image"
+                    />
+                  )}
+                  {product.id === 'mini-sensor' && (
+                    <img 
+                      src="/images/hvac-tech-mini-sensor-product-hero.png" 
+                      alt="AC Drain Wiz Mini + Sensor Bundle"
+                      className="unified-product-card-image"
+                    />
+                  )}
                 </div>
 
                 {/* Product Content */}
@@ -279,13 +297,25 @@ export function ProductsPage() {
                     </ul>
                   </div>
 
+                  {/* Quick Specs Row */}
+                  <div className="unified-product-card-specs-row">
+                    <div className="unified-product-card-spec-item">
+                      <ClockIcon className="unified-product-card-spec-icon" />
+                      <span className="unified-product-card-spec-text">{product.installationTime}</span>
+                    </div>
+                    <div className="unified-product-card-spec-item">
+                      <WrenchScrewdriverIcon className="unified-product-card-spec-icon" />
+                      <span className="unified-product-card-spec-text">{product.compatibility}</span>
+                    </div>
+                  </div>
+
                   {/* CTA Button */}
                   <div className="unified-product-card-cta">
                     <button 
                       onClick={() => handleProductCTA(product.id)}
                       className="unified-product-card-cta-button"
                     >
-                      View Product Details
+                      View Details
                       <ArrowRightIcon className="unified-product-card-cta-icon" />
                     </button>
                   </div>

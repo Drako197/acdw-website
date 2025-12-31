@@ -1,10 +1,25 @@
 import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { 
   Bars3Icon, 
   XMarkIcon, 
   ShoppingCartIcon,
-  UserCircleIcon
+  UserCircleIcon,
+  MagnifyingGlassIcon,
+  HomeIcon,
+  ShoppingBagIcon,
+  QuestionMarkCircleIcon,
+  EnvelopeIcon,
+  ChartBarSquareIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  WrenchScrewdriverIcon,
+  CpuChipIcon,
+  SparklesIcon,
+  UserGroupIcon,
+  RocketLaunchIcon,
+  DocumentTextIcon,
+  CreditCardIcon
 } from '@heroicons/react/24/outline'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -15,11 +30,43 @@ const baseNavigation = [
   { name: 'Sensor Monitoring', href: 'https://monitor.acdrainwiz.com/login', external: true },
 ]
 
+// Enhanced mobile navigation structure
+const mobileNavigationSections = {
+  shop: {
+    title: 'Shop',
+    icon: ShoppingBagIcon,
+    items: [
+      { name: 'All Products', href: '/products', icon: ShoppingBagIcon },
+      { name: 'AC Drain Wiz Mini', href: '/products/mini', icon: WrenchScrewdriverIcon },
+      { name: 'AC Drain Wiz Sensor', href: '/products/sensor', icon: CpuChipIcon },
+      { name: 'Mini + Sensor Bundle', href: '/products?product=mini&product=sensor', icon: SparklesIcon },
+      { name: 'For Homeowners', href: '/homeowner', icon: HomeIcon },
+      { name: 'Special Offers', href: '/promo', icon: RocketLaunchIcon },
+    ]
+  },
+  support: {
+    title: 'Support',
+    icon: QuestionMarkCircleIcon,
+    items: [
+      { name: 'Get Help', href: '/support', icon: QuestionMarkCircleIcon },
+      { name: 'Installation Guide', href: '/support/installation-scenarios', icon: DocumentTextIcon },
+      { name: 'Sensor Setup', href: '/sensor-setup', icon: CpuChipIcon },
+      { name: 'Warranty & Returns', href: '/support/warranty-returns', icon: CreditCardIcon },
+      { name: 'Product Support', href: '/support/product-support', icon: WrenchScrewdriverIcon },
+    ]
+  }
+}
+
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [shopExpanded, setShopExpanded] = useState(false)
+  const [supportExpanded, setSupportExpanded] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchFocused, setSearchFocused] = useState(false)
   const { user, logout, isAuthenticated } = useAuth()
   const location = useLocation()
+  const navigate = useNavigate()
 
   // Build navigation array with Dashboard first when authenticated
   const navigation = isAuthenticated
@@ -38,6 +85,24 @@ export function Header() {
       return location.pathname.startsWith('/dashboard') || location.pathname.startsWith('/business/pro')
     }
     return location.pathname.startsWith(href)
+  }
+
+  // Handle search submission
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      // Navigate to products page with search query
+      navigate(`/products?search=${encodeURIComponent(searchQuery)}`)
+      setMobileMenuOpen(false)
+      setSearchQuery('')
+    }
+  }
+
+  // Close mobile menu when route changes
+  const handleMobileNavClick = () => {
+    setMobileMenuOpen(false)
+    setShopExpanded(false)
+    setSupportExpanded(false)
   }
 
   return (
@@ -168,16 +233,23 @@ export function Header() {
             <div 
               className="header-mobile-menu-backdrop"
               onClick={() => setMobileMenuOpen(false)}
+              aria-hidden="true"
             />
             
             {/* Slide-over panel */}
-            <div className="header-mobile-menu-panel">
+            <div 
+              className="header-mobile-menu-panel"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Mobile navigation menu"
+            >
               {/* Header with logo and close button */}
               <div className="header-mobile-menu-header">
                 <Link 
                   to={isAuthenticated ? "/dashboard" : "/"} 
                   className="header-mobile-menu-logo" 
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={handleMobileNavClick}
+                  aria-label="Go to home page"
                 >
                   <img 
                     src="/images/ac-drain-wiz-logo.png" 
@@ -189,37 +261,170 @@ export function Header() {
                   type="button"
                   className="header-mobile-menu-close"
                   onClick={() => setMobileMenuOpen(false)}
+                  aria-label="Close navigation menu"
                 >
-                  <XMarkIcon className="header-mobile-menu-close-icon" />
+                  <XMarkIcon className="header-mobile-menu-close-icon" aria-hidden="true" />
                 </button>
               </div>
               
               {/* Navigation content */}
               <div className="header-mobile-menu-content">
-                <nav className="header-mobile-nav">
-                  {navigation.map((item) => (
-                    item.external ? (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="header-mobile-nav-item"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </a>
-                    ) : (
-                      <Link
-                        key={item.name}
-                        to={item.href}
-                        className={`header-mobile-nav-item ${isActive(item.href) ? 'active' : ''}`}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    )
-                  ))}
+                {/* Search bar */}
+                <div className="header-mobile-search-container">
+                  <form onSubmit={handleSearch} role="search">
+                    <div className={`header-mobile-search-wrapper ${searchFocused ? 'focused' : ''}`}>
+                      <MagnifyingGlassIcon className="header-mobile-search-icon" aria-hidden="true" />
+                      <input
+                        type="search"
+                        placeholder="Search products..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onFocus={() => setSearchFocused(true)}
+                        onBlur={() => setSearchFocused(false)}
+                        className="header-mobile-search-input"
+                        aria-label="Search products"
+                      />
+                    </div>
+                  </form>
+                </div>
+
+                <nav className="header-mobile-nav" aria-label="Main navigation">
+                  {/* Home Link (if not authenticated) */}
+                  {!isAuthenticated && (
+                    <Link
+                      to="/"
+                      className={`header-mobile-nav-item ${isActive('/') && location.pathname === '/' ? 'active' : ''}`}
+                      onClick={handleMobileNavClick}
+                    >
+                      <HomeIcon className="header-mobile-nav-icon" aria-hidden="true" />
+                      <span>Home</span>
+                    </Link>
+                  )}
+
+                  {/* Dashboard Link (if authenticated) */}
+                  {isAuthenticated && (
+                    <Link
+                      to="/dashboard"
+                      className={`header-mobile-nav-item ${isActive('/dashboard') ? 'active' : ''}`}
+                      onClick={handleMobileNavClick}
+                    >
+                      <ChartBarSquareIcon className="header-mobile-nav-icon" aria-hidden="true" />
+                      <span>Dashboard</span>
+                    </Link>
+                  )}
+
+                  {/* Expandable Shop Section */}
+                  <div className="header-mobile-nav-section">
+                    <button
+                      onClick={() => setShopExpanded(!shopExpanded)}
+                      className="header-mobile-nav-section-button"
+                      aria-expanded={shopExpanded}
+                      aria-controls="shop-menu"
+                    >
+                      <div className="header-mobile-nav-section-title">
+                        <ShoppingBagIcon className="header-mobile-nav-icon" aria-hidden="true" />
+                        <span>Shop</span>
+                      </div>
+                      {shopExpanded ? (
+                        <ChevronUpIcon className="header-mobile-nav-chevron" aria-hidden="true" />
+                      ) : (
+                        <ChevronDownIcon className="header-mobile-nav-chevron" aria-hidden="true" />
+                      )}
+                    </button>
+                    
+                    {shopExpanded && (
+                      <div className="header-mobile-nav-submenu" id="shop-menu">
+                        {mobileNavigationSections.shop.items.map((item) => {
+                          const Icon = item.icon
+                          return (
+                            <Link
+                              key={item.name}
+                              to={item.href}
+                              className={`header-mobile-nav-subitem ${isActive(item.href) ? 'active' : ''}`}
+                              onClick={handleMobileNavClick}
+                            >
+                              <Icon className="header-mobile-nav-subicon" aria-hidden="true" />
+                              <span>{item.name}</span>
+                            </Link>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Expandable Support Section */}
+                  <div className="header-mobile-nav-section">
+                    <button
+                      onClick={() => setSupportExpanded(!supportExpanded)}
+                      className="header-mobile-nav-section-button"
+                      aria-expanded={supportExpanded}
+                      aria-controls="support-menu"
+                    >
+                      <div className="header-mobile-nav-section-title">
+                        <QuestionMarkCircleIcon className="header-mobile-nav-icon" aria-hidden="true" />
+                        <span>Support</span>
+                      </div>
+                      {supportExpanded ? (
+                        <ChevronUpIcon className="header-mobile-nav-chevron" aria-hidden="true" />
+                      ) : (
+                        <ChevronDownIcon className="header-mobile-nav-chevron" aria-hidden="true" />
+                      )}
+                    </button>
+                    
+                    {supportExpanded && (
+                      <div className="header-mobile-nav-submenu" id="support-menu">
+                        {mobileNavigationSections.support.items.map((item) => {
+                          const Icon = item.icon
+                          return (
+                            <Link
+                              key={item.name}
+                              to={item.href}
+                              className={`header-mobile-nav-subitem ${isActive(item.href) ? 'active' : ''}`}
+                              onClick={handleMobileNavClick}
+                            >
+                              <Icon className="header-mobile-nav-subicon" aria-hidden="true" />
+                              <span>{item.name}</span>
+                            </Link>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* About Link */}
+                  <Link
+                    to="/about"
+                    className={`header-mobile-nav-item ${isActive('/about') ? 'active' : ''}`}
+                    onClick={handleMobileNavClick}
+                  >
+                    <UserGroupIcon className="header-mobile-nav-icon" aria-hidden="true" />
+                    <span>About</span>
+                  </Link>
+
+                  {/* Contact Link */}
+                  <Link
+                    to="/contact"
+                    className={`header-mobile-nav-item ${isActive('/contact') ? 'active' : ''}`}
+                    onClick={handleMobileNavClick}
+                  >
+                    <EnvelopeIcon className="header-mobile-nav-icon" aria-hidden="true" />
+                    <span>Contact</span>
+                  </Link>
+
+                  {/* Sensor Monitoring - External Link */}
+                  <a
+                    href="https://monitor.acdrainwiz.com/login"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="header-mobile-nav-item header-mobile-nav-item-external"
+                    onClick={handleMobileNavClick}
+                  >
+                    <ChartBarSquareIcon className="header-mobile-nav-icon" aria-hidden="true" />
+                    <span>Sensor Monitoring</span>
+                    <svg className="header-mobile-nav-external-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
                 </nav>
                 
                 {/* Auth section at bottom */}
@@ -227,17 +432,11 @@ export function Header() {
                   {isAuthenticated ? (
                     <>
                       <Link
-                        to="/dashboard"
-                        className="header-mobile-auth-button"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        Dashboard
-                      </Link>
-                      <Link
                         to="/dashboard/profile"
                         className="header-mobile-auth-button-secondary"
-                        onClick={() => setMobileMenuOpen(false)}
+                        onClick={handleMobileNavClick}
                       >
+                        <UserCircleIcon className="header-mobile-auth-icon" aria-hidden="true" />
                         Edit Profile
                       </Link>
                       <button
@@ -255,14 +454,14 @@ export function Header() {
                       <Link
                         to="/auth/signin"
                         className="header-mobile-auth-button-secondary"
-                        onClick={() => setMobileMenuOpen(false)}
+                        onClick={handleMobileNavClick}
                       >
                         Sign In
                       </Link>
                       <Link
                         to="/auth/signup"
                         className="header-mobile-auth-button-primary"
-                        onClick={() => setMobileMenuOpen(false)}
+                        onClick={handleMobileNavClick}
                       >
                         Sign Up
                       </Link>
