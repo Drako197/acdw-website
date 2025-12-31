@@ -19,14 +19,12 @@ import {
   BellAlertIcon,
   UserGroupIcon,
   BuildingOfficeIcon,
-  HomeIcon,
   DevicePhoneMobileIcon,
   ClipboardDocumentListIcon,
   ShieldCheckIcon,
   ClockIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  Battery100Icon,
   WifiIcon,
   CpuChipIcon
 } from '@heroicons/react/24/outline'
