@@ -186,7 +186,7 @@ export function HomeownerHomePage() {
             <div className="homeowner-step-number">Step 1</div>
             <h3 className="homeowner-step-title">Installs in 5 Minutes or Less</h3>
             <p className="homeowner-step-description">
-              Simple DIY installation. Cut your existing drain line and attach with included fittings. Detailed instructions and video guide included.
+              Simple DIY installation. Cut your existing drain line (PVC cutter or hacksaw) and attach with Oatey PVC cement. Detailed instructions and video guide included.
             </p>
           </div>
           
@@ -380,7 +380,7 @@ export function HomeownerHomePage() {
             </summary>
             <div className="homeowner-faq-answer">
               <p>
-                Correct! The AC Drain Wiz Mini is designed for DIY installation. You'll need basic tools like a hacksaw or PVC cutter to cut your existing drain line, but the included instructions and video guide make installation straightforward. Most homeowners complete installation in 30-45 minutes. If you prefer professional installation, many HVAC contractors offer installation services.
+                Correct! The AC Drain Wiz Mini is designed for DIY installation. You'll need basic tools like a PVC cutter (or hacksaw) and Oatey PVC pipe cement to cut and secure your existing drain line. The included instructions and video guide make installation straightforward. Most homeowners complete installation in 30-45 minutes. Once installed, you'll never need to cut the line again for future maintenance. If you prefer professional installation, many HVAC contractors offer installation services.
               </p>
             </div>
           </details>
@@ -424,7 +424,7 @@ export function HomeownerHomePage() {
             </summary>
             <div className="homeowner-faq-answer">
               <p>
-                Basic hand tools (PVC cutter or hacksaw) are all you need for installation. For ongoing maintenance, we recommend a transfer pump like the Milwaukee M18 model to push clean water through the line when a hose spigot isn’t handy. It delivers up to 8 GPM, runs on cordless M18 batteries, and makes attic or crawl-space flushes quick and mess-free.
+                You'll need a PVC pipe cutter (or hacksaw) and Oatey PVC pipe cement for installation. For ongoing maintenance, we recommend a transfer pump like the Milwaukee M18 model to push clean water through the line when a hose spigot isn't handy. It delivers up to 8 GPM, runs on cordless M18 batteries, and makes attic or crawl-space flushes quick and mess-free.
               </p>
             </div>
           </details>

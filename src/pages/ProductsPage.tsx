@@ -202,8 +202,8 @@ export function ProductsPage() {
     } else if (productId === 'sensor') {
       navigate('/products/sensor')
     } else if (productId === 'mini-sensor') {
-      // For bundle, navigate to sensor page (which can handle bundle info)
-      navigate('/products/sensor')
+      // Navigate to dedicated combo product page
+      navigate('/products/combo')
     }
   }
 
