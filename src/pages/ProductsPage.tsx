@@ -241,7 +241,19 @@ export function ProductsPage() {
             {products.map((product) => (
               <div key={product.id} className="unified-product-card">
                 {/* Product Image */}
-                <div className="unified-product-card-image-wrapper">
+                <div 
+                  className="unified-product-card-image-wrapper"
+                  onClick={() => handleProductCTA(product.id)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      handleProductCTA(product.id)
+                    }
+                  }}
+                  aria-label={`View details for ${product.name}`}
+                >
                   {product.id === 'mini' && (
                     <img 
                       src="/images/acdw-mini-hero1-background.png" 

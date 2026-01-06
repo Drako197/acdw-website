@@ -286,75 +286,89 @@ export function ComboProductPage() {
         </button>
       </div>
 
-      {/* Hero Section */}
-      <section className="combo-product-hero">
-        <div className="combo-product-hero-content">
-          <h1 className="combo-product-hero-title">
-            The Professional's Complete AC Drain Line Protection System
-          </h1>
-          <p className="combo-product-hero-subtitle">
-            Install the best. Monitor everything. Build lasting customer relationships with proactive maintenance they can see working.
-          </p>
+      {/* Hero Section - Full-Width Layout with Image */}
+      <section className="combo-product-hero-fullwidth">
+        {/* Inline Hero Image */}
+        <div className="combo-product-hero-image-container">
+          <img
+            src="/images/hvac-tech-mini-sensor-product-hero.png"
+            alt="AC Drain Wiz Mini + Sensor Complete System"
+            className="combo-product-hero-image"
+          />
+        </div>
+        
+        {/* Content Overlay */}
+        <div className="combo-product-hero-overlay">
+          <div className="combo-product-hero-content-wrapper">
+            <div className="combo-product-hero-info">
+              <h1 className="combo-product-hero-title">
+                The Professional's Complete AC Drain Line Protection System
+              </h1>
+              <p className="combo-product-hero-subtitle">
+                Install the best. Monitor everything. Build lasting customer relationships with proactive maintenance they can see working.
+              </p>
 
-          {/* Value Props */}
-          <div className="combo-product-hero-value-props">
-            <div className="combo-product-hero-value-prop">
-              <CheckIcon className="combo-product-hero-value-icon" />
-              <span>Professional-grade installation creates immediate value</span>
-            </div>
-            <div className="combo-product-hero-value-prop">
-              <CheckIcon className="combo-product-hero-value-icon" />
-              <span>24/7 monitoring shows continuous protection</span>
-            </div>
-            <div className="combo-product-hero-value-prop">
-              <CheckIcon className="combo-product-hero-value-icon" />
-              <span>Transform one-time service into ongoing relationships</span>
-            </div>
-            <div className="combo-product-hero-value-prop">
-              <CheckIcon className="combo-product-hero-value-icon" />
-              <span>Differentiate your business with smart home technology</span>
-            </div>
-          </div>
+              {/* Value Props */}
+              <div className="combo-product-hero-value-props">
+                <div className="combo-product-hero-value-prop">
+                  <CheckIcon className="combo-product-hero-value-icon" />
+                  <span>Professional-grade installation creates immediate value</span>
+                </div>
+                <div className="combo-product-hero-value-prop">
+                  <CheckIcon className="combo-product-hero-value-icon" />
+                  <span>24/7 monitoring shows continuous protection</span>
+                </div>
+                <div className="combo-product-hero-value-prop">
+                  <CheckIcon className="combo-product-hero-value-icon" />
+                  <span>Transform one-time service into ongoing relationships</span>
+                </div>
+                <div className="combo-product-hero-value-prop">
+                  <CheckIcon className="combo-product-hero-value-icon" />
+                  <span>Differentiate your business with smart home technology</span>
+                </div>
+              </div>
 
-          {/* CTAs */}
-          <div className="combo-product-hero-ctas">
-            {!isAuthenticated ? (
-              <>
-                <button
-                  onClick={() => navigate('/auth/signup?role=hvac_pro')}
-                  className="combo-product-cta-primary"
-                >
-                  Create Account for Contractor Pricing
-                </button>
-                <button
-                  onClick={() => navigate('/auth/signin')}
-                  className="combo-product-cta-secondary"
-                >
-                  Sign In to View Pricing
-                </button>
-              </>
-            ) : isHVACPro ? (
-              <button
-                onClick={() => navigate('/business/pro/catalog')}
-                className="combo-product-cta-primary"
-              >
-                View Pro Catalog & Pricing
-              </button>
-            ) : isPropertyManager ? (
-              <button
-                onClick={() => navigate('/contact?type=sales')}
-                className="combo-product-cta-primary"
-              >
-                Contact for Property Manager Quote
-              </button>
-            ) : (
-              <button
-                onClick={() => navigate('/auth/signup?role=hvac_pro')}
-                className="combo-product-cta-primary"
-              >
-                Create Contractor Account
-              </button>
-            )}
+              {/* CTAs */}
+              <div className="combo-product-hero-ctas">
+                {!isAuthenticated ? (
+                  <>
+                    <button
+                      onClick={() => navigate('/auth/signup?role=hvac_pro')}
+                      className="combo-product-cta-primary"
+                    >
+                      Create Account for Contractor Pricing
+                    </button>
+                    <button
+                      onClick={() => navigate('/auth/signin')}
+                      className="combo-product-cta-secondary"
+                    >
+                      Sign In to View Pricing
+                    </button>
+                  </>
+                ) : isHVACPro ? (
+                  <button
+                    onClick={() => navigate('/business/pro/catalog')}
+                    className="combo-product-cta-primary"
+                  >
+                    View Pro Catalog & Pricing
+                  </button>
+                ) : isPropertyManager ? (
+                  <button
+                    onClick={() => navigate('/contact?type=sales')}
+                    className="combo-product-cta-primary"
+                  >
+                    Contact for Property Manager Quote
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => navigate('/auth/signup?role=hvac_pro')}
+                    className="combo-product-cta-primary"
+                  >
+                    Create Contractor Account
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -368,7 +382,8 @@ export function ComboProductPage() {
             Together, they position you as their trusted HVAC technology partner.
           </p>
 
-          {/* Comparison Table */}
+          {/* Comparison - Desktop Table / Mobile Cards */}
+          {/* Desktop Table */}
           <div className="combo-product-comparison-table-wrapper">
             <table className="combo-product-comparison-table">
               <thead>
@@ -408,6 +423,73 @@ export function ComboProductPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile Cards */}
+          <div className="combo-product-comparison-cards">
+            {/* Mini Only Card */}
+            <div className="combo-product-comparison-card">
+              <div className="combo-product-comparison-card-header">
+                <h3 className="combo-product-comparison-card-title">Mini Only</h3>
+              </div>
+              <div className="combo-product-comparison-card-features">
+                {comparisonFeatures.map((item, index) => (
+                  <div key={index} className="combo-product-comparison-card-feature">
+                    <span className="combo-product-comparison-card-feature-name">{item.feature}</span>
+                    <span className="combo-product-comparison-card-feature-value">
+                      {typeof item.mini === 'boolean' ? (
+                        item.mini ? <CheckIcon className="combo-product-comparison-card-check" /> : <span className="combo-product-comparison-card-no">—</span>
+                      ) : (
+                        <span className="combo-product-comparison-card-text">{item.mini}</span>
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Sensor Only Card */}
+            <div className="combo-product-comparison-card">
+              <div className="combo-product-comparison-card-header">
+                <h3 className="combo-product-comparison-card-title">Sensor Only</h3>
+              </div>
+              <div className="combo-product-comparison-card-features">
+                {comparisonFeatures.map((item, index) => (
+                  <div key={index} className="combo-product-comparison-card-feature">
+                    <span className="combo-product-comparison-card-feature-name">{item.feature}</span>
+                    <span className="combo-product-comparison-card-feature-value">
+                      {typeof item.sensor === 'boolean' ? (
+                        item.sensor ? <CheckIcon className="combo-product-comparison-card-check" /> : <span className="combo-product-comparison-card-no">—</span>
+                      ) : (
+                        <span className="combo-product-comparison-card-text">{item.sensor}</span>
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Combo Card - Highlighted */}
+            <div className="combo-product-comparison-card combo-product-comparison-card-highlight">
+              <div className="combo-product-comparison-card-header">
+                <h3 className="combo-product-comparison-card-title">Mini + Sensor</h3>
+                <span className="combo-product-comparison-card-badge">Complete System</span>
+              </div>
+              <div className="combo-product-comparison-card-features">
+                {comparisonFeatures.map((item, index) => (
+                  <div key={index} className="combo-product-comparison-card-feature">
+                    <span className="combo-product-comparison-card-feature-name">{item.feature}</span>
+                    <span className="combo-product-comparison-card-feature-value">
+                      {typeof item.combo === 'boolean' ? (
+                        item.combo ? <CheckIcon className="combo-product-comparison-card-check-highlight" /> : <span className="combo-product-comparison-card-no">—</span>
+                      ) : (
+                        <strong className="combo-product-comparison-card-text">{item.combo}</strong>
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

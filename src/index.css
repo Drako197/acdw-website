@@ -4906,6 +4906,17 @@
   position: relative;
   padding: 25px 25px 0 25px;
   height: 20rem; /* 320px base height on mobile */
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.unified-product-card-image-wrapper:hover {
+  opacity: 0.9;
+}
+
+.unified-product-card-image-wrapper:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }
 
 @media (min-width: 768px) {
@@ -4918,6 +4929,10 @@
   @apply w-full h-full;
   @apply object-contain;
   transition: transform 0.3s ease;
+}
+
+.unified-product-card-image-wrapper:hover .unified-product-card-image {
+  transform: scale(1.05);
 }
 
 .unified-product-card:hover .unified-product-card-image {
@@ -11383,20 +11398,61 @@
 }
 
 /* Hero Section */
-.combo-product-hero {
-  @apply bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white py-16 md:py-24;
+/* Combo Product Hero - Full-Width Layout with Image */
+.combo-product-hero-fullwidth {
+  @apply relative;
+  @apply bg-black;
+  @apply flex flex-col;
 }
 
-.combo-product-hero-content {
-  @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center;
+/* Inline Hero Image Container */
+.combo-product-hero-image-container {
+  @apply relative;
+  @apply w-full;
+  @apply flex items-center justify-center;
+  @apply z-0;
+  @apply overflow-hidden;
+  @apply pt-8 md:pt-12;
+  @apply pb-12 md:pb-16;
+}
+
+.combo-product-hero-image {
+  height: auto;
+  width: 140%;
+  max-width: 100rem;
+  object-fit: contain;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Content Overlay - positioned after image */
+.combo-product-hero-overlay {
+  @apply relative;
+  @apply z-10;
+  @apply w-full;
+  @apply bg-black;
+  @apply pb-12 md:pb-16;
+  margin-top: -20px;
+}
+
+.combo-product-hero-content-wrapper {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply pt-12 md:pt-16;
+}
+
+.combo-product-hero-info {
+  @apply space-y-6;
+  @apply text-center;
 }
 
 .combo-product-hero-title {
-  @apply text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight;
+  @apply text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 leading-tight;
 }
 
 .combo-product-hero-subtitle {
-  @apply text-lg sm:text-xl text-blue-100 mb-10 max-w-3xl mx-auto leading-relaxed;
+  @apply text-lg sm:text-xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed;
 }
 
 .combo-product-hero-value-props {
@@ -11408,15 +11464,114 @@
 }
 
 .combo-product-hero-value-icon {
-  @apply h-6 w-6 text-green-300 flex-shrink-0 mt-0.5;
+  @apply h-6 w-6 text-green-400 flex-shrink-0 mt-0.5;
 }
 
 .combo-product-hero-value-prop span {
-  @apply text-base font-medium;
+  @apply text-base font-medium text-white;
 }
 
 .combo-product-hero-ctas {
   @apply flex flex-col sm:flex-row gap-4 justify-center items-center;
+}
+
+/* Responsive adjustments for inline image */
+@media screen and (max-width: 479px) {
+  .combo-product-hero-image-container {
+    @apply pt-6 pb-0;
+  }
+  
+  .combo-product-hero-overlay {
+    margin-top: -20px;
+  }
+  
+  .combo-product-hero-content-wrapper {
+    @apply pt-0;
+  }
+}
+
+@media screen and (min-width: 480px) and (max-width: 767px) {
+  .combo-product-hero-image-container {
+    @apply pt-8 pb-0;
+  }
+  
+  .combo-product-hero-overlay {
+    margin-top: -20px;
+  }
+  
+  .combo-product-hero-content-wrapper {
+    @apply pt-0;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .combo-product-hero-image-container {
+    @apply pt-10 pb-0;
+  }
+  
+  .combo-product-hero-overlay {
+    margin-top: -20px;
+  }
+  
+  .combo-product-hero-content-wrapper {
+    @apply pt-0;
+  }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1366px) {
+  .combo-product-hero-image-container {
+    @apply pt-12 pb-0;
+  }
+  
+  .combo-product-hero-overlay {
+    margin-top: -20px;
+  }
+  
+  .combo-product-hero-content-wrapper {
+    @apply pt-0;
+  }
+}
+
+@media screen and (min-width: 1367px) and (max-width: 1599px) {
+  .combo-product-hero-image-container {
+    @apply pt-12 pb-0;
+  }
+  
+  .combo-product-hero-overlay {
+    margin-top: -20px;
+  }
+  
+  .combo-product-hero-content-wrapper {
+    @apply pt-0;
+  }
+}
+
+@media screen and (min-width: 1600px) and (max-width: 1920px) {
+  .combo-product-hero-image-container {
+    @apply pt-12 pb-0;
+  }
+  
+  .combo-product-hero-overlay {
+    margin-top: -20px;
+  }
+  
+  .combo-product-hero-content-wrapper {
+    @apply pt-0;
+  }
+}
+
+@media screen and (min-width: 1921px) {
+  .combo-product-hero-image-container {
+    @apply pt-12 pb-0;
+  }
+  
+  .combo-product-hero-overlay {
+    margin-top: -20px;
+  }
+  
+  .combo-product-hero-content-wrapper {
+    @apply pt-0;
+  }
 }
 
 /* Section Styles */
@@ -11496,6 +11651,111 @@
 
 .combo-product-comparison-no {
   @apply text-gray-300 text-lg;
+}
+
+/* Mobile Comparison Cards */
+.combo-product-comparison-cards {
+  @apply grid grid-cols-1 gap-6;
+  display: none; /* Hidden on desktop, shown on mobile */
+}
+
+.combo-product-comparison-card {
+  @apply bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden;
+}
+
+.combo-product-comparison-card-highlight {
+  @apply border-2 border-blue-500 shadow-lg;
+  position: relative;
+}
+
+.combo-product-comparison-card-highlight::before {
+  content: 'Recommended';
+  position: absolute;
+  top: 0;
+  right: 0;
+  @apply bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-bl-lg;
+}
+
+.combo-product-comparison-card-header {
+  @apply bg-gray-50 border-b border-gray-200 px-6 py-4;
+}
+
+.combo-product-comparison-card-highlight .combo-product-comparison-card-header {
+  @apply bg-blue-50 border-blue-200;
+}
+
+.combo-product-comparison-card-title {
+  @apply text-lg font-bold text-gray-900 mb-1;
+}
+
+.combo-product-comparison-card-highlight .combo-product-comparison-card-title {
+  @apply text-blue-900;
+}
+
+.combo-product-comparison-card-badge {
+  @apply text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded;
+}
+
+.combo-product-comparison-card-features {
+  @apply divide-y divide-gray-100;
+}
+
+.combo-product-comparison-card-feature {
+  @apply flex items-center justify-between px-6 py-4;
+}
+
+.combo-product-comparison-card-feature-name {
+  @apply text-sm font-medium text-gray-900 flex-1;
+}
+
+.combo-product-comparison-card-feature-value {
+  @apply flex items-center justify-end ml-4;
+  min-width: 3rem;
+}
+
+.combo-product-comparison-card-check {
+  @apply h-5 w-5 text-green-600;
+}
+
+.combo-product-comparison-card-check-highlight {
+  @apply h-5 w-5 text-blue-600;
+}
+
+.combo-product-comparison-card-no {
+  @apply text-gray-300 text-lg;
+}
+
+.combo-product-comparison-card-text {
+  @apply text-sm font-medium text-gray-700;
+}
+
+.combo-product-comparison-card-highlight .combo-product-comparison-card-feature {
+  @apply bg-blue-50/30;
+}
+
+.combo-product-comparison-card-highlight .combo-product-comparison-card-feature:nth-child(even) {
+  @apply bg-blue-50/50;
+}
+
+/* Responsive: Show cards on mobile, table on desktop */
+@media (max-width: 767px) {
+  .combo-product-comparison-table-wrapper {
+    display: none;
+  }
+  
+  .combo-product-comparison-cards {
+    display: grid;
+  }
+}
+
+@media (min-width: 768px) {
+  .combo-product-comparison-table-wrapper {
+    display: block;
+  }
+  
+  .combo-product-comparison-cards {
+    display: none;
+  }
 }
 
 /* Contractor Benefits Section */

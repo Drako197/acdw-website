@@ -33,7 +33,7 @@ const baseNavigation = [
 // Enhanced mobile navigation structure
 const mobileNavigationSections = {
   shop: {
-    title: 'Shop',
+    title: 'Products',
     icon: ShoppingBagIcon,
     items: [
       { name: 'All Products', href: '/products', icon: ShoppingBagIcon },
@@ -313,7 +313,7 @@ export function Header() {
                     </Link>
                   )}
 
-                  {/* Expandable Shop Section */}
+                  {/* Expandable Products Section */}
                   <div className="header-mobile-nav-section">
                     <button
                       onClick={() => setShopExpanded(!shopExpanded)}
@@ -323,7 +323,7 @@ export function Header() {
                     >
                       <div className="header-mobile-nav-section-title">
                         <ShoppingBagIcon className="header-mobile-nav-icon" aria-hidden="true" />
-                        <span>Shop</span>
+                        <span>Products</span>
                       </div>
                       {shopExpanded ? (
                         <ChevronUpIcon className="header-mobile-nav-chevron" aria-hidden="true" />
